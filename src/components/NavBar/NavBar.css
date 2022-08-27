@@ -1,0 +1,70 @@
+.NavBarContainer{
+    background-color: lightgray;
+    position: sticky;
+    top: 0;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: row;
+    box-shadow: 2px 2px 2px;
+    /* border-style: solid; */
+    
+}
+
+/* Left Side Container of NavBar */
+
+.LogoContainer{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    /* border-style: solid; */
+}
+
+.Logo{
+    margin-left: 5px;
+    height: 70%;
+    width: auto;
+    /* border-style: solid; */
+    cursor: pointer;
+}
+
+.WebsiteTitle{
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* Center Container of NavBar */
+
+.SearchContainer{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-style: solid; */
+}
+
+.SearchBar{
+    width: 60%;
+    /* border-style: solid; */
+}
+
+/* Right Side Container of NavBar */
+
+.IconContainer{
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    /* border-style: solid; */
+}
+
+.Icons{
+    height: 50%;
+    width: auto;
+    padding: 5px;
+    /* border-style: solid; */
+    border-width: 2px;
+    cursor: pointer;
+}
