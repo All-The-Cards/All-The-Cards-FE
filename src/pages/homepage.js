@@ -11,34 +11,30 @@ const Home = (props) => {
     searchInput: ""
   })
 
+  const updateState = (objectToUpdate) => {
+    setState((previous) => ({
+      ...previous,
+      ...objectToUpdate
+    }))
+  }
+
   const search = (query) => {
     //if query is empty, don't send
     if (query.trim() === "/api/search/query=") {
       return
     }
     //clear results
-    console.log("Clearing results!")
-    setState((previous) => ({
-      ...previous,
-      searchResults: []
-    }))
+    updateState({ searchResults: [] })
 
-    console.log("Requesting!")
     ServerTalk.post(query).then(response => {
       if (response.length === 0) {
-        console.log("No results found!")
-        setState((previous) => ({
-          ...previous,
-          resultsFound: <div>No Results Found</div>
-        }))
+        updateState({ resultsFound: <div>No Results Found</div> })
       }
       else {
-        console.log(`Got some results: ${response}`)
-        setState((previous) => ({
-          ...previous,
+        updateState({
           resultsFound: <div>{response.length} Results Found</div>,
           searchResults: response
-        }))
+        })
       }
 
     }).then(response => {
@@ -48,11 +44,9 @@ const Home = (props) => {
   }
 
   const handleChanges = (event) => {
-    console.log("Changes handled!")
-    setState((previous) => ({
-      ...previous,
+    updateState({
       searchInput: event.target.value
-    }))
+    })
   }
   return (
     <div>
