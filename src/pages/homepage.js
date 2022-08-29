@@ -17,48 +17,56 @@ const Home = (props) => {
       return
     }
     //clear results
-    setState({
+    console.log("Clearing results!")
+    setState((previous) => ({
+      ...previous,
       searchResults: []
-    })
+    }))
 
+    console.log("Requesting!")
     ServerTalk.post(query).then(response => {
       if (response.length === 0) {
-        setState({
+        console.log("No results found!")
+        setState((previous) => ({
+          ...previous,
           resultsFound: <div>No Results Found</div>
-        })
+        }))
       }
       else {
-        setState({
+        console.log(`Got some results: ${response}`)
+        setState((previous) => ({
+          ...previous,
           resultsFound: <div>{response.length} Results Found</div>,
-          searchResults: response.map((item, i) => <CardObject data={item} key={i} />)
-        })
+          searchResults: response
+        }))
       }
 
-      return response
     }).then(response => {
       console.log(response)
     })
 
   }
 
-  const setInput = (input) => {
-    setState({
-      searchInput: input.target.value
-    })
+  const handleChanges = (event) => {
+    console.log("Changes handled!")
+    setState((previous) => ({
+      ...previous,
+      searchInput: event.target.value
+    }))
   }
   return (
     <div>
       <input
         placeholder="Search..."
         value={state.searchInput}
-        onChange={(input) => setInput(input)}>
+        onChange={handleChanges}>
       </input>
       <button onClick={() => search("/api/search/query=" + state.searchInput)}>Search</button>
       <div style={{ width: '400px' }}>
         <div>
           {state.resultsFound}
         </div>
-        {state.searchResults}
+        {state.searchResults.map((item, i) => <CardObject data={item} key={i} />)}
       </div>
     </div>
   );
