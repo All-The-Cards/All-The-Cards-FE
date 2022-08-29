@@ -1,73 +1,70 @@
-import { React, Component } from 'react';
+import { React, useState } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as ServerTalk from '../functions/ServerTalk.js';
 
-export default class Home extends Component {
+const Home = (props) => {
 
-  state = {
+  const [state, setState] = useState({
     searchResults: [],
     resultsFound: "",
     serverResponse: "",
     searchInput: ""
+  })
+
+  const updateState = (objectToUpdate) => {
+    setState((previous) => ({
+      ...previous,
+      ...objectToUpdate
+    }))
   }
 
-  constructor(props){
-    super(props)
-  }
-  
-  search(query){
+  const search = (query) => {
     //if query is empty, don't send
-    if (query.trim() == "/api/search/query=") {
-      return 
+    if (query.trim() === "/api/search/query=") {
+      return
     }
     //clear results
-    this.setState({
-      searchResults: []
-    })
+    updateState({ searchResults: [] })
 
     ServerTalk.post(query).then(response => {
-      if (response.length === 0){
-        this.setState({
-          resultsFound: <div>No Results Found</div>
-        })
+      if (response.length === 0) {
+        updateState({ resultsFound: <div>No Results Found</div> })
       }
       else {
-        this.setState({
+        updateState({
           resultsFound: <div>{response.length} Results Found</div>,
-          searchResults: response.map((item, i) => <CardObject data={item} key={i}/>)
+          searchResults: response
         })
       }
-      
-      return response
+
     }).then(response => {
       console.log(response)
     })
 
   }
 
-  setInput(input){
-    this.setState({
-      searchInput: input.target.value
+  const handleChanges = (event) => {
+    updateState({
+      searchInput: event.target.value
     })
   }
-  
-  render () {
-    return (
-      <div>
-        <input 
-          placeholder="Search..." 
-          value={this.state.searchInput}
-          onChange={(input) => this.setInput(input)}>
-        </input>
-        <button onClick={() => this.search("/api/search/query=" + this.state.searchInput)}>Search</button>
-        <div style={{width: '400px'}}>
-          <div>
-            {this.state.resultsFound}
-          </div>
-          {this.state.searchResults}
+  return (
+    <div>
+      <input
+        placeholder="Search..."
+        value={state.searchInput}
+        onChange={handleChanges}>
+      </input>
+      <button onClick={() => search("/api/search/query=" + state.searchInput)}>Search</button>
+      <div style={{ width: '400px' }}>
+        <div>
+          {state.resultsFound}
         </div>
+        {state.searchResults.map((item, i) => <CardObject data={item} key={i} />)}
       </div>
-    );
-  }
+    </div>
+  );
 
 };
+
+export default Home;
