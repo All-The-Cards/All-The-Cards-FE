@@ -9,10 +9,7 @@ const Home = (props) => {
 
   return (
     <div>
-      <a href={server.buildRedirectUrl("/search/")}>
-        <button>Go to Searchpage</button>
-      </a>
-      
+      Welcome to All The Cards
     </div>
   );
 
