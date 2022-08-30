@@ -13,7 +13,8 @@ export default class CardObject extends Component {
             // Find image link
             imgLink: this.getImage(),
             // Create page url
-            url: server.buildRedirectUrl("/cards/" + this.props.data.set + "/" + this.props.data.name)
+            url: server.buildRedirectUrl("/card/?id=" + this.props.data.name)
+            //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
         }
     }
 

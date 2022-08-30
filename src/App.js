@@ -3,9 +3,10 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route}
     from 'react-router-dom';
 import Home from './pages/Home';
-import DeckView from './pages/Deck';
+import Deck from './pages/Deck';
+import Card from './pages/Card';
 import DeckEditor from './pages/DeckEditor';
-import NewCard from './pages/CardCreator';
+import CardCreator from './pages/CardCreator';
 import Registration from './pages/Registration';
 import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
@@ -20,9 +21,13 @@ return (
         <Route path="/search" element={<SearchResults />}>
             <Route path="/search/:query?" element={<SearchResults />} />
         </Route>
-        <Route exact path='/deckview' element={<DeckView />} />
+        <Route exact path='/deck' element={<Deck />} />
+        <Route path='/card' element={<Card />}>
+            
+            <Route path="/card/:id?" element={<Card />} />
+        </Route>
         <Route exact path='/deckeditor' element={<DeckEditor />} />
-        <Route exact path='/newcard' element={<NewCard />} />
+        <Route exact path='/cardcreator' element={<CardCreator />} />
         <Route exact path='/registration' element={<Registration />} />
     </Routes>
     </Router>
