@@ -1,14 +1,13 @@
 import React from 'react'
-import Navbar from '../components/NavBar/NavBar.js'
 
-const registation = () => {
+const Registration = () => {
 
   return (
 
     <div>
-        registation page
+        Registation
     </div>
 
   )}
 
-export default registation
+export default Registration
