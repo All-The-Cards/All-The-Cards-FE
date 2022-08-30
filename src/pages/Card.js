@@ -26,10 +26,10 @@ const Card = (props) => {
         cardName = cardName.replace('id=', '')
         console.log(cardName)
         let cardNameToQuery = "query=" + cardName
-        search(cardNameToQuery)
+        getCardByExactName(cardNameToQuery)
     }, [id])
 
-    const search = (query) => {
+    const getCardByExactName = (query) => {
       query = "/api/search/" + query
       //if query is empty, don't send
       if (query.trim() === "/api/search/" ) {
