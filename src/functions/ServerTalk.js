@@ -17,15 +17,15 @@ const config = process.env.NODE_ENV === 'development' ? development : production
 //     query (string) - "/dir/page"
 // Returns: Promise, expected to be handled
 // Usage: Example including class state and local members
+//
 //     let localMember = ""
-//     server.get(query)
+//     const [stateMember, setStateMember] = useState("")
+//     server.post(query)
 //       .then(response => {
 //         localMember = response.data
-//         this.setState({ 
-//           stateMember: response.data
-//         })
+//         setStateMember(response.data)
 //         return response
-//     }).then(response => console.log(response, localMember, this.state.stateMember))
+//     }).then(response => console.log(response, localMember, stateMember))
 //
 export function get(query){
     let url = this.buildAPIUrl(query)
@@ -54,15 +54,15 @@ export function get(query){
 //     query (string) - "/dir/page"
 // Returns: Promise, expected to be handled
 // Usage: Example including class state and local members
+//
 //     let localMember = ""
+//     const [stateMember, setStateMember] = useState("")
 //     server.post(query)
 //       .then(response => {
 //         localMember = response.data
-//         this.setState({ 
-//           stateMember: response.data
-//         })
+//         setStateMember(response.data)
 //         return response
-//     }).then(response => console.log(response, localMember, this.state.stateMember))
+//     }).then(response => console.log(response, localMember, stateMember))
 //
 export function post(query){
     let url = this.buildAPIUrl(query)

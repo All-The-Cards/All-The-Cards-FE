@@ -1,14 +1,13 @@
 import React from 'react'
-import Navbar from '../components/NavBar/NavBar.js'
 
-const deckeditor = () => {
+const DeckEditor = () => {
 
   return (
 
     <div>
-        deckeditor
+        DeckEditor
     </div>
 
   )}
 
-export default deckeditor
+export default DeckEditor

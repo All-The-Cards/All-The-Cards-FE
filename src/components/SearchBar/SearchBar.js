@@ -15,7 +15,7 @@ const SearchBar = () => {
             type="search"
             placeholder="Search..."
             size="small"
-            fullWidth="true"
+            fullWidth={true}
             sx={{
                 bgcolor: "white",
                 borderRadius: 25,

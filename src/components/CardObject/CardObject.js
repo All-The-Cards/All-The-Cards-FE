@@ -2,7 +2,7 @@
 
 import { React, Component } from "react";
 import './CardObject.css'
-import * as ServerTalk from '../../functions/ServerTalk.js';
+import * as server from '../../functions/ServerTalk.js';
 
 export default class CardObject extends Component {
 
@@ -13,7 +13,7 @@ export default class CardObject extends Component {
             // Find image link
             imgLink: this.getImage(),
             // Create page url
-            url: ServerTalk.buildRedirectUrl("/cards/" + this.props.data.set + "/" + this.props.data.name)
+            url: server.buildRedirectUrl("/cards/" + this.props.data.set + "/" + this.props.data.name)
         }
     }
 

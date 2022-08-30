@@ -2,11 +2,11 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route}
     from 'react-router-dom';
-import Home from './pages/homepage';
-import DeckView from './pages/deckview';
-import DeckEditor from './pages/deckeditor';
-import NewCard from './pages/newcard';
-import Registration from './pages/registration';
+import Home from './pages/Home';
+import DeckView from './pages/Deck';
+import DeckEditor from './pages/DeckEditor';
+import NewCard from './pages/CardCreator';
+import Registration from './pages/Registration';
 import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
 
