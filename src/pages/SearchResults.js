@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const SearchResults = (props) => {
 
@@ -20,13 +20,11 @@ const SearchResults = (props) => {
         }))
     }
 
-    const nav = useNavigate()
-
     const query = useSearchParams()[0].toString()
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
-        console.log(query)
+        //console.log(query)
         //search if query not empty
         if(query.trim() !== "query=") search(query)
     }, [query])
@@ -55,24 +53,8 @@ const SearchResults = (props) => {
 
   }
 
-  const handleChanges = (event) => {
-    updateState({
-      searchInput: event.target.value
-    })
-  }
   return (
     <div>
-      <input
-        placeholder="Search..."
-        value={state.searchInput}
-        onChange={handleChanges}>
-      </input>
-      <button 
-        onClick={() => {
-            if (state.searchInput.trim() !== "") {
-                nav("/search/?query=" + state.searchInput)
-            }
-        }}>Search</button>
       <div style={{ width: '400px' }}>
         <div>
           {state.resultsFound}

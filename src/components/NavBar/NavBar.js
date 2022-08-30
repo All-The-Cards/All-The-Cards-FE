@@ -2,8 +2,6 @@ import { React, useState, useEffect } from "react";
 import './NavBar.css';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import logo from './logo.png'
-import profile from './profile_icon.png'
-import layer from './layer_icon.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayersIcon from '@mui/icons-material/Layers';
 import PersonIcon from '@mui/icons-material/Person';
@@ -65,7 +63,7 @@ const Navbar = ({hasSearchBar}) => {
 
         <div className="SearchContainer">
             {hasSearchBar &&
-                <SearchBar/>
+                <SearchBar type="global"/>
             }
         </div>
     
