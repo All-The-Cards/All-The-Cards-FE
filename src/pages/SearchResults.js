@@ -31,8 +31,6 @@ const SearchResults = (props) => {
         if(query.trim() !== "query=") search(query)
     }, [query])
 
- 
-
   const search = (query) => {
     query = "/api/search/" + query
     //if query is empty, don't send
