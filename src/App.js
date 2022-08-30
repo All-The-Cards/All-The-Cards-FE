@@ -8,6 +8,7 @@ import DeckEditor from './pages/deckeditor';
 import NewCard from './pages/newcard';
 import Registration from './pages/registration';
 import Navbar from './components/NavBar/NavBar';
+import SearchResults from './pages/SearchResults';
 
   
 function App() {
@@ -16,6 +17,9 @@ return (
     <Navbar hasSearchBar={true}/>
     <Routes>
         <Route exact path='/' element={<Home />} />
+        <Route path="/search" element={<SearchResults />}>
+            <Route path="/search/:query?" element={<SearchResults />} />
+        </Route>
         <Route exact path='/deckview' element={<DeckView />} />
         <Route exact path='/deckeditor' element={<DeckEditor />} />
         <Route exact path='/newcard' element={<NewCard />} />
