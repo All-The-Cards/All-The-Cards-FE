@@ -1,5 +1,5 @@
 .NavBarContainer{
-    background-color: lightgray;
+    background-color: #E8E8E8;
     position: sticky;
     top: 0;
     height: 50px;
@@ -7,7 +7,6 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    box-shadow: 2px 2px 2px;
     /* border-style: solid; */
     
 }
