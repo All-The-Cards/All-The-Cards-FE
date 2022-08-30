@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Routes, Route}
 import Home from './pages/Home';
 import Deck from './pages/Deck';
 import Card from './pages/Card';
-import DeckEditor from './pages/DeckEditor';
+import DeckEditor from './pages/Deck-Editor';
 import CardCreator from './pages/CardCreator';
-import Registration from './pages/Registration';
+import Registration from './pages/User-Registration';
 import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
 
