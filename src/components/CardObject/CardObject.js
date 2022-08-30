@@ -22,7 +22,7 @@ export default class CardObject extends Component {
         let imgLink = ""
         if (this.props.data.image_uris !== null){
             // Replace all ' with " for.. JSON reasons
-            imgLink = JSON.parse(this.props.data.image_uris.replaceAll('\'', '\"' )).normal
+            imgLink = JSON.parse(this.props.data.image_uris.replaceAll('\'', '\"' )).png
         }
         else {
             //Card back, placeholder image
