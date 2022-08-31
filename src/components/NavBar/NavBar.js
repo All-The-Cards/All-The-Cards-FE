@@ -4,11 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
 import logo from './logo.png'
 import SearchBar from "../SearchBar/SearchBar";
-import LayersIcon from '@mui/icons-material/Layers';
-import PersonIcon from '@mui/icons-material/Person';
-import IconButton from "@mui/material/IconButton";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
   
 const Navbar = () => {
 
@@ -34,6 +29,7 @@ const Navbar = () => {
     const handeLogoClick = () => {
 
         nav('/')
+
     };
 
     // Each MenuItem must have an ID so the handler knows which page to navigate to
@@ -53,6 +49,7 @@ const Navbar = () => {
             nav('/registration')
         else
             setAnchorEl(null)
+
     };
 
     // Used for debugging
@@ -71,13 +68,14 @@ const Navbar = () => {
         </div>
 
         <div className="SearchContainer">
-            {hasSearchBar &&
+            { 
+                hasSearchBar &&
                 <SearchBar type="global"/>
             }
         </div>
     
         <div className="IconContainer">
-            <IconButton 
+            {/* <IconButton 
                 id="basic-layerbutton"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
@@ -127,7 +125,7 @@ const Navbar = () => {
                         <MenuItem id={'6'} onClick={handleClose}>Dark Mode</MenuItem>
                     </div>
                 }
-            </Menu>
+            </Menu> */}
             
         </div>
     </div>
