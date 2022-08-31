@@ -28,7 +28,7 @@ const config = process.env.NODE_ENV === 'development' ? development : production
 //     }).then(response => console.log(response, localMember, stateMember))
 //
 export function get(query){
-    let url = this.buildAPIUrl(query)
+    let url = buildAPIUrl(query)
 
     const data = { 
         method: 'GET'
@@ -65,7 +65,7 @@ export function get(query){
 //     }).then(response => console.log(response, localMember, stateMember))
 //
 export function post(query){
-    let url = this.buildAPIUrl(query)
+    let url = buildAPIUrl(query)
 
     const data = { 
         method: 'POST'
