@@ -1,6 +1,7 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import './NavBar.css';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { GlobalContext } from "../../context/GlobalContext";
 import logo from './logo.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayersIcon from '@mui/icons-material/Layers';
@@ -9,13 +10,19 @@ import IconButton from "@mui/material/IconButton";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
   
-const Navbar = ({hasSearchBar}) => {
+const Navbar = () => {
 
     const nav = useNavigate()
+
+    // Global Context Variables
+    const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+    // MUI Menu & MenuItem variables
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const [iconType, setIconType] = useState("");
 
+    // Opens the MUI Menu when the Icons are clicked
     const handleIconClick = (event) => {
 
         setAnchorEl(event.currentTarget)
@@ -23,11 +30,13 @@ const Navbar = ({hasSearchBar}) => {
 
     };
 
+    // This will bring the user back to the homepage or (Needs to be added!) refreshes the page when user is already on the homepage
     const handeLogoClick = () => {
 
         nav('/')
     };
 
+    // Each MenuItem must have an ID so the handler knows which page to navigate to
     const handleClose = (event) => {
 
         let id = event.currentTarget.id
@@ -46,12 +55,12 @@ const Navbar = ({hasSearchBar}) => {
             setAnchorEl(null)
     };
 
+    // Used for debugging
     // useEffect(()=>{
 
-    //     console.log(anchorEl)
-    //     console.log(iconType)
+    //     console.log(hasSearchBar)
         
-    // },[anchorEl])
+    // },[hasSearchBar])
 
 
   return(
