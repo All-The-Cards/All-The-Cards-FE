@@ -1,19 +1,19 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import './NavBar.css';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import logo from './logo.png'
-import profile from './profile_icon.png'
-import layer from './layer_icon.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayersIcon from '@mui/icons-material/Layers';
 import PersonIcon from '@mui/icons-material/Person';
 import IconButton from "@mui/material/IconButton";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { GlobalContext } from "../../context/GlobalContext";
   
-const Navbar = ({hasSearchBar}) => {
+const Navbar = () => {
 
     const nav = useNavigate()
+    const { hasSearchBar, setSearchBar } = useContext(GlobalContext)   
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
     const [iconType, setIconType] = useState("");
@@ -50,10 +50,9 @@ const Navbar = ({hasSearchBar}) => {
 
     // useEffect(()=>{
 
-    //     console.log(anchorEl)
-    //     console.log(iconType)
+    //     console.log(hasSearchBar)
         
-    // },[anchorEl])
+    // },[hasSearchBar])
 
 
   return(
@@ -63,11 +62,11 @@ const Navbar = ({hasSearchBar}) => {
             <img src={logo} alt="logo" className="Logo" onClick={handeLogoClick}></img>
         </div>
 
-        <div className="SearchContainer">
+        {/* <div className="SearchContainer">
             {hasSearchBar &&
                 <SearchBar/>
             }
-        </div>
+        </div> */}
     
         <div className="IconContainer">
             <IconButton 
