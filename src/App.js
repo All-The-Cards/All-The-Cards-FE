@@ -23,9 +23,9 @@ return (
                 <Route path="/search" element={<SearchResults />}>
                     <Route path="/search/:query?" element={<SearchResults />} />
                 </Route>
-                <Route exact path='/deck' element={<Deck />} />
+                <Route path='/deck' element={<Deck />} />
+                    <Route path="/deck/:id?" element={<Deck />} />
                 <Route path='/card' element={<Card />}>
-                    
                     <Route path="/card/:id?" element={<Card />} />
                 </Route>
                 <Route exact path='/deckeditor' element={<DeckEditor />} />
