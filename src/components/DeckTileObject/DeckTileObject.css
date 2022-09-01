@@ -1,0 +1,30 @@
+.DeckTileObjectContainer{
+    background-color: fuchsia;
+    width: 350px;
+    height: 230px;
+    margin: 10px;
+    border-radius:20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* box-shadow: 2px 2px 10px rgb(0, 0, 0, .5); */
+}
+.DeckInfo {
+    color:#f7f7f7;
+    padding-left: 10px;
+    padding-top: 5px;
+    text-shadow: 2px 2px 10px rgb(0, 0, 0, .5);
+}
+
+.DeckTitle{
+    font-size:24px;
+    font-weight: bold;
+}
+
+
+.DeckAuthor {
+    font-style: italic
+}
+
+a {
+    text-decoration: none;
+}
