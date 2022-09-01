@@ -1,4 +1,4 @@
-// This Component displays a Card Image from Card .JSON info
+// This Component displays a Deck Preview from Deck .JSON info
 
 import { React, Component } from "react";
 import './DeckTileObject.css'
@@ -33,16 +33,21 @@ export default class DeckTileObject extends Component {
 
     render() {
         return(
-            <a href={this.state.url}>
-                <div  
-                    className="DeckTileObjectContainer"
-                    style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + this.getImage() + ')'}}>
-                    <div className="DeckInfo">
-                        <div className="DeckTitle">{this.state.data.title}</div>
-                        <div className="DeckAuthor">{this.state.data.author}</div>
+            <div
+                className="DeckTileObjectContainer"
+                style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + this.getImage() + ')'}}
+            >
+                <a 
+                    href={this.state.url}
+                >
+                    <div className="DeckClickable">
+                        <div className="DeckInfo">
+                            <div className="DeckTitle">{this.state.data.title}</div>
+                            <div className="DeckAuthor">{this.state.data.author}</div>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
 
         );
     }

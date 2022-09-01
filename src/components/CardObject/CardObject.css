@@ -1,11 +1,14 @@
 .CardObjectContainer{
-    /*background-color: fuchsia;*/
-    width: 188px;
-    height: 262px;
-    margin: 10px;
+    /* background-color: fuchsia;  */
+    width: 250px;
+    height: 350px;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-.CardImage{
-    max-width: 100%;
-    max-height: 100%;
+.CardObjectImage {
+    width: 250px;
+    height: 350px;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
