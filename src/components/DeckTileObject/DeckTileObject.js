@@ -34,9 +34,9 @@ export default class DeckTileObject extends Component {
     render() {
         return(
             <div
-            className="DeckTileObjectContainer"
-            style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + this.getImage() + ')'}}>
-            
+                className="DeckTileObjectContainer"
+                style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + this.getImage() + ')'}}
+            >
                 <a 
                     href={this.state.url}
                 >

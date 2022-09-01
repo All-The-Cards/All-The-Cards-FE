@@ -1,20 +1,22 @@
 .CardListObjectContainer{
+    width: 250px;
     background-color: #e8e8e8; 
+    border-radius: 10px;
+}
+
+.CardListInfo {
+    display: table;
     width: 250px;
     height: 30px;
-    border-radius: 10px;
+}
+
+.CardListContent {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 8px;
+}
+
+a {
+    text-decoration: none;
     color: #000000;
-    display: table;
-}
-
-.CardListContent-Left {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 8px;
-}
-
-.CardListContent-Right {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 8px;
 }

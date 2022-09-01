@@ -34,9 +34,11 @@ export default class CardObject extends Component {
     render() {
         return(
             <div 
-            className="CardObjectContainer">
+                className="CardObjectContainer"
+            >
                 <a 
-                    href={this.state.url}>
+                    href={this.state.url}
+                >
                     <img 
                         src={this.getImage()}
                         className="CardObjectImage">

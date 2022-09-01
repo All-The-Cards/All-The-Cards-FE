@@ -18,16 +18,19 @@ export default class CardListObject extends Component {
 
     render() {
         return(
-            <div style={{width: '250px'}}>
-                <a  
-                    className="CardListObjectContainer"
+            <div 
+                className="CardListObjectContainer"
+            >
+                <a 
                     href={this.state.url}
                 >
-                    <div className="CardListContent-Left">
-                        {this.state.data.name}
-                    </div>
-                    <div className="CardListContent-Right">
-                        {this.state.data.color_identity}
+                    <div className="CardListInfo">
+                        <div className="CardListContent">
+                            {this.state.data.name}
+                        </div>
+                        <div className="CardListContent">
+                            {this.state.data.color_identity}
+                        </div>
                     </div>
                 </a>
             </div>
