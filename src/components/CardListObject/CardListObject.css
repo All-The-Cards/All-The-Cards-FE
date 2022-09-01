@@ -1,0 +1,20 @@
+.CardListObjectContainer{
+    background-color: #e8e8e8; 
+    width: 250px;
+    height: 30px;
+    border-radius: 10px;
+    color: #000000;
+    display: table;
+}
+
+.CardListContent-Left {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 8px;
+}
+
+.CardListContent-Right {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 8px;
+}
