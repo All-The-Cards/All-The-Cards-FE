@@ -1,4 +1,4 @@
-// This Component displays a Card Image from Card .JSON info
+// This Component displays a Card List View from Card .JSON info
 
 import { React, Component } from "react";
 import './CardObject.css'
@@ -33,16 +33,16 @@ export default class CardObject extends Component {
 
     render() {
         return(
-            <a  
-                href={this.state.url}
-                className="CardObjectContainer">
-                <img
-                    className="CardImage" 
-                    src={this.state.imgLink}
-                    title={this.state.data.name}
-                    alt={this.state.data.name}>
-                </img>
-            </a>
+            <div 
+            className="CardObjectContainer">
+                <a 
+                    href={this.state.url}>
+                    <img 
+                        src={this.getImage()}
+                        className="CardObjectImage">
+                    </img>
+                </a>
+            </div>
 
         );
     }
