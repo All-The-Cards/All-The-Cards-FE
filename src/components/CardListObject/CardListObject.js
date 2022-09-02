@@ -1,40 +1,58 @@
 // This Component displays a Card Image from Card .JSON info
 
-import { React, Component, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import './CardListObject.css'
 import * as server from '../../functions/ServerTalk.js';
+import { useNavigate } from 'react-router-dom';
 
-export default class CardListObject extends Component {
+const CardListObject = (props) => {
 
-    constructor(props){
-        super(props)
-        this.state = {
-            data: this.props.data,
-            // Create page url
-            url: server.buildRedirectUrl("/card/?id=" + this.props.data.id)
-            //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
-        }
+    const [state, setState] = useState({
+        data: props.data,
+        // Create page url
+        url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
+
+    })
+
+    const nav = useNavigate()
+
+    const updateState = (objectToUpdate) => {
+        setState((previous) => ({
+            ...previous,
+            ...objectToUpdate
+        }))
+    }
+    
+    function getData() {
+        updateState({ 
+            data: props.data, 
+            url: server.buildRedirectUrl("/deck/?id=" + props.data.id
+        )})
     }
 
-    render() {
-        return(
-            <div 
-                className="CardListObjectContainer"
+    useEffect(() => {
+        getData()
+    }, [props])
+    
+    return(
+        <div 
+            className="CardListObjectContainer"
+        >
+            <a 
+                href={state.url}
             >
-                <a 
-                    href={this.state.url}
-                >
-                    <div className="CardListInfo">
-                        <div className="CardListContent">
-                            {this.state.data.name} 
-                        </div>
-                        <div className="CardListContent">
-                            {/* {this.state.data.set_shorthand.toUpperCase()} */}
-                        </div>
+                <div className="CardListInfo">
+                    <div className="CardListContent">
+                        {state.data.name} 
                     </div>
-                </a>
-            </div>
+                    <div className="CardListContent">
+                        {/* {this.state.data.set_shorthand.toUpperCase()} */}
+                    </div>
+                </div>
+            </a>
+        </div>
 
-        );
-    }
+    );
 };
+
+export default CardListObject

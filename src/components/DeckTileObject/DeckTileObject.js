@@ -1,28 +1,45 @@
 // This Component displays a Deck Preview from Deck .JSON info
 
-import { React, Component } from "react";
+import { React, useEffect, useState } from "react";
 import './DeckTileObject.css'
 import * as server from '../../functions/ServerTalk.js';
+import { useNavigate } from 'react-router-dom';
 
-export default class DeckTileObject extends Component {
+const DeckTileObject = (props) => {
+    const [state, setState] = useState({
+        data: props.data,
+        // Find image link
+        imgLink: props.data.cover_art,
+        // Create page url
+        url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
 
-    constructor(props){
-        super(props)
-        this.state = {
-            data: this.props.data,
-            // Find image link
-            // imgLink: this.getImage(),
-            // Create page url
-            url: server.buildRedirectUrl("/deck/?id=" + this.props.data.id)
-            //url: server.buildRedirectUrl("/deck/" + this.props.data.set + "/" + this.props.data.name)
-        }
+    })
+    const nav = useNavigate()
+
+    const updateState = (objectToUpdate) => {
+        setState((previous) => ({
+            ...previous,
+            ...objectToUpdate
+        }))
     }
 
-    getImage(){
+    useEffect(() => {
+        getData()
+    }, [props])
+    
+    function getData(){
+        updateState({
+            data: props.data,
+            url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+            imgLink: getImage()
+        })
+    }
+    
+    function getImage(){
         let imgLink = ""
-        if (this.props.data.cover_art !== null){
+        if (props.data.cover_art !== null){
             // Replace all ' with " for.. JSON reasons
-            imgLink = this.props.data.cover_art
+            imgLink = props.data.cover_art
         }
         else {
             //Card back, placeholder image
@@ -31,24 +48,25 @@ export default class DeckTileObject extends Component {
         return imgLink
     }
 
-    render() {
-        return(
-            <div
-                className="DeckTileObjectContainer"
-                style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4) ), url(' + this.getImage() + ')'}}
+    return(
+        <div
+            className="DeckTileObjectContainer"
+            style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + state.imgLink + ')'}}
+        >
+            <a 
+                href={state.url}
             >
-                <a 
-                    href={this.state.url}
-                >
-                    <div className="DeckClickable">
-                        <div className="DeckInfo">
-                            <div className="DeckTitle">{this.state.data.name}</div>
-                            <div className="DeckAuthor">{this.state.data.user_id}</div>
-                        </div>
+                <div className="DeckClickable">
+                    <div className="DeckInfo">
+                        <div className="DeckTitle">{state.data.name}</div>
+                        <div className="DeckAuthor">{state.data.user_id}</div>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
+        </div>
 
-        );
-    }
+    );
+    
 };
+
+export default DeckTileObject
