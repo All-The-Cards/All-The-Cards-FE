@@ -1,6 +1,6 @@
 // This Component displays a Card Image from Card .JSON info
 
-import { React, Component } from "react";
+import { React, Component, useEffect } from "react";
 import './CardListObject.css'
 import * as server from '../../functions/ServerTalk.js';
 
@@ -11,7 +11,7 @@ export default class CardListObject extends Component {
         this.state = {
             data: this.props.data,
             // Create page url
-            url: server.buildRedirectUrl("/card/?id=" + this.props.data.name)
+            url: server.buildRedirectUrl("/card/?id=" + this.props.data.id)
             //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
         }
     }
@@ -26,10 +26,10 @@ export default class CardListObject extends Component {
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent">
-                            {this.state.data.name}
+                            {this.state.data.name} 
                         </div>
                         <div className="CardListContent">
-                            {this.state.data.color_identity}
+                            {/* {this.state.data.set_shorthand.toUpperCase()} */}
                         </div>
                     </div>
                 </a>

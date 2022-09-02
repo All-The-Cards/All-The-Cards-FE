@@ -11,7 +11,7 @@ export default class DeckTileObject extends Component {
         this.state = {
             data: this.props.data,
             // Find image link
-            imgLink: this.getImage(),
+            // imgLink: this.getImage(),
             // Create page url
             url: server.buildRedirectUrl("/deck/?id=" + this.props.data.id)
             //url: server.buildRedirectUrl("/deck/" + this.props.data.set + "/" + this.props.data.name)
@@ -35,15 +35,15 @@ export default class DeckTileObject extends Component {
         return(
             <div
                 className="DeckTileObjectContainer"
-                style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + this.getImage() + ')'}}
+                style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4) ), url(' + this.getImage() + ')'}}
             >
                 <a 
                     href={this.state.url}
                 >
                     <div className="DeckClickable">
                         <div className="DeckInfo">
-                            <div className="DeckTitle">{this.state.data.title}</div>
-                            <div className="DeckAuthor">{this.state.data.author}</div>
+                            <div className="DeckTitle">{this.state.data.name}</div>
+                            <div className="DeckAuthor">{this.state.data.user_id}</div>
                         </div>
                     </div>
                 </a>

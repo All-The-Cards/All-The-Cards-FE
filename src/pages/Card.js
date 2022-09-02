@@ -6,7 +6,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 const Card = (props) => {
 
     const [state, setState] = useState({
-      card: <div></div>
+      card: <div></div>,
+      data: {}
     })
 
     const updateState = (objectToUpdate) => {
@@ -17,35 +18,31 @@ const Card = (props) => {
     }
 
     const nav = useNavigate()
-
     const id = useSearchParams()[0].toString()
 
     useEffect(() => {
       //clean up string from id format to search query format
-        let cardName = id.replaceAll('+', ' ')
-        cardName = cardName.replace('id=', '')
-        console.log(cardName)
-        let cardNameToQuery = "query=" + cardName
-        getCardByExactName(cardNameToQuery)
+        getCardById(id)
     }, [id])
 
-    const getCardByExactName = (query) => {
-      query = "/api/search/" + query
+    const getCardById = (query) => {
+      query = "/api/get/card/" + query
       //if query is empty, don't send
-      if (query.trim() === "/api/search/" ) {
+      if (query.trim() === "/api/get/card/" ) {
         return
       }
       //clear results
       updateState({ card: <div></div> })
   
       server.post(query).then(response => {
-        console.log(response)
+        console.log(response[0])
         //if invalid, just direct to search page
         if (response.length === 0) {
           nav('/search/')
         }
         else {
           updateState({
+            data: response[0],
             card: <CardObject data={response[0]}/>
           })
         }
@@ -56,7 +53,10 @@ const Card = (props) => {
 
   return (
     <div>
-      <div>{state.card}</div>
+      <div>
+        {state.data.name}, {state.data.set_name}
+        {state.card}
+      </div>
     </div>
   );
 
