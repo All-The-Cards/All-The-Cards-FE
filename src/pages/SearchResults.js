@@ -31,9 +31,11 @@ const SearchResults = (props) => {
     }, [query])
 
   const search = (query) => {
-    query = "/api/search/" + query
+    query = query.replaceAll('+', '%20')
+    query = "/api/search/card/" + query
+    console.log(query)
     //if query is empty, don't send
-    if (query.trim() === "/api/search/" ) {
+    if (query.trim() === "/api/search/card/" ) {
       return
     }
     //clear results
@@ -48,6 +50,7 @@ const SearchResults = (props) => {
           resultsFound: <div>{response.length} Results Found</div>,
           searchResults: response
         })
+        console.log(response[0])
       }
 
     })

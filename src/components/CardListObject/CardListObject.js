@@ -11,7 +11,7 @@ export default class CardListObject extends Component {
         this.state = {
             data: this.props.data,
             // Create page url
-            url: server.buildRedirectUrl("/card/?id=" + this.props.data.name)
+            url: server.buildRedirectUrl("/card/?id=" + this.props.data.id)
             //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
         }
     }
@@ -26,7 +26,7 @@ export default class CardListObject extends Component {
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent">
-                            {this.state.data.name}
+                            {this.state.data.name} {this.state.data.set_shorthand}
                         </div>
                         <div className="CardListContent">
                             {this.state.data.color_identity}

@@ -11,9 +11,9 @@ export default class CardObject extends Component {
         this.state = {
             data: this.props.data,
             // Find image link
-            imgLink: this.getImage(),
+            // imgLink: JSON.parse(this.props.data.image_uris).small,
             // Create page url
-            url: server.buildRedirectUrl("/card/?id=" + this.props.data.name)
+            url: server.buildRedirectUrl("/card/?id=" + this.props.data.id)
             //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
         }
     }
