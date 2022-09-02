@@ -25,10 +25,16 @@ const DeckTileObject = (props) => {
     }
 
     useEffect(() => {
-        getImage()
+        getData()
     }, [props])
     
-
+    function getData(){
+        getImage()
+        updateState({
+            data: props.data,
+            url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
+        })
+    }
     function getImage(){
         let imgLink = ""
         if (props.data.cover_art !== null){
