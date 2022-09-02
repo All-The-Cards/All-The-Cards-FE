@@ -1,28 +1,45 @@
 // This Component displays a Card List View from Card .JSON info
 
-import { React, Component } from "react";
+import { React, useState, useEffect } from "react";
 import './CardObject.css'
 import * as server from '../../functions/ServerTalk.js';
+import { useNavigate } from 'react-router-dom';
+import Card from "../../pages/Card";
 
-export default class CardObject extends Component {
+const CardObject = (props) => {
+    const [state, setState] = useState({
+        data: props.data,
+        // Create page url
+        url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+        imgLink: getImage()
 
-    constructor(props){
-        super(props)
-        this.state = {
-            data: this.props.data,
-            // Find image link
-            // imgLink: JSON.parse(this.props.data.image_uris).small,
-            // Create page url
-            url: server.buildRedirectUrl("/card/?id=" + this.props.data.id)
-            //url: server.buildRedirectUrl("/card/" + this.props.data.set + "/" + this.props.data.name)
-        }
+    })
+    const nav = useNavigate()
+
+    const updateState = (objectToUpdate) => {
+        setState((previous) => ({
+            ...previous,
+            ...objectToUpdate
+        }))
     }
 
-    getImage(){
+    useEffect(() => {
+        getData()
+    }, [props])
+
+    function getData(){
+        updateState({
+            data: props.data,
+            url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+            imgLink: getImage()
+        })
+    }
+
+    function getImage(){
         let imgLink = ""
-        if (this.props.data.image_uris !== null){
+        if (props.data.image_uris !== null){
             // Replace all ' with " for.. JSON reasons
-            imgLink = JSON.parse(this.props.data.image_uris.replaceAll('\'', '\"' )).png
+            imgLink = JSON.parse(props.data.image_uris.replaceAll('\'', '\"' )).png
         }
         else {
             //Card back, placeholder image
@@ -31,21 +48,21 @@ export default class CardObject extends Component {
         return imgLink
     }
 
-    render() {
-        return(
-            <div 
-                className="CardObjectContainer"
+    return(
+        <div 
+            className="CardObjectContainer"
+        >
+            <a 
+                href={state.url}
             >
-                <a 
-                    href={this.state.url}
-                >
-                    <img 
-                        src={this.getImage()}
-                        className="CardObjectImage">
-                    </img>
-                </a>
-            </div>
+                <img 
+                    src={state.imgLink}
+                    className="CardObjectImage">
+                </img>
+            </a>
+        </div>
 
-        );
-    }
+    );
 };
+
+export default CardObject

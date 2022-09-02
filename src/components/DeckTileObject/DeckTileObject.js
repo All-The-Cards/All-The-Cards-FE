@@ -1,9 +1,8 @@
 // This Component displays a Deck Preview from Deck .JSON info
 
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import './DeckTileObject.css'
 import * as server from '../../functions/ServerTalk.js';
-import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const DeckTileObject = (props) => {
@@ -29,21 +28,22 @@ const DeckTileObject = (props) => {
     }, [props])
     
     function getData(){
-        getImage()
         updateState({
             data: props.data,
-            url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
+            url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+            imgLink: getImage()
         })
     }
+    
     function getImage(){
         let imgLink = ""
         if (props.data.cover_art !== null){
             // Replace all ' with " for.. JSON reasons
-            updateState({ imgLink: props.data.cover_art })
+            imgLink = props.data.cover_art
         }
         else {
             //Card back, placeholder image
-            updateState({ imgLink: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg" })
+            imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
         }
         return imgLink
     }

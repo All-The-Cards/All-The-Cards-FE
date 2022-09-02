@@ -145,7 +145,7 @@ const SearchResults = (props) => {
       
       <div style={{overflow:'auto', whiteSpace:'nowrap'}}>
         {state.deckResults.slice(state.deckResultIndex, state.deckResultIndex + state.showResultAmount).map((item, i) => 
-            <div style={{margin: '10px'}}key={i}><DeckTileObject data={item}/></div>
+            <div style={{margin: '10px', display:'inline-block'}}key={i}><DeckTileObject data={item}/></div>
           )
         }
       </div>
