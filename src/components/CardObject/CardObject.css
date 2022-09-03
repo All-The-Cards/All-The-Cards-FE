@@ -12,3 +12,22 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
+
+.CardListObjectContainer{
+    width: 250px;
+    background-color: #e8e8e8; 
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.CardListInfo {
+    display: table;
+    width: 250px;
+    height: 30px;
+}
+
+.CardListContent {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 8px;
+}

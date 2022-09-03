@@ -9,6 +9,7 @@ import Card from "../../pages/Card";
 const CardObject = (props) => {
     const [state, setState] = useState({
         data: props.data,
+        isCompact: props,
         // Create page url
         url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
         imgLink: getImage()
@@ -27,7 +28,7 @@ const CardObject = (props) => {
         getData()
     }, [props])
 
-    function getData(){
+    function getData() {
         updateState({
             data: props.data,
             url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
@@ -35,11 +36,11 @@ const CardObject = (props) => {
         })
     }
 
-    function getImage(){
+    function getImage() {
         let imgLink = ""
-        if (props.data.image_uris !== null){
+        if (props.data.image_uris !== null) {
             // Replace all ' with " for.. JSON reasons
-            imgLink = JSON.parse(props.data.image_uris.replaceAll('\'', '\"' )).png
+            imgLink = JSON.parse(props.data.image_uris.replaceAll('\'', '\"')).png
         }
         else {
             //Card back, placeholder image
@@ -48,20 +49,38 @@ const CardObject = (props) => {
         return imgLink
     }
 
-    return(
-        <div 
-            className="CardObjectContainer"
-        >
-            <a 
-                href={state.url}
+    return (
+        <>
+            {state.isCompact === true ? <div
+                className="CardListObjectContainer"
             >
-                <img 
-                    src={state.imgLink}
-                    className="CardObjectImage">
-                </img>
-            </a>
-        </div>
+                <a
+                    href={state.url}
+                >
+                    <div className="CardListInfo">
+                        <div className="CardListContent">
+                            {state.data.name}
+                        </div>
+                        <div className="CardListContent">
+                            {/* {this.state.data.set_shorthand.toUpperCase()} */}
+                        </div>
+                    </div>
+                </a>
+            </div>
+                : <div
+                    className="CardObjectContainer"
+                >
+                    <a
+                        href={state.url}
+                    >
+                        <img
+                            src={state.imgLink}
+                            className="CardObjectImage">
+                        </img>
+                    </a>
+                </div>}
 
+        </>
     );
 };
 

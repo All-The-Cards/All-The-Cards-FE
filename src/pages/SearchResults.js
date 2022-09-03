@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
-import CardListObject from '../components/CardListObject/CardListObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
 import { useSearchParams } from 'react-router-dom';
@@ -120,7 +119,7 @@ const SearchResults = (props) => {
       
       <div style={{overflow:'auto', whiteSpace:'nowrap'}}>
         {state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmount).map((item, i) => 
-            <div style={{margin: '10px', display:'inline-block'}}key={i}><CardListObject data={item}/> <CardObject data={item}/></div>
+            <div style={{margin: '10px', display:'inline-block'}}key={i}><CardObject data={item}/></div>
           )
         }
       </div>
