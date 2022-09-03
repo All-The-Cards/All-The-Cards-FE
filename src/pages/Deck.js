@@ -1,13 +1,16 @@
 import { React, useState, useEffect } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
+import * as utilities from '../functions/Utilities.js';
+
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardList from '../components/CardStack/CardStack.js';
 
 const Deck = (props) => {
 
   const [state, setState] = useState({
-    data: []
+    data: [],
+    viewMode: "Spread"
   })
 
   const updateState = (objectToUpdate) => {
@@ -43,6 +46,7 @@ const Deck = (props) => {
           data: response
         })
         console.log(response)
+        console.log(utilities.mapCardsToTypes(response))
       }
 
     })
@@ -66,11 +70,16 @@ const Deck = (props) => {
       </label>
 
       {state.viewMode === "Spread" ? <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-        {state.data.map((item, i) =>
-          <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={item} /></div>
+        {state.data.map((card, i) =>
+          <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} /></div>
         )}
       </div> : <></>}
       {state.viewMode === "Stacked" ? <CardList cards={state.data}/> : <></>}
+      {state.viewMode === "Categorized" ? <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+          {utilities.mapCardsToTypes(state.data).map((typeList) => (
+            <CardList cards={typeList.cards} label={typeList.type}/>
+          ))}
+      </div> : <></>}
 
     </div>
   );
