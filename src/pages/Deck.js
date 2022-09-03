@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
-import CardListObject from '../components/CardListObject/CardListObject.js';
 import * as server from '../functions/ServerTalk.js';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
@@ -54,7 +53,7 @@ const Deck = (props) => {
       <div>
         {state.data.name}
         {state.data.map((item, i) => 
-          <div style={{margin: '10px', display:'inline-block'}}key={i}><CardListObject data={item}/> <CardObject data={item}/></div>
+          <div style={{margin: '10px', display:'inline-block'}}key={i}><CardObject data={item}/></div>
         )}
       </div>
     </div>
