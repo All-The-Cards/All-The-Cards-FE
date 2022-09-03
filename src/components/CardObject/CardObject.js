@@ -9,7 +9,6 @@ import Card from "../../pages/Card";
 const CardObject = (props) => {
     const [state, setState] = useState({
         data: props.data,
-        isCompact: props,
         // Create page url
         url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
         imgLink: getImage()
@@ -51,7 +50,7 @@ const CardObject = (props) => {
 
     return (
         <>
-            {state.isCompact === true ? <div
+            {props.isCompact === true ? <div
                 className="CardListObjectContainer"
             >
                 <a
