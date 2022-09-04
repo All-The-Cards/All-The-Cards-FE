@@ -1,7 +1,10 @@
 import { React, useState } from 'react';
+import './SearchBar.css';
 import { useNavigate } from 'react-router-dom';
 import * as server from '../../functions/ServerTalk.js';
-import CardObject from '../CardObject/CardObject.js'
+import CardObject from '../CardObject/CardObject.js';
+import SearchGlass from './SearchGlass.png';
+
 
 // Parameters:
 //      type
@@ -10,6 +13,7 @@ import CardObject from '../CardObject/CardObject.js'
 //          'local' gets search results locally, for deckbuilder use
 //                  
 //
+
 const SearchBar = (params) => {
     const [state, setState] = useState({
         searchResults: [],
@@ -20,6 +24,7 @@ const SearchBar = (params) => {
         type: params.type,
     })
 
+    const [searchIconShadow, setIconShadow] = useState(false);
     const nav = useNavigate()
 
     const updateState = (objectToUpdate) => {
@@ -74,8 +79,10 @@ const SearchBar = (params) => {
       }
   return (
 
-    <div className="SearchBar">
+    <div className='SearchContainer'>
         <input
+            className="SearchBar"
+            maxLength={50}
             onKeyPress={(e) => {
                 if (e.key === 'Enter') {
                     submitQuery()
@@ -84,9 +91,15 @@ const SearchBar = (params) => {
             placeholder="Search..."
             value={state.searchInput}
             onChange={handleChanges}
-            >
-        </input>
-        <button onClick={submitQuery}>Search!</button>
+        />
+        <img src={SearchGlass} 
+            alt="SearchGlass" 
+            className={`SearchIcon ${searchIconShadow ? "SearchIconShadow" : ''}`} 
+            onMouseEnter={() => setIconShadow(true)} 
+            onMouseLeave={() => setIconShadow(false)}
+            onClick={submitQuery}
+        />
+        {/* <button onClick={submitQuery}>Search!</button> */}
         <div>
             {state.resultsFound}
         {state.searchResults.map((item, i) => <CardObject data={item} key={i} />)}

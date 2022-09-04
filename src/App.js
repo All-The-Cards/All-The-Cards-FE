@@ -12,6 +12,7 @@ import CardCreator from './pages/CardCreator';
 import Registration from './pages/User-Registration';
 import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
+import Login from './pages/Login';
   
 function App() {
 return (
@@ -31,6 +32,7 @@ return (
                 <Route exact path='/deckeditor' element={<DeckEditor />} />
                 <Route exact path='/cardcreator' element={<CardCreator />} />
                 <Route exact path='/registration' element={<Registration />} />
+                <Route exact path='/login' element={<Login />} />
             </Routes>
         </GlobalProvider>
     </BrowserRouter>

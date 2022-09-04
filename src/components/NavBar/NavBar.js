@@ -1,35 +1,59 @@
-import { React, useState, useEffect, useContext } from "react";
+import { React, useState, useEffect, useContext, useRef} from "react";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
-import logo from './logo.png'
+import Logo from './logo.png'
 import SearchBar from "../SearchBar/SearchBar";
+import LayerIcon from './layers_icon.png'
+import UsersIcon from './users_icon.png'
+
   
 const Navbar = () => {
 
     const nav = useNavigate()
+    const wrapperRef = useRef(null)
 
     // Global Context Variables
     const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
-    // MUI Menu & MenuItem variables
-    const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-    const [iconType, setIconType] = useState("");
-
-    // Opens the MUI Menu when the Icons are clicked
-    const handleIconClick = (event) => {
-
-        setAnchorEl(event.currentTarget)
-        setIconType(event.currentTarget.id)
-
-    };
+    // Variables strickly on the NavBar
+    const [layerShadow, setLayerShadow] = useState(false);
+    const [userShadow, setUserShadow] = useState(false);
+    const [openLayerMenu, setLayerMenu] = useState(false);
+    const [openUserMenu, setUserMenu] = useState(false);
 
     // This will bring the user back to the homepage or (Needs to be added!) refreshes the page when user is already on the homepage
     const handeLogoClick = () => {
 
-        nav('/')
+        if(window.location.pathname !== "/")
+        {
+            nav('/')
+            setSearchBar(true)
+        }
+        else
+        {
+           window.location.reload(false);
+        }
 
+    };
+
+    // Opens the menu when an icon is clicked
+    const onClickHandler = () => {
+
+        if(layerShadow)
+            setLayerMenu(true)
+        else if(userShadow)
+            setUserMenu(true)
+
+    };
+
+    // Handles clicking outside of the menu
+    const handleClickOutside = (e) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+            
+            setLayerMenu(false)
+            setUserMenu(false)
+        }
     };
 
     // Each MenuItem must have an ID so the handler knows which page to navigate to
@@ -38,96 +62,90 @@ const Navbar = () => {
         let id = event.currentTarget.id
 
         if(id === '1')
-            nav('/deckview')
+        {
+            setLayerMenu(false)
+            setUserMenu(false)            
+            nav('/deck')
+        }
         else if (id === '2')
+        {
+            setLayerMenu(false)
+            setUserMenu(false)   
             nav('/deckeditor')
+        }
         else if (id === '3')
-            nav('/newcard')
+        {
+            setLayerMenu(false)
+            setUserMenu(false)  
+            nav('/cardcreator')
+        }
         else if (id === '4')
-            setAnchorEl(null)
+        {
+            setSearchBar(false)
+            setLayerMenu(false)
+            setUserMenu(false)  
+            nav('/login')
+        }
         else if (id === '5')
+        {
+            setSearchBar(false)
+            setLayerMenu(false)
+            setUserMenu(false) 
             nav('/registration')
+        }
         else
-            setAnchorEl(null)
+            console.log("Dark Mode Activated")
 
     };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside, true)
+        return () => {
+            document.addEventListener("click", handleClickOutside, true)
+        }
+      }, [wrapperRef]);
 
     // Used for debugging
     // useEffect(()=>{
 
-    //     console.log(hasSearchBar)
+    //     console.log(showShadow)
         
-    // },[hasSearchBar])
+    // },[showShadow])
 
 
   return(
 
     <div className="NavBarContainer">
         <div className="LogoContainer">
-            <img src={logo} alt="logo" className="Logo" onClick={handeLogoClick}></img>
+            <img src={Logo} alt="logo" className="Logo" onClick={handeLogoClick}></img>
         </div>
 
-        <div className="SearchContainer">
-            { 
-                hasSearchBar &&
-                <SearchBar type="global"/>
+        { 
+            hasSearchBar &&
+            <SearchBar type="global"/>
+        }
+
+        <div className="IconContainer">
+            <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img> 
+            {openLayerMenu &&
+                <div id={'1'} className="LayerMenu" ref={wrapperRef}>
+                    <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div>
+                    <div id={'2'} className="MenuItems" onClick={handleClose}>New Deck</div>
+                    <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
+                </div>
+            }
+            <img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+            {openUserMenu &&
+                <div>
+                    <div id={'2'} className="UserMenu" ref={wrapperRef}>
+                        <div id={'4'} className="MenuItems" onClick={handleClose}>Login</div>
+                        <div id={'5'} className="MenuItems" onClick={handleClose}>Register</div>
+                        <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
+                    </div>
+                </div>
             }
         </div>
-    
-        <div className="IconContainer">
-            {/* <IconButton 
-                id="basic-layerbutton"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleIconClick}
-                sx={{
-                    color: "black"
-                }}
-            >
-                <LayersIcon fontSize="medium" />
-            </IconButton>
 
-            <IconButton
-                id="basic-profilebutton"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleIconClick}
-                sx={{
-                    color: "black"
-                }}
-            >
-                <PersonIcon fontSize="medium" />
-            </IconButton>
-
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                'aria-labelledby': 'basic-layerbutton',
-                }}
-            >
-                {iconType === "basic-layerbutton" &&
-                    <div>
-                        <MenuItem id={'1'} onClick={handleClose}>View Library</MenuItem>
-                        <MenuItem id={'2'} onClick={handleClose}>New Deck</MenuItem>
-                        <MenuItem id={'3'} onClick={handleClose}>New Card</MenuItem>
-                    </div>
-                }
-
-                {iconType === "basic-profilebutton" &&
-                    <div>
-                        <MenuItem id={'4'} onClick={handleClose}>Login</MenuItem>
-                        <MenuItem id={'5'} onClick={handleClose}>Create Account</MenuItem>
-                        <MenuItem id={'6'} onClick={handleClose}>Dark Mode</MenuItem>
-                    </div>
-                }
-            </Menu> */}
-            
-        </div>
     </div>
 
   );

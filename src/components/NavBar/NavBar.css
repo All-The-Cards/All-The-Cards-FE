@@ -7,6 +7,7 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
+    box-shadow: 1px 2px 3px black;
     /* border-style: solid; */
     
 }
@@ -34,20 +35,6 @@
     font-size: 22px;
 }
 
-/* Center Container of NavBar */
-
-.SearchContainer{
-    width: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* border-style: solid; */
-}
-
-.SearchBar{
-    width: 60%;
-    /* border-style: solid; */
-}
 
 /* Right Side Container of NavBar */
 
@@ -60,10 +47,68 @@
 }
 
 .Icons{
-    height: 50%;
+    margin: 3px;
+    height: 40%;
     width: auto;
-    padding: 5px;
+    padding: 7px;
+    border-width: 2px;
+    cursor: pointer;
+}
+
+.LayerIcon{
+    height: 40%;
+    width: auto;
+    padding: 7px;
     /* border-style: solid; */
     border-width: 2px;
+    cursor: pointer;
+    background-color: lightgrey;
+    border-radius: 50%;
+}
+
+.UserIcon{
+    margin: 3px;
+    height: 40%;
+    width: auto;
+    padding: 7px;
+    border-width: 2px;
+    cursor: pointer;
+    background-color: lightgray;
+    border-radius: 50%;
+}
+
+/*Dropdown Menu*/
+.LayerMenu{
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: auto;
+    width: 100px;
+    box-shadow: 1px 3px 5px black;
+    position: absolute;
+    z-index: 1;
+    right: 15px;
+    top: 40px
+}
+
+.UserMenu{
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: auto;
+    width: 90px;;
+    box-shadow: 1px 3px 5px black;
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    top: 40px
+}
+
+.MenuItems{
+    padding: 2px;
     cursor: pointer;
 }
