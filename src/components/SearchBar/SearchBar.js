@@ -41,42 +41,10 @@ const SearchBar = (params) => {
     }
 
     const submitQuery = () => {
-        if (state.type === 'global') {
-            if (state.searchInput.trim() !== "") {
-                nav("/search/?query=" + state.searchInput)
-             }
-        }
-        if (state.type === 'local'){
-            //send a query to the server for matching cards
-            if (state.searchInput.trim() !== "") {
-                search("query=" + state.searchInput.trim())
+        if (state.searchInput.trim() !== "") {
+            nav("/search/?query=" + state.searchInput)
             }
-        }
     }
-
-    const search = (query) => {
-        query = "/api/search/" + query
-        //if query is empty, don't send
-        if (query.trim() === "/api/search/" ) {
-          return
-        }
-        //clear results
-        updateState({ searchResults: [] })
-    
-        server.post(query).then(response => {
-          if (response.length === 0) {
-            updateState({ resultsFound: <div>No Results Found</div> })
-          }
-          else {
-            updateState({
-              resultsFound: <div>{response.length} Results Found</div>,
-              searchResults: response
-            })
-          }
-    
-        })
-    
-      }
   return (
 
     <div className='SearchContainer'>

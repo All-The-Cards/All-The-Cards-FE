@@ -6,6 +6,7 @@ import Logo from './logo.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
 import UsersIcon from './users_icon.png'
+import * as server from '../../functions/ServerTalk.js'
 
   
 const Navbar = () => {
@@ -116,9 +117,13 @@ const Navbar = () => {
   return(
 
     <div className="NavBarContainer">
-        <div className="LogoContainer">
-            <img src={Logo} alt="logo" className="Logo" onClick={handeLogoClick}></img>
-        </div>
+        <a className="LogoContainer" href={server.buildRedirectUrl()} >
+            <img 
+                src={Logo} 
+                alt="logo" 
+                className="Logo"
+            />
+        </a>
 
         { 
             hasSearchBar &&
