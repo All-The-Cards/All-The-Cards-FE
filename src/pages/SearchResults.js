@@ -37,38 +37,59 @@ const SearchResults = (props) => {
         })
         //search if query not empty
         if(query.trim() !== "query=") {
-          search(query, 'card')
-          search(query, 'deck')
+          let queryTrimmed = query.replaceAll("query=", '')
+          search(queryTrimmed, 'card')
+          search(queryTrimmed, 'deck')
           // search(query, 'user')
         }
     }, [query])
 
   const search = (query, type) => {
+    let showAll = false
+    if (query.includes("%21a")) {
+      query = query.replaceAll("%21a", '')
+      query = query.replaceAll("+", ' ')
+      query = query.trim()
+      showAll = true
+    }
     //fix formatting to what server expects
     query = query.replaceAll('+', '%20')
-    query = "/api/search/" + type + "/" + query
+    query = "/api/search/" + type + "/query=" + query
     //if query is empty, don't send
-    if (query.trim() === "/api/search/" ) {
+    if (query.trim() === "/api/search/" + type + "/query=" ) {
       return
     }
 
     server.post(query).then(response => {
       let res = response
 
+      //sort by language
+      res = res.sort(sortByLanguage)
+      //sort by frame effects
+      res = res.sort(sortByFrameEffects)
+      //sort by border
+      res = res.sort(sortByBorderColor)
+      //sort by non-promo first
+      res = res.sort(sortByNonPromo)
+      //sort by release date
+      res = res.sort(sortByFrameYear)
       //sort results alphabetically
-      res = res.sort(alphabeticalSortByName)
+      res = res.sort(sortByName)
 
       //find duplicates, omit from appearing
-      let uniqueNames = []
-      let uniqueRes = res.filter((item) => {
-        let duplicate = uniqueNames.includes(item.name)
-        if (!duplicate) {
-          uniqueNames.push(item.name)
-          return true;
-        }
-        return false;
-      })
-      res = uniqueRes
+      if (!showAll) {
+        let uniqueNames = []
+        let uniqueRes = res.filter((item) => {
+          let duplicate = uniqueNames.includes(item.name)
+          if (!duplicate) {
+            uniqueNames.push(item.name)
+            return true;
+          }
+          return false;
+        })
+        res = uniqueRes
+      }
+      console.log(res)
 
       let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar']
       let realCardRes = res.filter((item) => {
@@ -102,7 +123,7 @@ const SearchResults = (props) => {
 
   }
 
-  const alphabeticalSortByName = (a, b) => {
+  const sortByName = (a, b) => {
     if (a.name >= b.name) {
       return 1
     }
@@ -110,6 +131,53 @@ const SearchResults = (props) => {
       return -1
     }
   }
+  
+  const sortByFrameYear = (a, b) => {
+    if (parseInt(a.frame) <= parseInt(b.frame)) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
+  const sortByNonPromo = (a, b) => {
+    if (a.promo >= b.promo) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
+  const sortByLanguage = (a, b) => {
+    if (a.lang === "en") {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }  
+  
+  const sortByBorderColor = (a, b) => {
+    if (a.border_color !== "black") {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  
+  const sortByFrameEffects = (a, b) => {
+    if (a.frame_effects === null) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
+
 
   return (
     <div>
