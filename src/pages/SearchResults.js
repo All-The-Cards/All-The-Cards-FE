@@ -44,6 +44,7 @@ const SearchResults = (props) => {
     }, [query])
 
   const search = (query, type) => {
+    //fix formatting to what server expects
     query = query.replaceAll('+', '%20')
     query = "/api/search/" + type + "/" + query
     //if query is empty, don't send
@@ -53,9 +54,12 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
-      res = res.sort(alphabeticalSortByName)
-      let uniqueNames = []
 
+      //sort results alphabetically
+      res = res.sort(alphabeticalSortByName)
+
+      //find duplicates, omit from appearing
+      let uniqueNames = []
       const uniqueRes = res.filter((item) => {
         let duplicate = uniqueNames.includes(item.name)
         if (!duplicate) {
@@ -63,7 +67,7 @@ const SearchResults = (props) => {
           return true;
         }
         return false;
-        })
+      })
       res = uniqueRes
 
       switch(type){

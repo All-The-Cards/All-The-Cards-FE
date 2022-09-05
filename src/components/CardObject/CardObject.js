@@ -8,12 +8,9 @@ import Card from "../../pages/Card";
 
 const CardObject = (props) => {
     const [state, setState] = useState({
-        data: props.data,
-        // Create page url
-        url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
-        imgLink: getImage()
 
     })
+
     const nav = useNavigate()
 
     const updateState = (objectToUpdate) => {
@@ -37,14 +34,16 @@ const CardObject = (props) => {
 
     function getImage() {
         let imgLink = ""
+        if (props.data.card_faces){
+            // console.log(props.data.card_faces)
+            imgLink = props.data.card_faces[0].image_uris.png
+            return imgLink
+        }
         if (props.data.image_uris !== null) {
-            // Replace all ' with " for.. JSON reasons
-            imgLink = JSON.parse(props.data.image_uris.replaceAll('\'', '\"')).png
+            imgLink = props.data.image_uris.png
+            return imgLink
         }
-        else {
-            //Card back, placeholder image
-            imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
-        }
+        imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
         return imgLink
     }
 
