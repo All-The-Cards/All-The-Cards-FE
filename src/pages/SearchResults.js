@@ -60,7 +60,7 @@ const SearchResults = (props) => {
 
       //find duplicates, omit from appearing
       let uniqueNames = []
-      const uniqueRes = res.filter((item) => {
+      let uniqueRes = res.filter((item) => {
         let duplicate = uniqueNames.includes(item.name)
         if (!duplicate) {
           uniqueNames.push(item.name)
@@ -69,6 +69,13 @@ const SearchResults = (props) => {
         return false;
       })
       res = uniqueRes
+
+      let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar']
+      let realCardRes = res.filter((item) => {
+        return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+      })
+
+      res = realCardRes
 
       switch(type){
         case 'card':

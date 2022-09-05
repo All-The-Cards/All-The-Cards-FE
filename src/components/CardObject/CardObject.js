@@ -34,13 +34,13 @@ const CardObject = (props) => {
 
     function getImage() {
         let imgLink = ""
+        if (props.data.image_uris !== null) {
+            imgLink = props.data.image_uris.png
+            return imgLink
+        }
         if (props.data.card_faces){
             // console.log(props.data.card_faces)
             imgLink = props.data.card_faces[0].image_uris.png
-            return imgLink
-        }
-        if (props.data.image_uris !== null) {
-            imgLink = props.data.image_uris.png
             return imgLink
         }
         imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
