@@ -5,10 +5,10 @@ export function mapCardsToTypes(unsortedCards) {
     
     unsortedCards.forEach(card => {
         let i = results.findIndex(object => {
-            return object.type === card.type_line
+            return object.type === card.type_one
         })
         if (i <= -1) {
-            results.push({type: card.type_line, cards: [card]})
+            results.push({type: card.type_one, cards: [card]})
         }
         else {
             results[i].cards.push(card)
