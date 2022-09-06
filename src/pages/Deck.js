@@ -9,7 +9,9 @@ import CardList from '../components/CardStack/CardStack.js';
 const Deck = (props) => {
 
   const [state, setState] = useState({
-    data: [],
+    data:{  
+      cards: [] 
+    },
     viewMode: "Spread",
     compactView: false
   })
@@ -83,13 +85,13 @@ const Deck = (props) => {
       </div>
 
       {state.viewMode === "Spread" ? <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-        {state.data.map((card, i) =>
+        {state.data.cards.map((card, i) =>
           <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView}/></div>
         )}
       </div> : <></>}
-      {state.viewMode === "Stacked" ? <CardList cards={state.data} isCompact={state.compactView}/> : <></>}
+      {state.viewMode === "Stacked" ? <CardList cards={state.data.cards} isCompact={state.compactView}/> : <></>}
       {state.viewMode === "Categorized" ? <div style={{display: 'flex', flexFlow: 'row wrap'}}>
-          {utilities.mapCardsToTypes(state.data).map((typeList) => (
+          {utilities.mapCardsToTypes(state.data.cards).map((typeList) => (
             <CardList cards={typeList.cards} label={typeList.type} isCompact={state.compactView}/>
           ))}
       </div> : <></>}
