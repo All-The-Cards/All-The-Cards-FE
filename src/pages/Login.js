@@ -1,9 +1,20 @@
-import { React, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Login.css'
 import EyePassword from '../images/EyePassword.png'
+import { React, useState, useEffect, useContext } from 'react';
+import { GlobalContext } from "../context/GlobalContext";
 
-const Login = () => {
+const Login = (props) => {
+
+  const [state, setState] = useState({
+    
+  })
+
+  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+  useEffect(() => {
+    setSearchBar(props.hasSearchBar)
+  }, [])
 
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)

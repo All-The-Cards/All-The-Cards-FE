@@ -1,9 +1,17 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
+import { GlobalContext } from "../context/GlobalContext";
+
 const Card = (props) => {
+
+  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+  useEffect(() => {
+    setSearchBar(props.hasSearchBar)
+  }, [])
 
     const [state, setState] = useState({
       card: <div></div>,

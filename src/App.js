@@ -18,21 +18,21 @@ function App() {
 return (
     <BrowserRouter>
         <GlobalProvider>
-            <Navbar hasSearchBar={true}/>
+            <Navbar />
             <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route path="/search" element={<SearchResults />}>
-                    <Route path="/search/:query?" element={<SearchResults />} />
+                <Route exact path='/' element={<Home hasSearchBar={false}/>} />
+                <Route path="/search" element={<SearchResults hasSearchBar={true}/>}>
+                    <Route path="/search/:query?" element={<SearchResults hasSearchBar={true}/>} />
                 </Route>
-                <Route path='/deck' element={<Deck />} />
-                    <Route path="/deck/:id?" element={<Deck />} />
-                <Route path='/card' element={<Card />}>
-                    <Route path="/card/:id?" element={<Card />} />
+                <Route path='/deck' element={<Deck hasSearchBar={true}/>} />
+                    <Route path="/deck/:id?" element={<Deck hasSearchBar={true}/>} />
+                <Route path='/card' element={<Card hasSearchBar={true}/>}>
+                    <Route path="/card/:id?" element={<Card hasSearchBar={true}/>} />
                 </Route>
-                <Route exact path='/deckeditor' element={<DeckEditor />} />
-                <Route exact path='/cardcreator' element={<CardCreator />} />
-                <Route exact path='/registration' element={<Registration />} />
-                <Route exact path='/login' element={<Login />} />
+                <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={false}/>} />
+                <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false}/>} />
+                <Route exact path='/registration' element={<Registration hasSearchBar={false}/>} />
+                <Route exact path='/login' element={<Login hasSearchBar={false}/>} />
             </Routes>
         </GlobalProvider>
     </BrowserRouter>

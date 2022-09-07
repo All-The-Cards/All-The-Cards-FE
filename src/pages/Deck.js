@@ -1,12 +1,19 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
 
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardList from '../components/CardStack/CardStack.js';
+import { GlobalContext } from "../context/GlobalContext";
 
 const Deck = (props) => {
+
+  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+  useEffect(() => {
+    setSearchBar(props.hasSearchBar)
+  }, [])
 
   const [state, setState] = useState({
     data:{  

@@ -1,7 +1,18 @@
-import React from 'react'
+import { React, useState, useEffect, useContext } from 'react';
+import { GlobalContext } from "../context/GlobalContext";
 
-const DeckEditor = () => {
+const DeckEditor = (props) => {
 
+  const [state, setState] = useState({
+    
+  })
+
+  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+  useEffect(() => {
+    setSearchBar(props.hasSearchBar)
+  }, [])
+  
   return (
 
     <div>
