@@ -89,7 +89,7 @@ const SearchResults = (props) => {
         })
         res = uniqueRes
       }
-      console.log(res)
+      // console.log(res)
 
       let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar']
       let realCardRes = res.filter((item) => {
@@ -97,6 +97,12 @@ const SearchResults = (props) => {
       })
 
       res = realCardRes
+
+      let noArenaRes= res.filter((item) => {
+        return !item.name.includes("A-")
+      })
+
+      res = noArenaRes
 
       switch(type){
         case 'card':
