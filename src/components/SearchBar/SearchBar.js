@@ -52,11 +52,11 @@ const SearchBar = (params) => {
             value={state.searchInput}
             onChange={handleChanges}
         />
-        <img src={SearchGlass} 
+        {/* <img src={SearchGlass} 
             alt="SearchGlass" 
             className="SearchIcon"
             onClick={submitQuery}
-        />
+        /> */}
         {/* <button onClick={submitQuery}>Search!</button> */}
         {/* <div>
             {state.resultsFound}

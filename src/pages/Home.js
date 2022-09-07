@@ -14,7 +14,8 @@ const Home = (props) => {
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
   useEffect(()=>{
-
+    setSearchBar(false)
+  })
   const handleAdvancedClick = () => {
     console.log("advanced click")
   }
@@ -75,6 +76,6 @@ const Home = (props) => {
       </div>
     </div>
   );
-  };
+};
 
 export default Home;
