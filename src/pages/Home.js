@@ -1,5 +1,6 @@
-import { React, useState } from 'react';
-import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
+import { React, useState, useEffect, useContext } from 'react';
+import SearchBar from '../components/SearchBar/SearchBar';
+import { GlobalContext } from "../context/GlobalContext";
 
 const Home = (props) => {
 
@@ -7,10 +8,17 @@ const Home = (props) => {
     
   })
 
+  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+
+  useEffect(() => {
+    setSearchBar(props.hasSearchBar)
+  }, [])
+
   return (
     <div>
       <header>Welcome to All The Cards</header>
       <div>
+        <SearchBar/>
       </div>
     </div>
   );
