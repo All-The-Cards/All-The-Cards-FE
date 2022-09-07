@@ -1,17 +1,19 @@
 .SearchContainer{
-    width: 50%;
+    /* width: 50%; */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-style: solid;
+    /* border-style: solid; */
+    /* background-color: aquamarine; */
+    width: 500px;
 }
 
 .SearchBar{
     margin-bottom: 7px;
     margin-right: 10px;
     padding: 8px;
-    border-radius: 25px;
-    width: 320px;
+    border-radius: 5px;
+    width: 100%;
     border: 0;
     /* border-style: solid; */
 }
@@ -23,8 +25,12 @@
     padding: 3px;
     position: relative;
     z-index: 1;
-    top: 8.5px;
-    right: 43px;
+    margin-right:-25px;
+    right: 30px;
+}
+
+.SearchBar:focus {
+    outline: none;
 }
 
 .SearchIconShadow{
