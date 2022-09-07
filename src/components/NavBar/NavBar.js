@@ -10,7 +10,7 @@ import * as server from '../../functions/ServerTalk.js'
 
   
 const Navbar = () => {
-
+    
     const nav = useNavigate()
     const wrapperRef = useRef(null)
 
@@ -29,7 +29,6 @@ const Navbar = () => {
         if(window.location.pathname !== "/")
         {
             nav('/')
-            setSearchBar(true)
         }
         else
         {
@@ -82,14 +81,12 @@ const Navbar = () => {
         }
         else if (id === '4')
         {
-            setSearchBar(false)
             setLayerMenu(false)
             setUserMenu(false)  
             nav('/login')
         }
         else if (id === '5')
         {
-            setSearchBar(false)
             setLayerMenu(false)
             setUserMenu(false) 
             nav('/registration')
@@ -125,12 +122,10 @@ const Navbar = () => {
             />
         </a>
 
-        { 
-            hasSearchBar &&
-            <SearchBar type="global"/>
-        }
-
         <div className="IconContainer">
+            { hasSearchBar &&
+                <SearchBar type="global"/>
+            }
             <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img> 
             {openLayerMenu &&
                 <div id={'1'} className="LayerMenu" ref={wrapperRef}>

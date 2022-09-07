@@ -1,0 +1,39 @@
+.RegistrationTitle{
+    margin-top: 150px;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.ActiveUserLink{
+    font-size: 15px;
+    color: rgba(113, 56, 209, 1);
+    text-overflow: none;
+}
+
+.ActiveUserLinkAlt{
+    font-size: 15px;
+    color: rgba(113, 56, 209, 1);
+    text-decoration-line: underline;
+}
+
+.RegEyeIcon{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    padding: 3px;
+    position: relative;
+    z-index: 1;
+    bottom: 25px;
+    left: 280px;
+}
+
+.RegEyeIconAlt{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    padding: 3px;
+    position: relative;
+    z-index: 1;
+    bottom: 25px;
+    left: 280px;
+}

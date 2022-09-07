@@ -1,9 +1,9 @@
-import { React, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SearchBar from '../components/SearchBar/SearchBar';
-import { GlobalContext } from "../context/GlobalContext";
-import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import './Home.css'
+import { React, useEffect, useState, useContext } from 'react';
+import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
+import { GlobalContext } from '../context/GlobalContext.js';
+import SearchBar from '../components/SearchBar/SearchBar.js';
 
 const Home = (props) => {
 
@@ -13,9 +13,7 @@ const Home = (props) => {
   
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
-  useEffect(() => {
-    setSearchBar(props.hasSearchBar)
-  }, [])
+  useEffect(()=>{
 
   const handleAdvancedClick = () => {
     console.log("advanced click")

@@ -7,8 +7,7 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    z-index: 999;
-    /* box-shadow: 1px 2px 3px black; */
+    z-index: 999
     /* border-style: solid; */
     
 }
@@ -16,7 +15,6 @@
 /* Left Side Container of NavBar */
 
 .LogoContainer{
-    /* width: 20%; */
     display: flex;
     align-items: center;
     /* border-style: solid; */
@@ -41,7 +39,7 @@
 /* Right Side Container of NavBar */
 
 .IconContainer{
-    width: 30%;
+    width: 50%;
     display: flex;
     justify-content: flex-end;
     align-items: center;

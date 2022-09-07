@@ -39,7 +39,7 @@ const SearchBar = (params) => {
     }
   return (
 
-    <div className='SearchContainer'>
+    <div>
         <input
             className="SearchBar"
             maxLength={50}
@@ -58,10 +58,10 @@ const SearchBar = (params) => {
             onClick={submitQuery}
         />
         {/* <button onClick={submitQuery}>Search!</button> */}
-        <div>
+        {/* <div>
             {state.resultsFound}
-        {state.searchResults.map((item, i) => <CardObject data={item} key={i} />)}
-        </div>
+            {state.searchResults.map((item, i) => <CardObject data={item} key={i} />)}
+        </div> */}
     </div>
     
 

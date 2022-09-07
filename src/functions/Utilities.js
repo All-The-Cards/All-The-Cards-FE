@@ -4,6 +4,9 @@ export function mapCardsToTypes(unsortedCards) {
     let results = []
     
     unsortedCards.forEach(card => {
+        if(card.type_one.toLowerCase().includes("creature")) {
+            card.type_one = "Creature"
+        }
         let i = results.findIndex(object => {
             return object.type === card.type_one
         })

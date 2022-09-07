@@ -18,54 +18,52 @@
 .RightContainer{
     height: 100%;
     width: 60%;
-    /* border-style: solid;
-    border-width: 1px; */
+    margin-left: 150px;
+    border-style: solid;
+    border-width: 1px;
 }
 
 /* Elements from top to bottom */
 
 .LoginTitle{
     margin-top: 150px;
-    margin-left: 150px;
     font-weight: bold;
     font-size: 30px;
 }
 
 .RegisterLink{
-    margin-left: 150px;
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
 }
 
 .RegisterLinkAlt{
-    margin-left: 150px;
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
     text-decoration-line: underline;
 }
 
 .FormContainer{
+    width: 30%;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
-    /* border-style: solid; */
+    border-style: solid;
 }
 
 .InputTitles{
     margin-top: 10px;
-    margin-left: 150px;
     font-weight: bold;
     font-size: 20px;
 }
 
 .RegistrationInputs{
-    margin-left: 150px;
     margin-top: 10px;
     background-color: lightgrey;
     padding: 5px;
     border-radius: 25px;
     width: 300px;
     border: 0;
-    box-shadow: 1px 3px 5px black;
+    box-shadow: 1px 1px 5px black;
     /* border-style: solid; */
 }
 
@@ -80,16 +78,28 @@
     left: 430px;
 }
 
+.EyeIconAlt{
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    padding: 3px;
+    position: relative;
+    z-index: 1;
+    bottom: 53px;
+    left: 430px;
+}
+
 .ForgotPasswordLink{
+    float: right;
     margin-top: 10px;
-    margin-left: 330px;
+    /* margin-left: 185px; */
     font-size: 15px;
     color: rgba(219, 30, 79, 1);
     cursor: pointer;
 }
 
 .ForgotPasswordLinkAlt{
-    margin-left: 330px;
+    /* margin-left: 185px; */
     font-size: 15px;
     color: rgba(219, 30, 79, 1);
     text-decoration-line: underline;
@@ -97,22 +107,16 @@
 }
 
 .SubmitButton{
-    margin-left: 260px;
+    direction: flex;
+    align-content: center;
     border-radius: 25px;
     background-color: lightgray;
     border: none;
     width: 75px;
     height: 25px;
     cursor: pointer;
-    
 }
 
-.SubmitButtonAlt{
-    margin-left: 260px;
-    border-radius: 25px;
-    background-color: rgb(202, 202, 202);
-    border: none;
-    width: 75px;
-    height: 25px;
-    cursor: pointer;
+.SubmitButton:hover{
+    background-color: rgb(202, 202, 202)
 }
