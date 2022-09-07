@@ -38,6 +38,7 @@ const SearchResults = (props) => {
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
+
         //console.log(query)
         updateState({ 
           cardResults: [],
@@ -52,6 +53,7 @@ const SearchResults = (props) => {
           // search(query, 'user')
         }
     }, [query])
+
 
   const search = (query, type) => {
     let showAll = false

@@ -1,6 +1,8 @@
-import { React, useState, useEffect, useContext } from 'react';
-import SearchBar from '../components/SearchBar/SearchBar';
-import { GlobalContext } from "../context/GlobalContext";
+import { React, useEffect, useState, useContext } from 'react';
+import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
+import { GlobalContext } from '../context/GlobalContext.js';
+import SearchBar from '../components/SearchBar/SearchBar.js';
+import env from "react-dotenv";
 
 const Home = (props) => {
 
@@ -10,15 +12,17 @@ const Home = (props) => {
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
-  useEffect(() => {
-    setSearchBar(props.hasSearchBar)
-  }, [])
+  useEffect(()=>{
 
+    setSearchBar(false)
+      
+  },[])
+  
   return (
     <div>
       <header>Welcome to All The Cards</header>
       <div>
-        <SearchBar/>
+        <SearchBar type="global"/>
       </div>
     </div>
   );
