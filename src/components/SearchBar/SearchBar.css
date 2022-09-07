@@ -1,34 +1,32 @@
 .SearchContainer{
-    width: 50%;
+    /* width: 50%; */
     display: flex;
     align-items: center;
     justify-content: center;
     /* border-style: solid; */
+    /* background-color: aquamarine; */
+    width: 500px;
 }
 
 .SearchBar{
     padding: 8px;
-    border-radius: 25px;
-    width: 320px;
+    border-radius: 5px;
+    width: 100%;
     border: 0;
     /* border-style: solid; */
 }
 
 .SearchIcon{
-    height: 40%;
+    height: 20px;
     width: auto;
     cursor: pointer;
     padding: 3px;
     position: relative;
     z-index: 1;
+    margin-right:-25px;
     right: 30px;
 }
 
-.SearchIconShadow{
-    height: 40%;
-    width: auto;
-    cursor: pointer;
-    background-color: lightgray;
-    padding: 3px;
-    border-radius: 50%;
+.SearchBar:focus {
+    outline: none;
 }

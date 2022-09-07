@@ -7,7 +7,8 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    box-shadow: 1px 2px 3px black;
+    z-index: 999;
+    /* box-shadow: 1px 2px 3px black; */
     /* border-style: solid; */
     
 }
