@@ -6,14 +6,6 @@ import CardObject from '../CardObject/CardObject.js';
 import SearchGlass from './SearchGlass.png';
 
 
-// Parameters:
-//      type
-//      expected: string - 'local' or 'global'
-//          'global' redirects to site-wide search
-//          'local' gets search results locally, for deckbuilder use
-//                  
-//
-
 const SearchBar = (params) => {
     const [state, setState] = useState({
         searchResults: [],
@@ -60,13 +52,11 @@ const SearchBar = (params) => {
             value={state.searchInput}
             onChange={handleChanges}
         />
-        <img src={SearchGlass} 
+        {/* <img src={SearchGlass} 
             alt="SearchGlass" 
-            className={`SearchIcon ${searchIconShadow ? "SearchIconShadow" : ''}`} 
-            onMouseEnter={() => setIconShadow(true)} 
-            onMouseLeave={() => setIconShadow(false)}
+            className="SearchIcon"
             onClick={submitQuery}
-        />
+        /> */}
         {/* <button onClick={submitQuery}>Search!</button> */}
         {/* <div>
             {state.resultsFound}

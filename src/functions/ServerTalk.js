@@ -11,7 +11,6 @@ const development = {
 }
 const config = process.env.NODE_ENV === 'development' ? development : production;
 
-
 // Run HTTP GET from the target location
 // Parameters:
 //     query (string) - "/dir/page"
