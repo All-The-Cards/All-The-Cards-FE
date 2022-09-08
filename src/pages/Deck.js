@@ -4,20 +4,20 @@ import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
 
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import CardList from '../components/CardStack/CardStack.js';
+import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
 
 const Deck = (props) => {
 
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
 
   useEffect(() => {
     setSearchBar(props.hasSearchBar)
   }, [])
 
   const [state, setState] = useState({
-    data:{  
-      cards: [] 
+    data: {
+      cards: []
     },
     viewMode: "Spread",
     compactView: false
@@ -76,33 +76,33 @@ const Deck = (props) => {
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
       {state.data.name}
-      <div style={{display: "flex", flexFlow: "row nowrap"}}>
-      <label>
-        View mode:
-        <select value={state.viewMode} onChange={handleDropdown}>
-          <option value="Spread">Spread</option>
-          <option value="Stacked">Stacked</option>
-          <option value="Categorized">Categorized</option>
-        </select>
-      </label>
-      <label>
-        Compact:
-        <input type="checkbox" checked={state.compactView} onChange={handleCheckbox}/>
-      </label>
+      <div style={{ display: "flex", flexFlow: "row nowrap" }}>
+        <label>
+          View mode:
+          <select value={state.viewMode} onChange={handleDropdown}>
+            <option value="Spread">Spread</option>
+            <option value="Stacked">Stacked</option>
+            <option value="Categorized">Categorized</option>
+          </select>
+        </label>
+        <label>
+          Compact:
+          <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
+        </label>
       </div>
-
-      {state.viewMode === "Spread" ? <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-        {state.data.cards.map((card, i) =>
-          <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView}/></div>
-        )}
-      </div> : <></>}
-      {state.viewMode === "Stacked" ? <CardList cards={state.data.cards} isCompact={state.compactView}/> : <></>}
-      {state.viewMode === "Categorized" ? <div style={{display: 'flex', flexFlow: 'row wrap'}}>
+      <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
+        {state.viewMode === "Spread" ? <>
+          {state.data.cards.map((card, i) =>
+            <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} /></div>
+          )}
+        </> : <></>}
+        {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
+        {state.viewMode === "Categorized" ? <>
           {utilities.mapCardsToTypes(state.data.cards).map((typeList) => (
-            <CardList cards={typeList.cards} label={typeList.type} isCompact={state.compactView}/>
+            <CardStack cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
           ))}
-      </div> : <></>}
-
+        </> : <></>}
+      </div>
     </div>
   );
 
