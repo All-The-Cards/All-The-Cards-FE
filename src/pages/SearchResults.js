@@ -5,6 +5,8 @@ import * as server from '../functions/ServerTalk.js';
 import { useSearchParams } from 'react-router-dom';
 
 import { GlobalContext } from "../context/GlobalContext";
+import './SearchResults.css'
+import './GlobalStyles.css'
 
 const SearchResults = (props) => {
 
@@ -24,7 +26,9 @@ const SearchResults = (props) => {
       deckResultIndex: 0,
       userResultIndex: 0,
 
-      showResultAmount: 10
+      showResultAmountCards: 12,
+      showResultAmountDecks: 4,
+      showResultAmountUsers: 20
     })
 
     const updateState = (objectToUpdate) => {
@@ -34,6 +38,7 @@ const SearchResults = (props) => {
         }))
     }
 
+    //get first search param
     const query = useSearchParams()[0].toString()
 
     //on page load, or whenever the /search/?query= changes
@@ -50,13 +55,14 @@ const SearchResults = (props) => {
           let queryTrimmed = query.replaceAll("query=", '')
           search(queryTrimmed, 'card')
           search(queryTrimmed, 'deck')
-          // search(query, 'user')
+          //search(queryTrimmed, 'user')
         }
     }, [query])
 
 
   const search = (query, type) => {
     let showAll = false
+    //if the query has "!a", set showall to true
     if (query.includes("%21a")) {
       query = query.replaceAll("%21a", '')
       query = query.replaceAll("+", ' ')
@@ -100,15 +106,16 @@ const SearchResults = (props) => {
         })
         res = uniqueRes
       }
-      // console.log(res)
 
-      let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar']
+      //remove invalid card types for deckbuilding
+      let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
       let realCardRes = res.filter((item) => {
         return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
       })
 
       res = realCardRes
 
+      //remove some technically-duplicate cards
       let noArenaRes= res.filter((item) => {
         return !item.name.includes("A-")
       })
@@ -129,9 +136,9 @@ const SearchResults = (props) => {
 
           break
         case 'user':
-          // updateState({          
-          //   userResults: res
-          // })
+          updateState({          
+            userResults: res
+          })
           break
       }
       
@@ -197,59 +204,135 @@ const SearchResults = (props) => {
 
 
   return (
-    <div>
-      <div>
-        Cards found: 
-        {state.cardResults.length}
-        <button onClick={() => { updateState({
-          cardResultIndex: state.cardResultIndex - state.showResultAmount,
-
-        })}}>Previous {state.showResultAmount}</button>
-        <button onClick={() => { updateState({
-          cardResultIndex: state.cardResultIndex + state.showResultAmount,
-
-        })}}>Next {state.showResultAmount}</button>
-        
-        Showing: {state.cardResultIndex + 1} through {state.showResultAmount + state.cardResultIndex}
-      </div>
+    <div className="Container">
       
-      <div style={{overflow:'auto', whiteSpace:'nowrap'}}>
-        {state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmount).map((item, i) => 
-            <div style={{margin: '10px', display:'inline-block'}}key={i}><CardObject data={item}/></div>
-          )
-        }
-      </div>
+      {/* if there are no results yet, show searching */}
+      { (state.cardResults.length < 1 && state.deckResults.length < 1) && 
+        <div className="HeaderText" style={{textAlign:'center'}}>
+          Searching...
+          {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
+        </div>
+      }
 
+      {/* if there are any card results, display them */}
+      {state.cardResults.length > 0 && 
+      <div className="Results">
+        <div style={{display:'block', textAlign:'left'}}>
+          <header className="HeaderText">Cards</header>
+          Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {state.showResultAmountCards + state.cardResultIndex}
+        </div>
+        <br></br>
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <span><CardObject data={item} key={i}/>{(i + 1) % 4 === 0 && <br></br>}</span>) }
+        <div>
+          <button 
+            className="FancyButton"
+            id="alt"
+            onClick={() => { 
+              if (state.cardResultIndex >= state.showResultAmountCards) {
+                updateState({
+                  cardResultIndex: state.cardResultIndex - state.showResultAmountCards,
+                })
+              }
+            }
+          }>
+            Previous {state.showResultAmountCards}
+          </button>
+
+          <button 
+            className="FancyButton"
+            onClick={() => { 
+              if (state.cardResultIndex <= state.cardResults.length - state.showResultAmountCards) {
+                updateState({
+                  cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
+                })
+              }
+            }
+          }>
+            Next {state.showResultAmountCards}
+          </button>
+        </div>
+      </div>
+      }
+
+      <br></br>
       
-      <div>
-        Decks found: 
-        {state.deckResults.length}
-        <button onClick={() => { updateState({
-          deckResultIndex: state.deckResultIndex - state.showResultAmount,
+      {/* if there are any deck results, display them */}
+      {state.deckResults.length > 0 && 
+      <div className="Results">
+        <div style={{display:'block', textAlign:'left'}}>
+          <header className="HeaderText">Decks</header>
+          Decks found: {state.deckResults.length} | Showing: {state.deckResultIndex + 1} - {state.showResultAmountDecks + state.deckResultIndex}
+        </div>
+        <br></br>
+        { state.deckResults.slice(state.deckResultIndex, state.deckResultIndex + state.showResultAmountDecks).map((item, i) => <DeckTileObject data={item} key={i}/>) }
+        <div>
+          <button 
+            className="FancyButton"
+            id="alt"
+            onClick={() => { 
+              if (state.deckResultIndex >= state.showResultAmountDecks) {
+                updateState({
+                  deckResultIndex: state.deckResultIndex - state.showResultAmountDecks,
+                })
+              }
+            }
+          }>
+            Previous {state.showResultAmountDecks}
+          </button>
 
-        })}}>Previous {state.showResultAmount}</button>
-        <button onClick={() => { updateState({
-          deckResultIndex: state.deckResultIndex + state.showResultAmount,
-
-        })}}>Next {state.showResultAmount}</button>
-
-        
-        Showing: {state.deckResultIndex + 1} through {state.showResultAmount + state.deckResultIndex}
-        
+          <button 
+            className="FancyButton"
+            onClick={() => { 
+              if (state.deckResultIndex <= state.deckResults.length - state.showResultAmountDecks) {
+                updateState({
+                  deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
+                })
+              }
+            }
+          }>
+            Next {state.showResultAmountDecks}
+          </button>
+        </div>
       </div>
+      }
+
+      <br></br>
       
-      <div style={{overflow:'auto', whiteSpace:'nowrap'}}>
-        {state.deckResults.slice(state.deckResultIndex, state.deckResultIndex + state.showResultAmount).map((item, i) => 
-            <div style={{margin: '10px', display:'inline-block'}}key={i}><DeckTileObject data={item}/></div>
-          )
-        }
+      {/* if there are any user results, display them */}
+      {state.userResults.length > 0 && 
+      <div className="Results">
+        <header className="HeaderText">Users</header>
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <div key={i}>{item.name}</div>) }
+        <div>
+          <button 
+            className="FancyButton"
+            id="alt"
+            onClick={() => { 
+              if (state.userResultIndex >= state.showResultAmountUsers) {
+                updateState({
+                  userResultIndex: state.userResultIndex - state.showResultAmountUsers,
+                })
+              }
+            }
+          }>
+            Previous {state.showResultAmountUsers}
+          </button>
+
+          <button 
+            className="FancyButton"
+            onClick={() => { 
+              if (state.userResultIndex <= state.userResults.length - state.showResultAmountUsers) {
+                updateState({
+                  userResultIndex: state.userResultIndex + state.showResultAmountUsers,
+                })
+              }
+            }
+          }>
+            Next {state.showResultAmountUsers}
+          </button>
+        </div>
       </div>
-        {/* Users found: 
-        {state.userResults.map((item, i) => 
-            <div style={{margin: '10px'}}key={i}><UserObject data={item}/></div>
-          )
-        }  */}
-       
+    }
     </div>
   );
 
