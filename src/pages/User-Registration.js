@@ -71,15 +71,6 @@ const Registration = () => {
         <Link to='/login' className={`ActiveUserLink ${underlineActiveUser ? "ActiveUserLinkAlt" : ''}`} onMouseEnter={() => setUnderline(true)} onMouseLeave={() => setUnderline(false)}>Already have an account?</Link>
       
         <form className='FormContainer' onSubmit={handleSubmit}>
-          <div className='InputTitles'>Email</div>
-          <input
-            type="email"
-            name="email"
-            value={inputs.email || ""}
-            onChange={handleChange}
-            className="RegistrationInputs"
-            maxLength={35}
-          />
           <div className='InputTitles'>Full Name</div>
           <input
             type="text"
@@ -89,7 +80,16 @@ const Registration = () => {
             className="RegistrationInputs"
             maxLength={35}
           />
-          <div className='InputTitles'>Username</div>
+          <div className='InputTitles'>Email</div>
+          <input
+            type="email"
+            name="email"
+            value={inputs.email || ""}
+            onChange={handleChange}
+            className="RegistrationInputs"
+            maxLength={35}
+          />
+          {/* <div className='InputTitles'>Username</div>
           <input
             type="text"
             name="username"
@@ -97,7 +97,7 @@ const Registration = () => {
             onChange={handleChange}
             className="RegistrationInputs"
             maxLength={35}
-          />
+          /> */}
           <div className='InputTitles'>Password</div>
           <input
             type={isShowing ? "text" : "password"}

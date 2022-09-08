@@ -74,11 +74,11 @@ const Login = () => {
               onChange={handleChange}
             />
             <div className={`ForgotPasswordLink ${underlineForgot ? "ForgotPasswordLinkAlt" : ''}`} onMouseEnter={() => setUnderlineForgot(true)} onMouseLeave={() => setUnderlineForgot(false)}>Forgot Password?</div>
-            {!isShowing &&
+              {!isShowing &&
                 <img src={EyePassword2} alt='EyeIcon2' className='EyeIconAlt' onClick={handlePasswordClick}/>
               }
               {isShowing &&
-                <img src={EyePassword} alt='EyeIcon' className='EyeIconAlt' onClick={handlePasswordClick}/>
+                <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick}/>
               }
 
             <button className='SubmitButton' onClick={handleSubmit}>Submit</button>
