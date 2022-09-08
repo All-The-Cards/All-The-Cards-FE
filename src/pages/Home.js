@@ -9,21 +9,33 @@ import SearchBar from '../components/SearchBar/SearchBar.js';
 const Home = (props) => {
 
   const [state, setState] = useState({
-
+    bgImageUrl: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092"
   })
   
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const {searchQuery, setSearchQuery} = useContext(GlobalContext);
+  const {searchType, setSearchType} = useContext(GlobalContext);
+  const nav = useNavigate()
 
   useEffect(()=>{
     setSearchBar(false)
+    // getRandomBgImg()
   })
   const handleAdvancedClick = () => {
-    console.log("advanced click")
+    setSearchType("ADV")
+    nav("/search")
+  }
+
+  const getRandomBgImg = () =>{
+    //get random image
+    setState({
+      bgImageUrl: ""
+    })
   }
 
   return (
     <div className="Container">
-      <div className="SearchContent">
+      <div className="SearchContent" style = {{ backgroundImage: 'url(' + state.bgImageUrl + ')'}}>
         <div className="blur"/>
         <div className="SearchBarObject">
           <SearchBar/>

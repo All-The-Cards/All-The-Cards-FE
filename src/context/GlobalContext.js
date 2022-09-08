@@ -22,6 +22,11 @@ export const GlobalProvider = ( {children} ) => {
     // Global Variables Below
 
     const [hasSearchBar, setSearchBar] = useState(true)
+    const [searchQuery, setSearchQuery] = useState("")
+
+    const [searchType, setSearchType] = useState("DEF")
+
+    const [forceSearch, setForceSearch] = useState("")
 
     // const supabaseUrl = process.env.SUPABASE_URL
     // const supabaseAnonKey = process.env.API_KEY
@@ -36,6 +41,10 @@ export const GlobalProvider = ( {children} ) => {
 
 				hasSearchBar,
                 setSearchBar,
+                searchQuery,
+                setSearchQuery,
+                searchType,
+                setSearchType,
                 User,
                 supabase,
     

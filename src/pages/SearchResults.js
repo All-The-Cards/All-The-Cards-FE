@@ -12,6 +12,8 @@ const SearchResults = (props) => {
 
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const {searchQuery, setSearchQuery} = useContext(GlobalContext);
+  const {searchType, setSearchType} = useContext(GlobalContext);
 
     const [state, setState] = useState({
       cardResults: [],
@@ -24,7 +26,9 @@ const SearchResults = (props) => {
 
       showResultAmountCards: 12,
       showResultAmountDecks: 4,
-      showResultAmountUsers: 20
+      showResultAmountUsers: 20,
+
+      advType: ""
     })
 
     const updateState = (objectToUpdate) => {
@@ -33,32 +37,40 @@ const SearchResults = (props) => {
           ...objectToUpdate
         }))
     }
-
-    //get first search param
-    const query = useSearchParams()[0].toString()
+    const urlTag = useSearchParams()[0].toString()
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
+      console.log("sending search type: " + searchType)
 
-        setSearchBar(props.hasSearchBar)
+      setSearchBar(props.hasSearchBar)
 
-        //console.log(query)
-        updateState({ 
-          cardResults: [],
-          deckResults: [],
-          userResults: [],
-        })
-        //search if query not empty
-        if(query.trim() !== "query=") {
-          let queryTrimmed = query.replaceAll("query=", '')
-          search(queryTrimmed, 'card')
-          search(queryTrimmed, 'deck')
-          //search(queryTrimmed, 'user')
+      //console.log(query)
+      updateState({ 
+        cardResults: [],
+        deckResults: [],
+        userResults: [],
+      })
+
+      let query = searchQuery
+      //search if query not empty
+      query = query.trim()
+      if(query !== "") {
+        if (searchType === "ADV"){
+          // search(query, 'card/adv')
+          console.log('adv search detected')
+          console.log(query, state.advType)
         }
-    }, [query])
-
+        else {
+          search(query, 'card')
+          search(query, 'deck')
+          //search(query, 'user')
+        }
+      }
+    }, [urlTag])
 
   const search = (query, type) => {
+    
     //reset search page
     updateState({
       
@@ -207,11 +219,24 @@ const SearchResults = (props) => {
     }
   }
 
-
+  const setAdvType = (event) =>{
+    updateState({
+      advType: event.target.value
+    })
+  }
 
   return (
     <div className="Container">
-      
+      {searchType === "ADV" && <div>
+    ADVANCED:
+    Type: <input
+            value={state.advType}
+            onChange={(e) => {updateState({
+              advType: e.target.value
+            })}}
+            />
+    </div>
+      }
       {/* if there are no results yet, show searching */}
       { (state.cardResults.length < 1 && state.deckResults.length < 1) && 
         <div className="HeaderText" style={{textAlign:'center'}}>
