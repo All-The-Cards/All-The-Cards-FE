@@ -13,10 +13,6 @@ const SearchResults = (props) => {
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
-  useEffect(() => {
-    setSearchBar(props.hasSearchBar)
-  }, [])
-
     const [state, setState] = useState({
       cardResults: [],
       deckResults: [],
@@ -44,6 +40,8 @@ const SearchResults = (props) => {
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
 
+        setSearchBar(props.hasSearchBar)
+
         //console.log(query)
         updateState({ 
           cardResults: [],
@@ -61,6 +59,14 @@ const SearchResults = (props) => {
 
 
   const search = (query, type) => {
+    //reset search page
+    updateState({
+      
+      cardResultIndex: 0,
+      deckResultIndex: 0,
+      userResultIndex: 0,
+
+    })
     let showAll = false
     //if the query has "!a", set showall to true
     if (query.includes("%21a")) {
