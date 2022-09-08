@@ -57,7 +57,7 @@ const CardObject = (props) => {
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent">
-                            {state.data.name}
+                            {(state.data !== undefined && state.data.name !== undefined) ? state.data.name : <></>}
                         </div>
                         <div className="CardListContent">
                             {/* {this.state.data.set_shorthand.toUpperCase()} */}
