@@ -1,9 +1,8 @@
 .DeckTileObjectContainer{
-    /* background-color: fuchsia; */
     width: 350px;
     height: 180px;
     border-radius:10px;
-    /* margin:10px; */
+    margin:10px;
     background-repeat: no-repeat;
     background-size: cover;
     display:inline-block;

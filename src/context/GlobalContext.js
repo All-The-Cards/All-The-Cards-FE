@@ -41,7 +41,7 @@ export const GlobalProvider = ( {children} ) => {
     
 			}}
 		>
-            {console.log(env)}
+            {/* {console.log(env)} */}
             {children}
         </GlobalContext.Provider>
 
