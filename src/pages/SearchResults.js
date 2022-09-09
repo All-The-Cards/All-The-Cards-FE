@@ -408,7 +408,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.cardResultIndex <= state.cardResults.length - state.showResultAmountCards) {
+              if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
                 updateState({
                   cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
                 })
@@ -450,7 +450,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.deckResultIndex <= state.deckResults.length - state.showResultAmountDecks) {
+              if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
                 updateState({
                   deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
                 })
@@ -488,7 +488,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.userResultIndex <= state.userResults.length - state.showResultAmountUsers) {
+              if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
                 updateState({
                   userResultIndex: state.userResultIndex + state.showResultAmountUsers,
                 })
