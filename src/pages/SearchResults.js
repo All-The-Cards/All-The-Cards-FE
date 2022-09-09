@@ -31,7 +31,24 @@ const SearchResults = (props) => {
       showResultAmountDecks: 4,
       showResultAmountUsers: 20,
 
-      advType: ""
+      advSearch: {
+        artist: "",
+        cmc: "",
+        color_identity: "",
+        colors: "",
+        flavor_text: "",
+        lang: "",
+        legalities: "",
+        name: "",
+        oracle_text: "",
+        power: "",
+        rarity: "",
+        set_name: "",
+        set_shorthand: "",
+        subtype_: "",
+        toughness: "",
+        type_: "",
+      }
     })
 
     const updateState = (objectToUpdate) => {
@@ -62,10 +79,8 @@ const SearchResults = (props) => {
       //search if query not empty
       query = query.trim()
       if(query !== "") {
-        if (searchType === "ADV"){
-          // search(query, 'card/adv')
-          console.log('adv search detected')
-          console.log(query, state.advType)
+        if (searchType === "ADV") {
+          search(query, 'card/adv')
         }
         else {
           search(query, 'card')
@@ -73,11 +88,36 @@ const SearchResults = (props) => {
           //search(query, 'user')
         }
       }
+      else {
+        updateState({ 
+          cardResults: [],
+          deckResults: [],
+          userResults: [],
+          cardResultsFound: 0,
+          deckResultsFound: 0,
+          userResultsFound: 0,
+        })
+      }
     }, [urlTag])
 
   const search = (query, type) => {
     
     console.log("sending search type: " + searchType)
+    if (searchType === "ADV") {
+      //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP QUERY LINE THIS IS HANDLED LATER
+      query = "/api/search/" + type + "/query=" + query
+      // console.log(query, state.advSearch)
+      for (let [key, value] of Object.entries(state.advSearch) ) {
+        if (value) {
+          query += "?" + key + "=" + value 
+        }
+      }
+      console.log('api request: ' + query)
+      console.log('not sending, backend not setup yet')
+
+
+      return
+    }
     //reset search page
     updateState({
       
@@ -86,6 +126,7 @@ const SearchResults = (props) => {
       userResultIndex: 0,
 
     })
+
     let showAll = false
     //if the query has "!a", set showall to true
     if (query.includes("%21a")) {
@@ -240,9 +281,19 @@ const SearchResults = (props) => {
       {searchType === "ADV" && <div>
     ADVANCED:
     Type: <input
-            value={state.advType}
+            value={state.advSearch.type}
             onChange={(e) => {updateState({
-              advType: e.target.value
+              advSearch: {
+                ...state.advSearch,
+                type: e.target.value}
+            })}}
+            />
+          CMC: <input
+            value={state.advSearch.cmc}
+            onChange={(e) => {updateState({
+              advSearch: {
+                ...state.advSearch,
+                cmc: e.target.value}
             })}}
             />
     </div>
