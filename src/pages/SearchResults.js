@@ -389,7 +389,9 @@ const SearchResults = (props) => {
           Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {state.showResultAmountCards + state.cardResultIndex}
         </div>
         <br></br>
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <span key={i}><CardObject data={item} key={i}/>{(i + 1) % 4 === 0 && <br></br>}</span>) }
+        <div className="ResultsContainer">
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <CardObject data={item} key={i}/>) }
+        </div>
         <div>
           <button 
             className="FancyButton"
