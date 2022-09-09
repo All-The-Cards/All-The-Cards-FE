@@ -9,10 +9,6 @@ const Card = (props) => {
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
 
-  useEffect(() => {
-    setSearchBar(props.hasSearchBar)
-  }, [])
-
     const [state, setState] = useState({
       card: <div></div>,
       data: {}
@@ -29,6 +25,7 @@ const Card = (props) => {
     const id = useSearchParams()[0].toString()
 
     useEffect(() => {
+      setSearchBar(props.hasSearchBar)
       //clean up string from id format to search query format
         getCardById(id)
     }, [id])
@@ -49,6 +46,7 @@ const Card = (props) => {
           nav('/search/')
         }
         else {
+          document.title = response[0].name + " | " + response[0].set_shorthand.toUpperCase()
           updateState({
             data: response[0],
             card: <CardObject data={response[0]}/>

@@ -52,6 +52,7 @@ const Deck = (props) => {
         nav('/search/')
       }
       else {
+        document.title = response.name
         updateState({
           data: response
         })

@@ -41,6 +41,7 @@ const SearchResults = (props) => {
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
+      document.title = "Search Results"
       console.log("sending search type: " + searchType)
 
       setSearchBar(props.hasSearchBar)
