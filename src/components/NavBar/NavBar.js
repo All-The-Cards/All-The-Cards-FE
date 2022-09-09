@@ -9,6 +9,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
 import UsersIcon from './users_icon.png'
 import * as server from '../../functions/ServerTalk.js'
+import SearchGlass from './SearchGlass.png';
 
   
 const Navbar = () => {
@@ -130,9 +131,15 @@ const Navbar = () => {
         </a>
 
         <div className="IconContainer">
-            { hasSearchBar &&
+            <div id="Searchbar-responsive">{ hasSearchBar &&
                 <SearchBar type="global"/>
-            }
+            }</div>
+            <img src={SearchGlass} 
+            alt="SearchGlass" 
+            className="SearchIcon"
+            id="Searchicon-responsive"
+            
+            />
             <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img> 
             {openLayerMenu &&
                 <div id={'1'} className="LayerMenu" ref={wrapperRef}>
