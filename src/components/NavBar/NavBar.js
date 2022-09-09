@@ -3,6 +3,8 @@ import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
 import Logo from './logo.png'
+import Logo_Star from './logo_star.png'
+import Logo_Name from './logo_text_marginleft.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
 import UsersIcon from './users_icon.png'
@@ -116,9 +118,14 @@ const Navbar = () => {
     <div className="NavBarContainer">
         <a className="LogoContainer" href={server.buildRedirectUrl()} >
             <img 
-                src={Logo} 
+                src={Logo_Star} 
                 alt="logo" 
                 className="Logo"
+            /><img 
+            src={Logo_Name} 
+            alt="logo" 
+            className="Logo"
+            id="Logo-responsive"
             />
         </a>
 
