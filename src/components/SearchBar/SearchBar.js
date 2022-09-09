@@ -37,7 +37,7 @@ const SearchBar = (params) => {
 
     const submitQuery = () => {
         if (searchQuery.trim() !== "") {
-            console.log(searchQuery)
+            // console.log(searchQuery)
             // nav("/search/?query=" + searchQuery)
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
         }

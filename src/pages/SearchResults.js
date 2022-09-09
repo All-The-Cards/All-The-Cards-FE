@@ -2,7 +2,7 @@ import { React, useState, useEffect, useContext} from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
@@ -58,6 +58,7 @@ const SearchResults = (props) => {
         }))
     }
     const urlTag = useSearchParams()[0].toString()
+    const nav = useNavigate()
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
@@ -78,15 +79,18 @@ const SearchResults = (props) => {
       let query = searchQuery
       //search if query not empty
       query = query.trim()
-      if(query !== "") {
-        if (searchType === "ADV") {
-          search(query, 'card/adv')
-        }
-        else {
+      if (searchType === "ADV") {
+        search(query, 'card/adv')
+      }
+      if(query !== "" && searchType === "DEF") {
+        // if (searchType === "ADV") {
+        //   search(query, 'card/adv')
+        // }
+        // else {
           search(query, 'card')
           search(query, 'deck')
           //search(query, 'user')
-        }
+        // }
       }
       else {
         updateState({ 
@@ -102,7 +106,7 @@ const SearchResults = (props) => {
 
   const search = (query, type) => {
     
-    console.log("sending search type: " + searchType)
+    // console.log("sending search type: " + searchType)
     if (searchType === "ADV") {
       //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP QUERY LINE THIS IS HANDLED LATER
       query = "/api/search/" + type + "/query=" + query
@@ -143,6 +147,7 @@ const SearchResults = (props) => {
       return
     }
 
+    console.log('api request: ' + query)
     server.post(query).then(response => {
       let res = response
 
@@ -280,22 +285,85 @@ const SearchResults = (props) => {
     <div className="Container">
       {searchType === "ADV" && <div>
     ADVANCED:
-    Type: <input
-            value={state.advSearch.type}
-            onChange={(e) => {updateState({
-              advSearch: {
-                ...state.advSearch,
-                type: e.target.value}
-            })}}
-            />
-          CMC: <input
-            value={state.advSearch.cmc}
-            onChange={(e) => {updateState({
-              advSearch: {
-                ...state.advSearch,
-                cmc: e.target.value}
-            })}}
-            />
+    <br></br>
+    Name: 
+    <input
+      value={state.advSearch.name}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
+    /><br></br>
+    Text: 
+    <input
+      value={state.advSearch.oracle_text}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
+    /><br></br>
+    CMC: 
+    <input
+      value={state.advSearch.cmc}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
+    /><br></br>
+    Type: 
+    <input
+      value={state.advSearch.type_}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
+    /><br></br>
+    Subtype: 
+    <input
+      value={state.advSearch.subtype_}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
+    /><br></br>
+    Colors: 
+    <input
+      value={state.advSearch.colors}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
+    /><br></br>
+    Color Identity: 
+    <input
+      value={state.advSearch.color_identity}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
+    /><br></br>
+    Power: 
+    <input
+      value={state.advSearch.power}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
+    /><br></br>
+    Toughness: 
+    <input
+      value={state.advSearch.toughness}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
+    /><br></br>
+    Legalities: 
+    <input
+      value={state.advSearch.legalities}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
+    /><br></br>
+    Rarity: 
+    <input
+      value={state.advSearch.rarity}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
+    /><br></br>
+    {/* Set: 
+    <input
+      value={state.advSearch.set_name}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
+    /><br></br> */}
+    Set ID: 
+    <input
+      value={state.advSearch.set_shorthand}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
+    /><br></br>
+    Artist: 
+    <input
+      value={state.advSearch.artist}
+      onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
+    /><br></br>
+    Flavor Text: 
+    <input
+      value={state.advSearch.flavor_text}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
+    /><br></br>
+    <button className='FancyButton' onClick={() => { 
+            nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
+          }}>Search</button>
     </div>
       }
       {/* if there are no results yet, show searching */}
@@ -321,7 +389,7 @@ const SearchResults = (props) => {
           Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {state.showResultAmountCards + state.cardResultIndex}
         </div>
         <br></br>
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <span><CardObject data={item} key={i}/>{(i + 1) % 4 === 0 && <br></br>}</span>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <span key={i}><CardObject data={item} key={i}/>{(i + 1) % 4 === 0 && <br></br>}</span>) }
         <div>
           <button 
             className="FancyButton"
