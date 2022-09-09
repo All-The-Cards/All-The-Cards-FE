@@ -19,6 +19,9 @@ const SearchResults = (props) => {
       cardResults: [],
       deckResults: [],
       userResults: [],
+      cardResultsFound: -1,
+      deckResultsFound: -1,
+      userResultsFound: -1,
 
       cardResultIndex: 0,
       deckResultIndex: 0,
@@ -42,7 +45,6 @@ const SearchResults = (props) => {
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
       document.title = "Search Results"
-      console.log("sending search type: " + searchType)
 
       setSearchBar(props.hasSearchBar)
 
@@ -51,6 +53,9 @@ const SearchResults = (props) => {
         cardResults: [],
         deckResults: [],
         userResults: [],
+        cardResultsFound: -1,
+        deckResultsFound: -1,
+        userResultsFound: -1,
       })
 
       let query = searchQuery
@@ -72,6 +77,7 @@ const SearchResults = (props) => {
 
   const search = (query, type) => {
     
+    console.log("sending search type: " + searchType)
     //reset search page
     updateState({
       
@@ -144,19 +150,22 @@ const SearchResults = (props) => {
       switch(type){
         case 'card':
           updateState({          
-            cardResults: res
+            cardResults: res,
+            cardResultsFound: res.length,
           })
 
           break
         case 'deck':
           updateState({          
-            deckResults: res
+            deckResults: res,
+            deckResultsFound: res.length,
           })
 
           break
         case 'user':
           updateState({          
-            userResults: res
+            userResults: res,
+            userResultsFound: res.length,
           })
           break
       }
@@ -239,11 +248,18 @@ const SearchResults = (props) => {
     </div>
       }
       {/* if there are no results yet, show searching */}
-      { (state.cardResults.length < 1 && state.deckResults.length < 1) && 
+      {/* { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0) &&  */}
+      { (state.cardResultsFound < 0 || state.deckResultsFound < 0 ) && 
         <div className="HeaderText" style={{textAlign:'center'}}>
           Searching...
           {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
         </div>
+      }
+      {/* { (state.cardResultsFound == 0 && state.deckResultsFound == 0 && state.userResultsFound == 0) && */}
+      { (state.cardResultsFound == 0 && state.deckResultsFound == 0) &&
+        <div className="HeaderText" style={{textAlign:'center'}}>
+        No results found :(
+      </div>
       }
 
       {/* if there are any card results, display them */}
