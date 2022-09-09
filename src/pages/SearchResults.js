@@ -2,7 +2,7 @@ import { React, useState, useEffect, useContext} from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
@@ -31,7 +31,24 @@ const SearchResults = (props) => {
       showResultAmountDecks: 4,
       showResultAmountUsers: 20,
 
-      advType: ""
+      advSearch: {
+        artist: "",
+        cmc: "",
+        color_identity: "",
+        colors: "",
+        flavor_text: "",
+        lang: "",
+        legalities: "",
+        name: "",
+        oracle_text: "",
+        power: "",
+        rarity: "",
+        set_name: "",
+        set_shorthand: "",
+        subtype_: "",
+        toughness: "",
+        type_: "",
+      }
     })
 
     const updateState = (objectToUpdate) => {
@@ -41,6 +58,7 @@ const SearchResults = (props) => {
         }))
     }
     const urlTag = useSearchParams()[0].toString()
+    const nav = useNavigate()
 
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
@@ -61,23 +79,49 @@ const SearchResults = (props) => {
       let query = searchQuery
       //search if query not empty
       query = query.trim()
-      if(query !== "") {
-        if (searchType === "ADV"){
-          // search(query, 'card/adv')
-          console.log('adv search detected')
-          console.log(query, state.advType)
-        }
-        else {
+      if (searchType === "ADV") {
+        search(query, 'card/adv')
+      }
+      if(query !== "" && searchType === "DEF") {
+        // if (searchType === "ADV") {
+        //   search(query, 'card/adv')
+        // }
+        // else {
           search(query, 'card')
           search(query, 'deck')
           //search(query, 'user')
-        }
+        // }
+      }
+      else {
+        updateState({ 
+          cardResults: [],
+          deckResults: [],
+          userResults: [],
+          cardResultsFound: 0,
+          deckResultsFound: 0,
+          userResultsFound: 0,
+        })
       }
     }, [urlTag])
 
   const search = (query, type) => {
     
-    console.log("sending search type: " + searchType)
+    // console.log("sending search type: " + searchType)
+    if (searchType === "ADV") {
+      //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP QUERY LINE THIS IS HANDLED LATER
+      query = "/api/search/" + type + "/query=" + query
+      // console.log(query, state.advSearch)
+      for (let [key, value] of Object.entries(state.advSearch) ) {
+        if (value) {
+          query += "?" + key + "=" + value 
+        }
+      }
+      console.log('api request: ' + query)
+      console.log('not sending, backend not setup yet')
+
+
+      return
+    }
     //reset search page
     updateState({
       
@@ -86,6 +130,7 @@ const SearchResults = (props) => {
       userResultIndex: 0,
 
     })
+
     let showAll = false
     //if the query has "!a", set showall to true
     if (query.includes("%21a")) {
@@ -102,6 +147,7 @@ const SearchResults = (props) => {
       return
     }
 
+    console.log('api request: ' + query)
     server.post(query).then(response => {
       let res = response
 
@@ -239,12 +285,85 @@ const SearchResults = (props) => {
     <div className="Container">
       {searchType === "ADV" && <div>
     ADVANCED:
-    Type: <input
-            value={state.advType}
-            onChange={(e) => {updateState({
-              advType: e.target.value
-            })}}
-            />
+    <br></br>
+    Name: 
+    <input
+      value={state.advSearch.name}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
+    /><br></br>
+    Text: 
+    <input
+      value={state.advSearch.oracle_text}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
+    /><br></br>
+    CMC: 
+    <input
+      value={state.advSearch.cmc}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
+    /><br></br>
+    Type: 
+    <input
+      value={state.advSearch.type_}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
+    /><br></br>
+    Subtype: 
+    <input
+      value={state.advSearch.subtype_}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
+    /><br></br>
+    Colors: 
+    <input
+      value={state.advSearch.colors}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
+    /><br></br>
+    Color Identity: 
+    <input
+      value={state.advSearch.color_identity}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
+    /><br></br>
+    Power: 
+    <input
+      value={state.advSearch.power}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
+    /><br></br>
+    Toughness: 
+    <input
+      value={state.advSearch.toughness}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
+    /><br></br>
+    Legalities: 
+    <input
+      value={state.advSearch.legalities}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
+    /><br></br>
+    Rarity: 
+    <input
+      value={state.advSearch.rarity}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
+    /><br></br>
+    {/* Set: 
+    <input
+      value={state.advSearch.set_name}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
+    /><br></br> */}
+    Set ID: 
+    <input
+      value={state.advSearch.set_shorthand}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
+    /><br></br>
+    Artist: 
+    <input
+      value={state.advSearch.artist}
+      onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
+    /><br></br>
+    Flavor Text: 
+    <input
+      value={state.advSearch.flavor_text}
+      onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
+    /><br></br>
+    <button className='FancyButton' onClick={() => { 
+            nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
+          }}>Search</button>
     </div>
       }
       {/* if there are no results yet, show searching */}
@@ -270,7 +389,9 @@ const SearchResults = (props) => {
           Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {state.showResultAmountCards + state.cardResultIndex}
         </div>
         <br></br>
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <span><CardObject data={item} key={i}/>{(i + 1) % 4 === 0 && <br></br>}</span>) }
+        <div className="ResultsContainer">
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <CardObject data={item} key={i}/>) }
+        </div>
         <div>
           <button 
             className="FancyButton"
@@ -289,7 +410,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.cardResultIndex <= state.cardResults.length - state.showResultAmountCards) {
+              if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
                 updateState({
                   cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
                 })
@@ -331,7 +452,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.deckResultIndex <= state.deckResults.length - state.showResultAmountDecks) {
+              if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
                 updateState({
                   deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
                 })
@@ -369,7 +490,7 @@ const SearchResults = (props) => {
           <button 
             className="FancyButton"
             onClick={() => { 
-              if (state.userResultIndex <= state.userResults.length - state.showResultAmountUsers) {
+              if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
                 updateState({
                   userResultIndex: state.userResultIndex + state.showResultAmountUsers,
                 })

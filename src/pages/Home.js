@@ -45,7 +45,6 @@ const Home = (props) => {
       {/* this is all hardcoded, will be dynamic content */}
       <div className="DeckContent">
         <header className="HeaderText">Recent Decks</header>
-        <div className="DeckRow">
         <span><DeckTileObject data={{
           cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/b/abff6c81-65a4-48fa-ba8f-580f87b0344a.jpg?1634347351",
           id: "",
@@ -67,9 +66,6 @@ const Home = (props) => {
           user_name: "noah_is_awesome_97",
           format: "format"
         }}/></span>
-        </div>
-        
-        <div className="DeckRow">
         <span><DeckTileObject data={{
           cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/d/5/d52868cb-087e-4f91-91bc-455f2e2e7cd7.jpg?1576381464",
           id: "",
@@ -91,7 +87,6 @@ const Home = (props) => {
           user_name: "noah_is_awesome_97",
           format: "format"
         }}/></span>
-        </div>
       </div>
     </div>
   );

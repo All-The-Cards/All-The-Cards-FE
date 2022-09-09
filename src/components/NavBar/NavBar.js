@@ -3,10 +3,13 @@ import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
 import Logo from './logo.png'
+import Logo_Star from './logo_star.png'
+import Logo_Name from './logo_text_marginleft.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
 import UsersIcon from './users_icon.png'
 import * as server from '../../functions/ServerTalk.js'
+import SearchGlass from './SearchGlass.png';
 
   
 const Navbar = () => {
@@ -116,16 +119,27 @@ const Navbar = () => {
     <div className="NavBarContainer">
         <a className="LogoContainer" href={server.buildRedirectUrl()} >
             <img 
-                src={Logo} 
+                src={Logo_Star} 
                 alt="logo" 
                 className="Logo"
+            /><img 
+            src={Logo_Name} 
+            alt="logo" 
+            className="Logo"
+            id="Logo-responsive"
             />
         </a>
 
         <div className="IconContainer">
-            { hasSearchBar &&
+            <div id="Searchbar-responsive">{ hasSearchBar &&
                 <SearchBar type="global"/>
-            }
+            }</div>
+            <img src={SearchGlass} 
+            alt="SearchGlass" 
+            className="SearchIcon"
+            id="Searchicon-responsive"
+            
+            />
             <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img> 
             {openLayerMenu &&
                 <div id={'1'} className="LayerMenu" ref={wrapperRef}>

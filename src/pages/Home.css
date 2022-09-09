@@ -35,6 +35,7 @@
     margin: 0 auto;
     margin-top: 80px;
     display: inline-block;
+    max-width: 1110px;
 }
 
 .DeckRow {
