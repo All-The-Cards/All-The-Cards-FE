@@ -1,6 +1,6 @@
 .DeckTileObjectContainer{
     width: 350px;
-    height: 180px;
+    height: 200px;
     border-radius:10px;
     margin:10px;
     background-repeat: no-repeat;
@@ -11,10 +11,12 @@
 }
 .DeckClickable {
     width: 350px;
-    height: 180px;
+    height: 200px;
 }
 
 .DeckInfo {
+    position:relative;
+    height:180px;
     background-color: rgba(0, 0, 0, .0);
     padding:10px;
     color:#f7f7f7;
@@ -29,9 +31,17 @@
 
 
 .DeckAuthor {
-    font-style: italic
+    font-style: italic;
+    position: absolute;
+    bottom: 0;
+    margin-bottom:10px;
+    right:0;
+    margin-right: 15px;
 }
 
+.DeckFormat {
+    font-style: italic;
+}
 a {
     text-decoration: none;
 }

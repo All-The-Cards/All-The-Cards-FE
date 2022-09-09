@@ -59,7 +59,8 @@ const DeckTileObject = (props) => {
                 <div className="DeckClickable">
                     <div className="DeckInfo">
                         <div className="DeckTitle">{state.data.name}</div>
-                        <div className="DeckAuthor">{state.data.user_name}</div>
+                        <div className="DeckAuthor">{state.data.format}</div>
+                        <div className="DeckFormat">{state.data.user_name}</div>
                     </div>
                 </div>
             </a>
