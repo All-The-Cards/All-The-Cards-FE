@@ -76,8 +76,15 @@ const SearchResults = (props) => {
         cardResultsFound: -1,
         deckResultsFound: -1,
         userResultsFound: -1,
-        advancedContainerDisplay: 'none'
       })
+
+      if (searchType === "DEF") {
+          updateState({ advancedContainerDisplay: 'none'})
+      }
+      if (searchType === "ADV") {
+          updateState({ advancedContainerDisplay: 'block'})
+      }
+
       let query = searchQuery
       //search if query not empty
       query = query.trim()
@@ -153,6 +160,7 @@ const SearchResults = (props) => {
     //if query is empty, don't send
     if (query.trim() === "/api/search/" + type + "/query=" || query.trim() === "/api/search/" + type + "/query=?"  ) {
       console.log('empty')
+      updateState({cardResultsFound: 0})
       return
     }
 
