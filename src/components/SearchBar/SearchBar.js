@@ -49,6 +49,7 @@ const SearchBar = (params) => {
         }
         if (searchType === "DEF") {
             setSearchType("ADV")
+            setSearchQuery("")
         }
     }
   return (

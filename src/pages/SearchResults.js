@@ -108,19 +108,16 @@ const SearchResults = (props) => {
     
     // console.log("sending search type: " + searchType)
     if (searchType === "ADV") {
-      //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP QUERY LINE THIS IS HANDLED LATER
-      query = "/api/search/" + type + "/query=" + query
+      query += "?"
       // console.log(query, state.advSearch)
       for (let [key, value] of Object.entries(state.advSearch) ) {
         if (value) {
-          query += "?" + key + "=" + value 
+          query += key + "=" + value + "&"
         }
       }
-      console.log('api request: ' + query)
-      console.log('not sending, backend not setup yet')
+      // console.log('api request: ' + query)
+      // console.log('not sending, backend not setup yet')
 
-
-      return
     }
     //reset search page
     updateState({
@@ -133,8 +130,11 @@ const SearchResults = (props) => {
 
     let showAll = false
     //if the query has "!a", set showall to true
-    if (query.includes("%21a")) {
+    if (query.includes("%21a") || query.includes("!a")) {
       query = query.replaceAll("%21a", '')
+      query = query.replaceAll("%20%21a", '')
+      query = query.replaceAll(" !a", '')
+      query = query.replaceAll("!a", '')
       query = query.replaceAll("+", ' ')
       query = query.trim()
       showAll = true
@@ -144,12 +144,15 @@ const SearchResults = (props) => {
     query = "/api/search/" + type + "/query=" + query
     //if query is empty, don't send
     if (query.trim() === "/api/search/" + type + "/query=" ) {
+      console.log('empty')
       return
     }
 
-    console.log('api request: ' + query)
+    console.log('api request: ', query)
+    console.log('data: ', state.advSearch)
     server.post(query).then(response => {
       let res = response
+      // console.log(res)
 
       //sort by language
       res = res.sort(sortByLanguage)
@@ -195,6 +198,13 @@ const SearchResults = (props) => {
 
       switch(type){
         case 'card':
+          updateState({          
+            cardResults: res,
+            cardResultsFound: res.length,
+          })
+
+          break
+        case 'card/adv':
           updateState({          
             cardResults: res,
             cardResultsFound: res.length,
