@@ -37,3 +37,34 @@
     bottom: 25px;
     left: 280px;
 }
+
+.ToolTip{
+    background-color: rgba(219, 30, 79, 0.85);
+    padding: 10px;
+    width: 328px;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+
+}
+
+.ToolTipTriangle{
+    z-index: 2;
+    position: relative;
+    /* top: 374px;
+    left: 755px; */
+    bottom: 78px;
+    left: 95px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 10px 5px 0;
+    border-color: transparent rgb(221, 30, 78,0.85) transparent transparent;
+}
+
+.SuccessfulTip{
+    position: relative;
+    bottom: 20px;
+    align-self: center;
+    color: green;
+}

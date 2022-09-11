@@ -4,17 +4,20 @@ import { Link } from 'react-router-dom'
 import EyePassword from '../images/EyePassword.png'
 import EyePassword2 from '../images/HiddenEyePassword.png'
 import { GlobalContext } from '../context/GlobalContext'
-import ReactTooltip from "react-tooltip";
 
 const Registration = () => {
 
-  const { User } = useContext(GlobalContext)
   const { supabase } = useContext(GlobalContext)
 
   const [underlineActiveUser, setUnderline] = useState(false)
   const [isShowing, setIsShowing] = useState(false)
   const [buttonHover, setButtonHover] = useState(false)
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: ""
+  });
+  const [isToolTipShown, setToolTip] = useState(false)
+  const [successfulRegister, setSuccessfulRegister] = useState(false)
 
   const handlePasswordClick = () => {
       
@@ -33,37 +36,51 @@ const Registration = () => {
   const handleSubmit = (event) => {
 
     event.preventDefault()
-    QueryRegister()
+    
+    let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/
+    
+    if(!inputs.password.match(check))
+    {
+      alert("Password does not contain a letter and a number. Please provide a password with both a letter and number.")
+      inputs.password = ""
+      return
+    }
 
-    // console.log(inputs)
-    // User.email = inputs.email
-    // User.name = inputs.fullname
-    // User.username = inputs.username
-    // User.password = inputs.password
-    // console.log(User)
+    QueryRegister()
   
   }
 
-  async function QueryRegister(){
-    
-    const { user, session, error } = await supabase.auth.signUp({
+
+  const QueryRegister = () =>{
+    supabase.auth.signUp({
       email: inputs.email,
       password: inputs.password,
+    }).then(({user,session,error})=>{
+      console.log(error)
+      if(error === null)
+      {
+        console.log("arrived at successful register trigger")
+        setSuccessfulRegister(true)
+      }
+      else
+      {
+        alert(error)
+        inputs.email = ""
+        inputs.password = ""
+      }
     })
-
-    console.log(user)
 
   }
 
     useEffect(()=>{
 
-      console.log(User)
+      console.log(inputs)
         
-    },[User])
+    },[inputs])
 
   return (
 
-    /* Login & Registration share CSS properties (Login-Registration.css) since they have the same foundational format */
+    /* Login & Registration share some CSS properties (Login-Registration.css) */
     <div className='LoginContainer'>
       <div className='LeftContainer'/>
       <div className='RightContainer'>
@@ -71,34 +88,19 @@ const Registration = () => {
         <Link to='/login' className={`ActiveUserLink ${underlineActiveUser ? "ActiveUserLinkAlt" : ''}`} onMouseEnter={() => setUnderline(true)} onMouseLeave={() => setUnderline(false)}>Already have an account?</Link>
       
         <form className='FormContainer' onSubmit={handleSubmit}>
-          <div className='InputTitles'>Full Name</div>
-          <input
-            type="text"
-            name="fullname"
-            value={inputs.fullname || ""}
-            onChange={handleChange}
-            className="RegistrationInputs"
-            maxLength={35}
-          />
+
+          {/* EACH GROUP IS A TITLE WITH ITS INPUT THEY ARE SPACED OUT */}
           <div className='InputTitles'>Email</div>
           <input
             type="email"
             name="email"
-            value={inputs.email || ""}
+            value={inputs.email}
             onChange={handleChange}
             className="RegistrationInputs"
-            maxLength={35}
+            maxLength={30}
           />
-          {/* <div className='InputTitles'>Username</div>
-          <input
-            type="text"
-            name="username"
-            value={inputs.username || ""}
-            onChange={handleChange}
-            className="RegistrationInputs"
-            maxLength={35}
-          /> */}
-          <div className='InputTitles'>Password</div>
+
+          <div className='InputTitles' onMouseEnter={() => setToolTip(true)} onMouseLeave={() => setToolTip(false)}>Password</div>
           <input
             type={isShowing ? "text" : "password"}
             name="password"
@@ -106,7 +108,7 @@ const Registration = () => {
             onChange={handleChange}
             className="RegistrationInputs"
             minLength={8}
-            maxLength={35}
+            maxLength={20}
           />
           {!isShowing &&
             <img src={EyePassword2} alt='EyeIcon2' className='RegEyeIconAlt' data-for='passReqs' data-iscapture="true" onClick={handlePasswordClick}/>
@@ -114,11 +116,21 @@ const Registration = () => {
           {isShowing &&
             <img src={EyePassword} alt='EyeIcon' className='RegEyeIcon' data-for='passReqs' data-iscapture="true" onClick={handlePasswordClick}/>
           }
-          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)}/>
+          {isToolTipShown &&
+            <div className='ToolTipTriangle'>
+              <div className='ToolTip'>
+                Password Requirements:<br /><br />• Password length must be 8 characters<br />• Must include at least one uppercase letter<br />
+                • Must include at least one number<br />• Cannot be more than 20 characters
+              </div>
+            </div>
+          }
 
-          <ReactTooltip id='passReqs' place='right' type='light' effect='solid' multiline='true'>
-            <span>Password Requirements:<br /><br />• Password must be a minumum of 8 characters<br />• Password must include a number</span>
-          </ReactTooltip>
+          {/* THIS IS THE SUCCESSFUL REGISTER MESSAGE THAT APPEARS WHEN YOUR REGISTRY GOES THROUGH */}
+          {successfulRegister &&
+            <div className='SuccessfulTip'>You have successfully registered!</div>
+          }
+
+          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)}/>
 
         </form>
       </div>

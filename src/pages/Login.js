@@ -1,4 +1,5 @@
-import { React, useState, useContext } from 'react'
+import { React, useState, useContext, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import './Login-Registration.css'
 import EyePassword from '../images/EyePassword.png'
@@ -12,7 +13,14 @@ const Login = () => {
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)
   const [isShowing, setIsShown] = useState(false)
-  const [inputs, setInputs] = useState({});
+  const [isModalActive, setModal] = useState(false)
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: ""
+  });
+
+  const nav = useNavigate()
+  const wrapperRef = useRef(null)
 
   const handleChange = (event) => {
 
@@ -33,16 +41,51 @@ const Login = () => {
 
   };
 
-  async function LoginQuery(){
-    
-    const { user, session, error } = await supabase.auth.signInWithPassword({
+    // Handles clicking outside of the menu
+  const handleClickOutside = (e) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        
+      setModal(false)
+    }
+  };
+
+  const handleForgotPassword = () => {
+    setModal(true)
+  };
+
+  const LoginQuery = () =>{
+
+    supabase.auth.signInWithPassword({
       email: inputs.email,
       password: inputs.password,
+    }).then(({user,session,error})=>{
+      if(error === null)
+      {
+        alert("Login Successful! Routing to homepage.")
+        nav('/')
+      }
+      else
+      {
+        alert(error)
+        inputs.email = ""
+        inputs.password = ""
+      }
     })
 
-    alert(error)
-
   }
+
+  // useEffect(()=>{
+
+  //     console.log(inputs)
+        
+  //   },[inputs])
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true)
+    return () => {
+        document.addEventListener("click", handleClickOutside, true)
+    }
+  }, [wrapperRef]);
 
   return (
 
@@ -60,31 +103,37 @@ const Login = () => {
               name="email"
               className="RegistrationInputs"
               maxLength={35}
-              value={inputs.email || ""}
+              value={inputs.email}
               onChange={handleChange}
             />
             <div className='InputTitles'>Password</div>
             <input
               type={isShowing ? "text" : "password"}
-              name={"password"}
+              name="password"
               className="RegistrationInputs"
               maxLength={35}
               minLength={8}
-              value={inputs.password || ""}
+              value={inputs.password}
               onChange={handleChange}
             />
-            <div className={`ForgotPasswordLink ${underlineForgot ? "ForgotPasswordLinkAlt" : ''}`} onMouseEnter={() => setUnderlineForgot(true)} onMouseLeave={() => setUnderlineForgot(false)}>Forgot Password?</div>
-              {!isShowing &&
-                <img src={EyePassword2} alt='EyeIcon2' className='EyeIconAlt' onClick={handlePasswordClick}/>
-              }
-              {isShowing &&
-                <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick}/>
-              }
+            <div className={`ForgotPasswordLink ${underlineForgot ? "ForgotPasswordLinkAlt" : ''}`} onClick={handleForgotPassword} onMouseEnter={() => setUnderlineForgot(true)} onMouseLeave={() => setUnderlineForgot(false)}>Forgot Password?</div>
+            {!isShowing &&
+              <img src={EyePassword2} alt='EyeIcon2' className='EyeIconAlt' onClick={handlePasswordClick}/>
+            }
+            {isShowing &&
+              <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick}/>
+            }
 
             <button className='SubmitButton' onClick={handleSubmit}>Submit</button>
           </form>
         </div>
       </div>
+
+      {isModalActive &&
+        <div className='ModalWindowBackground'>
+          <div className='ModalWindowContainer' ref={wrapperRef}>Password Reset Here</div>
+        </div>
+      }
     </div>
 
   )}

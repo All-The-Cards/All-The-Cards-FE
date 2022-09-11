@@ -1,10 +1,9 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import env from "react-dotenv";
 
 export const GlobalContext = createContext()
 
-export const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
+//export const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
 
 export const GlobalProvider = ( {children} ) => {
 
@@ -22,14 +21,13 @@ export const GlobalProvider = ( {children} ) => {
     // Global Variables Below
 
     const [hasSearchBar, setSearchBar] = useState(true)
-    const [searchQuery, setSearchQuery] = useState("")
+        const [searchQuery, setSearchQuery] = useState("")
 
     const [searchType, setSearchType] = useState("DEF")
 
     const [forceSearch, setForceSearch] = useState("")
 
-    // const supabaseUrl = process.env.SUPABASE_URL
-    // const supabaseAnonKey = process.env.API_KEY
+    const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
 
     // Global Function Below
 
