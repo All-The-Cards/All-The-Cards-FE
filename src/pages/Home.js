@@ -5,11 +5,14 @@ import { React, useEffect, useState, useContext } from 'react';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
 import { GlobalContext } from '../context/GlobalContext.js';
 import SearchBar from '../components/SearchBar/SearchBar.js';
+import * as server from '../functions/ServerTalk.js';
 
 const Home = (props) => {
 
   const [state, setState] = useState({
-    bgImageUrl: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092"
+    // bgImageUrl: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092",
+    bgImageUrl: "",
+    recentDecks: []
   })
   
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
@@ -19,8 +22,16 @@ const Home = (props) => {
 
   useEffect(()=>{
     setSearchBar(false)
-    // getRandomBgImg()
-  })
+    getRandomBgImg()
+    getRecentDecks()
+  }, [])
+
+  const updateState = (objectToUpdate) => {
+      setState((previous) => ({
+        ...previous,
+        ...objectToUpdate
+      }))
+  }
   const handleAdvancedClick = () => {
     setSearchType("ADV")
     nav("/search")
@@ -28,8 +39,21 @@ const Home = (props) => {
 
   const getRandomBgImg = () =>{
     //get random image
-    setState({
-      bgImageUrl: ""
+    server.post("/api/features/random/art").then(response => {
+      let res = response
+      // console.log(res) 
+      updateState({bgImageUrl: res.randomArt})
+      return res.randomArt
+    })
+  } 
+  
+  const getRecentDecks = () =>{
+    //get random image
+    server.post("/api/features/recent/decks").then(response => {
+      let res = response
+      // console.log(res) 
+      updateState({recentDecks: res})
+      return res
     })
   }
 
@@ -44,8 +68,17 @@ const Home = (props) => {
       </div>
       {/* this is all hardcoded, will be dynamic content */}
       <div className="DeckContent">
-        <header className="HeaderText">Recent Decks</header>
-        <span><DeckTileObject data={{
+        {state.recentDecks.length > 0 && 
+          <div>
+
+          <header className="HeaderText">Recent Decks</header>
+          { state.recentDecks.map((item, i) => <DeckTileObject data={item} key={i}/>) }
+        
+          </div>
+        }
+        {/* ignore this div, test data */}
+        <div>
+        {/* <span><DeckTileObject data={{
           cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/b/abff6c81-65a4-48fa-ba8f-580f87b0344a.jpg?1634347351",
           id: "",
           name: "Deck Test",
@@ -86,7 +119,8 @@ const Home = (props) => {
           name: "Deck Test",
           user_name: "noah_is_awesome_97",
           format: "format"
-        }}/></span>
+        }}/></span> */}
+        </div>
       </div>
     </div>
   );

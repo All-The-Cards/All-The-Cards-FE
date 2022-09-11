@@ -48,7 +48,9 @@ const SearchResults = (props) => {
         subtype_: "",
         toughness: "",
         type_: "",
-      }
+      },
+
+      advancedContainerDisplay: 'none'
     })
 
     const updateState = (objectToUpdate) => {
@@ -74,15 +76,21 @@ const SearchResults = (props) => {
         cardResultsFound: -1,
         deckResultsFound: -1,
         userResultsFound: -1,
+        advancedContainerDisplay: 'none'
       })
-
       let query = searchQuery
       //search if query not empty
       query = query.trim()
       if (searchType === "ADV") {
         search(query, 'card/adv')
+        updateState({ 
+          deckResults: [],
+          userResults: [],
+          deckResultsFound: 0,
+          userResultsFound: 0,
+        })
       }
-      if(query !== "" && searchType === "DEF") {
+      else if(query !== "" && searchType === "DEF") {
         // if (searchType === "ADV") {
         //   search(query, 'card/adv')
         // }
@@ -143,13 +151,13 @@ const SearchResults = (props) => {
     query = query.replaceAll('+', '%20')
     query = "/api/search/" + type + "/query=" + query
     //if query is empty, don't send
-    if (query.trim() === "/api/search/" + type + "/query=" ) {
+    if (query.trim() === "/api/search/" + type + "/query=" || query.trim() === "/api/search/" + type + "/query=?"  ) {
       console.log('empty')
       return
     }
 
-    console.log('api request: ', query)
-    console.log('data: ', state.advSearch)
+    // console.log('api request: ', query)
+    // console.log('data: ', state.advSearch)
     server.post(query).then(response => {
       let res = response
       // console.log(res)
@@ -285,16 +293,29 @@ const SearchResults = (props) => {
     }
   }
 
-  const setAdvType = (event) =>{
-    updateState({
-      advType: event.target.value
-    })
+  const toggleType = () => {
+    if (searchType === "ADV") {
+        setSearchType("DEF")
+        updateState({ advancedContainerDisplay: 'none'})
+    }
+    if (searchType === "DEF") {
+        setSearchType("ADV")
+        setSearchQuery("")
+        updateState({ advancedContainerDisplay: 'block'})
+    }
   }
+
+  const getTypeName = () => {
+    if (searchType === "DEF") return "Advanced"
+    else return "Cancel"
+  }
+
 
   return (
     <div className="Container">
+    <button className='FancyButton' onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
+      <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
       {searchType === "ADV" && <div>
-    ADVANCED:
     <br></br>
     Name: 
     <input
@@ -374,8 +395,9 @@ const SearchResults = (props) => {
     <button className='FancyButton' onClick={() => { 
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
           }}>Search</button>
-    </div>
+      </div>
       }
+      </div>
       {/* if there are no results yet, show searching */}
       {/* { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0) &&  */}
       { (state.cardResultsFound < 0 || state.deckResultsFound < 0 ) && 
