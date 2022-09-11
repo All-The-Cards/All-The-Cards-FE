@@ -78,6 +78,7 @@ const SearchResults = (props) => {
         userResultsFound: -1,
       })
 
+      //show or hide advanced container based on searchtype
       if (searchType === "DEF") {
           updateState({ advancedContainerDisplay: 'none'})
       }
@@ -86,8 +87,9 @@ const SearchResults = (props) => {
       }
 
       let query = searchQuery
-      //search if query not empty
       query = query.trim()
+
+      //do advanced search or...
       if (searchType === "ADV") {
         search(query, 'card/adv')
         updateState({ 
@@ -97,15 +99,11 @@ const SearchResults = (props) => {
           userResultsFound: 0,
         })
       }
+      //if query not empty, do regular search
       else if(query !== "" && searchType === "DEF") {
-        // if (searchType === "ADV") {
-        //   search(query, 'card/adv')
-        // }
-        // else {
           search(query, 'card')
           search(query, 'deck')
           //search(query, 'user')
-        // }
       }
       else {
         updateState({ 
@@ -121,22 +119,19 @@ const SearchResults = (props) => {
 
   const search = (query, type) => {
     
-    // console.log("sending search type: " + searchType)
     if (searchType === "ADV") {
       query += "?"
-      // console.log(query, state.advSearch)
       for (let [key, value] of Object.entries(state.advSearch) ) {
         if (value) {
           query += key + "=" + value + "&"
         }
       }
       // console.log('api request: ' + query)
-      // console.log('not sending, backend not setup yet')
 
     }
-    //reset search page
+
+    //reset search page so that "Searching..." displays
     updateState({
-      
       cardResultIndex: 0,
       deckResultIndex: 0,
       userResultIndex: 0,
@@ -144,7 +139,7 @@ const SearchResults = (props) => {
     })
 
     let showAll = false
-    //if the query has "!a", set showall to true
+    //if the query has "!a", set showall to true - for results only
     if (query.includes("%21a") || query.includes("!a")) {
       query = query.replaceAll("%21a", '')
       query = query.replaceAll("%20%21a", '')
@@ -160,12 +155,10 @@ const SearchResults = (props) => {
     //if query is empty, don't send
     if (query.trim() === "/api/search/" + type + "/query=" || query.trim() === "/api/search/" + type + "/query=?"  ) {
       console.log('empty')
-      updateState({cardResultsFound: 0})
+      updateState({ cardResultsFound: 0 })
       return
     }
 
-    // console.log('api request: ', query)
-    // console.log('data: ', state.advSearch)
     server.post(query).then(response => {
       let res = response
       // console.log(res)
@@ -212,6 +205,7 @@ const SearchResults = (props) => {
 
       res = noArenaRes
 
+      //set the results for whichever type of search
       switch(type){
         case 'card':
           updateState({          
@@ -242,7 +236,6 @@ const SearchResults = (props) => {
           break
       }
       
-
     })
 
   }
@@ -301,6 +294,7 @@ const SearchResults = (props) => {
     }
   }
 
+  //toggle query type
   const toggleType = () => {
     if (searchType === "ADV") {
         setSearchType("DEF")
@@ -313,96 +307,146 @@ const SearchResults = (props) => {
     }
   }
 
+  //
   const getTypeName = () => {
     if (searchType === "DEF") return "Advanced"
     else return "Cancel"
+  }
+  
+  const getTypeId = () => {
+    if (searchType === "DEF") return ""
+    else return "alt"
   }
 
 
   return (
     <div className="Container">
-    <button className='FancyButton' onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
+      {/* Advanced search options */}
+      <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
-      {searchType === "ADV" && <div>
-    <br></br>
-    Name: 
-    <input
-      value={state.advSearch.name}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
-    /><br></br>
-    Text: 
-    <input
-      value={state.advSearch.oracle_text}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
-    /><br></br>
-    CMC: 
-    <input
-      value={state.advSearch.cmc}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
-    /><br></br>
-    Type: 
-    <input
-      value={state.advSearch.type_}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
-    /><br></br>
-    Subtype: 
-    <input
-      value={state.advSearch.subtype_}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
-    /><br></br>
-    Colors: 
-    <input
-      value={state.advSearch.colors}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
-    /><br></br>
-    Color Identity: 
-    <input
-      value={state.advSearch.color_identity}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
-    /><br></br>
-    Power: 
-    <input
-      value={state.advSearch.power}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
-    /><br></br>
-    Toughness: 
-    <input
-      value={state.advSearch.toughness}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
-    /><br></br>
-    Legalities: 
-    <input
-      value={state.advSearch.legalities}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
-    /><br></br>
-    Rarity: 
-    <input
-      value={state.advSearch.rarity}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
-    /><br></br>
-    {/* Set: 
-    <input
-      value={state.advSearch.set_name}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
-    /><br></br> */}
-    Set ID: 
-    <input
-      value={state.advSearch.set_shorthand}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
-    /><br></br>
-    Artist: 
-    <input
-      value={state.advSearch.artist}
-      onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
-    /><br></br>
-    Flavor Text: 
-    <input
-      value={state.advSearch.flavor_text}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
-    /><br></br>
-    <button className='FancyButton' onClick={() => { 
+      {searchType === "ADV" && 
+      <div>
+        <br></br>
+        Name: 
+        <input
+          value={state.advSearch.name}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
+        /><br></br>
+        Text: 
+        <input
+          value={state.advSearch.oracle_text}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
+        /><br></br>
+        CMC: 
+        <input
+          value={state.advSearch.cmc}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
+        /><br></br>
+        Type: 
+        <select
+          value={state.advSearch.type_}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
+        >
+          <option value="">Any Type</option>
+          <option value="artifact">Artifact</option>
+          <option value="creature">Creature</option>
+          <option value="enchantment">Enchantment</option>
+          <option value="instant">Instant</option>
+          <option value="land">Land</option>
+          <option value="planeswalker">Planeswalker</option>
+          <option value="sorcery">Sorcery</option>
+          <option value="tribal">Tribal</option>
+          </select><br></br>
+        Subtype: 
+        <input
+          value={state.advSearch.subtype_}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
+        /><br></br>
+        Colors: 
+        <input
+          value={state.advSearch.colors}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
+        /><br></br>
+        Color Identity: 
+        <input
+          value={state.advSearch.color_identity}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
+        /><br></br>
+        Power: 
+        <input
+          value={state.advSearch.power}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
+        /><br></br>
+        Toughness: 
+        <input
+          value={state.advSearch.toughness}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
+        /><br></br>
+        Legality: 
+        <select
+          value={state.advSearch.legalities}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
+        >
+          <option value="">Any Format</option>
+          <option value="standard">Standard</option>
+          <option value="commander">Commander</option>
+          <option value="pioneer">Pioneer</option>
+          <option value="explorer">Explorer</option>
+          <option value="modern">Modern</option>
+          <option value="premodern">Premodern</option>
+          <option value="vintage">Vintage</option>
+          <option value="legacy">Legacy</option>
+          <option value="oldschool">Old School</option>
+          <option value="pauper">Pauper</option>
+          <option value="historic">Historic</option>
+          <option value="alchemy">Alchemy</option>
+          <option value="brawl">Brawl</option>
+          <option value="paupercommander">Pauper Commander</option>
+          <option value="historicbrawl">Historic Brawl</option>
+          <option value="penny">Penny Dreadful</option>
+          <option value="duel">Duel</option>
+          <option value="future">Future</option>
+          <option value="gladiator">Gladiator</option>
+          </select><br></br>
+        Rarity: 
+        <select
+          value={state.advSearch.rarity}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
+        >
+          <option value="">Any Rarity</option>
+          <option value="common">Common</option>
+          <option value="uncommon">Uncommon</option>
+          <option value="rare">Rare</option>
+          <option value="mythic">Mythic Rare</option>
+          </select><br></br>
+        {/* Set: 
+        <input
+          value={state.advSearch.set_name}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
+        /><br></br> */}
+        Set ID: 
+        <input
+          value={state.advSearch.set_shorthand}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
+        /><br></br>
+        Artist: 
+        <input
+          value={state.advSearch.artist}
+          onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
+        /><br></br>
+        Flavor Text: 
+        <input
+          value={state.advSearch.flavor_text}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
+        /><br></br>
+        <button className='FancyButton' 
+          onClick={() => { 
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
-          }}>Search</button>
+          }}>Search
+        </button>
       </div>
       }
       </div>
@@ -414,9 +458,10 @@ const SearchResults = (props) => {
           {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
         </div>
       }
+      {/* if no results are found, show error */}
       {/* { (state.cardResultsFound == 0 && state.deckResultsFound == 0 && state.userResultsFound == 0) && */}
       { (state.cardResultsFound == 0 && state.deckResultsFound == 0) &&
-        <div className="HeaderText" style={{textAlign:'center'}}>
+      <div className="HeaderText" style={{textAlign:'center'}}>
         No results found :(
       </div>
       }

@@ -25,4 +25,6 @@
     margin-top: 80px;
     padding-bottom: 20px;
     padding-top: 20px;
+    /* backdrop-filter: blur(6px); */
+    /* background: rgba(0,0,0, 0.1); */
 }
