@@ -188,9 +188,12 @@ const SearchResults = (props) => {
     server.post(query).then(response => {
       let res = response
       // console.log(res)
-
+      let englishCards = res.filter((item) => {
+        return item.lang === "en"
+      })
+      res = englishCards
       //sort by language
-      res = res.sort(sortByLanguage)
+      // res = res.sort(sortByLanguage)
       //sort by frame effects
       res = res.sort(sortByFrameEffects)
       //sort by border
@@ -640,7 +643,7 @@ const SearchResults = (props) => {
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <CardObject data={item} key={i}/>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"><CardObject data={item} key={i}/></div>) }
         </div>
         <div>
           <button 

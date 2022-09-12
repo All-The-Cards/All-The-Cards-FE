@@ -29,6 +29,38 @@
     text-align: left;
 }
 
+.SubHeaderText {
+    margin-top: 10px;
+    font-size: 20px;
+    font-style: italic;
+    text-align: left;
+}
+
+.BodyText {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: left;
+    white-space: pre-line;
+}
+
+
+
 button + button {
     margin-left: 20px;
+}
+
+
+
+.LargeCard {
+    max-width: 500px;
+    max-height: 700px;
+    /* background-color: rgba(255,0,0,.3); */
+    display: inline-block;
+}
+
+.RegularCard {
+    width: 250px;
+    height: 350px;
+    /* background-color: rgba(255,0,0,.3); */
+    display: inline-block;
 }
