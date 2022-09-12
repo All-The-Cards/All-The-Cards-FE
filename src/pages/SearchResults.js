@@ -187,53 +187,60 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
+      // if(res.length === 0) return
       // console.log(res)
-      let englishCards = res.filter((item) => {
-        return item.lang === "en"
-      })
-      res = englishCards
-      //sort by language
-      // res = res.sort(sortByLanguage)
-      //sort by frame effects
-      res = res.sort(sortByFrameEffects)
-      //sort by border
-      res = res.sort(sortByBorderColor)
-      //sort by non-promo first
-      res = res.sort(sortByNonPromo)
-      //sort by release date
-      res = res.sort(sortByFrameYear)
+      if (type === 'card'){
+        let englishCards = res.filter((item) => {
+          return item.lang === "en"
+        })
+        // console.log(englishCards)
+        res = englishCards
+        //sort by language
+        // res = res.sort(sortByLanguage)
+        //sort by frame effects
+        // res = res.sort(sortByFrameEffects)
+        // //sort by border
+        // res = res.sort(sortByBorderColor)
+        // //sort by non-promo first
+        // res = res.sort(sortByNonPromo)
+        // //sort by release date
+        // res = res.sort(sortByFrameYear)
+        //sort by release date
+        res = res.sort(sortByRelease)
+
+        //find duplicates, omit from appearing
+        let uniqueRes = []
+        if (!showAll) {
+          let uniqueNames = []
+          uniqueRes = res.filter((item) => {
+            let duplicate = uniqueNames.includes(item.name)
+            if (!duplicate) {
+              uniqueNames.push(item.name)
+              return true;
+            }
+            return false;
+          })
+          res = uniqueRes
+        }
+
+        //remove invalid card types for deckbuilding
+        let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
+        // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
+        let realCardRes = res.filter((item) => {
+          return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+        })
+        res = realCardRes
+
+        //remove some technically-duplicate cards
+        let noArenaRes= res.filter((item) => {
+          return !item.name.includes("A-")
+        })
+
+        res = noArenaRes
+
+      }
       //sort results alphabetically
       res = res.sort(sortByName)
-
-      //find duplicates, omit from appearing
-      if (!showAll) {
-        let uniqueNames = []
-        let uniqueRes = res.filter((item) => {
-          let duplicate = uniqueNames.includes(item.name)
-          if (!duplicate) {
-            uniqueNames.push(item.name)
-            return true;
-          }
-          return false;
-        })
-        res = uniqueRes
-      }
-
-      //remove invalid card types for deckbuilding
-      let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
-      let realCardRes = res.filter((item) => {
-        return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
-      })
-
-      res = realCardRes
-
-      //remove some technically-duplicate cards
-      let noArenaRes= res.filter((item) => {
-        return !item.name.includes("A-")
-      })
-
-      res = noArenaRes
-
       //set the results for whichever type of search
       switch(type){
         case 'card':
@@ -293,6 +300,18 @@ const SearchResults = (props) => {
     }
     else {
       return -1
+    }
+  }
+  
+  const sortByRelease = (a, b) => {
+    let aDate = new Date(a.released_at)
+    let bDate = new Date(b.released_at)
+    // console.log(aDate, bDate)
+    if (aDate >= bDate) {
+      return -1
+    }
+    else {
+      return 1
     }
   }
 
