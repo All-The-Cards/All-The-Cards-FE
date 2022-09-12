@@ -1,4 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react';
+import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
 
 const DeckEditor = (props) => {
@@ -8,6 +9,7 @@ const DeckEditor = (props) => {
   })
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const {wipDeck, setWipDeck} = useContext(GlobalContext);
 
   useEffect(() => {
     setSearchBar(props.hasSearchBar)
@@ -16,7 +18,11 @@ const DeckEditor = (props) => {
   return (
 
     <div>
-        DeckEditor
+        {wipDeck.title}
+        {wipDeck.description}
+        {wipDeck.cards.map((card, index) => (
+          <CardObject data={card}/>
+        ))}
     </div>
 
   )}
