@@ -223,6 +223,8 @@ const SearchResults = (props) => {
           res = uniqueRes
         }
 
+        //TODO:: remove art-types 
+
         //remove invalid card types for deckbuilding
         let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
         // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']

@@ -155,6 +155,14 @@ const Card = (props) => {
   return (
     <>
       <div className='Container'>
+        {
+          !state.hasGottenVersions && 
+          <div className="HeaderText" style={{textAlign:'center'}}>
+          Loading...
+          {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
+        </div>
+        }
+        { state.hasGottenVersions &&
         <div className="CardPageContent">
           <div className="CardPage-Left">
             <div className="LargeCard">
@@ -214,6 +222,7 @@ const Card = (props) => {
             </div>
           </div>
         </div>
+        } 
       </div>
     </>
   );
