@@ -3,7 +3,8 @@
     margin: 0 auto;
     margin-top: 80px;
     display: inline-block;
-    width: 80%;
+    width: 60%;
+    max-width: 80%;
     /* float: left; */
 }
 
@@ -58,7 +59,12 @@
 }
 
 #legalities {
-    /* background-color: rgba(255,0,0,.2); */
+    background-color: #e8e8e8;
+    height: 275px;
+    padding-left: 14px;
+    padding-top: 10px;
+    border-radius: 10px;
+    max-width: 450px;
 }
 
 .legalities-Left {

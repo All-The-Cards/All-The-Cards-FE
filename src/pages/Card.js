@@ -203,7 +203,7 @@ const Card = (props) => {
               }
               </div>
               <div className="BodyText" id="legalities"> 
-              Legality: {"\n"}
+              <b>Legality:</b> {"\n"}
               <div className='legalities-Left'>
               {state.legalitiesDisplayLeft}
               </div>

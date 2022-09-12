@@ -189,7 +189,7 @@ const SearchResults = (props) => {
       let res = response
       // if(res.length === 0) return
       // console.log(res)
-      if (type === 'card'){
+      if (type === 'card' || type==='card/adv'){
         let englishCards = res.filter((item) => {
           return item.lang === "en"
         })
@@ -209,8 +209,8 @@ const SearchResults = (props) => {
         res = res.sort(sortByRelease)
 
         //find duplicates, omit from appearing
-        let uniqueRes = []
         if (!showAll) {
+          let uniqueRes = []
           let uniqueNames = []
           uniqueRes = res.filter((item) => {
             let duplicate = uniqueNames.includes(item.name)
