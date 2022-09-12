@@ -39,6 +39,7 @@ const SearchBar = (params) => {
         if (searchQuery.trim() !== "") {
             // console.log(searchQuery)
             // nav("/search/?query=" + searchQuery)
+            setSearchType("DEF")
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
         }
     }
@@ -49,12 +50,12 @@ const SearchBar = (params) => {
         }
         if (searchType === "DEF") {
             setSearchType("ADV")
+            setSearchQuery("")
         }
     }
   return (
 
     <div style={{display:'inline'}}>
-        <div onClick={toggleType} style={{cursor:'pointer', display:"inline-block"}}>{searchType}</div>
         <input
             className="SearchBar"
             maxLength={50}

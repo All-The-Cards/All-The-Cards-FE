@@ -1,7 +1,7 @@
 .CardObjectContainer{
     /* background-color: fuchsia;  */
-    width: 250px;
-    height: 350px;
+    /* width: 250px;
+    height: 350px; */
     background-repeat: no-repeat;
     background-size: contain;
     display: inline-block;
@@ -9,10 +9,14 @@
 }
 
 .CardObjectImage {
-    width: 250px;
-    height: 350px;
+    /* width: 250px;
+    height: 350px; */
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
     background-repeat: no-repeat;
     background-size: contain;
+    /* box-shadow: 8px 8px 15px rgba(0,0,0,.3); */
 }
 
 .CardListObjectContainer{
@@ -32,4 +36,30 @@
     display: table-cell;
     vertical-align: middle;
     padding-left: 8px;
+}
+
+.flipBox {
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50px;
+    position: absolute;
+    background-color: rgba(0,0,0,.3);
+    margin-top: -40px;
+    margin-left: -10px;
+    box-shadow: 5px 5px 8px rgba(0,0,0,.3);
+    backdrop-filter: blur(2px);
+}
+
+.flipIcon {
+    max-width: 25px;
+    min-width: 25px;
+    filter: invert(.95);
+    position: relative;
+    margin-top: 6px;
+    margin-left: -1px;
+    /* position: absolute; */
+    /* margin-left: -13px; */
+
 }

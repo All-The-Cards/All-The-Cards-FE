@@ -34,8 +34,8 @@ const SearchResults = (props) => {
       advSearch: {
         artist: "",
         cmc: "",
-        color_identity: "",
-        colors: "",
+        color_identity: [false, false, false, false, false, false],
+        colors: [false, false, false, false, false, false],
         flavor_text: "",
         lang: "",
         legalities: "",
@@ -48,7 +48,9 @@ const SearchResults = (props) => {
         subtype_: "",
         toughness: "",
         type_: "",
-      }
+      },
+
+      advancedContainerDisplay: 'none'
     })
 
     const updateState = (objectToUpdate) => {
@@ -76,21 +78,32 @@ const SearchResults = (props) => {
         userResultsFound: -1,
       })
 
+      //show or hide advanced container based on searchtype
+      if (searchType === "DEF") {
+          updateState({ advancedContainerDisplay: 'none'})
+      }
+      if (searchType === "ADV") {
+          updateState({ advancedContainerDisplay: 'block'})
+      }
+
       let query = searchQuery
-      //search if query not empty
       query = query.trim()
+
+      //do advanced search or...
       if (searchType === "ADV") {
         search(query, 'card/adv')
+        updateState({ 
+          deckResults: [],
+          userResults: [],
+          deckResultsFound: 0,
+          userResultsFound: 0,
+        })
       }
-      if(query !== "" && searchType === "DEF") {
-        // if (searchType === "ADV") {
-        //   search(query, 'card/adv')
-        // }
-        // else {
+      //if query not empty, do regular search
+      else if(query !== "" && searchType === "DEF") {
           search(query, 'card')
           search(query, 'deck')
           //search(query, 'user')
-        // }
       }
       else {
         updateState({ 
@@ -106,25 +119,45 @@ const SearchResults = (props) => {
 
   const search = (query, type) => {
     
-    // console.log("sending search type: " + searchType)
     if (searchType === "ADV") {
-      //TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP QUERY LINE THIS IS HANDLED LATER
-      query = "/api/search/" + type + "/query=" + query
-      // console.log(query, state.advSearch)
+      query += "?"
       for (let [key, value] of Object.entries(state.advSearch) ) {
         if (value) {
-          query += "?" + key + "=" + value 
+          if (key !== 'colors' && key !== 'color_identity'){
+            query += key + "=" + value + "&"
+          }
+          if (key === 'colors' || key === 'color_identity'){
+            let colorBuilder = ""
+            let colorCodes = "CBGRUW"
+            if (value[0]) {
+              colorBuilder += "[]"
+            }
+            else {
+              for (let i = 1; i < value.length; i++){
+                // SINGLECOLOR
+                // if (value[i]) colorBuilder += colorCodes[i] + ","
+                if (value[i]) colorBuilder += colorCodes[i]
+              }
+            }
+            // SINGLECOLOR
+            // colorBuilder = colorBuilder.slice(0,-1)
+            // console.log(key, colorBuilder)
+            // SINGLECOLOR
+            if (colorBuilder !== ""){
+              query += key + "=" + colorBuilder + "&"
+            }
+            
+          }
         }
       }
-      console.log('api request: ' + query)
-      console.log('not sending, backend not setup yet')
+      query = query.slice(0,-1)
+      // console.log('api request: ' + query)
 
-
-      return
+      console.log(query)
     }
-    //reset search page
+
+    //reset search page so that "Searching..." displays
     updateState({
-      
       cardResultIndex: 0,
       deckResultIndex: 0,
       userResultIndex: 0,
@@ -132,9 +165,12 @@ const SearchResults = (props) => {
     })
 
     let showAll = false
-    //if the query has "!a", set showall to true
-    if (query.includes("%21a")) {
+    //if the query has "!a", set showall to true - for results only
+    if (query.includes("%21a") || query.includes("!a")) {
       query = query.replaceAll("%21a", '')
+      query = query.replaceAll("%20%21a", '')
+      query = query.replaceAll(" !a", '')
+      query = query.replaceAll("!a", '')
       query = query.replaceAll("+", ' ')
       query = query.trim()
       showAll = true
@@ -143,58 +179,80 @@ const SearchResults = (props) => {
     query = query.replaceAll('+', '%20')
     query = "/api/search/" + type + "/query=" + query
     //if query is empty, don't send
-    if (query.trim() === "/api/search/" + type + "/query=" ) {
+    if (query.trim() === "/api/search/" + type + "/query=" || query.trim() === "/api/search/" + type + "/query=?"  ) {
+      console.log('empty')
+      updateState({ cardResultsFound: 0 })
       return
     }
 
-    console.log('api request: ' + query)
     server.post(query).then(response => {
       let res = response
+      // if(res.length === 0) return
+      // console.log(res)
+      if (type === 'card' || type==='card/adv'){
+        let englishCards = res.filter((item) => {
+          return item.lang === "en"
+        })
+        // console.log(englishCards)
+        res = englishCards
+        //sort by language
+        // res = res.sort(sortByLanguage)
+        //sort by frame effects
+        // res = res.sort(sortByFrameEffects)
+        // //sort by border
+        // res = res.sort(sortByBorderColor)
+        // //sort by non-promo first
+        // res = res.sort(sortByNonPromo)
+        // //sort by release date
+        // res = res.sort(sortByFrameYear)
+        //sort by release date
+        res = res.sort(sortByRelease)
 
-      //sort by language
-      res = res.sort(sortByLanguage)
-      //sort by frame effects
-      res = res.sort(sortByFrameEffects)
-      //sort by border
-      res = res.sort(sortByBorderColor)
-      //sort by non-promo first
-      res = res.sort(sortByNonPromo)
-      //sort by release date
-      res = res.sort(sortByFrameYear)
+        //find duplicates, omit from appearing
+        if (!showAll) {
+          let uniqueRes = []
+          let uniqueNames = []
+          uniqueRes = res.filter((item) => {
+            let duplicate = uniqueNames.includes(item.name)
+            if (!duplicate) {
+              uniqueNames.push(item.name)
+              return true;
+            }
+            return false;
+          })
+          res = uniqueRes
+        }
+
+        //TODO:: remove art-types 
+
+        //remove invalid card types for deckbuilding
+        let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
+        // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
+        let realCardRes = res.filter((item) => {
+          return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+        })
+        res = realCardRes
+
+        //remove some technically-duplicate cards
+        let noArenaRes= res.filter((item) => {
+          return !item.name.includes("A-")
+        })
+
+        res = noArenaRes
+
+      }
       //sort results alphabetically
       res = res.sort(sortByName)
-
-      //find duplicates, omit from appearing
-      if (!showAll) {
-        let uniqueNames = []
-        let uniqueRes = res.filter((item) => {
-          let duplicate = uniqueNames.includes(item.name)
-          if (!duplicate) {
-            uniqueNames.push(item.name)
-            return true;
-          }
-          return false;
-        })
-        res = uniqueRes
-      }
-
-      //remove invalid card types for deckbuilding
-      let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
-      let realCardRes = res.filter((item) => {
-        return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
-      })
-
-      res = realCardRes
-
-      //remove some technically-duplicate cards
-      let noArenaRes= res.filter((item) => {
-        return !item.name.includes("A-")
-      })
-
-      res = noArenaRes
-
+      //set the results for whichever type of search
       switch(type){
         case 'card':
+          updateState({          
+            cardResults: res,
+            cardResultsFound: res.length,
+          })
+
+          break
+        case 'card/adv':
           updateState({          
             cardResults: res,
             cardResultsFound: res.length,
@@ -216,7 +274,6 @@ const SearchResults = (props) => {
           break
       }
       
-
     })
 
   }
@@ -247,6 +304,18 @@ const SearchResults = (props) => {
       return -1
     }
   }
+  
+  const sortByRelease = (a, b) => {
+    let aDate = new Date(a.released_at)
+    let bDate = new Date(b.released_at)
+    // console.log(aDate, bDate)
+    if (aDate >= bDate) {
+      return -1
+    }
+    else {
+      return 1
+    }
+  }
 
   const sortByLanguage = (a, b) => {
     if (a.lang === "en") {
@@ -275,97 +344,301 @@ const SearchResults = (props) => {
     }
   }
 
-  const setAdvType = (event) =>{
-    updateState({
-      advType: event.target.value
-    })
+  //toggle query type
+  const toggleType = () => {
+    if (searchType === "ADV") {
+        setSearchType("DEF")
+        updateState({ advancedContainerDisplay: 'none'})
+    }
+    if (searchType === "DEF") {
+        setSearchType("ADV")
+        setSearchQuery("")
+        updateState({ advancedContainerDisplay: 'block'})
+    }
   }
+
+  //
+  const getTypeName = () => {
+    if (searchType === "DEF") return "Advanced"
+    else return "Cancel"
+  }
+  
+  const getTypeId = () => {
+    if (searchType === "DEF") return ""
+    else return "alt"
+  }
+
 
   return (
     <div className="Container">
-      {searchType === "ADV" && <div>
-    ADVANCED:
-    <br></br>
-    Name: 
-    <input
-      value={state.advSearch.name}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
-    /><br></br>
-    Text: 
-    <input
-      value={state.advSearch.oracle_text}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
-    /><br></br>
-    CMC: 
-    <input
-      value={state.advSearch.cmc}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
-    /><br></br>
-    Type: 
-    <input
-      value={state.advSearch.type_}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
-    /><br></br>
-    Subtype: 
-    <input
-      value={state.advSearch.subtype_}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
-    /><br></br>
-    Colors: 
-    <input
-      value={state.advSearch.colors}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
-    /><br></br>
-    Color Identity: 
-    <input
-      value={state.advSearch.color_identity}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
-    /><br></br>
-    Power: 
-    <input
-      value={state.advSearch.power}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
-    /><br></br>
-    Toughness: 
-    <input
-      value={state.advSearch.toughness}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
-    /><br></br>
-    Legalities: 
-    <input
-      value={state.advSearch.legalities}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
-    /><br></br>
-    Rarity: 
-    <input
-      value={state.advSearch.rarity}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
-    /><br></br>
-    {/* Set: 
-    <input
-      value={state.advSearch.set_name}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
-    /><br></br> */}
-    Set ID: 
-    <input
-      value={state.advSearch.set_shorthand}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
-    /><br></br>
-    Artist: 
-    <input
-      value={state.advSearch.artist}
-      onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
-    /><br></br>
-    Flavor Text: 
-    <input
-      value={state.advSearch.flavor_text}
-      onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
-    /><br></br>
-    <button className='FancyButton' onClick={() => { 
+      {/* Advanced search options */}
+      <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
+      <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
+      {searchType === "ADV" && 
+      <div>
+        <div className="AdvRow">
+          <div className="AdvOption">
+        Name:</div>
+        <input
+          value={state.advSearch.name}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Text: </div>
+        <input
+          value={state.advSearch.oracle_text}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        CMC: </div>
+        <input
+          value={state.advSearch.cmc}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Type: </div>
+        <select
+          value={state.advSearch.type_}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
+        >
+          <option value="">Any Type</option>
+          <option value="artifact">Artifact</option>
+          <option value="creature">Creature</option>
+          <option value="enchantment">Enchantment</option>
+          <option value="instant">Instant</option>
+          <option value="land">Land</option>
+          <option value="planeswalker">Planeswalker</option>
+          <option value="sorcery">Sorcery</option>
+          <option value="tribal">Tribal</option>
+          </select>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Subtype: </div>
+        <input
+          value={state.advSearch.subtype_}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Colors: </div>
+        {/* <input
+          value={state.advSearch.colors}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
+        /> */}
+        <input type="checkbox" name="white1" checked={state.advSearch.colors[5]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[5] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="white1" id="symbolW">W</label>
+        <input type="checkbox" name="blue1" checked={state.advSearch.colors[4]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[4] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="blue1" id="symbolU">U</label>
+        <input type="checkbox" name="black1" checked={state.advSearch.colors[1]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[1] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="black1" id="symbolB">B</label>
+        <input type="checkbox" name="red1" checked={state.advSearch.colors[3]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[3] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="red1" id="symbolR">R</label>
+        <input type="checkbox" name="green1" checked={state.advSearch.colors[2]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[2] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="green1" id="symbolG">G</label>
+        <input type="checkbox" name="colorless1" checked={state.advSearch.colors[0]}
+          onChange={(e) => {
+            let arr = [false, false, false, false, false, false]
+            arr[0] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="colorless1" id="symbolC">C</label>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Commander: </div>
+        <input type="checkbox" name="white2" checked={state.advSearch.color_identity[5]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[5] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="white2" id="symbolW">W</label>
+        <input type="checkbox" name="blue2" checked={state.advSearch.color_identity[4]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[4] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="blue2" id="symbolU">U</label>
+        <input type="checkbox" name="black2" checked={state.advSearch.color_identity[1]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[1] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="black2" id="symbolB">B</label>
+        <input type="checkbox" name="red2" checked={state.advSearch.color_identity[3]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[3] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="red2" id="symbolR">R</label>
+        <input type="checkbox" name="green2" checked={state.advSearch.color_identity[2]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[2] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="green2" id="symbolG">G</label>
+        <input type="checkbox" name="colorless2" checked={state.advSearch.color_identity[0]}
+          onChange={(e) => {
+            let arr = [false, false, false, false, false, false]
+            arr[0] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="colorless2" id="symbolC">C</label>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Power: </div>
+        <input
+          value={state.advSearch.power}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Toughness: </div>
+        <input
+          value={state.advSearch.toughness}
+          type="number"
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Legality: </div>
+        <select
+          value={state.advSearch.legalities}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
+        >
+          <option value="">Any Format</option>
+          <option value="standard">Standard</option>
+          <option value="commander">Commander</option>
+          <option value="pioneer">Pioneer</option>
+          <option value="explorer">Explorer</option>
+          <option value="modern">Modern</option>
+          <option value="premodern">Premodern</option>
+          <option value="vintage">Vintage</option>
+          <option value="legacy">Legacy</option>
+          <option value="oldschool">Old School</option>
+          <option value="pauper">Pauper</option>
+          <option value="historic">Historic</option>
+          <option value="alchemy">Alchemy</option>
+          <option value="brawl">Brawl</option>
+          <option value="paupercommander">Pauper Commander</option>
+          <option value="historicbrawl">Historic Brawl</option>
+          <option value="penny">Penny Dreadful</option>
+          <option value="duel">Duel</option>
+          <option value="future">Future</option>
+          <option value="gladiator">Gladiator</option>
+          </select>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Rarity: </div>
+        <select
+          value={state.advSearch.rarity}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
+        >
+          <option value="">Any Rarity</option>
+          <option value="common">Common</option>
+          <option value="uncommon">Uncommon</option>
+          <option value="rare">Rare</option>
+          <option value="mythic">Mythic Rare</option>
+          </select>
+        </div>
+        <div className="AdvRow"> <div className="AdvOption">Set Name: </div>
+        <input
+          value={state.advSearch.set_name}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Set ID: </div>
+        <input
+          value={state.advSearch.set_shorthand}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Artist: </div>
+        <input
+          value={state.advSearch.artist}
+          onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Flavor Text: </div>
+        <input
+          value={state.advSearch.flavor_text}
+          onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
+        />
+        </div>
+        <button className='FancyButton' 
+          onClick={() => { 
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
-          }}>Search</button>
-    </div>
+          }}>Search
+        </button>
+      </div>
       }
+      </div>
       {/* if there are no results yet, show searching */}
       {/* { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0) &&  */}
       { (state.cardResultsFound < 0 || state.deckResultsFound < 0 ) && 
@@ -374,9 +647,10 @@ const SearchResults = (props) => {
           {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
         </div>
       }
+      {/* if no results are found, show error */}
       {/* { (state.cardResultsFound == 0 && state.deckResultsFound == 0 && state.userResultsFound == 0) && */}
       { (state.cardResultsFound == 0 && state.deckResultsFound == 0) &&
-        <div className="HeaderText" style={{textAlign:'center'}}>
+      <div className="HeaderText" style={{textAlign:'center'}}>
         No results found :(
       </div>
       }
@@ -390,7 +664,7 @@ const SearchResults = (props) => {
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <CardObject data={item} key={i}/>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"key={i}><CardObject data={item} /></div>) }
         </div>
         <div>
           <button 
