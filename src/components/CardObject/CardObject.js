@@ -1,12 +1,18 @@
 // This Component displays a Card List View from Card .JSON info
 
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import './CardObject.css'
 import * as server from '../../functions/ServerTalk.js';
 import { useNavigate } from 'react-router-dom';
 import Card from "../../pages/Card";
 
 import flipIcon from './rotate-right.png'
+
+import plusIcon from './plus-solid.svg'
+import minusIcon from './minus-solid.svg'
+
+
+import { GlobalContext } from "../../context/GlobalContext";
 const CardObject = (props) => {
     const [state, setState] = useState({
         isFlipped: false,
@@ -15,6 +21,8 @@ const CardObject = (props) => {
             layout: ""
         }
     })
+
+    const {wipDeck, setWipDeck} = useContext(GlobalContext)
 
     const nav = useNavigate()
 
@@ -82,8 +90,20 @@ const CardObject = (props) => {
         }
     }
 
+    const toggleInDeck = () => {
+        let index = wipDeck.cards.indexOf(props.data) 
+        if(index === -1) {
+            wipDeck.cards.push(props.data)
+        }
+        else{
+            wipDeck.cards.splice(index,1)
+        }
+        console.log(props.data)
+        console.log(wipDeck.cards)
+    }
+
     return (
-        <>
+        <div className="RegularCard">
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
             >
@@ -117,9 +137,13 @@ const CardObject = (props) => {
                             <img src={flipIcon} className="flipIcon" style={{transform: 'scaleX(' + transformFlipIcon() + ')'}}></img>
                         </div>
                     }
+                    <div className="plusMinusBox" onClick={toggleInDeck}>
+                        {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" /> : <img src={plusIcon} className="plusMinusIcon" />}
+                        
+                    </div>
                 </div>}
 
-        </>
+        </div>
     );
 };
 

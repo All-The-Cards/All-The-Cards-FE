@@ -14,12 +14,21 @@ const DeckEditor = (props) => {
   useEffect(() => {
     setSearchBar(props.hasSearchBar)
   }, [])
+
+  const handleChanges = (event) => {
+    setWipDeck((previous) => ({
+      ...previous,
+      [event.target.name]: event.target.value
+    }))
+  } 
   
   return (
 
     <div>
-        {wipDeck.title}
-        {wipDeck.description}
+      <form>
+        <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name"/>
+        <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description"/>
+      </form>
         {wipDeck.cards.map((card, index) => (
           <CardObject data={card}/>
         ))}

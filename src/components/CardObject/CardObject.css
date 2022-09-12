@@ -2,6 +2,7 @@
     /* background-color: fuchsia;  */
     /* width: 250px;
     height: 350px; */
+    position: relative;
     background-repeat: no-repeat;
     background-size: contain;
     display: inline-block;
@@ -62,4 +63,26 @@
     /* position: absolute; */
     /* margin-left: -13px; */
 
+}
+
+.plusMinusBox {
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50px;
+    position: absolute;
+    background-color: rgba(0,0,0,.3);
+    right: 10px;
+    top: 10px;
+    box-shadow: 5px 5px 8px rgba(0,0,0,.3);
+    backdrop-filter: blur(2px);
+}
+
+.plusMinusIcon {
+    max-width: 25px;
+    min-width: 25px;
+    position: relative;
+    margin-top: 6px;
+    margin-left: -1px;
 }
