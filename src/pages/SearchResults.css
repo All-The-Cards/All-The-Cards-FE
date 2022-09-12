@@ -12,3 +12,88 @@
     /* background-color: rgba(255,0,0,.3); */
     max-width: 1100px;
 }
+
+.AdvancedContainer {
+    position: absolute;
+    /* background-color: rgba(255,0,0,.3); */
+    width: 400px;
+    right: 0;
+    background-color: #e8e8e8;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(0,0,0,.2);
+    margin-right: 20px;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    backdrop-filter: blur(6px);
+    background: rgba(255,255,255, 0.3);
+}
+
+.AdvRow {
+    margin-bottom: 10px;
+    justify-content: space-between;
+    flex-direction: row;
+    display:flex;
+    /* display: inline-block; */
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.AdvOption {
+    font-weight: bold;
+}
+
+.AdvancedContainer input, option, select {
+    width: 200px;
+    border: none;
+    border-radius: 5px;
+}
+
+.AdvancedContainer input:focus, option:focus, select:focus {
+    outline: 0;
+}
+
+.AdvancedContainer label {
+    float: left;
+    min-width:20px;
+    min-height:20px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px rgb(0,0,0,.2);
+    color: rgba(0,0,0)
+}
+
+#symbolW { 
+    /* color: black; */
+    background-color: rgb(249,250,244);
+    background-color: rgb(248,231,185);
+}
+#symbolU { 
+    /* color: white; */
+    background-color: rgb(14,104,171);
+    background-color: rgb(179,206,234);
+}
+#symbolB { 
+    /* color: white; */
+    background-color: rgb(21,11,0);
+    background-color: rgb(166,159,157);
+}
+#symbolR { 
+    /* color: white; */
+    background-color: rgb(211,32,42);
+    background-color: rgb(235,159,130);
+}
+#symbolG { 
+    /* color: white; */
+    background-color: rgb(0,115,62);
+    background-color: rgb(196,211,202);
+}
+#symbolC { 
+    background-color: rgb(200, 200, 200);
+}
+
+.AdvancedContainer input[type=checkbox] {
+    /* float: left; */
+    /* margin: none; */
+    border-radius: 20px;
+    
+}

@@ -6,9 +6,14 @@ import * as server from '../../functions/ServerTalk.js';
 import { useNavigate } from 'react-router-dom';
 import Card from "../../pages/Card";
 
+import flipIcon from './rotate-right.png'
 const CardObject = (props) => {
     const [state, setState] = useState({
-
+        isFlipped: false,
+        data: { 
+            card_faces: [],
+            layout: ""
+        }
     })
 
     const nav = useNavigate()
@@ -47,6 +52,36 @@ const CardObject = (props) => {
         return imgLink
     }
 
+    function flipArt() {
+        if (state.data.card_faces) {
+            let img = ""
+            switch (state.isFlipped){
+                case true:
+                    img = state.data.card_faces[0].image_uris.png
+                    break
+                case false: 
+                    img = state.data.card_faces[1].image_uris.png
+                    break
+            }
+    
+            updateState({
+                isFlipped: !state.isFlipped,
+                imgLink: img
+            })
+        }
+    }
+
+    function transformFlipIcon(){
+        switch (state.isFlipped){
+            case true: 
+                return -1
+                break;
+            case false:
+                return 1
+                break;
+        }
+    }
+
     return (
         <>
             {props.isCompact === true ? <div
@@ -76,6 +111,12 @@ const CardObject = (props) => {
                             className="CardObjectImage">
                         </img>
                     </a>
+                    { (state.data.card_faces && state.data.layout === "transform") &&
+                        <div className="flipBox"
+                        onClick={flipArt}>
+                            <img src={flipIcon} className="flipIcon" style={{transform: 'scaleX(' + transformFlipIcon() + ')'}}></img>
+                        </div>
+                    }
                 </div>}
 
         </>
