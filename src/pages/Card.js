@@ -131,14 +131,14 @@ const Card = (props) => {
             break;
         }
         if (i >= Object.keys(legalities).length / 2){
-          a.push(<div style={{marginTop: '8px'}} title={entry}>
+          a.push(<div style={{marginTop: '8px'}} title={entry} key={i}>
           <div style={{width: '16px', height:'16px', backgroundColor:color, borderRadius:'20px'}}>   
           <div style={{marginLeft: '30px'}}>{key}</div>
           </div>
         </div>)
         }
         else {
-        b.push(<div style={{marginTop: '8px'}}title={entry}>
+        b.push(<div style={{marginTop: '8px'}}title={entry}key={i}>
         <div style={{width: '16px', height:'16px', backgroundColor:color, borderRadius:'20px'}}>   
         <div style={{marginLeft: '30px'}}>{key}</div>
         </div>

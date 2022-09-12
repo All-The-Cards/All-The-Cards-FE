@@ -664,7 +664,7 @@ const SearchResults = (props) => {
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"><CardObject data={item} key={i}/></div>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"key={i}><CardObject data={item} /></div>) }
         </div>
         <div>
           <button 
