@@ -34,8 +34,8 @@ const SearchResults = (props) => {
       advSearch: {
         artist: "",
         cmc: "",
-        color_identity: "",
-        colors: "",
+        color_identity: [false, false, false, false, false, false],
+        colors: [false, false, false, false, false, false],
         flavor_text: "",
         lang: "",
         legalities: "",
@@ -123,11 +123,37 @@ const SearchResults = (props) => {
       query += "?"
       for (let [key, value] of Object.entries(state.advSearch) ) {
         if (value) {
-          query += key + "=" + value + "&"
+          if (key !== 'colors' && key !== 'color_identity'){
+            query += key + "=" + value + "&"
+          }
+          if (key === 'colors' || key === 'color_identity'){
+            let colorBuilder = ""
+            let colorCodes = "CBGRUW"
+            if (value[0]) {
+              colorBuilder += "[]"
+            }
+            else {
+              for (let i = 1; i < value.length; i++){
+                // SINGLECOLOR
+                // if (value[i]) colorBuilder += colorCodes[i] + ","
+                if (value[i]) colorBuilder += colorCodes[i]
+              }
+            }
+            // SINGLECOLOR
+            // colorBuilder = colorBuilder.slice(0,-1)
+            // console.log(key, colorBuilder)
+            // SINGLECOLOR
+            if (colorBuilder !== ""){
+              query += key + "=" + colorBuilder + "&"
+            }
+            
+          }
         }
       }
+      query = query.slice(0,-1)
       // console.log('api request: ' + query)
 
+      console.log(query)
     }
 
     //reset search page so that "Searching..." displays
@@ -326,24 +352,31 @@ const SearchResults = (props) => {
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
       {searchType === "ADV" && 
       <div>
-        <br></br>
-        Name: 
+        <div className="AdvRow">
+          <div className="AdvOption">
+        Name:</div>
         <input
           value={state.advSearch.name}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,name: e.target.value}})}}
-        /><br></br>
-        Text: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Text: </div>
         <input
           value={state.advSearch.oracle_text}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,oracle_text: e.target.value}})}}
-        /><br></br>
-        CMC: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        CMC: </div>
         <input
           value={state.advSearch.cmc}
           type="number"
           onChange={(e) => {updateState({advSearch: {...state.advSearch,cmc: e.target.value}})}}
-        /><br></br>
-        Type: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Type: </div>
         <select
           value={state.advSearch.type_}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,type_: e.target.value}})}}
@@ -357,35 +390,157 @@ const SearchResults = (props) => {
           <option value="planeswalker">Planeswalker</option>
           <option value="sorcery">Sorcery</option>
           <option value="tribal">Tribal</option>
-          </select><br></br>
-        Subtype: 
+          </select>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Subtype: </div>
         <input
           value={state.advSearch.subtype_}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,subtype_: e.target.value}})}}
-        /><br></br>
-        Colors: 
-        <input
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Colors: </div>
+        {/* <input
           value={state.advSearch.colors}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,colors: e.target.value}})}}
-        /><br></br>
-        Color Identity: 
-        <input
-          value={state.advSearch.color_identity}
-          onChange={(e) => {updateState({advSearch: {...state.advSearch,color_identity: e.target.value}})}}
-        /><br></br>
-        Power: 
+        /> */}
+        <input type="checkbox" name="white1" checked={state.advSearch.colors[5]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[5] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="white1" id="symbolW">W</label>
+        <input type="checkbox" name="blue1" checked={state.advSearch.colors[4]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[4] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="blue1" id="symbolU">U</label>
+        <input type="checkbox" name="black1" checked={state.advSearch.colors[1]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[1] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="black1" id="symbolB">B</label>
+        <input type="checkbox" name="red1" checked={state.advSearch.colors[3]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[3] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="red1" id="symbolR">R</label>
+        <input type="checkbox" name="green1" checked={state.advSearch.colors[2]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[2] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="green1" id="symbolG">G</label>
+        <input type="checkbox" name="colorless1" checked={state.advSearch.colors[0]}
+          onChange={(e) => {
+            let arr = [false, false, false, false, false, false]
+            arr[0] = e.target.checked
+            updateState({advSearch: {...state.advSearch,colors: arr}})
+          }}></input>
+        <label htmlFor="colorless1" id="symbolC">C</label>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Commander: </div>
+        <input type="checkbox" name="white2" checked={state.advSearch.color_identity[5]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[5] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="white2" id="symbolW">W</label>
+        <input type="checkbox" name="blue2" checked={state.advSearch.color_identity[4]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[4] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="blue2" id="symbolU">U</label>
+        <input type="checkbox" name="black2" checked={state.advSearch.color_identity[1]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[1] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="black2" id="symbolB">B</label>
+        <input type="checkbox" name="red2" checked={state.advSearch.color_identity[3]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[3] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="red2" id="symbolR">R</label>
+        <input type="checkbox" name="green2" checked={state.advSearch.color_identity[2]}
+          onChange={(e) => {
+            // SINGLECOLOR
+            // let arr = state.advSearch.colors 
+            let arr = [false, false, false, false, false, false]
+            if (arr[0]) arr[0] = false
+            arr[2] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="green2" id="symbolG">G</label>
+        <input type="checkbox" name="colorless2" checked={state.advSearch.color_identity[0]}
+          onChange={(e) => {
+            let arr = [false, false, false, false, false, false]
+            arr[0] = e.target.checked
+            updateState({advSearch: {...state.advSearch,color_identity: arr}})
+          }}></input>
+        <label htmlFor="colorless2" id="symbolC">C</label>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Power: </div>
         <input
           value={state.advSearch.power}
           type="number"
           onChange={(e) => {updateState({advSearch: {...state.advSearch,power: e.target.value}})}}
-        /><br></br>
-        Toughness: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Toughness: </div>
         <input
           value={state.advSearch.toughness}
           type="number"
           onChange={(e) => {updateState({advSearch: {...state.advSearch,toughness: e.target.value}})}}
-        /><br></br>
-        Legality: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Legality: </div>
         <select
           value={state.advSearch.legalities}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,legalities: e.target.value}})}}
@@ -410,8 +565,10 @@ const SearchResults = (props) => {
           <option value="duel">Duel</option>
           <option value="future">Future</option>
           <option value="gladiator">Gladiator</option>
-          </select><br></br>
-        Rarity: 
+          </select>
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Rarity: </div>
         <select
           value={state.advSearch.rarity}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,rarity: e.target.value}})}}
@@ -421,27 +578,35 @@ const SearchResults = (props) => {
           <option value="uncommon">Uncommon</option>
           <option value="rare">Rare</option>
           <option value="mythic">Mythic Rare</option>
-          </select><br></br>
-        {/* Set: 
+          </select>
+        </div>
+        <div className="AdvRow"> <div className="AdvOption">Set Name: </div>
         <input
           value={state.advSearch.set_name}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,set_name: e.target.value}})}}
-        /><br></br> */}
-        Set ID: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Set ID: </div>
         <input
           value={state.advSearch.set_shorthand}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,set_shorthand: e.target.value}})}}
-        /><br></br>
-        Artist: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Artist: </div>
         <input
           value={state.advSearch.artist}
           onChange={(e) => {updateState({ advSearch: { ...state.advSearch, artist: e.target.value} })}}
-        /><br></br>
-        Flavor Text: 
+        />
+        </div><div className="AdvRow">
+          <div className="AdvOption">
+        Flavor Text: </div>
         <input
           value={state.advSearch.flavor_text}
           onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
-        /><br></br>
+        />
+        </div>
         <button className='FancyButton' 
           onClick={() => { 
             nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
