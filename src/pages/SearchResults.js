@@ -130,18 +130,18 @@ const SearchResults = (props) => {
             let colorBuilder = ""
             let colorCodes = "CBGRUW"
             if (value[0]) {
-              colorBuilder += "[]"
+              colorBuilder += "C&"
             }
             else {
               for (let i = 1; i < value.length; i++){
                 // SINGLECOLOR
-                // if (value[i]) colorBuilder += colorCodes[i] + ","
-                if (value[i]) colorBuilder += colorCodes[i]
+                if (value[i]) colorBuilder += colorCodes[i] + ","
+                // if (value[i]) colorBuilder += colorCodes[i]
               }
             }
             // SINGLECOLOR
-            // colorBuilder = colorBuilder.slice(0,-1)
-            // console.log(key, colorBuilder)
+            colorBuilder = colorBuilder.slice(0,-1)
+            console.log(key, colorBuilder)
             // SINGLECOLOR
             if (colorBuilder !== ""){
               query += key + "=" + colorBuilder + "&"
@@ -432,8 +432,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="white1" checked={state.advSearch.colors[5]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.colors 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
@@ -442,8 +442,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="blue1" checked={state.advSearch.colors[4]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.colors 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
@@ -452,8 +452,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="black1" checked={state.advSearch.colors[1]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.colors 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
@@ -462,8 +462,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="red1" checked={state.advSearch.colors[3]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.colors 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
@@ -472,8 +472,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="green1" checked={state.advSearch.colors[2]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.colors 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
@@ -492,8 +492,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="white2" checked={state.advSearch.color_identity[5]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.color_identity 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
@@ -502,8 +502,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="blue2" checked={state.advSearch.color_identity[4]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.color_identity 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
@@ -512,8 +512,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="black2" checked={state.advSearch.color_identity[1]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.color_identity 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
@@ -522,8 +522,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="red2" checked={state.advSearch.color_identity[3]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.color_identity 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
@@ -532,8 +532,8 @@ const SearchResults = (props) => {
         <input type="checkbox" name="green2" checked={state.advSearch.color_identity[2]}
           onChange={(e) => {
             // SINGLECOLOR
-            // let arr = state.advSearch.colors 
-            let arr = [false, false, false, false, false, false]
+            let arr = state.advSearch.color_identity 
+            // let arr = [false, false, false, false, false, false]
             if (arr[0]) arr[0] = false
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
