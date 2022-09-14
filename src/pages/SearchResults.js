@@ -103,7 +103,7 @@ const SearchResults = (props) => {
       else if(query !== "" && searchType === "DEF") {
           search(query, 'card')
           search(query, 'deck')
-          //search(query, 'user')
+          search(query, 'user')
       }
       else {
         //query must have been invalid
@@ -144,7 +144,7 @@ const SearchResults = (props) => {
               }
             }
             colorBuilder = colorBuilder.slice(0,-1)
-            console.log(key, colorBuilder)
+            // console.log(key, colorBuilder)
             if (colorBuilder !== ""){
               query += key + "=" + colorBuilder + "&"
             }
@@ -188,6 +188,7 @@ const SearchResults = (props) => {
     server.post(query).then(response => {
       let res = response
       console.log(res)
+      console.log("Found " + res.length + " results")
       //if a card search, do some filtering
       if (type === 'card' || type ==='card/adv'){
         let englishCards = res.filter((item) => {
@@ -210,8 +211,7 @@ const SearchResults = (props) => {
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
           })
-          //TODO:: GET full 'limited' card data from advanced search to make sure these fields are visible
-          // res = regularCards
+          res = regularCards
 
           //find duplicates, omit from appearing
           let uniqueRes = []
@@ -621,7 +621,7 @@ const SearchResults = (props) => {
       </div>
       {/* if there are no results yet, show searching */}
       {/* { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0) &&  */}
-      { (state.cardResultsFound < 0 || state.deckResultsFound < 0 ) && 
+      { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0 ) && 
         <div className="HeaderText" style={{textAlign:'center'}}>
           Searching...
           {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
@@ -629,7 +629,7 @@ const SearchResults = (props) => {
       }
       {/* if no results are found, show error */}
       {/* { (state.cardResultsFound == 0 && state.deckResultsFound == 0 && state.userResultsFound == 0) && */}
-      { (state.cardResultsFound == 0 && state.deckResultsFound == 0) &&
+      { (state.cardResultsFound == 0 && state.deckResultsFound == 0 && state.userResultsFound == 0) &&
       <div className="HeaderText" style={{textAlign:'center'}}>
         No results found :(
       </div>
@@ -731,7 +731,7 @@ const SearchResults = (props) => {
       {state.userResults.length > 0 && 
       <div className="Results">
         <header className="HeaderText">Users</header>
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <div key={i}>{item.name}</div>) }
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} href={server.buildRedirectUrl("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
         <div>
           { state.userResultIndex > 1 && 
           <button 
