@@ -10,8 +10,8 @@ import * as server from '../functions/ServerTalk.js';
 const Home = (props) => {
 
   const [state, setState] = useState({
-    // bgImageUrl: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092",
-    bgImageUrl: "",
+    bgImageUrl: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092",
+    // bgImageUrl: "",
     recentDecks: []
   })
   
@@ -22,7 +22,7 @@ const Home = (props) => {
 
   useEffect(()=>{
     setSearchBar(false)
-    getRandomBgImg()
+    // getRandomBgImg()
     getRecentDecks()
   }, [])
 

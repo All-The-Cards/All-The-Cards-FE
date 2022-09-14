@@ -113,6 +113,9 @@ const Card = (props) => {
       let a = []
       let b = []
       let i = 0
+      let names = ["Standard", "Future Standard", "Historic", "Gladiator", "Pioneer", "Explorer",
+      "Modern", "Legacy", "Pauper", "Vintage", "Penny Dreadful", "Commander", "Brawl", "Historic Brawl",
+      "Alchemy", "Pauper Commander", "Duel", "Old School", "Pre-Modern"]
       for (let [key, entry] of Object.entries(legalities) ) {
         // console.log(key, entry)
         let color = ""
@@ -133,14 +136,14 @@ const Card = (props) => {
         if (i >= Object.keys(legalities).length / 2){
           a.push(<div style={{marginTop: '8px'}} title={entry} key={i}>
           <div style={{width: '16px', height:'16px', backgroundColor:color, borderRadius:'20px'}}>   
-          <div style={{marginLeft: '30px'}}>{key}</div>
+          <div style={{marginLeft: '30px', whiteSpace:'nowrap'}}>{names[i]}</div>
           </div>
         </div>)
         }
         else {
         b.push(<div style={{marginTop: '8px'}}title={entry}key={i}>
         <div style={{width: '16px', height:'16px', backgroundColor:color, borderRadius:'20px'}}>   
-        <div style={{marginLeft: '30px'}}>{key}</div>
+        <div style={{marginLeft: '30px', whiteSpace:'nowrap'}}>{names[i]}</div>
         </div>
       </div>)
         }
