@@ -225,13 +225,20 @@ const SearchResults = (props) => {
 
         //TODO:: remove art-types 
 
-        //remove invalid card types for deckbuilding
-        let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
-        // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
-        let realCardRes = res.filter((item) => {
-          return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+        let legalCards = res.filter((item) => {
+          console.log(Object.values(item.legalities).every(value => value === "not_legal"))
+          return !Object.values(item.legalities).every(value => value === "not_legal")
         })
-        res = realCardRes
+        res = legalCards
+
+        // this is deprecated by the above function
+        // //remove invalid card types for deckbuilding
+        // let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
+        // // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
+        // let realCardRes = res.filter((item) => {
+        //   return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+        // })
+        // res = realCardRes
 
         //remove some technically-duplicate cards
         let noArenaRes= res.filter((item) => {
