@@ -64,7 +64,8 @@
     padding-left: 14px;
     padding-top: 10px;
     border-radius: 10px;
-    max-width: 450px;
+    max-width: 600px;
+    min-width: 400px;
 }
 
 .legalities-Left {

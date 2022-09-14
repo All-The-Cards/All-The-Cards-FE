@@ -68,7 +68,7 @@ const SearchResults = (props) => {
 
       setSearchBar(props.hasSearchBar)
 
-      //console.log(query)
+      //reset results
       updateState({ 
         cardResults: [],
         deckResults: [],
@@ -106,6 +106,7 @@ const SearchResults = (props) => {
           //search(query, 'user')
       }
       else {
+        //query must have been invalid
         updateState({ 
           cardResults: [],
           deckResults: [],
@@ -119,13 +120,18 @@ const SearchResults = (props) => {
 
   const search = (query, type) => {
     
+    //if advanced search, build the adv query
     if (searchType === "ADV") {
       query += "?"
+      //build query
       for (let [key, value] of Object.entries(state.advSearch) ) {
         if (value) {
+          //add for normal queries
           if (key !== 'colors' && key !== 'color_identity'){
             query += key + "=" + value + "&"
           }
+
+          //build color string
           if (key === 'colors' || key === 'color_identity'){
             let colorBuilder = ""
             let colorCodes = "CBGRUW"
@@ -134,25 +140,19 @@ const SearchResults = (props) => {
             }
             else {
               for (let i = 1; i < value.length; i++){
-                // SINGLECOLOR
                 if (value[i]) colorBuilder += colorCodes[i] + ","
-                // if (value[i]) colorBuilder += colorCodes[i]
               }
             }
-            // SINGLECOLOR
             colorBuilder = colorBuilder.slice(0,-1)
             console.log(key, colorBuilder)
-            // SINGLECOLOR
             if (colorBuilder !== ""){
               query += key + "=" + colorBuilder + "&"
             }
-            
           }
         }
       }
+      //remove trailing &
       query = query.slice(0,-1)
-      // console.log('api request: ' + query)
-
       console.log(query)
     }
 
@@ -187,29 +187,32 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
-      // if(res.length === 0) return
-      // console.log(res)
+
+      //if a card search, do some filtering
       if (type === 'card' || type==='card/adv'){
         let englishCards = res.filter((item) => {
           return item.lang === "en"
         })
-        // console.log(englishCards)
         res = englishCards
-        //sort by language
-        // res = res.sort(sortByLanguage)
-        //sort by frame effects
-        // res = res.sort(sortByFrameEffects)
-        // //sort by border
-        // res = res.sort(sortByBorderColor)
-        // //sort by non-promo first
-        // res = res.sort(sortByNonPromo)
-        // //sort by release date
-        // res = res.sort(sortByFrameYear)
+
         //sort by release date
         res = res.sort(sortByRelease)
 
-        //find duplicates, omit from appearing
         if (!showAll) {
+          //remove art-types 
+          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart"]
+          let regularCards = res.filter((item) => {
+            return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) }) 
+              && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
+              && item.promo === "false"
+              && item.full_art === "false" 
+              && item.digital === "false"
+              && item.set_shorthand !== "sld"
+              && item.set_type !== "masterpiece"
+          })
+          res = regularCards
+
+          //find duplicates, omit from appearing
           let uniqueRes = []
           let uniqueNames = []
           uniqueRes = res.filter((item) => {
@@ -223,10 +226,8 @@ const SearchResults = (props) => {
           res = uniqueRes
         }
 
-        //TODO:: remove art-types 
-
+        //get cards that are "real" cards, buildable in a deck
         let legalCards = res.filter((item) => {
-          console.log(Object.values(item.legalities).every(value => value === "not_legal"))
           return !Object.values(item.legalities).every(value => value === "not_legal")
         })
         res = legalCards
@@ -244,7 +245,6 @@ const SearchResults = (props) => {
         let noArenaRes= res.filter((item) => {
           return !item.name.includes("A-")
         })
-
         res = noArenaRes
 
       }
@@ -294,24 +294,6 @@ const SearchResults = (props) => {
     }
   }
   
-  const sortByFrameYear = (a, b) => {
-    if (parseInt(a.frame) <= parseInt(b.frame)) {
-      return 1
-    }
-    else {
-      return -1
-    }
-  }
-
-  const sortByNonPromo = (a, b) => {
-    if (a.promo >= b.promo) {
-      return 1
-    }
-    else {
-      return -1
-    }
-  }
-  
   const sortByRelease = (a, b) => {
     let aDate = new Date(a.released_at)
     let bDate = new Date(b.released_at)
@@ -321,33 +303,6 @@ const SearchResults = (props) => {
     }
     else {
       return 1
-    }
-  }
-
-  const sortByLanguage = (a, b) => {
-    if (a.lang === "en") {
-      return 1
-    }
-    else {
-      return -1
-    }
-  }  
-  
-  const sortByBorderColor = (a, b) => {
-    if (a.border_color !== "black") {
-      return 1
-    }
-    else {
-      return -1
-    }
-  }
-  
-  const sortByFrameEffects = (a, b) => {
-    if (a.frame_effects === null) {
-      return 1
-    }
-    else {
-      return -1
     }
   }
 
@@ -364,17 +319,34 @@ const SearchResults = (props) => {
     }
   }
 
-  //
+  //advanced query toggle button text
   const getTypeName = () => {
     if (searchType === "DEF") return "Advanced"
     else return "Cancel"
   }
   
+  //button color 
   const getTypeId = () => {
     if (searchType === "DEF") return ""
     else return "alt"
   }
 
+  const getShowingAmt = (type) => {
+    switch (type) {
+
+      case "card":
+        if (state.showResultAmountCards + state.cardResultIndex > state.cardResults.length) return state.cardResults.length
+        else return state.showResultAmountCards + state.cardResultIndex
+      case "deck":
+        if (state.showResultAmountDecks + state.deckResultIndex > state.deckResults.length) return state.deckResults.length
+        else return state.showResultAmountDecks + state.deckResultIndex
+      case "user":
+        if (state.showResultAmountUsers + state.userResultIndex > state.userResults.length) return state.userResults.length
+        else return state.showResultAmountUsers + state.userResultIndex
+      
+    }
+
+  }
 
   return (
     <div className="Container">
@@ -667,13 +639,14 @@ const SearchResults = (props) => {
       <div className="Results">
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Cards</header>
-          Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {state.showResultAmountCards + state.cardResultIndex}
+          Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {getShowingAmt("card")}
         </div>
         <br></br>
         <div className="ResultsContainer">
         { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"key={i}><CardObject data={item} /></div>) }
         </div>
         <div>
+          { state.cardResultIndex > 1 && 
           <button 
             className="FancyButton"
             id="alt"
@@ -687,7 +660,8 @@ const SearchResults = (props) => {
           }>
             Previous {state.showResultAmountCards}
           </button>
-
+          }
+      {state.cardResultIndex < state.cardResults.length - state.showResultAmountCards &&
           <button 
             className="FancyButton"
             onClick={() => { 
@@ -700,6 +674,7 @@ const SearchResults = (props) => {
           }>
             Next {state.showResultAmountCards}
           </button>
+      }
         </div>
       </div>
       }
@@ -711,11 +686,12 @@ const SearchResults = (props) => {
       <div className="Results">
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Decks</header>
-          Decks found: {state.deckResults.length} | Showing: {state.deckResultIndex + 1} - {state.showResultAmountDecks + state.deckResultIndex}
+          Decks found: {state.deckResults.length} | Showing: {state.deckResultIndex + 1} - {getShowingAmt("deck")}
         </div>
         <br></br>
         { state.deckResults.slice(state.deckResultIndex, state.deckResultIndex + state.showResultAmountDecks).map((item, i) => <DeckTileObject data={item} key={i}/>) }
         <div>
+          { state.deckResultIndex > 1 && 
           <button 
             className="FancyButton"
             id="alt"
@@ -729,7 +705,8 @@ const SearchResults = (props) => {
           }>
             Previous {state.showResultAmountDecks}
           </button>
-
+          }
+          {state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks &&
           <button 
             className="FancyButton"
             onClick={() => { 
@@ -742,6 +719,7 @@ const SearchResults = (props) => {
           }>
             Next {state.showResultAmountDecks}
           </button>
+}
         </div>
       </div>
       }
@@ -754,6 +732,7 @@ const SearchResults = (props) => {
         <header className="HeaderText">Users</header>
         {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <div key={i}>{item.name}</div>) }
         <div>
+          { state.userResultIndex > 1 && 
           <button 
             className="FancyButton"
             id="alt"
@@ -767,7 +746,8 @@ const SearchResults = (props) => {
           }>
             Previous {state.showResultAmountUsers}
           </button>
-
+          }
+          {state.userResultIndex < state.userResults.length - state.showResultAmountUsers &&
           <button 
             className="FancyButton"
             onClick={() => { 
@@ -780,6 +760,7 @@ const SearchResults = (props) => {
           }>
             Next {state.showResultAmountUsers}
           </button>
+          }
         </div>
       </div>
     }
