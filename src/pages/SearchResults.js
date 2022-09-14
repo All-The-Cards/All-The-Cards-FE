@@ -187,9 +187,9 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
-
+      console.log(res)
       //if a card search, do some filtering
-      if (type === 'card' || type==='card/adv'){
+      if (type === 'card' || type ==='card/adv'){
         let englishCards = res.filter((item) => {
           return item.lang === "en"
         })
@@ -210,7 +210,8 @@ const SearchResults = (props) => {
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
           })
-          res = regularCards
+          //TODO:: GET full 'limited' card data from advanced search to make sure these fields are visible
+          // res = regularCards
 
           //find duplicates, omit from appearing
           let uniqueRes = []
