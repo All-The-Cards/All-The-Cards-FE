@@ -2,7 +2,6 @@ import { React, useState, useEffect, useContext, useRef} from "react";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
-import Logo from './logo.png'
 import Logo_Star from './logo_star.png'
 import Logo_Name from './logo_text_marginleft.png'
 import SearchBar from "../SearchBar/SearchBar";
