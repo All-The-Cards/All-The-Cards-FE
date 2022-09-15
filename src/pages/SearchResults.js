@@ -651,7 +651,8 @@ const SearchResults = (props) => {
         { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
           .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px'}}key={i}>
             <CardObject data={item} isCompact={true} 
-            count={Math.floor(Math.random() * 4 + 1)}
+            // count={i % 4}
+            // count={4 - i % 4}
             />
             <CardObject data={item}/>
             </div>) }

@@ -10,7 +10,6 @@ import { Mana } from "@saeris/react-mana";
 import * as mana from '../../components/TextToMana/TextToMana.js'
 
 import flipIcon from './rotate-right.png'
-import { generateSymbols } from "../TextToMana/TextToMana";
 const CardObject = (props) => {
     const [state, setState] = useState({
         isFlipped: false,
@@ -22,7 +21,7 @@ const CardObject = (props) => {
         listBackgroundColorV2: "",
         listAltColor:"",
         manaCostSymbols: "",
-        maxNameLength: getMaxLength(),
+        maxNameLength: 0,
     })
 
     const nav = useNavigate()
@@ -36,6 +35,7 @@ const CardObject = (props) => {
 
     useEffect(() => {
         getData()
+        console.log(props)
     }, [props])
 
     function getData() {
@@ -44,33 +44,55 @@ const CardObject = (props) => {
             url: server.buildRedirectUrl("/card/?id=" + props.data.id),
             imgLink: getImage(),
         })
-        generateListBackgroundColor()
-        getManaSymbols()
+        if (props.isCompact){
+            generateListBackgroundColor()
+            getManaSymbols()
+            getFrontName()
+            getMaxLength()
+        }
     }
-    
+    function getFrontName(){
+        if (props.data.card_faces){
+            updateState((previous) => ({data: {...previous, name: props.data.card_faces[0].name}}))
+        }
+    }
     function getMaxLength(){
         let mana = 0
         let nameLen = 0
         let count = 0
-        if (props.data.mana_cost) {
+        if (props.data.mana_cost && props.data.layout !== "adventure") {
             mana = props.data.mana_cost
             nameLen = props.data.name.length
             count = (mana.match(/{/g || []).length)
         }
         if (props.data.card_faces){
             mana = props.data.card_faces[0].mana_cost
-            nameLen = props.data.card_faces[0].name.length
+            nameLen = props.data.card_faces[0].name.length + 3
             count = (mana.match(/{/g || []).length)
         }
-        if (mana === 0) return
-        if (props.count < 2) nameLen += 4
+        else {
+            nameLen = props.data.name.length
+        }
+
         
-        if (count < 4 && nameLen < 25) return nameLen + 3
-        if (count > 7) return nameLen - 3 - count / 3
-        if (count > 5) return nameLen - 1 - count / 3
-        if (nameLen + count * 2 > 27 && props.count > 1) return nameLen * .75
-        if (nameLen + count * 2 > 34 && count > 1) return nameLen * .75
-        else return nameLen
+        if (mana === 0)  {
+            updateState({
+                maxNameLength: nameLen
+            })
+            return
+        }
+        // if (props.count < 2) nameLen += 4
+        
+        if (count < 4 && nameLen < 25) nameLen += 3
+        if (count > 7) nameLen -= 3 - count / 3
+        if (count > 5) nameLen -= 1 - count / 3
+        if (nameLen + count * 2 > 27 && props.count > 1) nameLen *= .75
+        if (nameLen + count * 2 > 34 && count > 1) nameLen *= .75
+        
+        console.log(props.data.name, nameLen)
+        updateState({
+            maxNameLength: nameLen
+        })
 
     }
 
@@ -130,12 +152,20 @@ const CardObject = (props) => {
         let uniqueColors = 0
         let seenColors = [false,false,false,false,false]
         if (props.data.mana_cost){
-            colorobject = props.data.mana_cost
+            if (props.data.layout === "adventure") { 
+                colorobject = props.data.mana_cost.split("//")[0] 
+            }
+            else {
+                colorobject = props.data.mana_cost
+            }
 
         }
         else if (props.data.card_faces){
             colorobject = props.data.card_faces[0].mana_cost
         }
+        // else if (props.data.color_identity) {
+        //     colorobject = props.data.color_identity
+        // }
         if (colorobject !== undefined) {
             for (let i = 0; i < colorobject.length; i++){
                 switch (colorobject[i]){
@@ -261,6 +291,13 @@ const CardObject = (props) => {
                     altclr = "#025434"
                 }
             }
+            if (props.data.oracle_text && (props.data.oracle_text.includes("any color") || props.data.oracle_text.includes("chosen color"))&& props.data.type_one.toLowerCase().includes("land") && props.data.color_identity==="[]"){
+                // if (props.data.oracle_text && (props.data.oracle_text.includes("any color") || props.data.oracle_text.includes("chosen color"))&& props.data.type_one.toLowerCase().includes("land")){
+                //gold
+                bgclr = "#d6be73"
+                bgclr2 = "#d6be73"
+                altclr = "#efd26e"
+            }
             // console.log(props.data.name, colors, uniqueColors, splitcount, symbolcount)
             updateState({
                 listBackgroundColor: bgclr,
@@ -276,9 +313,16 @@ const CardObject = (props) => {
         else rawMana = props.data.mana_cost
         
         
-        updateState({manaCostSymbols: mana.generateSymbols(rawMana)})
+        updateState({manaCostSymbols: mana.replaceSymbols(rawMana)})
     }
 
+    function mouseDownHandler(event){
+        if (event.button === 1) {
+            console.log("middle clicked")
+            //TODO:: Nav in new tab? 
+            // nav("/card/?id=" + props.data.id)
+        }
+    }
 
     return (
         <>
@@ -290,6 +334,7 @@ const CardObject = (props) => {
                 <a
                     // href={state.url}
                     onClick={() => nav("/card/?id=" + props.data.id)}
+                    onMouseDown={mouseDownHandler}
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
@@ -307,6 +352,7 @@ const CardObject = (props) => {
                     <a
                         // href={state.url}
                         onClick={() => nav("/card/?id=" + props.data.id)}
+                        onMouseDown={mouseDownHandler}
                     >
                         <img
                             src={state.imgLink}
