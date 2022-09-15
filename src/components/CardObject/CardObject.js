@@ -231,6 +231,33 @@ const CardObject = (props) => {
                 bgclr2 = "#d6be73"
                 altclr = "#efd26e"
             }
+            if (colorobject.includes("2/") && uniqueColors === 1){
+                if (seenColors[0]) {
+                    bgclr = "#e1dfd9"
+                    bgclr2 = "#ebe6d9"
+                    altclr = "#e9e8e4"
+                }
+                if (seenColors[1]) {
+                    bgclr = "#84bad9"
+                    bgclr2 = "#c5d6eb"
+                    altclr = "#0880c3"
+                }
+                if (seenColors[2]) {
+                    bgclr = "#a29d9a"
+                    bgclr2 = "#bab7b9"
+                    altclr = "#3b3b38"
+                }
+                if (seenColors[3]) {
+                    bgclr = "#f4b09a"
+                    bgclr2 = "#eac3ad"
+                    altclr = "#aa230e"
+                }
+                if (seenColors[4]) {
+                    bgclr = "#adcebd"
+                    bgclr2 = "#c7dece"
+                    altclr = "#025434"
+                }
+            }
             // console.log(props.data.name, colors, uniqueColors, splitcount, symbolcount)
             updateState({
                 listBackgroundColor: bgclr,
