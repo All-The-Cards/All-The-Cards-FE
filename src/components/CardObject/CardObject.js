@@ -65,6 +65,7 @@ const CardObject = (props) => {
         if (mana === 0) return
         if (props.count < 2) nameLen += 4
         
+        if (count < 4 && nameLen < 25) return nameLen + 3
         if (count > 7) return nameLen - 3 - count / 3
         if (count > 5) return nameLen - 1 - count / 3
         if (nameLen + count * 2 > 27 && props.count > 1) return nameLen * .75

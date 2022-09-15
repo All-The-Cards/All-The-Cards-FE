@@ -21,7 +21,7 @@ export const GlobalProvider = ( {children} ) => {
     // Global Variables Below
 
     const [hasSearchBar, setSearchBar] = useState(true)
-        const [searchQuery, setSearchQuery] = useState("")
+    const [searchQuery, setSearchQuery] = useState("")
 
     const [searchType, setSearchType] = useState("DEF")
 
