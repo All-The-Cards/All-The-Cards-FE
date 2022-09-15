@@ -47,19 +47,32 @@ const CardObject = (props) => {
         generateListBackgroundColor()
         getManaSymbols()
     }
+    
     function getMaxLength(){
         let mana = 0
+        let nameLen = 0
+        let count = 0
         if (props.data.mana_cost) {
-            mana = props.data.mana_cost.length
+            mana = props.data.mana_cost
+            nameLen = props.data.name.length
+            count = (mana.match(/{/g || []).length)
         }
         if (props.data.card_faces){
-            mana = props.data.card_faces[0].mana_cost.length
+            mana = props.data.card_faces[0].mana_cost
+            nameLen = props.data.card_faces[0].name.length
+            count = (mana.match(/{/g || []).length)
         }
-        mana = mana / 3
-        console.log(mana)
-        if (mana < 6) return 25 - mana
-        else return 15 - mana
+        if (mana === 0) return
+        // console.log(count, nameLen)
+        if (props.count < 2) nameLen += 4
+
+        // console.log(props.data.name || props.data.card_faces[0].name, nameLen, count)
+        if (nameLen + count * 2 > 30 && props.count > 1) return nameLen * .75
+        if (count > 5) return nameLen - count / 2
+        else return nameLen
+
     }
+
     function getImage() {
         let imgLink = ""
         if (props.data.image_uris !== null) {
@@ -107,60 +120,118 @@ const CardObject = (props) => {
 
     function generateListBackgroundColor(){
         let bgclr = "#cbd3d3"
+        let bgclr2 = "#dbdbdc"
         let altclr = "#959f9e"
-        let bgclr2 = "#dbe0f8"
         let colors = 0
         let colorobject = ""
-        if (props.data.colors){
-            colorobject = props.data.colors
+        let splitcount = 0
+        let symbolcount = 0
+        let uniqueColors = 0
+        let seenColors = [false,false,false,false,false]
+        if (props.data.mana_cost){
+            colorobject = props.data.mana_cost
+
         }
         else if (props.data.card_faces){
-            colorobject = props.data.card_faces[0].colors
+            colorobject = props.data.card_faces[0].mana_cost
         }
-        // console.log(colorobject)
         if (colorobject !== undefined) {
             for (let i = 0; i < colorobject.length; i++){
                 switch (colorobject[i]){
                     case 'W':
                         bgclr = "#e1dfd9"
-                        bgclr2 = "#e1dfd9"
+                        bgclr2 = "#ebe6d9"
                         altclr = "#e9e8e4"
+                        if (!seenColors[0]) uniqueColors++
+                        seenColors[0] = true
                         colors++
                         break;
                     case 'U':
                         bgclr = "#84bad9"
                         bgclr2 = "#c5d6eb"
                         altclr = "#0880c3"
+                        if (!seenColors[1]) uniqueColors++
+                        seenColors[1] = true
                         colors++
                         break;
                     case 'B':
                         bgclr = "#a29d9a"
                         bgclr2 = "#bab7b9"
                         altclr = "#3b3b38"
+                        if (!seenColors[2]) uniqueColors++
+                        seenColors[2] = true
                         colors++
                         break;
                     case 'R':
                         bgclr = "#f4b09a"
                         bgclr2 = "#eac3ad"
                         altclr = "#aa230e"
+                        if (!seenColors[3]) uniqueColors++
+                        seenColors[3] = true
                         colors++
                         break;
                     case 'G':
                         bgclr = "#adcebd"
-                        bgclr2 = "#c7d6ce"
+                        bgclr2 = "#c7dece"
                         altclr = "#025434"
+                        if (!seenColors[4]) uniqueColors++
+                        seenColors[4] = true
                         colors++
                         break;
-
+                    case '{':
+                        symbolcount++
+                        break;
+                    case '/':
+                        splitcount++
+                        break;
+                    case '1':
+                        symbolcount--
+                        break;
+                    case '2':
+                        symbolcount--
+                        break;
+                    case '3':
+                        symbolcount--
+                        break;
+                    case '4':
+                        symbolcount--
+                        break;
+                    case '5':
+                        symbolcount--
+                        break;
+                    case '6':
+                        symbolcount--
+                        break;
+                    case '7':
+                        symbolcount--
+                        break;
+                    case '8':
+                        symbolcount--
+                        break;
+                    case '9':
+                        symbolcount--
+                        break;
+                    case 'C':
+                        symbolcount--
+                        break;
+    
                 }
                 
-                if (colors > 1) {
-                    bgclr = "#d6be73"
-                    bgclr2 = "#d6be73"
-                    altclr = "#efd26e"
-                }
             }
-
+            //if multicolored
+            if (splitcount > 0) {
+                //grey
+                bgclr = "#c6bdbd"
+                bgclr2 = "#c4c4c4"
+                altclr = "#c6bdbd"
+            }
+            if (colors > 1 && uniqueColors > 1 && symbolcount != splitcount || props.data.name === "Sphinx of the Guildpact" || props.data.name === "Transguild Courier") {
+                //gold
+                bgclr = "#d6be73"
+                bgclr2 = "#d6be73"
+                altclr = "#efd26e"
+            }
+            // console.log(props.data.name, colors, uniqueColors, splitcount, symbolcount)
             updateState({
                 listBackgroundColor: bgclr,
                 listBackgroundColorV2: bgclr2,
@@ -188,6 +259,7 @@ const CardObject = (props) => {
             >
                 <a
                     href={state.url}
+                    // onClick={() => nav("/card/?id=" + props.data.id)}
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
@@ -204,6 +276,7 @@ const CardObject = (props) => {
                 >
                     <a
                         href={state.url}
+                        // onClick={() => nav("/card/?id=" + props.data.id)}
                     >
                         <img
                             src={state.imgLink}

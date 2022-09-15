@@ -211,6 +211,8 @@ const SearchResults = (props) => {
               && item.digital === "false"
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
+              && item.finishes !== "['foil']"
+              && item.set_type !== "spellbook"
           })
           res = regularCards
 
@@ -738,7 +740,7 @@ const SearchResults = (props) => {
       {state.userResults.length > 0 && 
       <div className="Results">
         <header className="HeaderText">Users</header>
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} href={server.buildRedirectUrl("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} style={{cursor: 'pointer'}} onClick = {() => nav("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
         <div>
           { state.userResultIndex > 1 && 
           <button 

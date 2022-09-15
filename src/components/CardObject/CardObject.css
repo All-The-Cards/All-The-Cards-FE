@@ -50,7 +50,7 @@
     padding-left: 8px;
     max-width: 10%;
     white-space: nowrap;
-    z-index: 10;
+    /* z-index: 10; */
 }
 #cardListRight {
     float: right;
