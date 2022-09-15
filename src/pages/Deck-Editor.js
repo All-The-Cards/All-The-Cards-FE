@@ -5,7 +5,7 @@ import { GlobalContext } from "../context/GlobalContext";
 const DeckEditor = (props) => {
 
   const [state, setState] = useState({
-    
+    cards: []
   })
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
@@ -13,6 +13,11 @@ const DeckEditor = (props) => {
 
   useEffect(() => {
     setSearchBar(props.hasSearchBar)
+    setState((previous) => ({
+      ...previous,
+      cards: wipDeck.cards
+    }))
+    console.log("asldkfjasdfkldskafkl")
   }, [])
 
   const handleChanges = (event) => {
@@ -29,7 +34,7 @@ const DeckEditor = (props) => {
         <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name"/>
         <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description"/>
       </form>
-        {wipDeck.cards.map((card, index) => (
+        {state.cards.map((card, index) => (
           <CardObject data={card}/>
         ))}
     </div>

@@ -22,6 +22,7 @@ const CardObject = (props) => {
         }
     })
 
+    const {hasSearchBar, setSearchBar} = useContext(GlobalContext)
     const {wipDeck, setWipDeck} = useContext(GlobalContext)
 
     const nav = useNavigate()
@@ -35,7 +36,7 @@ const CardObject = (props) => {
 
     useEffect(() => {
         getData()
-    }, [props])
+    }, [props, wipDeck])
 
     function getData() {
         updateState({
@@ -92,14 +93,21 @@ const CardObject = (props) => {
 
     const toggleInDeck = () => {
         let index = wipDeck.cards.indexOf(props.data) 
+        let tempCards = wipDeck.cards
         if(index === -1) {
-            wipDeck.cards.push(props.data)
+            tempCards.push(props.data)
         }
         else{
-            wipDeck.cards.splice(index,1)
+            tempCards.splice(index,1)
         }
+        setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
         console.log(props.data)
         console.log(wipDeck.cards)
+        // setSearchBar(!hasSearchBar)
+        console.log(hasSearchBar)
     }
 
     return (

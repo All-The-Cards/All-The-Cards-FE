@@ -29,7 +29,7 @@ return (
                 <Route path='/card' element={<Card hasSearchBar={true}/>}>
                     <Route path="/card/:id?" element={<Card hasSearchBar={true}/>} />
                 </Route>
-                <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={false}/>} />
+                <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={true}/>} />
                 <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false}/>} />
                 <Route exact path='/registration' element={<Registration hasSearchBar={false}/>} />
                 <Route exact path='/login' element={<Login hasSearchBar={false}/>} />

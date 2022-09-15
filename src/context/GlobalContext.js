@@ -28,12 +28,13 @@ export const GlobalProvider = ({ children }) => {
     const [forceSearch, setForceSearch] = useState("")
 
     const [wipDeck, setWipDeck] = useState({
-        title: "",
-        description: "",
+        attributes: [],
         cards: [],
+        coverCard: "",
+        description: "",
         formatTag: "",
         tags: [],
-        coverCard: ""
+        title: ""
     })
 
 
