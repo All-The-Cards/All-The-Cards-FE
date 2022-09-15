@@ -64,10 +64,11 @@ const CardObject = (props) => {
         }
         if (mana === 0) return
         if (props.count < 2) nameLen += 4
-
+        
+        if (count > 7) return nameLen - 3 - count / 3
+        if (count > 5) return nameLen - 1 - count / 3
         if (nameLen + count * 2 > 27 && props.count > 1) return nameLen * .75
         if (nameLen + count * 2 > 34 && count > 1) return nameLen * .75
-        if (count > 5) return nameLen - count / 2
         else return nameLen
 
     }
@@ -119,7 +120,7 @@ const CardObject = (props) => {
 
     function generateListBackgroundColor(){
         let bgclr = "#cbd3d3"
-        let bgclr2 = "#dbdbdc"
+        let bgclr2 = "#dbdbe0"
         let altclr = "#959f9e"
         let colors = 0
         let colorobject = ""
@@ -231,6 +232,7 @@ const CardObject = (props) => {
                 bgclr2 = "#d6be73"
                 altclr = "#efd26e"
             }
+            // 2/x edge case
             if (colorobject.includes("2/") && uniqueColors === 1){
                 if (seenColors[0]) {
                     bgclr = "#e1dfd9"
