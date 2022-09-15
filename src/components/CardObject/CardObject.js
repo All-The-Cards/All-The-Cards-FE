@@ -342,16 +342,18 @@ const CardObject = (props) => {
     }
 
     return (
-        <a
-        href={state.url}
-        // onClick={() => nav("/card/?id=" + props.data.id)}
-        // onMouseDown={mouseDownHandler}
+        <
         >
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
                 // style={{backgroundColor:state.listBackgroundColor, boxShadow: '0px 0px 0px 2px ' + state.listAltColor + ' inset'}}
                 style={{backgroundColor:state.listBackgroundColorV2}}
-            >
+            ><a
+            
+                href={state.url}
+                // onClick={() => nav("/card/?id=" + props.data.id)}
+                // onMouseDown={mouseDownHandler}
+                >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
                             {(state.data !== undefined && state.data.name !== undefined) ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
@@ -360,14 +362,21 @@ const CardObject = (props) => {
                             {state.manaCostSymbols}
                         </div>
                     </div>
+                </a>
             </div>
                 : <div
                     className="CardObjectContainer"
                 >
+                    <a
+                        href={state.url}
+                        // onClick={() => nav("/card/?id=" + props.data.id)}
+                        // onMouseDown={mouseDownHandler}
+                        >
                         <img
                             src={state.imgLink}
                             className="CardObjectImage">
                         </img>
+                    </a>
                     { (state.data.card_faces && state.data.layout === "transform" || state.data.layout === "modal_dfc") &&
                         <div className="flipBox"
                         onClick={flipArt}>
@@ -376,7 +385,7 @@ const CardObject = (props) => {
                     }
                 </div>}
 
-        </a>
+        </>
     );
 };
 

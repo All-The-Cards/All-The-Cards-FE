@@ -144,7 +144,6 @@ const SearchResults = (props) => {
               }
             }
             colorBuilder = colorBuilder.slice(0,-1)
-            // console.log(key, colorBuilder)
             if (colorBuilder !== ""){
               query += key + "=" + colorBuilder + "&"
             }
@@ -302,7 +301,6 @@ const SearchResults = (props) => {
   const sortByRelease = (a, b) => {
     let aDate = new Date(a.released_at)
     let bDate = new Date(b.released_at)
-    // console.log(aDate, bDate)
     if (aDate >= bDate) {
       return -1
     }
