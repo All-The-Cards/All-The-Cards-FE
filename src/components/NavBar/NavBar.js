@@ -116,7 +116,10 @@ const Navbar = () => {
   return(
 
     <div className="NavBarContainer">
-        <a className="LogoContainer" href={server.buildRedirectUrl()} >
+        <a className="LogoContainer" 
+        // href={server.buildRedirectUrl()} 
+        onClick = {() => { nav('/')}}
+        >
             <img 
                 src={Logo_Star} 
                 alt="logo" 
