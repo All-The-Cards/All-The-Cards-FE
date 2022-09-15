@@ -123,7 +123,7 @@ const CardObject = (props) => {
                 switch (colorobject[i]){
                     case 'W':
                         bgclr = "#e1dfd9"
-                        bgclr2 = "#d8d7d5"
+                        bgclr2 = "#e1dfd9"
                         altclr = "#e9e8e4"
                         colors++
                         break;
