@@ -84,11 +84,12 @@ const CardObject = (props) => {
         if (props.count > 1) { 
             nameLen += 5
         }
-        if (props.count === undefined) {
-            if (nameLen > 25) nameLen -= count
-        }
+        
         //if more than 1 mana symbol, shorten
         if (count > 1){
+            if (props.count === undefined || props.count === 1) {
+                if (nameLen > 25) nameLen -= count
+            }
             if (count === 2){
                 if (nameLen * .75 > 21) nameLen  *= .7
             }
@@ -102,10 +103,10 @@ const CardObject = (props) => {
                 if (nameLen * .7 > 15) nameLen  *= .7
             }
             else if (count > 5 && count < 10){
-                nameLen *= .7
+                nameLen *= .55
             }
             else if (count >= 10){
-                nameLen *= .3
+                nameLen *= .25
             }
         }
         
