@@ -187,8 +187,9 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
-      console.log(res)
-      console.log("Found " + res.length + " results")
+      // console.log(res)
+      console.log(query)
+      console.log("Found " + res.length + " " + type + " results")
       //if a card search, do some filtering
       if (type === 'card' || type ==='card/adv'){
         let englishCards = res.filter((item) => {
@@ -201,15 +202,18 @@ const SearchResults = (props) => {
 
         if (!showAll) {
           //remove art-types 
-          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart"]
+          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
           let regularCards = res.filter((item) => {
             return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) }) 
               && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
+              && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
               && item.promo === "false"
               && item.full_art === "false" 
               && item.digital === "false"
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
+              && item.finishes !== "['foil']"
+              && item.set_type !== "spellbook"
           })
           res = regularCards
 
@@ -644,7 +648,13 @@ const SearchResults = (props) => {
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"key={i}><CardObject data={item} /></div>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
+          .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px'}}key={i}>
+            <CardObject data={item} isCompact={true} 
+            count={Math.floor(Math.random() * 4 + 1)}
+            />
+            <CardObject data={item}/>
+            </div>) }
         </div>
         <div>
           { state.cardResultIndex > 1 && 
@@ -731,7 +741,7 @@ const SearchResults = (props) => {
       {state.userResults.length > 0 && 
       <div className="Results">
         <header className="HeaderText">Users</header>
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} href={server.buildRedirectUrl("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} style={{cursor: 'pointer'}} onClick = {() => nav("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
         <div>
           { state.userResultIndex > 1 && 
           <button 

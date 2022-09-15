@@ -34,9 +34,33 @@
 
 .CardListContent {
     display: table-cell;
+    /* width: inherit; */
+    /* width: 250px; */
     vertical-align: middle;
-    padding-left: 8px;
+    /* padding-left: 8px; */
+    /* float: left; */
+    /* margin-top: 7px; */
+    color: black;
+    font-size: 14px;
 }
+
+#cardListLeft {
+    float: left;
+    margin-top: 7px;
+    padding-left: 8px;
+    max-width: 10%;
+    white-space: nowrap;
+    /* z-index: 10; */
+}
+#cardListRight {
+    float: right;
+    margin-top: 5px;
+    padding-right: 10px;
+    max-width: 80%;
+    white-space: nowrap;
+    text-align: right;
+}
+
 
 .flipBox {
     min-width: 40px;
