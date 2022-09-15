@@ -144,7 +144,6 @@ const SearchResults = (props) => {
               }
             }
             colorBuilder = colorBuilder.slice(0,-1)
-            // console.log(key, colorBuilder)
             if (colorBuilder !== ""){
               query += key + "=" + colorBuilder + "&"
             }
@@ -302,7 +301,6 @@ const SearchResults = (props) => {
   const sortByRelease = (a, b) => {
     let aDate = new Date(a.released_at)
     let bDate = new Date(b.released_at)
-    // console.log(aDate, bDate)
     if (aDate >= bDate) {
       return -1
     }
@@ -651,7 +649,9 @@ const SearchResults = (props) => {
         { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
           .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px'}}key={i}>
             <CardObject data={item} isCompact={true} 
-            count={Math.floor(Math.random() * 4 + 1)}
+            // count={i % 4}
+            // count={4 - i % 4}
+            // count={4}
             />
             <CardObject data={item}/>
             </div>) }
