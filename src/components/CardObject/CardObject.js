@@ -108,7 +108,7 @@ const CardObject = (props) => {
     function generateListBackgroundColor(){
         let bgclr = "#cbd3d3"
         let altclr = "#959f9e"
-        let bgclr2 = "#cbd3d3"
+        let bgclr2 = "#dbe0f8"
         let colors = 0
         let colorobject = ""
         if (props.data.colors){
