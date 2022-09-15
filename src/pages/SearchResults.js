@@ -187,8 +187,9 @@ const SearchResults = (props) => {
 
     server.post(query).then(response => {
       let res = response
-      console.log(res)
-      console.log("Found " + res.length + " results")
+      // console.log(res)
+      console.log(query)
+      console.log("Found " + res.length + " " + type + " results")
       //if a card search, do some filtering
       if (type === 'card' || type ==='card/adv'){
         let englishCards = res.filter((item) => {
@@ -644,7 +645,11 @@ const SearchResults = (props) => {
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards).map((item, i) => <div className="RegularCard"key={i}><CardObject data={item} /></div>) }
+        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
+          .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px'}}key={i}>
+            <CardObject data={item} isCompact={true} 
+            // count={Math.floor(Math.random() * 4 + 1)}
+            /></div>) }
         </div>
         <div>
           { state.cardResultIndex > 1 && 
