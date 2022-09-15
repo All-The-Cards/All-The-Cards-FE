@@ -63,11 +63,10 @@ const CardObject = (props) => {
             count = (mana.match(/{/g || []).length)
         }
         if (mana === 0) return
-        // console.log(count, nameLen)
         if (props.count < 2) nameLen += 4
 
-        // console.log(props.data.name || props.data.card_faces[0].name, nameLen, count)
-        if (nameLen + count * 2 > 30 && props.count > 1) return nameLen * .75
+        if (nameLen + count * 2 > 27 && props.count > 1) return nameLen * .75
+        if (nameLen + count * 2 > 34 && count > 1) return nameLen * .75
         if (count > 5) return nameLen - count / 2
         else return nameLen
 
@@ -225,6 +224,7 @@ const CardObject = (props) => {
                 bgclr2 = "#c4c4c4"
                 altclr = "#c6bdbd"
             }
+            //some super-edge cases
             if (colors > 1 && uniqueColors > 1 && symbolcount != splitcount || props.data.name === "Sphinx of the Guildpact" || props.data.name === "Transguild Courier") {
                 //gold
                 bgclr = "#d6be73"

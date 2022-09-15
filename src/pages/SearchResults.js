@@ -202,10 +202,11 @@ const SearchResults = (props) => {
 
         if (!showAll) {
           //remove art-types 
-          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart"]
+          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
           let regularCards = res.filter((item) => {
             return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) }) 
               && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
+              && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
               && item.promo === "false"
               && item.full_art === "false" 
               && item.digital === "false"
