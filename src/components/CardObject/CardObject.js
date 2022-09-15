@@ -287,8 +287,8 @@ const CardObject = (props) => {
                 style={{backgroundColor:state.listBackgroundColorV2}}
             >
                 <a
-                    href={state.url}
-                    // onClick={() => nav("/card/?id=" + props.data.id)}
+                    // href={state.url}
+                    onClick={() => nav("/card/?id=" + props.data.id)}
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
@@ -304,8 +304,8 @@ const CardObject = (props) => {
                     className="CardObjectContainer"
                 >
                     <a
-                        href={state.url}
-                        // onClick={() => nav("/card/?id=" + props.data.id)}
+                        // href={state.url}
+                        onClick={() => nav("/card/?id=" + props.data.id)}
                     >
                         <img
                             src={state.imgLink}
