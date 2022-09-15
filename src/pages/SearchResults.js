@@ -651,7 +651,7 @@ const SearchResults = (props) => {
             <CardObject data={item} isCompact={true} 
             // count={i % 4}
             // count={4 - i % 4}
-            count={4}
+            // count={4}
             />
             <CardObject data={item}/>
             </div>) }

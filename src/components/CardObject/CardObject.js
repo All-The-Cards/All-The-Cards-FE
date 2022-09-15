@@ -81,8 +81,12 @@ const CardObject = (props) => {
             })
             return
         }
-        if (props.count > 1) nameLen += 5
-        
+        if (props.count > 1) { 
+            nameLen += 5
+        }
+        if (props.count === undefined) {
+            if (nameLen > 25) nameLen -= count
+        }
         //if more than 1 mana symbol, shorten
         if (count > 1){
             if (count === 2){
