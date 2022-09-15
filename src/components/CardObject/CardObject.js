@@ -35,7 +35,7 @@ const CardObject = (props) => {
 
     useEffect(() => {
         getData()
-        console.log(props)
+        // console.log(props)
     }, [props])
 
     function getData() {
@@ -65,7 +65,7 @@ const CardObject = (props) => {
             nameLen = props.data.name.length
             count = (mana.match(/{/g || []).length)
         }
-        if (props.data.card_faces){
+        if (props.data.card_faces && props.data.card_faces[0].mana_cost){
             mana = props.data.card_faces[0].mana_cost
             nameLen = props.data.card_faces[0].name.length + 3
             count = (mana.match(/{/g || []).length)
@@ -81,15 +81,32 @@ const CardObject = (props) => {
             })
             return
         }
-        // if (props.count < 2) nameLen += 4
+        if (props.count > 1) nameLen += 5
         
-        if (count < 4 && nameLen < 25) nameLen += 3
-        if (count > 7) nameLen -= 3 - count / 3
-        if (count > 5) nameLen -= 1 - count / 3
-        if (nameLen + count * 2 > 27 && props.count > 1) nameLen *= .75
-        if (nameLen + count * 2 > 34 && count > 1) nameLen *= .75
+        //if more than 1 mana symbol, shorten
+        if (count > 1){
+            if (count === 2){
+                if (nameLen * .75 > 21) nameLen  *= .7
+            }
+            else if (count === 3){
+                if (nameLen * .7 > 19) nameLen  *= .7
+            }
+            else if (count === 4){
+                if (nameLen * .7 > 17) nameLen  *= .68
+            }
+            else if (count === 5){
+                if (nameLen * .7 > 15) nameLen  *= .7
+            }
+            else if (count > 5 && count < 10){
+                nameLen *= .7
+            }
+            else if (count >= 10){
+                nameLen *= .3
+            }
+        }
         
-        console.log(props.data.name, nameLen)
+        nameLen = Math.floor(nameLen)
+        // console.log(props.data.name, nameLen, count)
         updateState({
             maxNameLength: nameLen
         })
@@ -325,17 +342,16 @@ const CardObject = (props) => {
     }
 
     return (
-        <>
+        <a
+        href={state.url}
+        // onClick={() => nav("/card/?id=" + props.data.id)}
+        // onMouseDown={mouseDownHandler}
+        >
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
                 // style={{backgroundColor:state.listBackgroundColor, boxShadow: '0px 0px 0px 2px ' + state.listAltColor + ' inset'}}
                 style={{backgroundColor:state.listBackgroundColorV2}}
             >
-                <a
-                    // href={state.url}
-                    onClick={() => nav("/card/?id=" + props.data.id)}
-                    onMouseDown={mouseDownHandler}
-                >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
                             {(state.data !== undefined && state.data.name !== undefined) ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
@@ -344,21 +360,14 @@ const CardObject = (props) => {
                             {state.manaCostSymbols}
                         </div>
                     </div>
-                </a>
             </div>
                 : <div
                     className="CardObjectContainer"
                 >
-                    <a
-                        // href={state.url}
-                        onClick={() => nav("/card/?id=" + props.data.id)}
-                        onMouseDown={mouseDownHandler}
-                    >
                         <img
                             src={state.imgLink}
                             className="CardObjectImage">
                         </img>
-                    </a>
                     { (state.data.card_faces && state.data.layout === "transform" || state.data.layout === "modal_dfc") &&
                         <div className="flipBox"
                         onClick={flipArt}>
@@ -367,7 +376,7 @@ const CardObject = (props) => {
                     }
                 </div>}
 
-        </>
+        </a>
     );
 };
 
