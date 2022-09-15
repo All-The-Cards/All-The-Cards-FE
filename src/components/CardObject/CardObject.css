@@ -34,6 +34,8 @@
 
 .CardListContent {
     display: table-cell;
+    /* width: inherit; */
+    /* width: 250px; */
     vertical-align: middle;
     /* padding-left: 8px; */
     /* float: left; */
@@ -46,15 +48,15 @@
     float: left;
     margin-top: 7px;
     padding-left: 8px;
-    min-width: 20%;
-    max-width: 50%;
+    max-width: 10%;
     white-space: nowrap;
+    z-index: 10;
 }
 #cardListRight {
     float: right;
     margin-top: 5px;
-    padding-right: 8px;
-    max-width: 50%;
+    padding-right: 10px;
+    max-width: 80%;
     white-space: nowrap;
     text-align: right;
 }

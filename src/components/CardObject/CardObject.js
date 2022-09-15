@@ -19,9 +19,10 @@ const CardObject = (props) => {
             layout: ""
         },
         listBackgroundColor: "",
+        listBackgroundColorV2: "",
         listAltColor:"",
         manaCostSymbols: "",
-        maxNameLength: 24,
+        maxNameLength: getMaxLength(),
     })
 
     const nav = useNavigate()
@@ -46,7 +47,19 @@ const CardObject = (props) => {
         generateListBackgroundColor()
         getManaSymbols()
     }
-
+    function getMaxLength(){
+        let mana = 0
+        if (props.data.mana_cost) {
+            mana = props.data.mana_cost.length
+        }
+        if (props.data.card_faces){
+            mana = props.data.card_faces[0].mana_cost.length
+        }
+        mana = mana / 3
+        console.log(mana)
+        if (mana < 6) return 25 - mana
+        else return 15 - mana
+    }
     function getImage() {
         let imgLink = ""
         if (props.data.image_uris !== null) {
@@ -95,6 +108,7 @@ const CardObject = (props) => {
     function generateListBackgroundColor(){
         let bgclr = "#cbd3d3"
         let altclr = "#959f9e"
+        let bgclr2 = "#cbd3d3"
         let colors = 0
         let colorobject = ""
         if (props.data.colors){
@@ -109,26 +123,31 @@ const CardObject = (props) => {
                 switch (colorobject[i]){
                     case 'W':
                         bgclr = "#e1dfd9"
+                        bgclr2 = "#d8d7d5"
                         altclr = "#e9e8e4"
                         colors++
                         break;
                     case 'U':
                         bgclr = "#84bad9"
+                        bgclr2 = "#c5d6eb"
                         altclr = "#0880c3"
                         colors++
                         break;
                     case 'B':
                         bgclr = "#a29d9a"
+                        bgclr2 = "#bab7b9"
                         altclr = "#3b3b38"
                         colors++
                         break;
                     case 'R':
                         bgclr = "#f4b09a"
+                        bgclr2 = "#eac3ad"
                         altclr = "#aa230e"
                         colors++
                         break;
                     case 'G':
                         bgclr = "#adcebd"
+                        bgclr2 = "#c7d6ce"
                         altclr = "#025434"
                         colors++
                         break;
@@ -137,12 +156,14 @@ const CardObject = (props) => {
                 
                 if (colors > 1) {
                     bgclr = "#d6be73"
+                    bgclr2 = "#d6be73"
                     altclr = "#efd26e"
                 }
             }
 
             updateState({
                 listBackgroundColor: bgclr,
+                listBackgroundColorV2: bgclr2,
                 listAltColor: altclr
             })
         }
@@ -163,7 +184,7 @@ const CardObject = (props) => {
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
                 // style={{backgroundColor:state.listBackgroundColor, boxShadow: '0px 0px 0px 2px ' + state.listAltColor + ' inset'}}
-                style={{backgroundColor:state.listBackgroundColor}}
+                style={{backgroundColor:state.listBackgroundColorV2}}
             >
                 <a
                     href={state.url}
