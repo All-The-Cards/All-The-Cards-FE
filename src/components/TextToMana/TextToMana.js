@@ -33,10 +33,12 @@ let charCodes = [
 // Returns: array - [<Mana.../>, <Mana.../>]
 //
 export function generateSymbols(rawMana){
+    if (rawMana === null) return
     // console.log(rawMana)
     let symbols = []
     let allCounts = []
     
+    //find frequency symbols from string
     for (let i = 0; i < validChars.length; i++){
         allCounts[i] = (rawMana.match(new RegExp(validChars[i], "g") || []))
         if (allCounts[i]) allCounts[i] = allCounts[i].length
@@ -44,8 +46,8 @@ export function generateSymbols(rawMana){
     }
 
     let key = 0
+    //create the array of symbols
     for (let i = 0; i < allCounts.length; i++){
-
         for (let k = 0; k < allCounts[i]; k++){
             symbols.push(<Mana symbol={charCodes[i]} cost="true" shadow fixed key={key++}></Mana>)
         }
@@ -64,21 +66,36 @@ export function generateSymbols(rawMana){
 export function replaceSymbols(text){
     if (text === null) return
     let jsxObjs = []
+    //split text by both { and } which puts the mana tags seperate
     let splitText = text.split(/{|}/)
-    splitText = splitText.filter(x => {
-        return x !== ""
-    })
-    console.log(splitText)
+    //remove empty
+    splitText = splitText.filter(x => { return x !== "" })
+    // console.log(splitText)
 
     for (let i = 0; i < splitText.length; i++){
+        //if the split item matches a valid char
         if (validChars.find(el => {
-            if (el.includes(splitText[i]))
+            //hardcoded annoying edge case
+            if (el.includes(splitText[i]) || splitText[i] == "2/W"|| splitText[i] == "2/U"|| splitText[i] == "2/B"|| splitText[i] == "2/R"|| splitText[i] == "2/G")
             return true
         }) ) {
+            //replace nums with [x] for regexing
             let builtStr = splitText[i]
-            
+            let regex = /(\d)/
+            if (builtStr.match(regex)) {
+                builtStr = builtStr.replace(regex, "[" +  /$1/ + "]")
+                builtStr = builtStr.replaceAll("/", "")
+            }
+            //hardcoded annoying edge case
+            if (builtStr === "[2]W") builtStr = "[2]/W"
+            if (builtStr === "[2]U") builtStr = "[2]/U"
+            if (builtStr === "[2]B") builtStr = "[2]/B"
+            if (builtStr === "[2]R") builtStr = "[2]/R"
+            if (builtStr === "[2]G") builtStr = "[2]/G"
+            //surround in tag for mana
             let fullChars = "{" + builtStr + "}"
-            jsxObjs.push(<div key={i} style={{display:"inline"}}><Mana symbol={charCodes[validChars.indexOf(fullChars)]} cost="true" shadow fixed/></div>)
+            // console.log(fullChars)
+            jsxObjs.push(<div key={i} style={{display:"inline"}}><Mana symbol={charCodes[validChars.indexOf(fullChars)]} cost="true" shadow/></div>)
         }
         else {
             jsxObjs.push(<div key={i} style={{display:"inline", marginLeft: '2px'}}>{splitText[i]}</div>)
