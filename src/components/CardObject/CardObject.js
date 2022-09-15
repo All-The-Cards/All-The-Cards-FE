@@ -5,8 +5,12 @@ import './CardObject.css'
 import * as server from '../../functions/ServerTalk.js';
 import { useNavigate } from 'react-router-dom';
 import Card from "../../pages/Card";
+// import 'mana-font/css/mana.css'
+import { Mana } from "@saeris/react-mana";
+import * as mana from '../../components/TextToMana/TextToMana.js'
 
 import flipIcon from './rotate-right.png'
+import { generateSymbols } from "../TextToMana/TextToMana";
 const CardObject = (props) => {
     const [state, setState] = useState({
         isFlipped: false,
@@ -92,9 +96,17 @@ const CardObject = (props) => {
         let bgclr = "#cbd3d3"
         let altclr = "#959f9e"
         let colors = 0
-        if (props.data.color_identity !== null) {
-            for (let i = 0; i < props.data.color_identity.length; i++){
-                switch (props.data.color_identity[i]){
+        let colorobject = ""
+        if (props.data.colors){
+            colorobject = props.data.colors
+        }
+        else if (props.data.card_faces){
+            colorobject = props.data.card_faces[0].colors
+        }
+        // console.log(colorobject)
+        if (colorobject !== undefined) {
+            for (let i = 0; i < colorobject.length; i++){
+                switch (colorobject[i]){
                     case 'W':
                         bgclr = "#e1dfd9"
                         altclr = "#e9e8e4"
@@ -137,16 +149,12 @@ const CardObject = (props) => {
     }
 
     function getManaSymbols(){
-        if (props.data.card_faces){
-            updateState({
-                manaCostSymbols: props.data.card_faces[0].mana_cost
-            })
-        }
-        else {
-            updateState({
-                manaCostSymbols: props.data.mana_cost
-            })
-        }
+        let rawMana = ""
+        if (props.data.card_faces) rawMana = props.data.card_faces[0].mana_cost
+        else rawMana = props.data.mana_cost
+        
+        
+        updateState({manaCostSymbols: mana.generateSymbols(rawMana)})
     }
 
 
@@ -162,7 +170,7 @@ const CardObject = (props) => {
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
-                            {(state.data !== undefined && state.data.name !== undefined) ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength) + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
+                            {(state.data !== undefined && state.data.name !== undefined) ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
                         </div>
                         <div className="CardListContent"id="cardListRight">
                             {state.manaCostSymbols}

@@ -46,12 +46,13 @@
     float: left;
     margin-top: 7px;
     padding-left: 8px;
+    min-width: 20%;
     max-width: 50%;
     white-space: nowrap;
 }
 #cardListRight {
     float: right;
-    margin-top: 7px;
+    margin-top: 5px;
     padding-right: 8px;
     max-width: 50%;
     white-space: nowrap;
