@@ -35,6 +35,7 @@
 
 #cardDetails {
     margin-top: 40px;
+    max-width: 500px;
 }
 
 #typeLine {

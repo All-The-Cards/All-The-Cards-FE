@@ -6,6 +6,7 @@ import './GlobalStyles.css'
 import './Card.css'
 
 import { GlobalContext } from "../context/GlobalContext";
+import * as mana from '../components/TextToMana/TextToMana.js'
 
 const Card = (props) => {
 
@@ -154,7 +155,6 @@ const Card = (props) => {
         legalitiesDisplayRight: a
       })
     }
-
   return (
     <>
       <div className='Container'>
@@ -198,18 +198,20 @@ const Card = (props) => {
                 "Loyalty: " + state.data.loyalty
               }
               </div>
-              <div className="BodyText" id="cardDetails"> 
-              {state.data.oracle_text}
+              <div className="BodyText" id="cardDetails" style={{whiteSpace:"pre-line"}}> 
+              {/* {state.data.oracle_text} */}
+              {/* {mana.generateSymbols(state.data.oracle_text)} */}
+              {mana.replaceSymbols(state.data.oracle_text)}
               {state.data.card_faces && 
               <>
                 <div style={{fontWeight: 'bold'}}>{state.data.card_faces[0].name}:</div>
-                <div>{state.data.card_faces[0].oracle_text}</div>
+                <div>{mana.replaceSymbols(state.data.card_faces[0].oracle_text)}</div>
               </>
               } {"\n\n"}
                 {state.data.card_faces && 
               <>
                 <div style={{fontWeight: 'bold'}}>{state.data.card_faces[1].name}:</div>
-                <div>{state.data.card_faces[1].oracle_text}</div>
+                <div>{mana.replaceSymbols(state.data.card_faces[1].oracle_text)}</div>
               </>
               }
               </div>
