@@ -2,6 +2,8 @@ import { React, useState, useEffect, useContext } from 'react';
 import * as server from '../functions/ServerTalk.js';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import './GlobalStyles.css'
+import './User.css'
+import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
 
 import { GlobalContext } from "../context/GlobalContext";
 
@@ -11,7 +13,13 @@ const User = (props) => {
 
     const [state, setState] = useState({
       data: {},
-    })
+      decks: [<DeckTileObject data={""}></DeckTileObject>,
+      <DeckTileObject data={""}></DeckTileObject>,
+      <DeckTileObject data={""}></DeckTileObject>,
+      <DeckTileObject data={""}></DeckTileObject>,
+      <DeckTileObject data={""}></DeckTileObject>,
+      <DeckTileObject data={""}></DeckTileObject>]
+      })
 
     const updateState = (objectToUpdate) => {
         setState((previous) => ({
@@ -25,7 +33,7 @@ const User = (props) => {
 
     useEffect(() => {
       gc.setSearchBar(props.hasSearchBar)
-      console.log(id)
+      // console.log(id)
       getUserById(id)
     }, [id])
 
@@ -57,7 +65,36 @@ const User = (props) => {
   return (
     <>
       <div className='Container'>
-        {state.data.username}
+        <div className="UserPageContent" >
+          <div className="UserPage-Left">
+            <div className="UserInfo">
+            <div className="ProfilePicture" style={{backgroundImage: "url(" + state.data.avatar + ")", float:"left"}}></div>
+            
+              <div className="UserDetails">
+                <div className="HeaderText">
+                  {state.data.username}
+                </div>
+                <div className="BodyText">
+                  <i>{state.data.location}</i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="UserPage-Right">
+            <div className="HeaderText" style={{fontSize: "28px"}}>
+              About Me
+            </div>
+            <div className="SubHeaderText">
+              {state.data.bio}
+            </div>
+          </div>
+        </div>
+        <div className="UserPageContent" id="deckContent">
+        <div className="HeaderText">
+          Decks
+        </div>
+          {state.decks}
+        </div>
       </div>
     </>
   );

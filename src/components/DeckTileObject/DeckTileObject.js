@@ -32,7 +32,7 @@ const DeckTileObject = (props) => {
         updateState({
             data: props.data,
             // url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
-            url: "/deck/?id=" + props.data.id,
+            url: "../deck/?id=" + props.data.id,
             imgLink: getImage()
         })
     }

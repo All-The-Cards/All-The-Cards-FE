@@ -41,7 +41,7 @@ const CardObject = (props) => {
     function getData() {
         updateState({
             data: props.data,
-            url: "/card/?id=" + props.data.id,
+            url: "../card/?id=" + props.data.id,
             // url: server.buildRedirectUrl("/card/?id=" + props.data.id),
             imgLink: getImage(),
         })
