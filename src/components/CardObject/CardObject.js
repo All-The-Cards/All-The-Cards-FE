@@ -45,6 +45,7 @@ const CardObject = (props) => {
             url: "../card/?id=" + props.data.id,
             // url: server.buildRedirectUrl("/card/?id=" + props.data.id),
             imgLink: getImage(),
+            listHover: false
         })
         if (props.isCompact){
             generateListBackgroundColor()
@@ -54,29 +55,36 @@ const CardObject = (props) => {
         }
     }
     function getFrontName(){
-        if (props.data.card_faces){
+        if (props.data.card_faces && props.data.layout !== "split"){
             updateState((previous) => ({data: {...previous, name: props.data.card_faces[0].name}}))
+        }
+        if (props.data.layout === "split"){
+            updateState((previous) => ({data: {...previous, name: props.data.name}}))
         }
     }
     function getMaxLength(){
         let mana = 0
         let nameLen = 0
         let count = 0
-        if (props.data.mana_cost && props.data.layout !== "adventure") {
+        if (props.data.mana_cost && props.data.layout !== "adventure" && props.data.layout !== "split") {
             mana = props.data.mana_cost
             nameLen = props.data.name.length
             count = (mana.match(/{/g || []).length)
         }
-        if (props.data.card_faces && props.data.card_faces[0].mana_cost){
+        else if (props.data.card_faces && props.data.card_faces[0].mana_cost && props.data.layout !== "split"){
             mana = props.data.card_faces[0].mana_cost
             nameLen = props.data.card_faces[0].name.length + 3
             count = (mana.match(/{/g || []).length)
         }
+        else if(props.data.mana_cost){
+            mana = props.data.mana_cost
+            nameLen = props.data.name.length
+            count = (mana.match(/{/g || []).length)
+            console.log('else')
+        }
         else {
             nameLen = props.data.name.length
         }
-
-        
         if (mana === 0)  {
             updateState({
                 maxNameLength: nameLen
@@ -99,12 +107,15 @@ const CardObject = (props) => {
                 if (nameLen * .7 > 19) nameLen  *= .7
             }
             else if (count === 4){
-                if (nameLen * .7 > 17) nameLen  *= .68
+                if (nameLen * .7 > 16) nameLen  *= .7
             }
             else if (count === 5){
                 if (nameLen * .7 > 15) nameLen  *= .7
             }
-            else if (count > 5 && count < 10){
+            else if (count === 6) {
+                if (nameLen * .7 > 13) nameLen  *= .7
+            }
+            else if (count > 6 && count < 10){
                 nameLen *= .55
             }
             else if (count >= 10){
@@ -113,10 +124,10 @@ const CardObject = (props) => {
         }
         
         nameLen = Math.floor(nameLen)
-        // console.log(props.data.name, nameLen, count)
         updateState({
             maxNameLength: nameLen
         })
+
 
     }
 
@@ -158,10 +169,8 @@ const CardObject = (props) => {
         switch (state.isFlipped){
             case true: 
                 return -1
-                break;
             case false:
                 return 1
-                break;
         }
     }
 
@@ -269,6 +278,9 @@ const CardObject = (props) => {
                     case 'C':
                         symbolcount--
                         break;
+                    case 'X':
+                        symbolcount--
+                        break;
     
                 }
                 
@@ -371,7 +383,8 @@ const CardObject = (props) => {
                 >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{fontWeight: 'bold'}}>
-                            {(state.data !== undefined && state.data.name !== undefined) ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
+                        {(state.data !== undefined && state.data.name !== undefined && state.data.layout === "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.slice(0,state.maxNameLength).trim() + (state.data.name.length > state.maxNameLength ? "..." : "")  : <></>}
+                        {(state.data !== undefined && state.data.name !== undefined && state.data.layout !== "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0,state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "")  : <></>}
                         </div>
                         <div className="CardListContent"id="cardListRight">
                             {state.manaCostSymbols}
