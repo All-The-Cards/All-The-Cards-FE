@@ -7,7 +7,7 @@ import { GlobalContext } from "../context/GlobalContext";
 
 const User = (props) => {
 
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const gc = useContext(GlobalContext);
 
     const [state, setState] = useState({
       data: {},
@@ -24,7 +24,7 @@ const User = (props) => {
     const id = useSearchParams()[0].toString()
 
     useEffect(() => {
-      setSearchBar(props.hasSearchBar)
+      gc.setSearchBar(props.hasSearchBar)
       console.log(id)
       getUserById(id)
     }, [id])

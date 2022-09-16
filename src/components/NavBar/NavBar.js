@@ -17,7 +17,7 @@ const Navbar = () => {
     const wrapperRef = useRef(null)
 
     // Global Context Variables
-    const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+    const gc = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
     const [layerShadow, setLayerShadow] = useState(false);
@@ -133,7 +133,7 @@ const Navbar = () => {
         </a>
 
         <div className="IconContainer">
-            <div id="Searchbar-responsive">{ hasSearchBar &&
+            <div id="Searchbar-responsive">{ gc.hasSearchBar &&
                 <SearchBar type="global"/>
             }</div>
             <img src={SearchGlass} 

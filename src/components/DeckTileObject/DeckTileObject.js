@@ -11,7 +11,8 @@ const DeckTileObject = (props) => {
         // Find image link
         imgLink: props.data.cover_art,
         // Create page url
-        url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
+        // url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
+        url: "/deck/?id=" + props.data.id
 
     })
     const nav = useNavigate()
@@ -30,7 +31,8 @@ const DeckTileObject = (props) => {
     function getData(){
         updateState({
             data: props.data,
-            url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+            // url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
+            url: "/deck/?id=" + props.data.id,
             imgLink: getImage()
         })
     }

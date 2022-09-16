@@ -7,10 +7,10 @@ const CardCreator = (props) => {
     
   })
 
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+  const gc = useContext(GlobalContext)
 
   useEffect(() => {
-    setSearchBar(props.hasSearchBar)
+    gc.setSearchBar(props.hasSearchBar)
   }, [])
   
 

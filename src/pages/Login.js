@@ -7,9 +7,9 @@ import EyePassword2 from '../images/HiddenEyePassword.png'
 import { GlobalContext } from '../context/GlobalContext'
 import * as server from '../functions/ServerTalk.js';
 
-const Login = () => {
+const Login = (props) => {
 
-  const { supabase } = useContext(GlobalContext)
+  const gc = useContext(GlobalContext)
 
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)
@@ -25,6 +25,7 @@ const Login = () => {
   const wrapperRef = useRef(null)
 
   useEffect(()=>{
+    gc.setSearchBar(props.hasSearchBar)
     getRandomBgImg()
   }, [])
 
@@ -69,7 +70,7 @@ const Login = () => {
 
   const LoginQuery = () =>{
 
-    supabase.auth.signInWithPassword({
+    gc.supabase.auth.signInWithPassword({
       email: inputs.email,
       password: inputs.password,
     }).then(({user,session,error})=>{
