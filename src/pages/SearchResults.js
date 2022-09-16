@@ -48,7 +48,7 @@ const SearchResults = (props) => {
         type_: "",
       },
 
-      advancedContainerDisplay: 'none'
+      advancedContainerDisplay: 'none',
     })
 
     const updateState = (objectToUpdate) => {
@@ -372,7 +372,10 @@ const SearchResults = (props) => {
       <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
       {gc.searchType === "ADV" && 
-      <div>
+      <form onSubmit={(event) => { 
+        nav("/search/?adv=true/?query=?" + buildAdvQuery())
+        event.preventDefault()
+      }}>
         <div className="AdvRow">
           <div className="AdvOption">
         Name:</div>
@@ -628,13 +631,18 @@ const SearchResults = (props) => {
           onChange={(e) => {updateState({advSearch: {...state.advSearch,flavor_text: e.target.value}})}}
         />
         </div>
+        {/* <input className='FancyButton' type="submit" value="Search"
+          onClick={() => { 
+            nav("/search/?adv=true/?query=?" + buildAdvQuery())
+          }}
+          ></input> */}
         <button className='FancyButton' 
           onClick={() => { 
             nav("/search/?adv=true/?query=?" + buildAdvQuery())
           }}
           >Search
         </button>
-      </div>
+      </form>
       }
       </div>
       {/* if there are no results yet, show searching */}
@@ -758,7 +766,7 @@ const SearchResults = (props) => {
       <div className="Results">
         <header className="HeaderText">Users</header>
         {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers)
-          .map((item, i) => <a key={i} style={{cursor: 'pointer'}} href={"user/?id=" + item.id}
+          .map((item, i) => <a key={i} style={{cursor: 'pointer'}} href={"../user/?id=" + item.id}
         // onClick = {() => nav("/user/?id=" + item.id)}
           >
         <div>{item.username}</div></a>) }
