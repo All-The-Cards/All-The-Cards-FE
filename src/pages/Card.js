@@ -10,8 +10,6 @@ import * as mana from '../components/TextToMana/TextToMana.js'
 
 const Card = (props) => {
 
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
-
     const [state, setState] = useState({
       card: <div></div>,
       data: {},
@@ -29,10 +27,12 @@ const Card = (props) => {
     }
 
     const nav = useNavigate()
+    const gc = useContext(GlobalContext)
+
     const id = useSearchParams()[0].toString()
 
     useEffect(() => {
-      setSearchBar(props.hasSearchBar)
+      gc.setSearchBar(props.hasSearchBar)
       //clean up string from id format to search query format
         getCardById(id)
     }, [id])

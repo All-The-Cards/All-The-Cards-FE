@@ -9,10 +9,10 @@ import { GlobalContext } from "../context/GlobalContext";
 
 const Deck = (props) => {
 
-  const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
+  const gc = useContext(GlobalContext)
 
   useEffect(() => {
-    setSearchBar(props.hasSearchBar)
+    gc.setSearchBar(props.hasSearchBar)
   }, [])
 
   const [state, setState] = useState({

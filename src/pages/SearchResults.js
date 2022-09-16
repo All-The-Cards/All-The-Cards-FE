@@ -11,9 +11,8 @@ import './GlobalStyles.css'
 const SearchResults = (props) => {
 
 
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
-  const {searchType, setSearchType} = useContext(GlobalContext);
-
+  const gc = useContext(GlobalContext)
+  
     const [state, setState] = useState({
       cardResults: [],
       deckResults: [],
@@ -64,7 +63,7 @@ const SearchResults = (props) => {
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
       document.title = "Search Results"
-      setSearchBar(props.hasSearchBar)
+      gc.setSearchBar(props.hasSearchBar)
 
       //url query - first result is for advanced query, second is query string
       let tagSplit = ["",""]
@@ -76,13 +75,13 @@ const SearchResults = (props) => {
 
       //if advanced search
       if (tagSplit[0] === "adv=true"){
-        setSearchType("ADV")
+        gc.setSearchType("ADV")
         queryString = "name=" + tagSplit[1]
         updateState({ advancedContainerDisplay: 'block'})
       }
       //otherwise default
       else {
-        setSearchType("DEF")
+        gc.setSearchType("DEF")
         queryString = tagSplit[1]
         queryString = queryString.replace("query%3D", "")
         updateState({ advancedContainerDisplay: 'none'})
@@ -293,25 +292,25 @@ const SearchResults = (props) => {
 
   //toggle query type
   const toggleType = () => {
-    if (searchType === "ADV") {
-        setSearchType("DEF")
+    if (gc.searchType === "ADV") {
+        gc.setSearchType("DEF")
         updateState({ advancedContainerDisplay: 'none'})
     }
-    if (searchType === "DEF") {
-        setSearchType("ADV")
+    if (gc.searchType === "DEF") {
+        gc.setSearchType("ADV")
         updateState({ advancedContainerDisplay: 'block'})
     }
   }
 
   //advanced query toggle button text
   const getTypeName = () => {
-    if (searchType === "DEF") return "Advanced"
+    if (gc.searchType === "DEF") return "Advanced"
     else return "Cancel"
   }
   
   //button color 
   const getTypeId = () => {
-    if (searchType === "DEF") return ""
+    if (gc.searchType === "DEF") return ""
     else return "alt"
   }
 
@@ -372,7 +371,7 @@ const SearchResults = (props) => {
       {/* Advanced search options */}
       <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
-      {searchType === "ADV" && 
+      {gc.searchType === "ADV" && 
       <div>
         <div className="AdvRow">
           <div className="AdvOption">
@@ -632,7 +631,8 @@ const SearchResults = (props) => {
         <button className='FancyButton' 
           onClick={() => { 
             nav("/search/?adv=true/?query=?" + buildAdvQuery())
-          }}>Search
+          }}
+          >Search
         </button>
       </div>
       }
@@ -757,7 +757,11 @@ const SearchResults = (props) => {
       {state.userResults.length > 0 && 
       <div className="Results">
         <header className="HeaderText">Users</header>
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <a key={i} style={{cursor: 'pointer'}} onClick = {() => nav("/user/?id=" + item.id)}><div>{item.username}</div></a>) }
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers)
+          .map((item, i) => <a key={i} style={{cursor: 'pointer'}} href={"user/?id=" + item.id}
+        // onClick = {() => nav("/user/?id=" + item.id)}
+          >
+        <div>{item.username}</div></a>) }
         <div>
           { state.userResultIndex > 1 && 
           <button 

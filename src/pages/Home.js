@@ -15,13 +15,11 @@ const Home = (props) => {
     recentDecks: []
   })
   
-  const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
-  const {searchQuery, setSearchQuery} = useContext(GlobalContext);
-  const {searchType, setSearchType} = useContext(GlobalContext);
+  const gc = useContext(GlobalContext)
   const nav = useNavigate()
 
   useEffect(()=>{
-    setSearchBar(false)
+    gc.setSearchBar(props.hasSearchBar)
     // getRandomBgImg()
     getRecentDecks()
   }, [])
@@ -33,7 +31,7 @@ const Home = (props) => {
       }))
   }
   const handleAdvancedClick = () => {
-    setSearchType("ADV")
+    gc.setSearchType("ADV")
     nav("/search/?adv=true/")
   }
 
