@@ -77,7 +77,7 @@ const CardObject = (props) => {
             count = (mana.match(/{/g || []).length)
         }
         else if(props.data.mana_cost){
-            mana = props.data.mana_cost
+            mana = props.data.mana_cost.split("//")[0]
             nameLen = props.data.name.length
             count = (mana.match(/{/g || []).length)
             console.log('else')
@@ -360,8 +360,8 @@ const CardObject = (props) => {
         }
     }
 
-    function toggleListHover() {
-        updateState({listHover: !state.listHover})
+    function setListHover(value) {
+        updateState({listHover: value})
     }
 
     return (
@@ -375,8 +375,8 @@ const CardObject = (props) => {
             
                 href={state.url}
                 // id="cardList"
-                onMouseEnter={toggleListHover}
-                onMouseLeave={toggleListHover}
+                onMouseEnter={() => setListHover(true)}
+                onMouseLeave={() => setListHover(false)}
                 
                 // onClick={() => nav("/card/?id=" + props.data.id)}
                 // onMouseDown={mouseDownHandler}
