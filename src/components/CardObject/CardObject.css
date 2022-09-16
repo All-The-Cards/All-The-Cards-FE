@@ -87,3 +87,15 @@
     /* margin-left: -13px; */
 
 }
+
+#cardList {
+    /* content: url(cardhoverimg); */
+    display: block;
+    position: absolute;
+    max-width: 250px;
+    max-height: 350px;
+    z-index: 100;
+    box-shadow: 5px 5px 10px rgba(0,0,0,.3);
+    margin-top: 5px;
+    border-radius: 12px;
+}
