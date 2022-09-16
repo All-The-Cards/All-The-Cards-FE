@@ -672,7 +672,7 @@ const SearchResults = (props) => {
         <br></br>
         <div className="ResultsContainer">
         { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
-          .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px'}}key={i}>
+          .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px', maxHeight:'350px'}}key={i}>
             <CardObject data={item} isCompact={true} 
             // count={i % 4}
             // count={4 - i % 4}
@@ -769,7 +769,7 @@ const SearchResults = (props) => {
           <header className="HeaderText">Users</header>
           Users found: {state.userResults.length} | Showing: {state.userResultIndex + 1} - {getShowingAmt("user")}
         </div>
-        <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
+        <div className="ResultsContainer" style={{maxWidth:'1250px', marginTop:'20px'}} >
         {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <UserObject data={item} key={i}/>) }
         </div>
         <div>
