@@ -40,7 +40,7 @@ const SearchBar = (params) => {
             // console.log(searchQuery)
             // nav("/search/?query=" + searchQuery)
             setSearchType("DEF")
-            nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
+            nav("/search/?adv=false/?query=" + searchQuery)
         }
     }
 

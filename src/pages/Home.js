@@ -34,7 +34,7 @@ const Home = (props) => {
   }
   const handleAdvancedClick = () => {
     setSearchType("ADV")
-    nav("/search")
+    nav("/search/?adv=true/")
   }
 
   const getRandomBgImg = () =>{

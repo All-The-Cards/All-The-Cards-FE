@@ -12,7 +12,6 @@ const SearchResults = (props) => {
 
 
   const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
-  const {searchQuery, setSearchQuery} = useContext(GlobalContext);
   const {searchType, setSearchType} = useContext(GlobalContext);
 
     const [state, setState] = useState({
@@ -65,8 +64,29 @@ const SearchResults = (props) => {
     //on page load, or whenever the /search/?query= changes
     useEffect(() => {
       document.title = "Search Results"
-
       setSearchBar(props.hasSearchBar)
+
+      //url query - first result is for advanced query, second is query string
+      let tagSplit = ["",""]
+      //if urlTag exists
+      if (urlTag) {
+        tagSplit = urlTag.replaceAll("%3F", "").split("%2F")
+      }
+      let queryString = ""
+
+      //if advanced search
+      if (tagSplit[0] === "adv=true"){
+        setSearchType("ADV")
+        queryString = "name=" + tagSplit[1]
+        updateState({ advancedContainerDisplay: 'block'})
+      }
+      //otherwise default
+      else {
+        setSearchType("DEF")
+        queryString = tagSplit[1]
+        queryString = queryString.replace("query%3D", "")
+        updateState({ advancedContainerDisplay: 'none'})
+      }
 
       //reset results
       updateState({ 
@@ -78,29 +98,21 @@ const SearchResults = (props) => {
         userResultsFound: -1,
       })
 
-      //show or hide advanced container based on searchtype
-      if (searchType === "DEF") {
-          updateState({ advancedContainerDisplay: 'none'})
-      }
-      if (searchType === "ADV") {
-          updateState({ advancedContainerDisplay: 'block'})
-      }
-
-      let query = searchQuery
+      let query = queryString
       query = query.trim()
-
+      query = query.replaceAll("%3D", "=")
       //do advanced search or...
-      if (searchType === "ADV") {
-        search(query, 'card/adv')
-        updateState({ 
-          deckResults: [],
-          userResults: [],
-          deckResultsFound: 0,
-          userResultsFound: 0,
-        })
+      if (tagSplit[0] === "adv=true" && query !== "name=" && query !== "name=query=" && query !== "name=undefined") {
+          search(query, 'card/adv')
+          updateState({ 
+            deckResults: [],
+            userResults: [],
+            deckResultsFound: 0,
+            userResultsFound: 0,
+          })
       }
       //if query not empty, do regular search
-      else if(query !== "" && searchType === "DEF") {
+      else if(tagSplit[0] === "adv=false") {
           search(query, 'card')
           search(query, 'deck')
           search(query, 'user')
@@ -119,41 +131,7 @@ const SearchResults = (props) => {
     }, [urlTag])
 
   const search = (query, type) => {
-    
-    //if advanced search, build the adv query
-    if (searchType === "ADV") {
-      query += "?"
-      //build query
-      for (let [key, value] of Object.entries(state.advSearch) ) {
-        if (value) {
-          //add for normal queries
-          if (key !== 'colors' && key !== 'color_identity'){
-            query += key + "=" + value + "&"
-          }
-
-          //build color string
-          if (key === 'colors' || key === 'color_identity'){
-            let colorBuilder = ""
-            let colorCodes = "CBGRUW"
-            if (value[0]) {
-              colorBuilder += "C&"
-            }
-            else {
-              for (let i = 1; i < value.length; i++){
-                if (value[i]) colorBuilder += colorCodes[i] + ","
-              }
-            }
-            colorBuilder = colorBuilder.slice(0,-1)
-            if (colorBuilder !== ""){
-              query += key + "=" + colorBuilder + "&"
-            }
-          }
-        }
-      }
-      //remove trailing &
-      query = query.slice(0,-1)
-      console.log(query)
-    }
+    query = query.replace("%3D", "=")
 
     //reset search page so that "Searching..." displays
     updateState({
@@ -184,10 +162,14 @@ const SearchResults = (props) => {
       return
     }
 
+    //fix advanced from url
+    query = query.replace("query=name=query=", "query=?")
+    query = query.replace("%3D", '=')
+    
     server.post(query).then(response => {
       let res = response
       // console.log(res)
-      console.log(query)
+      console.log("Searching for... " + query)
       console.log("Found " + res.length + " " + type + " results")
       //if a card search, do some filtering
       if (type === 'card' || type ==='card/adv'){
@@ -317,7 +299,6 @@ const SearchResults = (props) => {
     }
     if (searchType === "DEF") {
         setSearchType("ADV")
-        setSearchQuery("")
         updateState({ advancedContainerDisplay: 'block'})
     }
   }
@@ -349,6 +330,41 @@ const SearchResults = (props) => {
       
     }
 
+  }
+
+  const buildAdvQuery = () => {
+    let query = ""
+    query += ""
+    //build query
+    for (let [key, value] of Object.entries(state.advSearch) ) {
+      if (value) {
+        //add for normal queries
+        if (key !== 'colors' && key !== 'color_identity'){
+          query += key + "=" + value + "&"
+        }
+
+        //build color string
+        if (key === 'colors' || key === 'color_identity'){
+          let colorBuilder = ""
+          let colorCodes = "CBGRUW"
+          if (value[0]) {
+            colorBuilder += "C&"
+          }
+          else {
+            for (let i = 1; i < value.length; i++){
+              if (value[i]) colorBuilder += colorCodes[i] + ","
+            }
+          }
+          colorBuilder = colorBuilder.slice(0,-1)
+          if (colorBuilder !== ""){
+            query += key + "=" + colorBuilder + "&"
+          }
+        }
+      }
+    }
+    //remove trailing &
+    query = query.slice(0,-1)
+    return query
   }
 
   return (
@@ -615,7 +631,7 @@ const SearchResults = (props) => {
         </div>
         <button className='FancyButton' 
           onClick={() => { 
-            nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
+            nav("/search/?adv=true/?query=?" + buildAdvQuery())
           }}>Search
         </button>
       </div>

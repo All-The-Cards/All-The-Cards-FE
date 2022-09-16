@@ -21,11 +21,8 @@ export const GlobalProvider = ( {children} ) => {
     // Global Variables Below
 
     const [hasSearchBar, setSearchBar] = useState(true)
-    const [searchQuery, setSearchQuery] = useState("")
 
     const [searchType, setSearchType] = useState("DEF")
-
-    const [forceSearch, setForceSearch] = useState("")
 
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
 
@@ -39,8 +36,6 @@ export const GlobalProvider = ( {children} ) => {
 
 				hasSearchBar,
                 setSearchBar,
-                searchQuery,
-                setSearchQuery,
                 searchType,
                 setSearchType,
                 User,

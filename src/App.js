@@ -23,7 +23,7 @@ return (
             <Routes>
                 <Route exact path='/' element={<Home hasSearchBar={false}/>} />
                 <Route path="/search" element={<SearchResults hasSearchBar={true}/>}>
-                    <Route path="/search/:query?" element={<SearchResults hasSearchBar={true}/>} />
+                    <Route path="/search/:adv?:query?" element={<SearchResults hasSearchBar={true}/>} />
                 </Route>
                 <Route path='/deck' element={<Deck hasSearchBar={true}/>} />
                     <Route path="/deck/:id?" element={<Deck hasSearchBar={true}/>} />
