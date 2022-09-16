@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
+import UserObject from '../components/UserObject/UserObject.js';
 
 const SearchResults = (props) => {
 
@@ -27,7 +28,7 @@ const SearchResults = (props) => {
 
       showResultAmountCards: 12,
       showResultAmountDecks: 4,
-      showResultAmountUsers: 20,
+      showResultAmountUsers: 12,
 
       advSearch: {
         artist: "",
@@ -764,12 +765,13 @@ const SearchResults = (props) => {
       {/* if there are any user results, display them */}
       {state.userResults.length > 0 && 
       <div className="Results">
-        <header className="HeaderText">Users</header>
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers)
-          .map((item, i) => <a key={i} style={{cursor: 'pointer'}} href={"../user/?id=" + item.id}
-        // onClick = {() => nav("/user/?id=" + item.id)}
-          >
-        <div>{item.username}</div></a>) }
+        <div style={{display:'block', textAlign:'left'}}>
+          <header className="HeaderText">Users</header>
+          Users found: {state.userResults.length} | Showing: {state.userResultIndex + 1} - {getShowingAmt("user")}
+        </div>
+        <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
+        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <UserObject data={item} key={i}/>) }
+        </div>
         <div>
           { state.userResultIndex > 1 && 
           <button 
@@ -780,6 +782,7 @@ const SearchResults = (props) => {
                 updateState({
                   userResultIndex: state.userResultIndex - state.showResultAmountUsers,
                 })
+                console.log(state.userResultIndex, state.userResultsFound)
               }
             }
           }>
@@ -794,6 +797,7 @@ const SearchResults = (props) => {
                 updateState({
                   userResultIndex: state.userResultIndex + state.showResultAmountUsers,
                 })
+                console.log(state.userResultIndex, state.userResultsFound)
               }
             }
           }>
