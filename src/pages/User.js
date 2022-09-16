@@ -13,12 +13,7 @@ const User = (props) => {
 
     const [state, setState] = useState({
       data: {},
-      decks: [<DeckTileObject data={""}></DeckTileObject>,
-      <DeckTileObject data={""}></DeckTileObject>,
-      <DeckTileObject data={""}></DeckTileObject>,
-      <DeckTileObject data={""}></DeckTileObject>,
-      <DeckTileObject data={""}></DeckTileObject>,
-      <DeckTileObject data={""}></DeckTileObject>]
+      decks: []
       })
 
     const updateState = (objectToUpdate) => {
@@ -35,6 +30,7 @@ const User = (props) => {
       gc.setSearchBar(props.hasSearchBar)
       // console.log(id)
       getUserById(id)
+      getDecksByUserId(id)
     }, [id])
 
     const getUserById = (query) => {
@@ -45,7 +41,7 @@ const User = (props) => {
       }
   
       server.post(query).then(response => {
-        console.log(response[0])
+        console.log("User: ", response[0])
         //if invalid, just direct to search page
         if (response.length === 0) {
           nav('/search/')
@@ -60,7 +56,27 @@ const User = (props) => {
   
     }
 
-
+    const getDecksByUserId = (query) => {
+      query = "/api/get/decks/user_" + query
+      //if query is empty, don't send
+      if (query.trim() === "/api/get/decks/user_id=" ) {
+        return
+      }
+  
+      server.post(query).then(response => {
+        console.log("User Decks: ", response)
+        //if invalid, just direct to search page
+        if (response.length === 0) {
+          // nav('/search/')
+        }
+        else {
+          updateState({
+            decks: response,
+          })
+        }  
+      })
+  
+    }
 
   return (
     <>
@@ -93,7 +109,7 @@ const User = (props) => {
         <div className="HeaderText">
           Decks
         </div>
-          {state.decks}
+        { state.decks.map((item, i) => <DeckTileObject data={item} key={i}/>) }
         </div>
       </div>
     </>

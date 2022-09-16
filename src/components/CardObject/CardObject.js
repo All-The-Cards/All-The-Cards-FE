@@ -22,6 +22,7 @@ const CardObject = (props) => {
         listAltColor:"",
         manaCostSymbols: "",
         maxNameLength: 0,
+        listHover: false
     })
 
     const nav = useNavigate()
@@ -347,6 +348,10 @@ const CardObject = (props) => {
         }
     }
 
+    function toggleListHover() {
+        updateState({listHover: !state.listHover})
+    }
+
     return (
         <
         >
@@ -357,6 +362,10 @@ const CardObject = (props) => {
             ><a
             
                 href={state.url}
+                // id="cardList"
+                onMouseEnter={toggleListHover}
+                onMouseLeave={toggleListHover}
+                
                 // onClick={() => nav("/card/?id=" + props.data.id)}
                 // onMouseDown={mouseDownHandler}
                 >
@@ -369,6 +378,9 @@ const CardObject = (props) => {
                         </div>
                     </div>
                 </a>
+                {state.listHover && 
+                    <img src={state.imgLink} id="cardList"></img>
+                }
             </div>
                 : <div
                     className="CardObjectContainer"
