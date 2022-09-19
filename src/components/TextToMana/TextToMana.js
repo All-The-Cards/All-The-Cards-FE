@@ -11,7 +11,9 @@ let validChars = [
     "{[2]/W}","{[2]/U}","{[2]/B}","{[2]/R}","{[2]/G}",
     "{W}","{U}","{B}","{R}","{G}", "{C}", "{S}",
     "{W/P}","{U/P}","{B/P}","{R/P}","{G/P}", "{P}",
-    "{T}", "{Q}"
+    "{T}", "{Q}", "{E}", "{CREATURE}", "{ARTIFACT}", "{ENCHANTMENT}", 
+    "{INSTANT}", "{LAND}", "{PLANESWALKER}", "{SORCERY}"
+
 ]
 let charCodes = [
     "0", "1", "2", "3", "4",
@@ -24,7 +26,13 @@ let charCodes = [
     "2w","2u","2b","2r","2g",
     "w","u","b","r","g", "c", "s",
     "wp","up","bp","rp","gp", "p",
-    "tap", "untap"
+    "tap", "untap", "e", "creature", "artifact", 
+    "enchantment", "instant", "land",
+    "planeswalker", "sorcery"
+]
+let noBGChars = [
+    "E", "CREATURE", "ARTIFACT", "ENCHANTMENT", "INSTANT", "LAND",
+    "PLANESWALKER", "SORCERY"
 ]
 
 // DEPRECATED 
@@ -106,10 +114,22 @@ export function replaceSymbols(text){
             if (builtStr === "[1]8") builtStr = "[1][8]"
             if (builtStr === "[1]9") builtStr = "[1][9]"
             if (builtStr === "[2]0") builtStr = "[2][0]"
+
+            //determine if background circle should show
+            let bg = true
+            if (noBGChars.includes(builtStr)) bg = false
+            // console.log("bg:", bg, "- symbol:", fullChars)
+
             //surround in tag for mana
             let fullChars = "{" + builtStr + "}"
-            // console.log(fullChars)
-            jsxObjs.push(<div key={i} style={{display:"inline"}}><Mana symbol={charCodes[validChars.indexOf(fullChars)]} cost="true" shadow/></div>)
+
+
+            let icon =  <Mana symbol={charCodes[validChars.indexOf(fullChars)]}/>
+            if (bg) icon = <Mana symbol={charCodes[validChars.indexOf(fullChars)]} cost shadow/>
+
+            jsxObjs.push(<div key={i} style={{display:"inline"}}>
+                {icon}
+            </div>)
         }
         else {
             jsxObjs.push(<div key={i} style={{display:"inline", marginLeft: '2px'}}>{splitText[i]}</div>)
