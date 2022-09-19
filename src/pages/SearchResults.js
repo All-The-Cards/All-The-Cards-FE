@@ -22,6 +22,8 @@ const SearchResults = (props) => {
       cardResults: [],
       deckResults: [],
       userResults: [],
+      cardResultsOriginal: [],
+      cardResultsFiltered: [],
       cardResultsFound: -1,
       deckResultsFound: -1,
       userResultsFound: -1,
@@ -51,6 +53,12 @@ const SearchResults = (props) => {
         subtype_: "",
         toughness: "",
         type_: "",
+      },
+
+      filters: {
+        rarity: "",
+        type: "",
+        legality: "",
       },
 
       advancedContainerDisplay: 'none',
@@ -100,11 +108,17 @@ const SearchResults = (props) => {
       //reset results
       updateState({ 
         cardResults: [],
+        cardResultsOriginal: [],
         deckResults: [],
         userResults: [],
         cardResultsFound: -1,
         deckResultsFound: -1,
         userResultsFound: -1,
+        filters: {
+          legality: "",
+          rarity: "",
+          type: ""
+        }
       })
 
       let query = queryString
@@ -130,6 +144,7 @@ const SearchResults = (props) => {
         //query must have been invalid
         updateState({ 
           cardResults: [],
+          cardResultsOriginal: [],
           deckResults: [],
           userResults: [],
           cardResultsFound: 0,
@@ -253,6 +268,7 @@ const SearchResults = (props) => {
         case 'card':
           updateState({          
             cardResults: res,
+            cardResultsOriginal: res,
             cardResultsFound: res.length,
           })
 
@@ -260,6 +276,7 @@ const SearchResults = (props) => {
         case 'card/adv':
           updateState({          
             cardResults: res,
+            cardResultsOriginal: res,
             cardResultsFound: res.length,
           })
 
@@ -410,6 +427,59 @@ const SearchResults = (props) => {
   const getResultsID = (type) => {
     if (state.resultsDisplayMode === type) return "typeActive"
     else return "typeInactive"
+  }
+
+  const filterResults = (filters) => {
+    
+    if (filters === "clear"){
+      updateState({
+        cardResults: state.cardResultsOriginal,
+        filters: {
+          legality: "",
+          rarity: "",
+          type: ""
+        }
+      })
+      return
+    }
+
+    let filteredResults = state.cardResultsOriginal
+    // console.log(filters)
+
+    for (let [filterkey, filterentry] of Object.entries(filters)){
+      if (filterentry !== ""){
+        switch(filterkey){
+          case 'legality':
+            filteredResults = filteredResults.filter((item) => {
+              if (item.legalities) {
+                // if (entry === "") return true
+                for (let [key2, entry2] of Object.entries(item.legalities) ) {
+                  if (entry2 === "legal" && key2 === filterentry) return true
+                }
+              }
+            })
+            break;
+          case 'rarity':
+            filteredResults = filteredResults.filter((item) => {
+              return item.rarity.toLowerCase().includes(filters.rarity.toLowerCase())
+            })
+            break;
+          case 'type': 
+            filteredResults = filteredResults.filter((item) => {
+              if (item.type_one) {
+                return item.type_one.toLowerCase().includes(filters.type.toLowerCase())
+              }
+          })
+        }
+      }
+    } 
+
+    
+
+    updateState({
+      cardResults: filteredResults,
+      cardResultIndex: 0,
+    })
   }
 
   return (
@@ -742,11 +812,90 @@ const SearchResults = (props) => {
 
       {/* if there are any card results, display them */}
       {state.resultsDisplayMode === "cards" && <div>
-      {state.cardResults.length > 0 && 
+      {state.cardResultsFound > 0 && 
+      
       <div className="Results">
+        
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Cards</header>
           Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
+        </div>
+        <div className='SelectTypeContainer'>
+          <div className='SelectTypeOption'>
+          Rarity: 
+          <select
+            value ={state.filters.rarity}
+            onChange={(e) => {
+              let filters = state.filters
+              filters.rarity = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Rarity</option>
+            <option value="common">Common</option>
+            <option value="uncommon">Uncommon</option>
+            <option value="rare">Rare</option>
+            <option value="mythic">Mythic Rare</option>
+            </select>
+          </div>
+          <div className='SelectTypeOption'>
+          Type: 
+          <select
+            onChange={(e) => {
+              let filters = state.filters
+              filters.type = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Type</option>
+            <option value="artifact">Artifact</option>
+            <option value="creature">Creature</option>
+            <option value="enchantment">Enchantment</option>
+            <option value="instant">Instant</option>
+            <option value="land">Land</option>
+            <option value="planeswalker">Planeswalker</option>
+            <option value="sorcery">Sorcery</option>
+            <option value="tribal">Tribal</option>
+            </select>
+          </div>
+          <div className='SelectTypeOption'>
+          Legality: 
+          <select
+            value ={state.filters.legality}
+            onChange={(e) => {
+              let filters = state.filters
+              filters.legality = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Format</option>
+            <option value="standard">Standard</option>
+            <option value="commander">Commander</option>
+            <option value="pioneer">Pioneer</option>
+            <option value="explorer">Explorer</option>
+            <option value="modern">Modern</option>
+            <option value="premodern">Premodern</option>
+            <option value="vintage">Vintage</option>
+            <option value="legacy">Legacy</option>
+            <option value="oldschool">Old School</option>
+            <option value="pauper">Pauper</option>
+            <option value="historic">Historic</option>
+            <option value="alchemy">Alchemy</option>
+            <option value="brawl">Brawl</option>
+            <option value="paupercommander">Pauper Commander</option>
+            <option value="historicbrawl">Historic Brawl</option>
+            <option value="penny">Penny Dreadful</option>
+            <option value="duel">Duel</option>
+            <option value="future">Future</option>
+            <option value="gladiator">Gladiator</option>
+            </select>
+          </div><div className='SelectTypeOption'
+            onClick={(e) => filterResults('clear')}>
+          Reset Filters
+          </div>
         </div>
         <br></br>
         <div className="ResultsContainer">
