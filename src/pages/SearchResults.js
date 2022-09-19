@@ -3,6 +3,7 @@ import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
@@ -70,7 +71,9 @@ const SearchResults = (props) => {
       document.title = "Search Results"
       gc.setSearchBar(props.hasSearchBar)
       gc.setDevMode(process.env.NODE_ENV === 'development' ? true : false)
-      gc.setDevMode(false)
+      // gc.setDevMode(false)
+
+      
 
       //url query - first result is for advanced query, second is query string
       let tagSplit = ["",""]
@@ -134,6 +137,7 @@ const SearchResults = (props) => {
           userResultsFound: 0,
         })
       }
+
     }, [urlTag])
 
   const search = (query, type) => {
@@ -323,6 +327,30 @@ const SearchResults = (props) => {
     else return "alt"
   }
 
+  const loadMoreResults = (type) => {
+    if (state.cardResultsFound !== -1){
+      if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
+        updateState({
+          cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
+        })
+      }
+    } 
+    if (state.deckResultsFound !== -1){
+      if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
+        updateState({
+          deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
+        })
+      }
+    }
+    if (state.userResultsFound !== -1){
+      if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
+        updateState({
+          userResultIndex: state.userResultIndex + state.showResultAmountUsers,
+        })
+      }
+    }
+  }
+
   const getShowingAmt = (type) => {
     switch (type) {
 
@@ -385,7 +413,15 @@ const SearchResults = (props) => {
   }
 
   return (
-    <div className="Container">
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={loadMoreResults}
+      hasMore={true || false}
+      // loader={<div>Loading...</div>}
+      // useWindow={true}
+      threshold={50}
+      >
+    <div className="Container" style={{paddingBottom:'200px'}}>
       {/* Advanced search options */}
       <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
@@ -725,40 +761,9 @@ const SearchResults = (props) => {
               <CardObject data={item}/>
             </div>
             </div>) }
+          </div>
         </div>
-        <div>
-          {/* { state.cardResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.cardResultIndex >= state.showResultAmountCards) {
-                updateState({
-                  cardResultIndex: state.cardResultIndex - state.showResultAmountCards,
-                })
-              }
-            }
-          }>
-            Previous {state.showResultAmountCards}
-          </button>
-          } */}
-      {state.cardResultIndex < state.cardResults.length - state.showResultAmountCards &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
-                updateState({
-                  cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
-                })
-              }
-            }
-          }>
-            Show more
-          </button>
-      }
-        </div>
-      </div>
-      }
+        }
       </div>
       }
       
@@ -773,37 +778,6 @@ const SearchResults = (props) => {
         <br></br>
         <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
         { state.deckResults.slice(0, state.deckResultIndex + state.showResultAmountDecks).map((item, i) => <DeckTileObject data={item} key={i}/>) }
-        </div>
-        <div>
-          {/* { state.deckResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.deckResultIndex >= state.showResultAmountDecks) {
-                updateState({
-                  deckResultIndex: state.deckResultIndex - state.showResultAmountDecks,
-                })
-              }
-            }
-          }>
-            Previous {state.showResultAmountDecks}
-          </button>
-          } */}
-          {state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
-                updateState({
-                  deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
-                })
-              }
-            }
-          }>
-            Show more
-          </button>
-}
         </div>
       </div>
       }
@@ -821,43 +795,11 @@ const SearchResults = (props) => {
         <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
         {state.userResults.slice(0, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <UserObject data={item} key={i}/>) }
         </div>
-        <div>
-          {/* { state.userResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.userResultIndex >= state.showResultAmountUsers) {
-                updateState({
-                  userResultIndex: state.userResultIndex - state.showResultAmountUsers,
-                })
-                console.log(state.userResultIndex, state.userResultsFound)
-              }
-            }
-          }>
-            Previous {state.showResultAmountUsers}
-          </button>
-          } */}
-          {state.userResultIndex < state.userResults.length - state.showResultAmountUsers &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
-                updateState({
-                  userResultIndex: state.userResultIndex + state.showResultAmountUsers,
-                })
-                console.log(state.userResultIndex, state.userResultsFound)
-              }
-            }
-          }>
-            Show more
-          </button>
-          }
-        </div>
       </div>
     }
     </div>}
     </div>
+  </InfiniteScroll>
   );
 
 };
