@@ -133,7 +133,9 @@ const Navbar = () => {
         </a>
 
         <div className="IconContainer">
-            <div id="Searchbar-responsive">{ gc.hasSearchBar &&
+            {/* <div id="Searchbar-responsive"> */}
+            <div id="Searchbar">
+                { gc.hasSearchBar &&
                 <SearchBar type="global"/>
             }</div>
             <img src={SearchGlass} 

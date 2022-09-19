@@ -3,18 +3,22 @@ import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
 import UserObject from '../components/UserObject/UserObject.js';
 
+
+
 const SearchResults = (props) => {
 
-
   const gc = useContext(GlobalContext)
+
   
     const [state, setState] = useState({
+
       cardResults: [],
       deckResults: [],
       userResults: [],
@@ -50,6 +54,7 @@ const SearchResults = (props) => {
       },
 
       advancedContainerDisplay: 'none',
+      resultsDisplayMode: 'cards',
     })
 
     const updateState = (objectToUpdate) => {
@@ -65,6 +70,10 @@ const SearchResults = (props) => {
     useEffect(() => {
       document.title = "Search Results"
       gc.setSearchBar(props.hasSearchBar)
+      gc.setDevMode(process.env.NODE_ENV === 'development' ? true : false)
+      // gc.setDevMode(false)
+
+      
 
       //url query - first result is for advanced query, second is query string
       let tagSplit = ["",""]
@@ -128,6 +137,7 @@ const SearchResults = (props) => {
           userResultsFound: 0,
         })
       }
+
     }, [urlTag])
 
   const search = (query, type) => {
@@ -181,6 +191,12 @@ const SearchResults = (props) => {
         //sort by release date
         res = res.sort(sortByRelease)
 
+        //get cards that are "real" cards, buildable in a deck
+        let legalCards = res.filter((item) => {
+          return !Object.values(item.legalities).every(value => value === "not_legal")
+        })
+        res = legalCards
+
         if (!showAll) {
           //remove art-types 
           const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
@@ -190,7 +206,8 @@ const SearchResults = (props) => {
               && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
               && item.promo === "false"
               && item.full_art === "false" 
-              && item.digital === "false"
+              // && item.digital === "false"
+              && item.games !== "['arena']"
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
               && item.finishes !== "['foil']"
@@ -212,11 +229,6 @@ const SearchResults = (props) => {
           res = uniqueRes
         }
 
-        //get cards that are "real" cards, buildable in a deck
-        let legalCards = res.filter((item) => {
-          return !Object.values(item.legalities).every(value => value === "not_legal")
-        })
-        res = legalCards
 
         // this is deprecated by the above function
         // //remove invalid card types for deckbuilding
@@ -315,6 +327,30 @@ const SearchResults = (props) => {
     else return "alt"
   }
 
+  const loadMoreResults = (type) => {
+    if (state.cardResultsFound !== -1){
+      if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
+        updateState({
+          cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
+        })
+      }
+    } 
+    if (state.deckResultsFound !== -1){
+      if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
+        updateState({
+          deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
+        })
+      }
+    }
+    if (state.userResultsFound !== -1){
+      if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
+        updateState({
+          userResultIndex: state.userResultIndex + state.showResultAmountUsers,
+        })
+      }
+    }
+  }
+
   const getShowingAmt = (type) => {
     switch (type) {
 
@@ -367,8 +403,25 @@ const SearchResults = (props) => {
     return query
   }
 
+  const setResultsType = (type) => {
+    updateState({resultsDisplayMode: type})
+  }
+
+  const getResultsID = (type) => {
+    if (state.resultsDisplayMode === type) return "typeActive"
+    else return "typeInactive"
+  }
+
   return (
-    <div className="Container">
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={loadMoreResults}
+      hasMore={true || false}
+      // loader={<div>Loading...</div>}
+      // useWindow={true}
+      threshold={50}
+      >
+    <div className="Container" style={{paddingBottom:'200px'}}>
       {/* Advanced search options */}
       <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{position:'absolute', right:'0', marginRight: '20px'}}>{getTypeName()}</button>
       <div className="AdvancedContainer" style={{display: state.advancedContainerDisplay }}>
@@ -646,6 +699,31 @@ const SearchResults = (props) => {
       </form>
       }
       </div>
+      <div className='SelectTypeContainer'>
+        <div 
+          className='SelectTypeOption' 
+          onClick={() => setResultsType('cards')}
+          id={getResultsID('cards')}
+        >
+          <div className="SelectTypeText">Cards
+          </div>
+        </div>
+        <div 
+          className='SelectTypeOption' 
+          onClick={() => setResultsType('decks')}
+          id={getResultsID('decks')}
+        >
+          <div className="SelectTypeText">Decks
+          </div>
+        </div>
+        <div 
+          className='SelectTypeOption' 
+          onClick={() => setResultsType('users')}
+          id={getResultsID('users')}
+        >
+          <div className="SelectTypeText">Users</div>
+        </div>
+      </div>
       {/* if there are no results yet, show searching */}
       {/* { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0) &&  */}
       { (state.cardResultsFound < 0 || state.deckResultsFound < 0 || state.userResultsFound < 0 ) && 
@@ -663,151 +741,65 @@ const SearchResults = (props) => {
       }
 
       {/* if there are any card results, display them */}
+      {state.resultsDisplayMode === "cards" && <div>
       {state.cardResults.length > 0 && 
       <div className="Results">
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Cards</header>
-          Cards found: {state.cardResults.length} | Showing: {state.cardResultIndex + 1} - {getShowingAmt("card")}
+          Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
         </div>
         <br></br>
         <div className="ResultsContainer">
-        { state.cardResults.slice(state.cardResultIndex, state.cardResultIndex + state.showResultAmountCards)
-          .map((item, i) => <div className="RegularCard" style={{marginLeft: '10px', maxHeight:'30px'}}key={i}>
-            <CardObject data={item} isCompact={true} 
+        { state.cardResults.slice(0, state.cardResultIndex + state.showResultAmountCards)
+          .map((item, i) => <div style={{marginLeft: '10px', float:'left'}}key={i}>
+            { gc.devMode && <CardObject data={item} isCompact={true} 
             // count={i % 4}
             // count={4 - i % 4}
             // count={4}
-            />
-            <CardObject data={item}/>
+            /> }
+            <div className="RegularCard">
+              <CardObject data={item}/>
+            </div>
             </div>) }
+          </div>
         </div>
-        <div>
-          { state.cardResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.cardResultIndex >= state.showResultAmountCards) {
-                updateState({
-                  cardResultIndex: state.cardResultIndex - state.showResultAmountCards,
-                })
-              }
-            }
-          }>
-            Previous {state.showResultAmountCards}
-          </button>
-          }
-      {state.cardResultIndex < state.cardResults.length - state.showResultAmountCards &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.cardResultIndex < state.cardResults.length - state.showResultAmountCards) {
-                updateState({
-                  cardResultIndex: state.cardResultIndex + state.showResultAmountCards,
-                })
-              }
-            }
-          }>
-            Next {state.showResultAmountCards}
-          </button>
-      }
-        </div>
+        }
       </div>
       }
-
-      <br></br>
       
       {/* if there are any deck results, display them */}
+      {state.resultsDisplayMode === "decks" && <div>
       {state.deckResults.length > 0 && 
       <div className="Results">
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Decks</header>
-          Decks found: {state.deckResults.length} | Showing: {state.deckResultIndex + 1} - {getShowingAmt("deck")}
+          Decks found: {state.deckResults.length} | Showing: {getShowingAmt("deck")}
         </div>
         <br></br>
-        { state.deckResults.slice(state.deckResultIndex, state.deckResultIndex + state.showResultAmountDecks).map((item, i) => <DeckTileObject data={item} key={i}/>) }
-        <div>
-          { state.deckResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.deckResultIndex >= state.showResultAmountDecks) {
-                updateState({
-                  deckResultIndex: state.deckResultIndex - state.showResultAmountDecks,
-                })
-              }
-            }
-          }>
-            Previous {state.showResultAmountDecks}
-          </button>
-          }
-          {state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.deckResultIndex < state.deckResults.length - state.showResultAmountDecks) {
-                updateState({
-                  deckResultIndex: state.deckResultIndex + state.showResultAmountDecks,
-                })
-              }
-            }
-          }>
-            Next {state.showResultAmountDecks}
-          </button>
-}
+        <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
+        { state.deckResults.slice(0, state.deckResultIndex + state.showResultAmountDecks).map((item, i) => <DeckTileObject data={item} key={i}/>) }
         </div>
       </div>
       }
-
-      <br></br>
+      </div>}
       
       {/* if there are any user results, display them */}
+      {state.resultsDisplayMode === "users" && <div>
       {state.userResults.length > 0 && 
       <div className="Results">
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Users</header>
-          Users found: {state.userResults.length} | Showing: {state.userResultIndex + 1} - {getShowingAmt("user")}
+          Users found: {state.userResults.length} | Showing: {getShowingAmt("user")}
         </div>
-        <div className="ResultsContainer" style={{maxWidth:'1250px', marginTop:'20px'}} >
-        {state.userResults.slice(state.userResultIndex, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <UserObject data={item} key={i}/>) }
-        </div>
-        <div>
-          { state.userResultIndex > 1 && 
-          <button 
-            className="FancyButton"
-            id="alt"
-            onClick={() => { 
-              if (state.userResultIndex >= state.showResultAmountUsers) {
-                updateState({
-                  userResultIndex: state.userResultIndex - state.showResultAmountUsers,
-                })
-                console.log(state.userResultIndex, state.userResultsFound)
-              }
-            }
-          }>
-            Previous {state.showResultAmountUsers}
-          </button>
-          }
-          {state.userResultIndex < state.userResults.length - state.showResultAmountUsers &&
-          <button 
-            className="FancyButton"
-            onClick={() => { 
-              if (state.userResultIndex < state.userResults.length - state.showResultAmountUsers) {
-                updateState({
-                  userResultIndex: state.userResultIndex + state.showResultAmountUsers,
-                })
-                console.log(state.userResultIndex, state.userResultsFound)
-              }
-            }
-          }>
-            Next {state.showResultAmountUsers}
-          </button>
-          }
+        <br></br>
+        <div className="ResultsContainer" style={{maxWidth:'1250px'}} >
+        {state.userResults.slice(0, state.userResultIndex + state.showResultAmountUsers).map((item, i) => <UserObject data={item} key={i}/>) }
         </div>
       </div>
     }
+    </div>}
     </div>
+  </InfiniteScroll>
   );
 
 };

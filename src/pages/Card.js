@@ -16,7 +16,10 @@ const Card = (props) => {
       versionOptions: [<option value={"null"}>null</option>],
       hasGottenVersions: false,
       legalitiesDisplayLeft: [<div></div>],
-      legalitiesDisplayRight: [<div></div>]
+      legalitiesDisplayRight: [<div></div>],
+      oracleTextWithSymbols: <div/>,
+      oracleTextWithSymbols_face0: <div/>,
+      oracleTextWithSymbols_face1: <div/>,
     })
 
     const updateState = (objectToUpdate) => {
@@ -34,7 +37,7 @@ const Card = (props) => {
     useEffect(() => {
       gc.setSearchBar(props.hasSearchBar)
       //clean up string from id format to search query format
-        getCardById(id)
+      getCardById(id)
     }, [id])
 
     const getCardById = (query) => {
@@ -61,7 +64,7 @@ const Card = (props) => {
           if (!state.hasGottenVersions) getAllVersions(response[0].name)
         }
         buildLegalities(response[0].legalities)
-  
+        generateOracleText(response[0])
       })
   
     }
@@ -155,6 +158,20 @@ const Card = (props) => {
         legalitiesDisplayRight: a
       })
     }
+
+    const generateOracleText = (card) => {
+      if (card.oracle_text) {
+        updateState({
+          oracleTextWithSymbols: mana.replaceSymbols(card.oracle_text)
+        })
+      }
+      else if (card.card_faces){
+        updateState({
+          oracleTextWithSymbols_face0: mana.replaceSymbols(card.card_faces[0].oracle_text),
+          oracleTextWithSymbols_face1: mana.replaceSymbols(card.card_faces[1].oracle_text)
+        })
+      }
+    }
   return (
     <>
       <div className='Container'>
@@ -201,17 +218,17 @@ const Card = (props) => {
               <div className="BodyText" id="cardDetails" style={{whiteSpace:"pre-line"}}> 
               {/* {state.data.oracle_text} */}
               {/* {mana.generateSymbols(state.data.oracle_text)} */}
-              {mana.replaceSymbols(state.data.oracle_text)}
+              {state.oracleTextWithSymbols}
               {state.data.card_faces && 
               <>
                 <div style={{fontWeight: 'bold'}}>{state.data.card_faces[0].name}:</div>
-                <div>{mana.replaceSymbols(state.data.card_faces[0].oracle_text)}</div>
+                {state.oracleTextWithSymbols_face0}
               </>
               } {"\n\n"}
                 {state.data.card_faces && 
               <>
                 <div style={{fontWeight: 'bold'}}>{state.data.card_faces[1].name}:</div>
-                <div>{mana.replaceSymbols(state.data.card_faces[1].oracle_text)}</div>
+                {state.oracleTextWithSymbols_face1}
               </>
               }
               </div>

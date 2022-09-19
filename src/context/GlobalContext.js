@@ -20,6 +20,8 @@ export const GlobalProvider = ( {children} ) => {
 
     // Global Variables Below
 
+    const [devMode, setDevMode] = useState(false)
+
     const [hasSearchBar, setSearchBar] = useState(true)
 
     const [searchType, setSearchType] = useState("DEF")
@@ -43,6 +45,8 @@ export const GlobalProvider = ( {children} ) => {
                 setSearchQuery,
                 User,
                 supabase,
+                devMode,
+                setDevMode
     
 			}}
 		>
