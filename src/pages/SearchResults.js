@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext} from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
+import * as mana from '../components/TextToMana/TextToMana.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -9,6 +10,7 @@ import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
 import UserObject from '../components/UserObject/UserObject.js';
+
 
 
 
@@ -22,6 +24,8 @@ const SearchResults = (props) => {
       cardResults: [],
       deckResults: [],
       userResults: [],
+      cardResultsOriginal: [],
+      cardResultsFiltered: [],
       cardResultsFound: -1,
       deckResultsFound: -1,
       userResultsFound: -1,
@@ -52,6 +56,15 @@ const SearchResults = (props) => {
         toughness: "",
         type_: "",
       },
+
+      filters: {
+        rarity: "",
+        type: "",
+        legality: "",
+        color_identity: [false, false, false, false, false, false]
+      },
+
+      sortType: "",
 
       advancedContainerDisplay: 'none',
       resultsDisplayMode: 'cards',
@@ -100,11 +113,18 @@ const SearchResults = (props) => {
       //reset results
       updateState({ 
         cardResults: [],
+        cardResultsOriginal: [],
         deckResults: [],
         userResults: [],
         cardResultsFound: -1,
         deckResultsFound: -1,
         userResultsFound: -1,
+        filters: {
+          legality: "",
+          rarity: "",
+          type: "",
+          color_identity: [false,false,false,false,false,false]
+        }
       })
 
       let query = queryString
@@ -130,6 +150,7 @@ const SearchResults = (props) => {
         //query must have been invalid
         updateState({ 
           cardResults: [],
+          cardResultsOriginal: [],
           deckResults: [],
           userResults: [],
           cardResultsFound: 0,
@@ -253,6 +274,7 @@ const SearchResults = (props) => {
         case 'card':
           updateState({          
             cardResults: res,
+            cardResultsOriginal: res,
             cardResultsFound: res.length,
           })
 
@@ -260,6 +282,7 @@ const SearchResults = (props) => {
         case 'card/adv':
           updateState({          
             cardResults: res,
+            cardResultsOriginal: res,
             cardResultsFound: res.length,
           })
 
@@ -291,7 +314,56 @@ const SearchResults = (props) => {
       return -1
     }
   }
-  
+  const sortByName2 = (a, b) => {
+    if (a.name <= b.name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByCMC = (a, b) => {
+    if (a.cmc >= b.cmc) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByCMC2 = (a, b) => {
+    if (a.cmc <= b.cmc) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByType = (a, b) => {
+    let typeA = ""
+    let typeB = ""
+    if (a.type_one) typeA = a.type_one + a.type_two
+    else if (a.card_faces) typeA = a.card_faces[0].type_one + a.card_faces[0].type_two
+
+    if (b.type_one) typeA = b.type_one + b.type_two
+    else if (b.card_faces) typeA = b.card_faces[0].type_one + b.card_faces[0].type_two
+
+
+
+    if (typeA >= typeB) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortBySet = (a, b) => {
+    if (a.set_name >= b.set_name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
   const sortByRelease = (a, b) => {
     let aDate = new Date(a.released_at)
     let bDate = new Date(b.released_at)
@@ -412,6 +484,107 @@ const SearchResults = (props) => {
     else return "typeInactive"
   }
 
+  const filterResults = (filters) => {
+    
+    if (filters === "clear"){
+      updateState({
+        cardResults: state.cardResultsOriginal,
+        filters: {
+          legality: "",
+          rarity: "",
+          type: "",
+          color_identity: [false,false,false,false,false,false]
+        }
+      })
+      return
+    }
+
+    let filteredResults = state.cardResultsOriginal
+
+    for (let [filterkey, filterentry] of Object.entries(filters)){
+      if (filterentry !== ""){
+        switch(filterkey){
+          case 'legality':
+            filteredResults = filteredResults.filter((item) => {
+              if (item.legalities) {
+                // if (entry === "") return true
+                for (let [key2, entry2] of Object.entries(item.legalities) ) {
+                  if (entry2 === "legal" && key2 === filterentry) return true
+                }
+              }
+            })
+            break;
+          case 'rarity':
+            filteredResults = filteredResults.filter((item) => {
+              return item.rarity.toLowerCase().includes(filters.rarity.toLowerCase())
+            })
+            break;
+          case 'type': 
+            filteredResults = filteredResults.filter((item) => {
+              if (item.type_one) {
+                return item.type_one.toLowerCase().includes(filters.type.toLowerCase())
+              }
+            })
+            break;
+          case 'color_identity':
+            let colors = ["[]", "B", "G", "R", "U", "W"]
+            // console.log(colors, filterentry)
+            if(filterentry.toString() != [false,false,false,false,false,false].toString()){
+              filteredResults = filteredResults.filter((item) => {
+                let foundone = false
+                for (let i = 0; i < colors.length; i++) {
+                  if (filterentry[i] === true && item.color_identity && item.color_identity.toLowerCase().includes(colors[i].toLowerCase())) {
+                    foundone = true
+                  }
+                }
+                return foundone
+            })
+          }
+        }
+      }
+    } 
+
+    
+
+    updateState({
+      cardResults: filteredResults,
+      cardResultIndex: 0,
+    })
+  }
+
+  const sortCardsBy = (type) => {
+    console.log(type)
+    let cards = state.cardResults
+
+    switch(type){
+      case 'default':
+        cards = cards.sort(sortByName)
+        break
+      case 'cmc':
+        cards = cards.sort(sortByCMC)
+        break
+      case 'default2':
+        cards = cards.sort(sortByName2)
+        break
+      case 'cmc2':
+        cards = cards.sort(sortByCMC2)
+        break
+      case 'type':
+        cards = cards.sort(sortByType)
+        break
+      case 'set':
+        cards = cards.sort(sortBySet)
+        break
+    }
+
+
+
+    updateState({
+      cardResults: cards,
+      cardResultsOriginal: cards,
+    })
+  }
+
   return (
     <InfiniteScroll
       pageStart={0}
@@ -492,7 +665,7 @@ const SearchResults = (props) => {
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="white1" id="symbolW">W</label>
+        <label htmlFor="white1" id="symbolW">{mana.replaceSymbols("{W}")}</label>
         <input type="checkbox" name="blue1" checked={state.advSearch.colors[4]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -502,7 +675,7 @@ const SearchResults = (props) => {
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="blue1" id="symbolU">U</label>
+        <label htmlFor="blue1" id="symbolU">{mana.replaceSymbols("{U}")}</label>
         <input type="checkbox" name="black1" checked={state.advSearch.colors[1]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -512,7 +685,7 @@ const SearchResults = (props) => {
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="black1" id="symbolB">B</label>
+        <label htmlFor="black1" id="symbolB">{mana.replaceSymbols("{B}")}</label>
         <input type="checkbox" name="red1" checked={state.advSearch.colors[3]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -522,7 +695,7 @@ const SearchResults = (props) => {
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="red1" id="symbolR">R</label>
+        <label htmlFor="red1" id="symbolR">{mana.replaceSymbols("{R}")}</label>
         <input type="checkbox" name="green1" checked={state.advSearch.colors[2]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -532,14 +705,14 @@ const SearchResults = (props) => {
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="green1" id="symbolG">G</label>
+        <label htmlFor="green1" id="symbolG">{mana.replaceSymbols("{G}")}</label>
         <input type="checkbox" name="colorless1" checked={state.advSearch.colors[0]}
           onChange={(e) => {
             let arr = [false, false, false, false, false, false]
             arr[0] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="colorless1" id="symbolC">C</label>
+        <label htmlFor="colorless1" id="symbolC">{mana.replaceSymbols("{C}")}</label>
         </div><div className="AdvRow">
           <div className="AdvOption">
         Commander: </div>
@@ -552,7 +725,7 @@ const SearchResults = (props) => {
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="white2" id="symbolW">W</label>
+        <label htmlFor="white2" id="symbolW">{mana.replaceSymbols("{W}")}</label>
         <input type="checkbox" name="blue2" checked={state.advSearch.color_identity[4]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -562,7 +735,7 @@ const SearchResults = (props) => {
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="blue2" id="symbolU">U</label>
+        <label htmlFor="blue2" id="symbolU">{mana.replaceSymbols("{U}")}</label>
         <input type="checkbox" name="black2" checked={state.advSearch.color_identity[1]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -572,7 +745,7 @@ const SearchResults = (props) => {
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="black2" id="symbolB">B</label>
+        <label htmlFor="black2" id="symbolB">{mana.replaceSymbols("{B}")}</label>
         <input type="checkbox" name="red2" checked={state.advSearch.color_identity[3]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -582,7 +755,7 @@ const SearchResults = (props) => {
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="red2" id="symbolR">R</label>
+        <label htmlFor="red2" id="symbolR">{mana.replaceSymbols("{R}")}</label>
         <input type="checkbox" name="green2" checked={state.advSearch.color_identity[2]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -592,14 +765,14 @@ const SearchResults = (props) => {
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="green2" id="symbolG">G</label>
+        <label htmlFor="green2" id="symbolG">{mana.replaceSymbols("{G}")}</label>
         <input type="checkbox" name="colorless2" checked={state.advSearch.color_identity[0]}
           onChange={(e) => {
             let arr = [false, false, false, false, false, false]
             arr[0] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="colorless2" id="symbolC">C</label>
+        <label htmlFor="colorless2" id="symbolC">{mana.replaceSymbols("{C}")}</label>
         </div><div className="AdvRow">
           <div className="AdvOption">
         Power: </div>
@@ -742,11 +915,173 @@ const SearchResults = (props) => {
 
       {/* if there are any card results, display them */}
       {state.resultsDisplayMode === "cards" && <div>
-      {state.cardResults.length > 0 && 
+      {state.cardResultsFound > 0 && 
+      
       <div className="Results">
+        
         <div style={{display:'block', textAlign:'left'}}>
           <header className="HeaderText">Cards</header>
           Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
+        </div>
+        <div className='SelectTypeContainer'>
+        <div className="HeaderText" style={{textAlign:'center'}}>
+          Filters:
+        </div>
+          <div className='SelectTypeOption'
+            onClick={(e) => filterResults('clear')}>
+          Reset
+          </div><div className='SelectTypeOption'>
+          Sort: 
+          <select
+            value ={state.sortType}
+            onChange={(e) => {
+              updateState({ sortType: e.target.value })
+              sortCardsBy(e.target.value)
+            }}
+          >
+            <option value="default">Alphabetical (A-Z)</option>
+            <option value="default2">Alphabetical (Z-A)</option>
+            <option value="cmc">Mana Value (Ascending)</option>
+            <option value="cmc2">Mana Value (Descending)</option>
+            {/* <option value="type">Type</option> */}
+            {/* <option value="set">Set</option> */}
+            </select>
+          </div>
+          <div className='SelectTypeOption'>
+          Rarity: 
+          <select
+            value ={state.filters.rarity}
+            onChange={(e) => {
+              let filters = state.filters
+              filters.rarity = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Rarity</option>
+            <option value="common">Common</option>
+            <option value="uncommon">Uncommon</option>
+            <option value="rare">Rare</option>
+            <option value="mythic">Mythic Rare</option>
+            </select>
+          </div>
+          <div className='SelectTypeOption'>
+          Type: 
+          <select
+            onChange={(e) => {
+              let filters = state.filters
+              filters.type = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Type</option>
+            <option value="artifact">Artifact</option>
+            <option value="creature">Creature</option>
+            <option value="enchantment">Enchantment</option>
+            <option value="instant">Instant</option>
+            <option value="land">Land</option>
+            <option value="planeswalker">Planeswalker</option>
+            <option value="sorcery">Sorcery</option>
+            <option value="tribal">Tribal</option>
+            </select>
+          </div>
+          <div className='SelectTypeOption'>
+          Legality: 
+          <select
+            value ={state.filters.legality}
+            onChange={(e) => {
+              let filters = state.filters
+              filters.legality = e.target.value
+              updateState({ filters: filters })
+              filterResults(filters)
+            }}
+          >
+            <option value="">Any Format</option>
+            <option value="standard">Standard</option>
+            <option value="commander">Commander</option>
+            <option value="pioneer">Pioneer</option>
+            <option value="explorer">Explorer</option>
+            <option value="modern">Modern</option>
+            <option value="premodern">Premodern</option>
+            <option value="vintage">Vintage</option>
+            <option value="legacy">Legacy</option>
+            <option value="oldschool">Old School</option>
+            <option value="pauper">Pauper</option>
+            <option value="historic">Historic</option>
+            <option value="alchemy">Alchemy</option>
+            <option value="brawl">Brawl</option>
+            <option value="paupercommander">Pauper Commander</option>
+            <option value="historicbrawl">Historic Brawl</option>
+            <option value="penny">Penny Dreadful</option>
+            <option value="duel">Duel</option>
+            <option value="future">Future</option>
+            <option value="gladiator">Gladiator</option>
+            </select>
+          </div>
+          <div className='SelectTypeOption'>Colors: <div className="AdvRow">
+        <input type="checkbox" name="white3" 
+          checked={state.filters.color_identity[5]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[5] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="white3" >{mana.replaceSymbols("{W}")}</label>
+        <input type="checkbox" name="blue3" 
+        checked={state.filters.color_identity[4]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[4] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="blue3" >{mana.replaceSymbols("{U}")}</label>
+        <input type="checkbox" name="black3" 
+        checked={state.filters.color_identity[1]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[1] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="black3" >{mana.replaceSymbols("{B}")}</label>
+        <input type="checkbox" name="red3" 
+        checked={state.filters.color_identity[3]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[3] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="red3" >{mana.replaceSymbols("{R}")}</label>
+        <input type="checkbox" name="green3" 
+        checked={state.filters.color_identity[2]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[2] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="green3" >{mana.replaceSymbols("{G}")}</label>
+        <input type="checkbox" name="colorless3" 
+        checked={state.filters.color_identity[0]}
+          onChange={(e) => {
+            let filters = state.filters
+            filters.color_identity = [false, false, false, false, false, false]
+            filters.color_identity[0] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="colorless3">{mana.replaceSymbols("{C}")}</label>
+        </div></div>
+          
         </div>
         <br></br>
         <div className="ResultsContainer">
