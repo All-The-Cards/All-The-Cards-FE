@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext} from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject';
 import * as server from '../functions/ServerTalk.js';
+import * as mana from '../components/TextToMana/TextToMana.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -9,6 +10,7 @@ import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
 import UserObject from '../components/UserObject/UserObject.js';
+
 
 
 
@@ -59,6 +61,7 @@ const SearchResults = (props) => {
         rarity: "",
         type: "",
         legality: "",
+        color_identity: [false, false, false, false, false, false]
       },
 
       advancedContainerDisplay: 'none',
@@ -117,7 +120,8 @@ const SearchResults = (props) => {
         filters: {
           legality: "",
           rarity: "",
-          type: ""
+          type: "",
+          color_identity: [false, false, false, false, false, false]
         }
       })
 
@@ -437,14 +441,15 @@ const SearchResults = (props) => {
         filters: {
           legality: "",
           rarity: "",
-          type: ""
+          type: "",
+          color_identity: [false,false,false,false,false,false]
         }
       })
       return
     }
 
     let filteredResults = state.cardResultsOriginal
-    // console.log(filters)
+    // console.log(filters.color_identity)
 
     for (let [filterkey, filterentry] of Object.entries(filters)){
       if (filterentry !== ""){
@@ -470,6 +475,20 @@ const SearchResults = (props) => {
                 return item.type_one.toLowerCase().includes(filters.type.toLowerCase())
               }
           })
+          case 'color_identity':
+            let colors = ["", "B", "G", "R", "U", "W"]
+            // console.log(colors, filterentry)
+            if(filterentry.toString() !== [false,false,false,false,false,false].toString()){
+              filteredResults = filteredResults.filter((item) => {
+                let foundone = false
+                for (let i = 0; i < colors.length; i++) {
+                  if (filterentry[i] === true && item.mana_cost.toLowerCase().includes(colors[i].toLowerCase())) {
+                    foundone = true
+                  }
+                }
+                return foundone
+            })
+          }
         }
       }
     } 
@@ -562,7 +581,7 @@ const SearchResults = (props) => {
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="white1" id="symbolW">W</label>
+        <label htmlFor="white1" id="symbolW">{mana.replaceSymbols("{W}")}</label>
         <input type="checkbox" name="blue1" checked={state.advSearch.colors[4]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -572,7 +591,7 @@ const SearchResults = (props) => {
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="blue1" id="symbolU">U</label>
+        <label htmlFor="blue1" id="symbolU">{mana.replaceSymbols("{U}")}</label>
         <input type="checkbox" name="black1" checked={state.advSearch.colors[1]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -582,7 +601,7 @@ const SearchResults = (props) => {
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="black1" id="symbolB">B</label>
+        <label htmlFor="black1" id="symbolB">{mana.replaceSymbols("{B}")}</label>
         <input type="checkbox" name="red1" checked={state.advSearch.colors[3]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -592,7 +611,7 @@ const SearchResults = (props) => {
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="red1" id="symbolR">R</label>
+        <label htmlFor="red1" id="symbolR">{mana.replaceSymbols("{R}")}</label>
         <input type="checkbox" name="green1" checked={state.advSearch.colors[2]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -602,14 +621,14 @@ const SearchResults = (props) => {
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="green1" id="symbolG">G</label>
+        <label htmlFor="green1" id="symbolG">{mana.replaceSymbols("{G}")}</label>
         <input type="checkbox" name="colorless1" checked={state.advSearch.colors[0]}
           onChange={(e) => {
             let arr = [false, false, false, false, false, false]
             arr[0] = e.target.checked
             updateState({advSearch: {...state.advSearch,colors: arr}})
           }}></input>
-        <label htmlFor="colorless1" id="symbolC">C</label>
+        <label htmlFor="colorless1" id="symbolC">{mana.replaceSymbols("{C}")}</label>
         </div><div className="AdvRow">
           <div className="AdvOption">
         Commander: </div>
@@ -622,7 +641,7 @@ const SearchResults = (props) => {
             arr[5] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="white2" id="symbolW">W</label>
+        <label htmlFor="white2" id="symbolW">{mana.replaceSymbols("{W}")}</label>
         <input type="checkbox" name="blue2" checked={state.advSearch.color_identity[4]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -632,7 +651,7 @@ const SearchResults = (props) => {
             arr[4] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="blue2" id="symbolU">U</label>
+        <label htmlFor="blue2" id="symbolU">{mana.replaceSymbols("{U}")}</label>
         <input type="checkbox" name="black2" checked={state.advSearch.color_identity[1]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -642,7 +661,7 @@ const SearchResults = (props) => {
             arr[1] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="black2" id="symbolB">B</label>
+        <label htmlFor="black2" id="symbolB">{mana.replaceSymbols("{B}")}</label>
         <input type="checkbox" name="red2" checked={state.advSearch.color_identity[3]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -652,7 +671,7 @@ const SearchResults = (props) => {
             arr[3] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="red2" id="symbolR">R</label>
+        <label htmlFor="red2" id="symbolR">{mana.replaceSymbols("{R}")}</label>
         <input type="checkbox" name="green2" checked={state.advSearch.color_identity[2]}
           onChange={(e) => {
             // SINGLECOLOR
@@ -662,14 +681,14 @@ const SearchResults = (props) => {
             arr[2] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="green2" id="symbolG">G</label>
+        <label htmlFor="green2" id="symbolG">{mana.replaceSymbols("{G}")}</label>
         <input type="checkbox" name="colorless2" checked={state.advSearch.color_identity[0]}
           onChange={(e) => {
             let arr = [false, false, false, false, false, false]
             arr[0] = e.target.checked
             updateState({advSearch: {...state.advSearch,color_identity: arr}})
           }}></input>
-        <label htmlFor="colorless2" id="symbolC">C</label>
+        <label htmlFor="colorless2" id="symbolC">{mana.replaceSymbols("{C}")}</label>
         </div><div className="AdvRow">
           <div className="AdvOption">
         Power: </div>
@@ -821,6 +840,10 @@ const SearchResults = (props) => {
           Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
         </div>
         <div className='SelectTypeContainer'>
+          <div className='SelectTypeOption'
+            onClick={(e) => filterResults('clear')}>
+          Reset
+          </div>
           <div className='SelectTypeOption'>
           Rarity: 
           <select
@@ -892,10 +915,70 @@ const SearchResults = (props) => {
             <option value="future">Future</option>
             <option value="gladiator">Gladiator</option>
             </select>
-          </div><div className='SelectTypeOption'
-            onClick={(e) => filterResults('clear')}>
-          Reset Filters
           </div>
+          <div className='SelectTypeOption'>Colors: <div className="AdvRow">
+        <input type="checkbox" name="white3" 
+          checked={state.filters.color_identity[5]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[5] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="white3" >{mana.replaceSymbols("{W}")}</label>
+        <input type="checkbox" name="blue3" 
+        checked={state.filters.color_identity[4]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[4] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="blue3" >{mana.replaceSymbols("{U}")}</label>
+        <input type="checkbox" name="black3" 
+        checked={state.filters.color_identity[1]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[1] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="black3" >{mana.replaceSymbols("{B}")}</label>
+        <input type="checkbox" name="red3" 
+        checked={state.filters.color_identity[3]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[3] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="red3" >{mana.replaceSymbols("{R}")}</label>
+        <input type="checkbox" name="green3" 
+        checked={state.filters.color_identity[2]}
+          onChange={(e) => {
+            let filters = state.filters
+            if (filters.color_identity[0]) filters.color_identity[0] = false
+            filters.color_identity[2] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="green3" >{mana.replaceSymbols("{G}")}</label>
+        <input type="checkbox" name="colorless3" 
+        checked={state.filters.color_identity[0]}
+          onChange={(e) => {
+            let filters = state.filters
+            filters.color_identity = [false, false, false, false, false, false]
+            filters.color_identity[0] = e.target.checked
+            updateState({ filters: filters })
+            filterResults(filters)
+          }}></input>
+        <label htmlFor="colorless3">{mana.replaceSymbols("{C}")}</label>
+        </div></div>
+          
         </div>
         <br></br>
         <div className="ResultsContainer">
