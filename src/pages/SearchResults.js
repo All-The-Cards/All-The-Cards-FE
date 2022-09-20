@@ -64,6 +64,8 @@ const SearchResults = (props) => {
         color_identity: [false, false, false, false, false, false]
       },
 
+      sortType: "",
+
       advancedContainerDisplay: 'none',
       resultsDisplayMode: 'cards',
     })
@@ -121,7 +123,7 @@ const SearchResults = (props) => {
           legality: "",
           rarity: "",
           type: "",
-          color_identity: [false, false, false, false, false, false]
+          color_identity: [false,false,false,false,false,false]
         }
       })
 
@@ -312,7 +314,56 @@ const SearchResults = (props) => {
       return -1
     }
   }
-  
+  const sortByName2 = (a, b) => {
+    if (a.name <= b.name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByCMC = (a, b) => {
+    if (a.cmc >= b.cmc) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByCMC2 = (a, b) => {
+    if (a.cmc <= b.cmc) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortByType = (a, b) => {
+    let typeA = ""
+    let typeB = ""
+    if (a.type_one) typeA = a.type_one + a.type_two
+    else if (a.card_faces) typeA = a.card_faces[0].type_one + a.card_faces[0].type_two
+
+    if (b.type_one) typeA = b.type_one + b.type_two
+    else if (b.card_faces) typeA = b.card_faces[0].type_one + b.card_faces[0].type_two
+
+
+
+    if (typeA >= typeB) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+  const sortBySet = (a, b) => {
+    if (a.set_name >= b.set_name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
   const sortByRelease = (a, b) => {
     let aDate = new Date(a.released_at)
     let bDate = new Date(b.released_at)
@@ -449,7 +500,6 @@ const SearchResults = (props) => {
     }
 
     let filteredResults = state.cardResultsOriginal
-    // console.log(filters.color_identity)
 
     for (let [filterkey, filterentry] of Object.entries(filters)){
       if (filterentry !== ""){
@@ -474,15 +524,16 @@ const SearchResults = (props) => {
               if (item.type_one) {
                 return item.type_one.toLowerCase().includes(filters.type.toLowerCase())
               }
-          })
+            })
+            break;
           case 'color_identity':
-            let colors = ["", "B", "G", "R", "U", "W"]
+            let colors = ["[]", "B", "G", "R", "U", "W"]
             // console.log(colors, filterentry)
-            if(filterentry.toString() !== [false,false,false,false,false,false].toString()){
+            if(filterentry.toString() != [false,false,false,false,false,false].toString()){
               filteredResults = filteredResults.filter((item) => {
                 let foundone = false
                 for (let i = 0; i < colors.length; i++) {
-                  if (filterentry[i] === true && item.mana_cost.toLowerCase().includes(colors[i].toLowerCase())) {
+                  if (filterentry[i] === true && item.color_identity && item.color_identity.toLowerCase().includes(colors[i].toLowerCase())) {
                     foundone = true
                   }
                 }
@@ -498,6 +549,39 @@ const SearchResults = (props) => {
     updateState({
       cardResults: filteredResults,
       cardResultIndex: 0,
+    })
+  }
+
+  const sortCardsBy = (type) => {
+    console.log(type)
+    let cards = state.cardResults
+
+    switch(type){
+      case 'default':
+        cards = cards.sort(sortByName)
+        break
+      case 'cmc':
+        cards = cards.sort(sortByCMC)
+        break
+      case 'default2':
+        cards = cards.sort(sortByName2)
+        break
+      case 'cmc2':
+        cards = cards.sort(sortByCMC2)
+        break
+      case 'type':
+        cards = cards.sort(sortByType)
+        break
+      case 'set':
+        cards = cards.sort(sortBySet)
+        break
+    }
+
+
+
+    updateState({
+      cardResults: cards,
+      cardResultsOriginal: cards,
     })
   }
 
@@ -840,9 +924,28 @@ const SearchResults = (props) => {
           Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
         </div>
         <div className='SelectTypeContainer'>
+        <div className="HeaderText" style={{textAlign:'center'}}>
+          Filters:
+        </div>
           <div className='SelectTypeOption'
             onClick={(e) => filterResults('clear')}>
           Reset
+          </div><div className='SelectTypeOption'>
+          Sort: 
+          <select
+            value ={state.sortType}
+            onChange={(e) => {
+              updateState({ sortType: e.target.value })
+              sortCardsBy(e.target.value)
+            }}
+          >
+            <option value="default">Alphabetical (A-Z)</option>
+            <option value="default2">Alphabetical (Z-A)</option>
+            <option value="cmc">Mana Value (Ascending)</option>
+            <option value="cmc2">Mana Value (Descending)</option>
+            {/* <option value="type">Type</option> */}
+            {/* <option value="set">Set</option> */}
+            </select>
           </div>
           <div className='SelectTypeOption'>
           Rarity: 
