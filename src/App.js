@@ -7,6 +7,7 @@ import { GlobalProvider } from './context/GlobalContext';
 import Home from './pages/Home';
 import Deck from './pages/Deck';
 import Card from './pages/Card';
+import User from './pages/User';
 import DeckEditor from './pages/Deck-Editor';
 import CardCreator from './pages/CardCreator';
 import Registration from './pages/User-Registration';
@@ -22,14 +23,15 @@ return (
             <Routes>
                 <Route exact path='/' element={<Home hasSearchBar={false}/>} />
                 <Route path="/search" element={<SearchResults hasSearchBar={true}/>}>
-                    {/* <Route path="/search/:query?" element={<SearchResults hasSearchBar={true}/>} /> */}
+                    <Route path="/search/:adv?:query?" element={<SearchResults hasSearchBar={true}/>} />
                 </Route>
                 <Route path='/deck' element={<Deck hasSearchBar={true}/>} />
                     <Route path="/deck/:id?" element={<Deck hasSearchBar={true}/>} />
-                <Route path='/card' element={<Card hasSearchBar={true}/>}>
+                <Route path='/card' element={<Card hasSearchBar={true}/>} />
                     <Route path="/card/:id?" element={<Card hasSearchBar={true}/>} />
-                </Route>
-                <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={true}/>} />
+                <Route path='/user' element={<User hasSearchBar={true}/>} />
+                    <Route path="/user/:id?" element={<User hasSearchBar={true}/>} />
+                <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={false}/>} />
                 <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false}/>} />
                 <Route exact path='/registration' element={<Registration hasSearchBar={false}/>} />
                 <Route exact path='/login' element={<Login hasSearchBar={false}/>} />

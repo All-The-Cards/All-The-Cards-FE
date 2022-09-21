@@ -2,7 +2,6 @@ import { React, useState, useEffect, useContext, useRef} from "react";
 import './NavBar.css';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
-import Logo from './logo.png'
 import Logo_Star from './logo_star.png'
 import Logo_Name from './logo_text_marginleft.png'
 import SearchBar from "../SearchBar/SearchBar";
@@ -18,7 +17,7 @@ const Navbar = () => {
     const wrapperRef = useRef(null)
 
     // Global Context Variables
-    const {hasSearchBar, setSearchBar} = useContext(GlobalContext);
+    const gc = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
     const [layerShadow, setLayerShadow] = useState(false);
@@ -117,7 +116,10 @@ const Navbar = () => {
   return(
 
     <div className="NavBarContainer">
-        <a className="LogoContainer" href={server.buildRedirectUrl()} >
+        <a className="LogoContainer" 
+        href={server.buildRedirectUrl()} 
+        // onClick = {() => { nav('/')}}
+        >
             <img 
                 src={Logo_Star} 
                 alt="logo" 
@@ -131,7 +133,9 @@ const Navbar = () => {
         </a>
 
         <div className="IconContainer">
-            <div id="Searchbar-responsive">{ hasSearchBar &&
+            {/* <div id="Searchbar-responsive"> */}
+            <div id="Searchbar">
+                { gc.hasSearchBar &&
                 <SearchBar type="global"/>
             }</div>
             <img src={SearchGlass} 

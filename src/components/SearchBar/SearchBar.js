@@ -17,8 +17,9 @@ const SearchBar = (params) => {
     })
 
     const [searchIconShadow, setIconShadow] = useState(false);
-    const {searchQuery, setSearchQuery} = useContext(GlobalContext);
-    const {searchType, setSearchType} = useContext(GlobalContext);
+    // const {searchQuery, setSearchQuery} = useContext(GlobalContext);
+    // const {searchType, setSearchType} = useContext(GlobalContext);
+    const gc = useContext(GlobalContext)
     const nav = useNavigate()
 
     const updateState = (objectToUpdate) => {
@@ -32,25 +33,21 @@ const SearchBar = (params) => {
         // updateState({
         //     searchInput: event.target.value
         // })
-        setSearchQuery(event.target.value)
+        gc.setSearchQuery(event.target.value)
     }
 
     const submitQuery = () => {
-        if (searchQuery.trim() !== "") {
-            // console.log(searchQuery)
-            // nav("/search/?query=" + searchQuery)
-            setSearchType("DEF")
-            nav("/search?key=" + Math.floor((Math.random() * 1000000000)).toString("16"))
-        }
+        gc.setSearchType("DEF")
+        nav("/search/?adv=false/?query=" + gc.searchQuery)
     }
 
     const toggleType = () => {
-        if (searchType === "ADV") {
-            setSearchType("DEF")
+        if (gc.searchType === "ADV") {
+            gc.setSearchType("DEF")
         }
-        if (searchType === "DEF") {
-            setSearchType("ADV")
-            setSearchQuery("")
+        if (gc.searchType === "DEF") {
+            gc.setSearchType("ADV")
+            gc.setSearchQuery("")
         }
     }
   return (
@@ -66,7 +63,7 @@ const SearchBar = (params) => {
                 }
             }}
             placeholder="Search..."
-            value={searchQuery}
+            value={gc.searchQuery}
             onChange={handleChanges}
         />
         {/* <img src={SearchGlass} 

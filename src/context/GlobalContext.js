@@ -20,12 +20,12 @@ export const GlobalProvider = ({ children }) => {
 
     // Global Variables Below
 
+    const [devMode, setDevMode] = useState(false)
+
     const [hasSearchBar, setSearchBar] = useState(true)
-    const [searchQuery, setSearchQuery] = useState("")
 
     const [searchType, setSearchType] = useState("DEF")
-
-    const [forceSearch, setForceSearch] = useState("")
+    const [searchQuery, setSearchQuery] = useState("")
 
     const [wipDeck, setWipDeck] = useState({
         authorID: "",
@@ -50,17 +50,21 @@ export const GlobalProvider = ({ children }) => {
 
                 hasSearchBar,
                 setSearchBar,
-                searchQuery,
-                setSearchQuery,
                 searchType,
                 setSearchType,
                 wipDeck,
                 setWipDeck,
                 User,
                 supabase,
-
-            }}
-        >
+                searchQuery,
+                setSearchQuery,
+                User,
+                supabase,
+                devMode,
+                setDevMode
+    
+			}}
+		>
             {/* {console.log(env)} */}
             {children}
         </GlobalContext.Provider>

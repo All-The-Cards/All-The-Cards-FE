@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom'
 import EyePassword from '../images/EyePassword.png'
 import EyePassword2 from '../images/HiddenEyePassword.png'
 import { GlobalContext } from '../context/GlobalContext'
+import * as server from '../functions/ServerTalk.js';
 
-const Registration = () => {
+const Registration = (props) => {
 
-  const { supabase } = useContext(GlobalContext)
+  const gc = useContext(GlobalContext)
 
   const [underlineActiveUser, setUnderline] = useState(false)
   const [isShowing, setIsShowing] = useState(false)
@@ -18,6 +19,21 @@ const Registration = () => {
   });
   const [isToolTipShown, setToolTip] = useState(false)
   const [successfulRegister, setSuccessfulRegister] = useState(false)
+  const [randomPic, setRandomPic] = useState()
+
+
+  useEffect(()=>{
+    gc.setSearchBar(props.hasSearchBar)
+    getRandomBgImg()
+  }, [])
+
+  const getRandomBgImg = () =>{
+    server.post("/api/features/random/art").then(response => {
+      let res = response
+      // console.log(res) 
+      setRandomPic(res.randomArt)
+    })
+  } 
 
   const handlePasswordClick = () => {
       
@@ -41,7 +57,7 @@ const Registration = () => {
     
     if(!inputs.password.match(check))
     {
-      alert("Password does not contain a letter and a number. Please provide a password with both a letter and number.")
+      alert("Password does not meet requirements. Hover of the password title to view requirements.")
       inputs.password = ""
       return
     }
@@ -52,7 +68,7 @@ const Registration = () => {
 
 
   const QueryRegister = () =>{
-    supabase.auth.signUp({
+    gc.supabase.auth.signUp({
       email: inputs.email,
       password: inputs.password,
     }).then(({user,session,error})=>{
@@ -72,17 +88,13 @@ const Registration = () => {
 
   }
 
-    useEffect(()=>{
-
-      console.log(inputs)
-        
-    },[inputs])
-
   return (
 
     /* Login & Registration share some CSS properties (Login-Registration.css) */
     <div className='LoginContainer'>
-      <div className='LeftContainer'/>
+      <div style={{backgroundImage: `url(${randomPic})`}} className='LeftContainer'>
+      <div className='ArtBlur'/>
+      </div>
       <div className='RightContainer'>
         <div className='RegistrationTitle'>Register</div>
         <Link to='/login' className={`ActiveUserLink ${underlineActiveUser ? "ActiveUserLinkAlt" : ''}`} onMouseEnter={() => setUnderline(true)} onMouseLeave={() => setUnderline(false)}>Already have an account?</Link>
