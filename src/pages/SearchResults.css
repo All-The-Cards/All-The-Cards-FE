@@ -6,11 +6,13 @@
     /* margin: 0 auto; */
     /* background-color: rgba(255,0,0,.3); */
     display: inline-block;
+    /* width: 400px; */
 }
 
 .ResultsContainer {
     /* background-color: rgba(255,0,0,.3); */
-    max-width: 1100px;
+    max-width: 1050px;
+    height: 100px;
 
 }
 
@@ -103,17 +105,18 @@
 .SelectTypeContainer {
     display: flex;
     margin: 0 auto;
-    /* background-color: red; */
+    /* background-color: rgba(255,0,0,.2); */
     justify-content: center;
-    width: 800px;
+    max-width: 1000px;
+    min-width: 100px;
 
 }
 
 .SelectTypeOption {
     /* margin: 20px; */
     cursor: pointer;
-    width: 200px;
-    height: 50px;
+    /* width: 200px; */
+    height: 100px;
     font-size: 24px;
     font-weight: bold;
     border-radius: 10px;
@@ -121,7 +124,10 @@
     max-width: 30%;
     float: left;
     margin: auto;
-    margin-top: 40px;
+    /* margin-top: 40px; */
+    /* background-color: rgba(0,0,255,.2); */
+    /* overflow: auto; */
+    min-width: 0px;
 }
 
 #typeActive {
@@ -139,4 +145,13 @@
 
 .SelectTypeText {
     margin-top: 10px;
+}
+
+.SelectTypeOption select {
+    overflow: auto;
+    max-width: 150px;
+}
+
+#colorIdBoxes {
+    /* overflow: auto; */
 }

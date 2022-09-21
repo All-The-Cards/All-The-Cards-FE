@@ -488,7 +488,8 @@ const SearchResults = (props) => {
     
     if (filters === "clear"){
       updateState({
-        cardResults: state.cardResultsOriginal,
+        cardResults: state.cardResultsOriginal.sort(sortByName),
+        sortType: 'default',
         filters: {
           legality: "",
           rarity: "",
@@ -553,7 +554,7 @@ const SearchResults = (props) => {
   }
 
   const sortCardsBy = (type) => {
-    console.log(type)
+    // console.log(type)
     let cards = state.cardResults
 
     switch(type){
@@ -581,7 +582,7 @@ const SearchResults = (props) => {
 
     updateState({
       cardResults: cards,
-      cardResultsOriginal: cards,
+      // cardResultsOriginal: cards,
     })
   }
 
@@ -872,11 +873,12 @@ const SearchResults = (props) => {
       </form>
       }
       </div>
-      <div className='SelectTypeContainer'>
+      <div className='SelectTypeContainer' style={{marginTop: '40px', height: '50px'}}>
         <div 
           className='SelectTypeOption' 
           onClick={() => setResultsType('cards')}
           id={getResultsID('cards')}
+          style={{width:'200px', height: '50px'}}
         >
           <div className="SelectTypeText">Cards
           </div>
@@ -885,6 +887,7 @@ const SearchResults = (props) => {
           className='SelectTypeOption' 
           onClick={() => setResultsType('decks')}
           id={getResultsID('decks')}
+          style={{width:'200px', height: '50px'}}
         >
           <div className="SelectTypeText">Decks
           </div>
@@ -893,6 +896,7 @@ const SearchResults = (props) => {
           className='SelectTypeOption' 
           onClick={() => setResultsType('users')}
           id={getResultsID('users')}
+          style={{width:'200px', height: '50px'}}
         >
           <div className="SelectTypeText">Users</div>
         </div>
@@ -923,14 +927,10 @@ const SearchResults = (props) => {
           <header className="HeaderText">Cards</header>
           Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
         </div>
-        <div className='SelectTypeContainer'>
-        <div className="HeaderText" style={{textAlign:'center'}}>
-          Filters:
-        </div>
-          <div className='SelectTypeOption'
-            onClick={(e) => filterResults('clear')}>
-          Reset
-          </div><div className='SelectTypeOption'>
+        {/* <header className="HeaderText">Filters:</header> */}
+        <div className='SelectTypeContainer' style={{backgroundColor: '#e8e8e8', marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px'}}>
+   
+          <div className='SelectTypeOption'>
           Sort: 
           <select
             value ={state.sortType}
@@ -974,6 +974,7 @@ const SearchResults = (props) => {
               updateState({ filters: filters })
               filterResults(filters)
             }}
+            value={state.filters.type}
           >
             <option value="">Any Type</option>
             <option value="artifact">Artifact</option>
@@ -1019,7 +1020,7 @@ const SearchResults = (props) => {
             <option value="gladiator">Gladiator</option>
             </select>
           </div>
-          <div className='SelectTypeOption'>Colors: <div className="AdvRow">
+          <div className='SelectTypeOption' id="colorIdBoxes">Colors: <div className="AdvRow">
         <input type="checkbox" name="white3" 
           checked={state.filters.color_identity[5]}
           onChange={(e) => {
@@ -1081,7 +1082,7 @@ const SearchResults = (props) => {
           }}></input>
         <label htmlFor="colorless3">{mana.replaceSymbols("{C}")}</label>
         </div></div>
-          
+        <button className="FancyButton" onClick={(e) => filterResults('clear')} style={{marginTop: '-12px'}}>Reset</button>
         </div>
         <br></br>
         <div className="ResultsContainer">

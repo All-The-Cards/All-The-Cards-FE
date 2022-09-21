@@ -18,9 +18,18 @@
     /* box-shadow: 10px 10px 10px rgba(0,0,0,.1); */
 }
 
+.FancyButton:hover {
+    background-color: #c6214d;
+}
+
 #alt {
     background-color: #7138D1;
 }
+
+#alt:hover {
+    background-color: #5d32a7;
+}
+
 
 .HeaderText {
     margin-top: 20px;
