@@ -28,7 +28,7 @@ export const GlobalProvider = ({ children }) => {
     const [forceSearch, setForceSearch] = useState("")
 
     const [wipDeck, setWipDeck] = useState({
-        attributes: [],
+        authorID: "",
         cards: [],
         coverCard: "",
         description: "",
