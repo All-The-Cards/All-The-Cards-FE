@@ -31,6 +31,7 @@ export const GlobalProvider = ({ children }) => {
         authorID: "",
         cards: [],
         coverCard: "",
+        deckID: "",
         description: "",
         formatTag: "",
         tags: [],

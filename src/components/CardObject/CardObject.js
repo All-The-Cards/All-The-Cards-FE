@@ -13,6 +13,8 @@ import flipIcon from './rotate-right.png'
 
 import plusIcon from './plus-solid.svg'
 import minusIcon from './minus-solid.svg'
+import imageIcon from './image-regular.svg'
+
 
 
 import { GlobalContext } from "../../context/GlobalContext";
@@ -196,7 +198,12 @@ const CardObject = (props) => {
             cards: tempCards
         }))
     }
-
+    const setAsCoverCard = () => {
+        setWipDeck((previous) => ({
+            ...previous,
+            coverCard: props.data
+        }))
+    }
     function generateListBackgroundColor() {
         let bgclr = "#cbd3d3"
         let bgclr2 = "#dbdbe0"
@@ -439,7 +446,7 @@ const CardObject = (props) => {
                     <div className="plusMinusBox">
                         <img src={plusIcon} className="plusMinusIcon" onClick={addToDeck}/>
                         {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" onClick={removeFromDeck}/>: <></>}
-
+                        <img src={imageIcon} className="plusMinusIcon" onClick={setAsCoverCard}/>
                     </div>
                 </div>}
         </div>
