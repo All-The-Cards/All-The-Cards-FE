@@ -5,7 +5,7 @@ export const GlobalContext = createContext()
 
 //export const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
 
-export const GlobalProvider = ( {children} ) => {
+export const GlobalProvider = ({ children }) => {
 
     // Object Variables Below
 
@@ -27,6 +27,18 @@ export const GlobalProvider = ( {children} ) => {
     const [searchType, setSearchType] = useState("DEF")
     const [searchQuery, setSearchQuery] = useState("")
 
+    const [wipDeck, setWipDeck] = useState({
+        authorID: "",
+        cards: [],
+        coverCard: "",
+        deckID: "",
+        description: "",
+        formatTag: "",
+        tags: [],
+        title: ""
+    })
+
+
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
 
     // Global Function Below
@@ -34,13 +46,17 @@ export const GlobalProvider = ( {children} ) => {
     return (
 
         // Any variable or function must be placed below
-		<GlobalContext.Provider
-			value={{
+        <GlobalContext.Provider
+            value={{
 
-				hasSearchBar,
+                hasSearchBar,
                 setSearchBar,
                 searchType,
                 setSearchType,
+                wipDeck,
+                setWipDeck,
+                User,
+                supabase,
                 searchQuery,
                 setSearchQuery,
                 User,
@@ -54,5 +70,5 @@ export const GlobalProvider = ( {children} ) => {
             {children}
         </GlobalContext.Provider>
 
-	);
+    );
 };
