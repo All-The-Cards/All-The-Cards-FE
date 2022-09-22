@@ -138,7 +138,6 @@ const CardObject = (props) => {
 
 
     }
-
     function getImage() {
         let imgLink = ""
         if (props.data.image_uris !== null) {
@@ -153,7 +152,6 @@ const CardObject = (props) => {
         imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
         return imgLink
     }
-
     function flipArt() {
         if (state.data.card_faces) {
             let img = ""
@@ -172,7 +170,6 @@ const CardObject = (props) => {
             })
         }
     }
-
     function transformFlipIcon() {
         switch (state.isFlipped) {
             case true:
@@ -182,23 +179,22 @@ const CardObject = (props) => {
         }
     }
 
-    const toggleInDeck = () => {
-        let index = wipDeck.cards.indexOf(props.data)
+    const addToDeck = () => {
         let tempCards = wipDeck.cards
-        if (index === -1) {
-            tempCards.push(props.data)
-        }
-        else {
-            tempCards.splice(index, 1)
-        }
+        tempCards.push(props.data)
         setWipDeck((previous) => ({
             ...previous,
             cards: tempCards
         }))
-        console.log(props.data)
-        console.log(wipDeck.cards)
-        // setSearchBar(!hasSearchBar)
-        console.log(hasSearchBar)
+    }
+    const removeFromDeck = () => {
+        let tempCards = wipDeck.cards
+        let index = wipDeck.cards.indexOf(props.data)
+        tempCards.splice(index, 1)
+        setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
     }
 
     function generateListBackgroundColor() {
@@ -440,8 +436,9 @@ const CardObject = (props) => {
                             <img src={flipIcon} className="flipIcon" style={{ transform: 'scaleX(' + transformFlipIcon() + ')' }}></img>
                         </div>
                     }
-                    <div className="plusMinusBox" onClick={toggleInDeck}>
-                        {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" /> : <img src={plusIcon} className="plusMinusIcon" />}
+                    <div className="plusMinusBox">
+                        <img src={plusIcon} className="plusMinusIcon" onClick={addToDeck}/>
+                        {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" onClick={removeFromDeck}/>: <></>}
 
                     </div>
                 </div>}

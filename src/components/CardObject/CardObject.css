@@ -101,6 +101,8 @@
     top: 10px;
     box-shadow: 5px 5px 8px rgba(0,0,0,.3);
     backdrop-filter: blur(2px);
+    display: flex;
+    flex-flow: column;
 }
 
 .plusMinusIcon {
