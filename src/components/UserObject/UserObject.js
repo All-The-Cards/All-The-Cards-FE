@@ -3,6 +3,7 @@
 import { React, useEffect, useState } from "react";
 import './UserObject.css'
 import '../../pages/GlobalStyles.css'
+import { Link } from "react-router-dom";
 
 const UserObject = (props) => {
 
@@ -36,7 +37,7 @@ const UserObject = (props) => {
 
     return(
         <>
-            <a href={"../user/?id=" + state.data.id}>
+            <Link to={"/user/?id=" + state.data.id}>
                 <div className="userTile" style={{backgroundImage: "radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url("+ state.avatar + ")"}}>
                     <div className="HeaderText" id="userHeader">
                     {state.data.username.length <= 14 && state.data.username.slice(0,12)} 
@@ -44,7 +45,7 @@ const UserObject = (props) => {
                     {state.data.username.length > 12 && "..."}
                     </div>
                 </div>
-            </a>
+            </Link>
         </>
     )
 }

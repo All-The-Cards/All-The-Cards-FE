@@ -9,6 +9,7 @@ import LayerIcon from './layers_icon.png'
 import UsersIcon from './users_icon.png'
 import * as server from '../../functions/ServerTalk.js'
 import SearchGlass from './SearchGlass.png';
+import { Link } from "react-router-dom";
 
   
 const Navbar = () => {
@@ -116,10 +117,8 @@ const Navbar = () => {
   return(
 
     <div className="NavBarContainer">
-        <a className="LogoContainer" 
-        href={server.buildRedirectUrl()} 
-        // onClick = {() => { nav('/')}}
-        >
+        <Link to={"/"}
+            className="LogoContainer">
             <img 
                 src={Logo_Star} 
                 alt="logo" 
@@ -130,7 +129,7 @@ const Navbar = () => {
             className="Logo"
             id="Logo-responsive"
             />
-        </a>
+        </Link>
 
         <div className="IconContainer">
             {/* <div id="Searchbar-responsive"> */}

@@ -4,17 +4,16 @@ import { React, useEffect, useState } from "react";
 import './DeckTileObject.css'
 import * as server from '../../functions/ServerTalk.js';
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const DeckTileObject = (props) => {
     const [state, setState] = useState({
         data: props.data,
         // Find image link
         imgLink: props.data.cover_art,
-        // Create page url
-        // url: server.buildRedirectUrl("/deck/?id=" + props.data.id)
-        url: "/deck/?id=" + props.data.id
 
     })
+
     const nav = useNavigate()
 
     const updateState = (objectToUpdate) => {
@@ -31,8 +30,6 @@ const DeckTileObject = (props) => {
     function getData(){
         updateState({
             data: props.data,
-            // url: server.buildRedirectUrl("/deck/?id=" + props.data.id),
-            url: "../deck/?id=" + props.data.id,
             imgLink: getImage()
         })
     }
@@ -40,7 +37,6 @@ const DeckTileObject = (props) => {
     function getImage(){
         let imgLink = ""
         if (props.data.cover_art !== null){
-            // Replace all ' with " for.. JSON reasons
             imgLink = props.data.cover_art
         }
         else {
@@ -55,9 +51,7 @@ const DeckTileObject = (props) => {
             className="DeckTileObjectContainer"
             style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + state.imgLink + ')'}}
         >
-            <a 
-                href={state.url}
-            >
+            <Link to={"/deck/?id=" + props.data.id}>
                 <div className="DeckClickable">
                     <div className="DeckInfo">
                         <div className="DeckTitle">{state.data.name}</div>
@@ -65,7 +59,7 @@ const DeckTileObject = (props) => {
                         <div className="DeckFormat">{state.data.user_name}</div>
                     </div>
                 </div>
-            </a>
+            </Link>
         </div>
 
     );

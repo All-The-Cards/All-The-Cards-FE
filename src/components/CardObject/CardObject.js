@@ -14,10 +14,9 @@ import flipIcon from './rotate-right.png'
 import plusIcon from './plus-solid.svg'
 import minusIcon from './minus-solid.svg'
 import imageIcon from './image-regular.svg'
-
-
-
+import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
+
 const CardObject = (props) => {
     const [state, setState] = useState({
         isFlipped: false,
@@ -33,7 +32,6 @@ const CardObject = (props) => {
         listHover: false
     })
 
-    const { hasSearchBar, setSearchBar } = useContext(GlobalContext)
     const { wipDeck, setWipDeck } = useContext(GlobalContext)
 
     const nav = useNavigate()
@@ -52,8 +50,6 @@ const CardObject = (props) => {
     function getData() {
         updateState({
             data: props.data,
-            url: "../card/?id=" + props.data.id,
-            // url: server.buildRedirectUrl("/card/?id=" + props.data.id),
             imgLink: getImage(),
             listHover: false
         })
@@ -147,7 +143,6 @@ const CardObject = (props) => {
             return imgLink
         }
         if (props.data.card_faces) {
-            // console.log(props.data.card_faces)
             imgLink = props.data.card_faces[0].image_uris.png
             return imgLink
         }
@@ -204,6 +199,7 @@ const CardObject = (props) => {
             coverCard: props.data
         }))
     }
+    
     function generateListBackgroundColor() {
         let bgclr = "#cbd3d3"
         let bgclr2 = "#dbdbe0"
@@ -364,7 +360,6 @@ const CardObject = (props) => {
                 bgclr2 = "#d6be73"
                 altclr = "#efd26e"
             }
-            // console.log(props.data.name, colors, uniqueColors, splitcount, symbolcount)
             updateState({
                 listBackgroundColor: bgclr,
                 listBackgroundColorV2: bgclr2,
@@ -382,14 +377,6 @@ const CardObject = (props) => {
         updateState({ manaCostSymbols: mana.replaceSymbols(rawMana) })
     }
 
-    function mouseDownHandler(event) {
-        if (event.button === 1) {
-            console.log("middle clicked")
-            //TODO:: Nav in new tab? 
-            // nav("/card/?id=" + props.data.id)
-        }
-    }
-
     function setListHover(value) {
         updateState({ listHover: value })
     }
@@ -398,17 +385,12 @@ const CardObject = (props) => {
         <div className="RegularCard">
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
-                // style={{backgroundColor:state.listBackgroundColor, boxShadow: '0px 0px 0px 2px ' + state.listAltColor + ' inset'}}
                 style={{ backgroundColor: state.listBackgroundColorV2 }}
-            ><a
+            >
+            <Link to={"/card/?id=" + props.data.id}
 
-                href={state.url}
-                // id="cardList"
                 onMouseEnter={() => setListHover(true)}
                 onMouseLeave={() => setListHover(false)}
-
-            // onClick={() => nav("/card/?id=" + props.data.id)}
-            // onMouseDown={mouseDownHandler}
             >
                     <div className="CardListInfo">
                         <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
@@ -419,7 +401,7 @@ const CardObject = (props) => {
                             {state.manaCostSymbols}
                         </div>
                     </div>
-                </a>
+                </Link>
                 {state.listHover &&
                     <img src={state.imgLink} id="cardList"></img>
                 }
@@ -427,16 +409,13 @@ const CardObject = (props) => {
                 : <div
                     className="CardObjectContainer"
                 >
-                    <a
-                        href={state.url}
-                    // onClick={() => nav("/card/?id=" + props.data.id)}
-                    // onMouseDown={mouseDownHandler}
+                <Link to={"/card/?id=" + props.data.id}
                     >
                         <img
                             src={state.imgLink}
                             className="CardObjectImage">
                         </img>
-                    </a>
+                    </Link>
                     {(state.data.card_faces && state.data.layout === "transform" || state.data.layout === "modal_dfc") &&
                         <div className="flipBox"
                             onClick={flipArt}>
