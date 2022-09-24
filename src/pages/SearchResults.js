@@ -1088,11 +1088,11 @@ const SearchResults = (props) => {
         <div className="ResultsContainer">
         { state.cardResults.slice(0, state.cardResultIndex + state.showResultAmountCards)
           .map((item, i) => <div style={{marginLeft: '10px', float:'left'}}key={i}>
-            { gc.devMode && <CardObject data={item} isCompact={true} 
+            {/* { gc.devMode && <CardObject data={item} isCompact={true} 
             // count={i % 4}
             // count={4 - i % 4}
             // count={4}
-            /> }
+            /> } */}
             <div className="RegularCard">
               <CardObject data={item}/>
             </div>
