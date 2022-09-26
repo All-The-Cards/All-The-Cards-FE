@@ -380,6 +380,7 @@ const CardObject = (props) => {
     function setListHover(value) {
         updateState({ listHover: value })
     }
+    
 
     return (
         <div className="RegularCard">
@@ -387,7 +388,8 @@ const CardObject = (props) => {
                 className="CardListObjectContainer"
                 style={{ backgroundColor: state.listBackgroundColorV2 }}
             >
-            <Link to={"/card/?id=" + props.data.id}
+                {props.clickable && 
+                <Link to={("/card/?id=" + props.data.id)}
 
                 onMouseEnter={() => setListHover(true)}
                 onMouseLeave={() => setListHover(false)}
@@ -402,6 +404,24 @@ const CardObject = (props) => {
                         </div>
                     </div>
                 </Link>
+                }
+                {!props.clickable && 
+                    <div
+    
+                    onMouseEnter={() => setListHover(true)}
+                    onMouseLeave={() => setListHover(false)}
+                >
+                        <div className="CardListInfo">
+                            <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
+                                {(state.data !== undefined && state.data.name !== undefined && state.data.layout === "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.slice(0, state.maxNameLength).trim() + (state.data.name.length > state.maxNameLength ? "..." : "") : <></>}
+                                {(state.data !== undefined && state.data.name !== undefined && state.data.layout !== "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0, state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "") : <></>}
+                            </div>
+                            <div className="CardListContent" id="cardListRight">
+                                {state.manaCostSymbols}
+                            </div>
+                        </div>
+                    </div>
+                    }
                 {state.listHover &&
                     <img src={state.imgLink} id="cardList"></img>
                 }
@@ -409,13 +429,22 @@ const CardObject = (props) => {
                 : <div
                     className="CardObjectContainer"
                 >
+                    {props.clickable && 
                 <Link to={"/card/?id=" + props.data.id}
                     >
                         <img
                             src={state.imgLink}
                             className="CardObjectImage">
                         </img>
-                    </Link>
+                </Link> }
+                {!props.clickable && 
+                <div
+                    >
+                        <img
+                            src={state.imgLink}
+                            className="CardObjectImage">
+                        </img>
+                </div> }
                     {(state.data.card_faces && state.data.layout === "transform" || state.data.layout === "modal_dfc") &&
                         <div className="flipBox"
                             onClick={flipArt}>

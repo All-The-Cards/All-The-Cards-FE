@@ -1094,7 +1094,7 @@ const SearchResults = (props) => {
             // count={4}
             /> } */}
             <div className="RegularCard">
-              <CardObject data={item}/>
+              <CardObject clickable data={item}/>
             </div>
             </div>) }
           </div>
