@@ -1,6 +1,7 @@
 import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
+import * as server from "../functions/ServerTalk";
 
 const DeckEditor = (props) => {
 
@@ -18,9 +19,8 @@ const DeckEditor = (props) => {
     setState((previous) => ({
       ...previous,
       cards: wipDeck.cards
-    }), [])
-    console.log("asldkfjasdfkldskafkl")
-  })
+    }))
+  }, [])
   const handleChanges = (event) => {
     setWipDeck((previous) => ({
       ...previous,
@@ -32,7 +32,7 @@ const DeckEditor = (props) => {
       ...previous,
       ...objectToUpdate
     }))
-}
+  }
   const handleStateChanges = (event) => {
     setState((previous) => ({
       ...previous,
@@ -55,15 +55,47 @@ const DeckEditor = (props) => {
       }
     }
   }
+
+  const formatWipDeck = () => {
+    let result = {...wipDeck,cards: [], coverCard: wipDeck.coverCard.id}
+    wipDeck.cards.forEach(card => {
+      result.cards.push(card.id)
+    });
+    return result
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let deckData = formatWipDeck()
+    console.log(deckData)
+    fetch(server.buildAPIUrl("/api/features/editor/decks"),
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deckData)
+      }
+    )
+      .then((response) => {
+        console.log(response);
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   return (
     <div>
       <form>
         <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" />
         <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" />
-        <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
         <select
           value={wipDeck.formatTag}
-          onChange={(event) => {updateWipDeck({formatTag: event.target.value})}}
+          onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
         >
           <option value="">Any Format</option>
           <option value="standard">Standard</option>
@@ -85,7 +117,9 @@ const DeckEditor = (props) => {
           <option value="duel">Duel</option>
           <option value="future">Future</option>
           <option value="gladiator">Gladiator</option>
-          </select>
+        </select>
+        <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
+        <input type="button" onClick={handleSubmit} value="Save Deck" />
         <>{wipDeck.tags.map((tag, index) => (
           <>{tag}, </>
         ))}</>
@@ -93,7 +127,7 @@ const DeckEditor = (props) => {
       {state.cards.map((card, index) => (
         <CardObject data={card} />
       ))}
-      {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard}/> </>: <></>}
+      {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
     </div>
   )
 }
