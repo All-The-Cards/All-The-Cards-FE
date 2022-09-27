@@ -9,15 +9,6 @@ export const GlobalProvider = ({ children }) => {
 
     // Object Variables Below
 
-    let User = {
-
-        email: '',
-        name: '',
-        username: '',
-        password: '',
-
-    };
-
     // Global Variables Below
 
     const [devMode, setDevMode] = useState(false)
@@ -40,6 +31,8 @@ export const GlobalProvider = ({ children }) => {
 
 
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
+    const [activeSession, setActiveSession] = useState(null)
+    const [activeUser, setUser] = useState(null)
 
     // Global Function Below
 
@@ -55,17 +48,18 @@ export const GlobalProvider = ({ children }) => {
                 setSearchType,
                 wipDeck,
                 setWipDeck,
-                User,
                 supabase,
                 searchQuery,
                 setSearchQuery,
-                User,
-                supabase,
                 devMode,
-                setDevMode
-    
-			}}
-		>
+                setDevMode,
+                activeSession,
+                setActiveSession,
+                activeUser,
+                setUser,
+
+            }}
+        >
             {/* {console.log(env)} */}
             {children}
         </GlobalContext.Provider>

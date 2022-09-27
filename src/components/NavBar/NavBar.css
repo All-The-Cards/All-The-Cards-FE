@@ -1,4 +1,4 @@
-.NavBarContainer{
+.NavBarContainer {
     background-color: #E8E8E8;
     position: sticky;
     top: 0;
@@ -8,19 +8,19 @@
     align-items: stretch;
     flex-direction: row;
     z-index: 999
-    /* border-style: solid; */
-    
+        /* border-style: solid; */
+
 }
 
 /* Left Side Container of NavBar */
 
-.LogoContainer{
+.LogoContainer {
     display: flex;
     align-items: center;
     /* border-style: solid; */
 }
 
-.Logo{
+.Logo {
     margin-left: 5px;
     height: 80%;
     width: auto;
@@ -29,7 +29,7 @@
     vertical-align: middle;
 }
 
-.WebsiteTitle{
+.WebsiteTitle {
     margin-left: 5px;
     font-weight: bold;
     font-size: 22px;
@@ -38,7 +38,7 @@
 
 /* Right Side Container of NavBar */
 
-.IconContainer{
+.IconContainer {
     width: 50%;
     display: flex;
     justify-content: flex-end;
@@ -46,7 +46,7 @@
     /* border-style: solid; */
 }
 
-.Icons{
+.Icons {
     margin: 3px;
     height: 40%;
     width: auto;
@@ -55,7 +55,7 @@
     cursor: pointer;
 }
 
-.LayerIcon{
+.LayerIcon {
     height: 40%;
     width: auto;
     padding: 7px;
@@ -66,7 +66,7 @@
     border-radius: 50%;
 }
 
-.UserIcon{
+.UserIcon {
     margin: 3px;
     height: 40%;
     width: auto;
@@ -78,7 +78,7 @@
 }
 
 /*Dropdown Menu*/
-.LayerMenu{
+.LayerMenu {
     font-size: 15px;
     display: flex;
     flex-direction: column;
@@ -93,14 +93,14 @@
     top: 40px
 }
 
-.UserMenu{
+.UserMenu {
     font-size: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: white;
     height: auto;
-    width: 90px;;
+    width: auto;
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
@@ -108,9 +108,13 @@
     top: 40px
 }
 
-.MenuItems{
+.MenuItems {
     padding: 2px;
     cursor: pointer;
+}
+
+.MenuText {
+    padding: 2px;
 }
 
 .SearchIcon {
@@ -127,17 +131,30 @@
     #Logo-responsive {
         display: none;
     }
-    
+
 }
 
 @media only screen and (max-width: 1000px) {
-    
+
     #Searchbar-responsive {
         display: none;
     }
-    
+
     #Searchicon-responsive {
         display: block;
     }
-    
+
+
+}
+
+@media (prefers-color-scheme: dark) {
+    .day.dark-scheme {
+        background: #333;
+        color: white;
+    }
+
+    .night.dark-scheme {
+        background: black;
+        color: #ddd;
+    }
 }

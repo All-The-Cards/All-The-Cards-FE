@@ -7,7 +7,7 @@ import EyePassword2 from '../images/HiddenEyePassword.png'
 import { GlobalContext } from '../context/GlobalContext'
 import * as server from '../functions/ServerTalk.js';
 
-const Login = (props) => {
+const Login = () => {
 
   const gc = useContext(GlobalContext)
 
@@ -19,47 +19,69 @@ const Login = (props) => {
     email: "",
     password: ""
   });
-  const [randomPic,setRandomPic] = useState("")
+  const [randomPic, setRandomPic] = useState("")
+  const [passwordResetEmail, setResetEmail] = useState("");
 
   const nav = useNavigate()
   const wrapperRef = useRef(null)
 
-  useEffect(()=>{
-    gc.setSearchBar(props.hasSearchBar)
+  useEffect(() => {
     getRandomBgImg()
   }, [])
 
-  const getRandomBgImg = () =>{
+  const getRandomBgImg = () => {
     server.post("/api/features/random/art").then(response => {
       let res = response
-      // console.log(res) 
       setRandomPic(res.randomArt)
     })
-  } 
+  }
 
   const handleChange = (event) => {
 
-    const name = event.target.name
-    const value = event.target.value
-    setInputs(values => ({...values, [name]: value}))
-  
+    if (event.id !== "resetPass") {
+      const name = event.target.name
+      const value = event.target.value
+      setInputs(values => ({ ...values, [name]: value }))
+    }
+
+    setResetEmail(event.target.value)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    LoginQuery();
+    if (event.target.id === 'resetButton') {
+      PasswordReset();
+    }
+    else
+      LoginQuery();
+  }
+
+  async function PasswordReset() {
+    // event.preventDefault();
+    const { data, error } = await gc.supabase.auth.resetPasswordForEmail(
+      passwordResetEmail,
+      {
+        redirectTo: "http://localhost:3000/reset-password",
+      }
+    )
+    if (error) {
+      alert(error)
+    }
+    else {
+      alert("An email has been sent to email you provided. Please view this email and click the reset password link.")
+      setModal(false)
+    }
   }
 
   const handlePasswordClick = () => {
-      
+
     isShowing ? setIsShown(false) : setIsShown(true)
 
   };
 
-    // Handles clicking outside of the menu
+  // Handles clicking outside of the menu
   const handleClickOutside = (e) => {
     if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        
       setModal(false)
     }
   };
@@ -68,46 +90,66 @@ const Login = (props) => {
     setModal(true)
   };
 
-  const LoginQuery = () =>{
+  const LoginQuery = () => {
 
-    gc.supabase.auth.signInWithPassword({
-      email: inputs.email,
-      password: inputs.password,
-    }).then(({user,session,error})=>{
-      console.log(user,session)
-      if(error === null)
+    gc.setActiveSession(gc.supabase.auth.signInWithPassword(
       {
-        alert("Login Successful! Routing to homepage.")
-        nav('/')
-      }
-      else
+        email: inputs.email,
+        password: inputs.password,
+      },
       {
+        data: {
+          fullname: inputs.name
+        },
+      }).then(({ user, session, error }) => {
+        if (error === null) {
+          alert("Login Successful! Routing to homepage.")
+          GetUserInfo()
+          nav('/')
+        }
+        else {
+          alert(error)
+          inputs.email = ""
+          inputs.password = ""
+        }
+      }))
+
+  }
+
+  const GetUserInfo = () => {
+
+    gc.supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error !== null) {
         alert(error)
-        inputs.email = ""
-        inputs.password = ""
+      }
+      else if (session !== null) {
+        gc.setActiveSession(session)
+      }
+    })
+
+    gc.supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (error !== null) {
+        alert(error)
+      }
+      else {
+        gc.setUser(user)
       }
     })
 
   }
 
-  // useEffect(()=>{
-
-  //     console.log(inputs)
-        
-  //   },[inputs])
-
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true)
     return () => {
-        document.addEventListener("click", handleClickOutside, true)
+      document.addEventListener("click", handleClickOutside, true)
     }
   }, [wrapperRef]);
 
   return (
 
     <div className='LoginContainer'>
-      <div style={{backgroundImage: `url(${randomPic})`}} className='LeftContainer'>
-        <div className='ArtBlur'/>
+      <div style={{ backgroundImage: `url(${randomPic})` }} className='LeftContainer'>
+        <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
 
@@ -119,6 +161,7 @@ const Login = (props) => {
             <input
               type="email"
               name="email"
+              required
               className="RegistrationInputs"
               maxLength={35}
               value={inputs.email}
@@ -128,6 +171,7 @@ const Login = (props) => {
             <input
               type={isShowing ? "text" : "password"}
               name="password"
+              required
               className="RegistrationInputs"
               maxLength={35}
               minLength={8}
@@ -136,10 +180,10 @@ const Login = (props) => {
             />
             <div className={`ForgotPasswordLink ${underlineForgot ? "ForgotPasswordLinkAlt" : ''}`} onClick={handleForgotPassword} onMouseEnter={() => setUnderlineForgot(true)} onMouseLeave={() => setUnderlineForgot(false)}>Forgot Password?</div>
             {!isShowing &&
-              <img src={EyePassword2} alt='EyeIcon2' className='EyeIconAlt' onClick={handlePasswordClick}/>
+              <img src={EyePassword2} alt='EyeIcon2' className='EyeIconAlt' onClick={handlePasswordClick} />
             }
             {isShowing &&
-              <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick}/>
+              <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick} />
             }
 
             <button className='SubmitButton' onClick={handleSubmit}>Submit</button>
@@ -156,17 +200,23 @@ const Login = (props) => {
               <label>
                 Email:
                 <input
+                  id="resetPass"
                   type="email"
                   className="RegistrationInputs"
                   maxLength={35}
+                  value={passwordResetEmail}
+                  onChange={handleChange}
                 />
               </label>
+              <br /><br />
+              <button id='resetButton' className='SubmitButton' onClick={handleSubmit}>Submit</button>
             </form>
           </div>
         </div>
       }
     </div>
 
-  )}
+  )
+}
 
 export default Login

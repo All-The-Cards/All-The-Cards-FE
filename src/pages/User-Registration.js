@@ -14,6 +14,7 @@ const Registration = (props) => {
   const [isShowing, setIsShowing] = useState(false)
   const [buttonHover, setButtonHover] = useState(false)
   const [inputs, setInputs] = useState({
+    name: "",
     email: "",
     password: ""
   });
@@ -22,21 +23,20 @@ const Registration = (props) => {
   const [randomPic, setRandomPic] = useState()
 
 
-  useEffect(()=>{
-    gc.setSearchBar(props.hasSearchBar)
+  useEffect(() => {
     getRandomBgImg()
   }, [])
 
-  const getRandomBgImg = () =>{
+  const getRandomBgImg = () => {
     server.post("/api/features/random/art").then(response => {
       let res = response
       // console.log(res) 
       setRandomPic(res.randomArt)
     })
-  } 
+  }
 
   const handlePasswordClick = () => {
-      
+
     isShowing ? setIsShowing(false) : setIsShowing(true)
 
   };
@@ -45,41 +45,42 @@ const Registration = (props) => {
 
     const name = event.target.name
     const value = event.target.value
-    setInputs(values => ({...values, [name]: value}))
-  
+    setInputs(values => ({ ...values, [name]: value }))
+
   }
 
   const handleSubmit = (event) => {
 
     event.preventDefault()
-    
+
     let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/
-    
-    if(!inputs.password.match(check))
-    {
+
+    if (!inputs.password.match(check)) {
       alert("Password does not meet requirements. Hover of the password title to view requirements.")
       inputs.password = ""
       return
     }
 
     QueryRegister()
-  
+
   }
 
 
-  const QueryRegister = () =>{
+  const QueryRegister = () => {
     gc.supabase.auth.signUp({
       email: inputs.email,
       password: inputs.password,
-    }).then(({user,session,error})=>{
+      options: {
+        data: {
+          name: inputs.name
+        }
+      }
+    }).then(({ error }) => {
       console.log(error)
-      if(error === null)
-      {
-        console.log("arrived at successful register trigger")
+      if (error === null) {
         setSuccessfulRegister(true)
       }
-      else
-      {
+      else {
         alert(error)
         inputs.email = ""
         inputs.password = ""
@@ -92,20 +93,31 @@ const Registration = (props) => {
 
     /* Login & Registration share some CSS properties (Login-Registration.css) */
     <div className='LoginContainer'>
-      <div style={{backgroundImage: `url(${randomPic})`}} className='LeftContainer'>
-      <div className='ArtBlur'/>
+      <div style={{ backgroundImage: `url(${randomPic})` }} className='LeftContainer'>
+        <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
         <div className='RegistrationTitle'>Register</div>
         <Link to='/login' className={`ActiveUserLink ${underlineActiveUser ? "ActiveUserLinkAlt" : ''}`} onMouseEnter={() => setUnderline(true)} onMouseLeave={() => setUnderline(false)}>Already have an account?</Link>
-      
+
         <form className='FormContainer' onSubmit={handleSubmit}>
 
           {/* EACH GROUP IS A TITLE WITH ITS INPUT THEY ARE SPACED OUT */}
+          <div className='InputTitles'>Fullname</div>
+          <input
+            type="text"
+            name="name"
+            required
+            value={inputs.name}
+            onChange={handleChange}
+            className="RegistrationInputs"
+          />
+
           <div className='InputTitles'>Email</div>
           <input
             type="email"
             name="email"
+            required
             value={inputs.email}
             onChange={handleChange}
             className="RegistrationInputs"
@@ -116,17 +128,18 @@ const Registration = (props) => {
           <input
             type={isShowing ? "text" : "password"}
             name="password"
-            value={inputs.password || ""}
+            required
+            value={inputs.password}
             onChange={handleChange}
             className="RegistrationInputs"
             minLength={8}
             maxLength={20}
           />
           {!isShowing &&
-            <img src={EyePassword2} alt='EyeIcon2' className='RegEyeIconAlt' data-for='passReqs' data-iscapture="true" onClick={handlePasswordClick}/>
+            <img src={EyePassword2} alt='EyeIcon2' className='RegEyeIconAlt' onClick={handlePasswordClick} />
           }
           {isShowing &&
-            <img src={EyePassword} alt='EyeIcon' className='RegEyeIcon' data-for='passReqs' data-iscapture="true" onClick={handlePasswordClick}/>
+            <img src={EyePassword} alt='EyeIcon' className='RegEyeIcon' onClick={handlePasswordClick} />
           }
           {isToolTipShown &&
             <div className='ToolTipTriangle'>
@@ -142,13 +155,14 @@ const Registration = (props) => {
             <div className='SuccessfulTip'>You have successfully registered!</div>
           }
 
-          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)}/>
+          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} />
 
         </form>
       </div>
 
     </div>
 
-  )}
+  )
+}
 
 export default Registration

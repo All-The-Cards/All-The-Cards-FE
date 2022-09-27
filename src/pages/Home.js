@@ -14,69 +14,86 @@ const Home = (props) => {
     // bgImageUrl: "",
     recentDecks: []
   })
-  
+
   const gc = useContext(GlobalContext)
+  const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
+  const { searchQuery, setSearchQuery } = useContext(GlobalContext);
+  const { searchType, setSearchType } = useContext(GlobalContext);
+  const { supabase } = useContext(GlobalContext)
   const nav = useNavigate()
 
-  useEffect(()=>{
+  useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     // getRandomBgImg()
     getRecentDecks()
+
   }, [])
 
+  useEffect(() => {
+
+    console.log(gc.activeSession)
+
+  }, [])
+
+  useEffect(() => {
+
+    console.log(gc.activeUser)
+
+  }, [gc.activeSession])
+
   const updateState = (objectToUpdate) => {
-      setState((previous) => ({
-        ...previous,
-        ...objectToUpdate
-      }))
+    setState((previous) => ({
+      ...previous,
+      ...objectToUpdate
+    }))
   }
   const handleAdvancedClick = () => {
     gc.setSearchType("ADV")
     nav("/search/?adv=true/")
   }
 
-  const getRandomBgImg = () =>{
+  const getRandomBgImg = () => {
     //get random image
     server.post("/api/features/random/art").then(response => {
       let res = response
       // console.log(res) 
-      updateState({bgImageUrl: res.randomArt})
+      updateState({ bgImageUrl: res.randomArt })
       return res.randomArt
     })
-  } 
-  
-  const getRecentDecks = () =>{
+  }
+
+  const getRecentDecks = () => {
     //get random image
     server.post("/api/features/recent/decks").then(response => {
       let res = response
       // console.log(res) 
-      updateState({recentDecks: res})
+      updateState({ recentDecks: res })
       return res
     })
   }
 
   return (
     <div className="Container">
-      <div className="SearchContent" style = {{ backgroundImage: 'url(' + state.bgImageUrl + ')'}}>
-        <div className="blur"/>
+      <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
+        <div className="blur" />
         <div className="SearchBarObject">
-          <SearchBar/>
+          <SearchBar />
           <button className="FancyButton" onClick={handleAdvancedClick}>Advanced</button>
         </div>
       </div>
       {/* this is all hardcoded, will be dynamic content */}
       <div className="DeckContent">
-        {state.recentDecks.length > 0 && 
+        {state.recentDecks.length > 0 &&
           <div>
 
-          <header className="HeaderText">Recent Decks</header>
-          { state.recentDecks.map((item, i) => <DeckTileObject data={item} key={i}/>) }
-        
+            <header className="HeaderText">Recent Decks</header>
+            {state.recentDecks.map((item, i) => <DeckTileObject data={item} key={i} />)}
+
           </div>
         }
         {/* ignore this div, test data */}
         <div>
-        {/* <span><DeckTileObject data={{
+          {/* <span><DeckTileObject data={{
           cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/b/abff6c81-65a4-48fa-ba8f-580f87b0344a.jpg?1634347351",
           id: "",
           name: "Deck Test",
