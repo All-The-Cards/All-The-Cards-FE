@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Deck from './pages/Deck';
 import Card from './pages/Card';
 import User from './pages/User';
+import UserSettings from './pages/User-Settings';
 import DeckEditor from './pages/Deck-Editor';
 import CardCreator from './pages/CardCreator';
 import Registration from './pages/User-Registration';
@@ -37,6 +38,7 @@ function App() {
                     <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false} />} />
                     <Route exact path='/registration' element={<Registration hasSearchBar={false} />} />
                     <Route exact path='/login' element={<Login hasSearchBar={false} />} />
+                    <Route exact path='/settings' element={<UserSettings hasSearchBar={true} />} />
                     <Route exact path='/reset-password' element={<ResetPassword hasSearchBar={false} />} />
                 </Routes>
             </GlobalProvider>

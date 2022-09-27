@@ -91,6 +91,11 @@ const Navbar = () => {
             setUserMenu(false)
             nav('/registration')
         }
+        else if (id === '7') {
+            setLayerMenu(false)
+            setUserMenu(false)
+            nav('/settings')
+        }
         else if (id === 'logout') {
             setLayerMenu(false)
             setLoggedUserMenu(false)
@@ -104,7 +109,7 @@ const Navbar = () => {
 
     function displayName() {
 
-        if (gc.activeUser)
+        if (gc.activeUser && gc.activeUser.user_metadata.name)
             name = gc.activeUser.user_metadata.name.split(" ")[0]
 
         if (name !== "")
@@ -115,13 +120,13 @@ const Navbar = () => {
     };
 
     const logout = () => {
-
         gc.supabase.auth.signOut()
             .then(({ error }) => {
                 console.log(error)
                 if (error === null) {
                     alert("You have successfully logged out")
                     setActiveSession(null)
+                    nav('/')
                 }
                 else {
                     alert(error)
@@ -180,7 +185,7 @@ const Navbar = () => {
                         <div className="UserMenu" ref={wrapperRef}>
                             <div id={'4'} className="MenuItems" onClick={handleClose}>Login</div>
                             <div id={'5'} className="MenuItems" onClick={handleClose}>Register</div>
-                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
+                            {/* <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div> */}
                         </div>
                     </div>
                 }
@@ -189,7 +194,8 @@ const Navbar = () => {
                         <div className="UserMenu" ref={wrapperRef}>
                             <div className="MenuText">Hello {displayName()}</div>
                             <div id={'0'} className="MenuItems" onClick={handleClose}>Profile</div>
-                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
+                            {/* <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div> */}
+                            <div id={'7'} className="MenuItems" onClick={handleClose}>Settings</div>
                             <div id={'logout'} className="MenuItems" onClick={handleClose}>Signout</div>
                         </div>
                     </div>
