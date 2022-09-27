@@ -88,11 +88,11 @@ const UserSettings = (props) => {
         inputs: {
           ...state.inputs, 
           email: gc.activeUser.email,
-          username: data.username,
-          bio: data.bio,
-          name: data.name,
-          location: data.location,
-          avatar: data.avatar
+          username: data.username || "",
+          bio: data.bio || "",
+          name: data.name || "",
+          location: data.location || "",
+          avatar: data.avatar || ""
         }
       })
     }
