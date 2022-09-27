@@ -99,7 +99,15 @@ const UserSettings = (props) => {
 
 
     const submitUserSettings = () => {
-      console.log(state.inputs)
+      console.log("state.inputs:", state.inputs)
+      let sendData = {
+        email: "",
+        username: "",
+        bio: "",
+        name: "",
+        location: "",
+        avatar: ""
+      }
       //if password update matches, send password change
       if (state.inputs.typePassword === state.inputs.confirmPassword && state.inputs.typePassword !== ""){
         updateState({
@@ -108,10 +116,19 @@ const UserSettings = (props) => {
             password: state.inputs.typePassword
           }
         })
+        sendData.password = state.inputs.typePassword
       }
       else if (state.inputs.typePassword !== "") {
         console.log("Password did not match")
       }
+      sendData.email = state.inputs.email
+      sendData.username = state.inputs.username
+      sendData.bio = state.inputs.bio
+      sendData.name = state.inputs.name
+      sendData.location = state.inputs.location
+      sendData.avatar = state.inputs.avatar
+
+      console.log("Sending: ", sendData)
       fetch(server.buildAPIUrl("/api/features/user/update"),
         {
           method: 'POST',
@@ -121,7 +138,7 @@ const UserSettings = (props) => {
             'token': gc.activeSession.access_token
           },
           //send inputs
-          body: JSON.stringify(state.inputs),
+          body: JSON.stringify(state.sendData),
 
         }
       )
