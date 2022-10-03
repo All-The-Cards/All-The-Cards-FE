@@ -127,6 +127,9 @@ const Navbar = () => {
         if (gc.activeUser && gc.activeUser.user_metadata.name) {
             setName(gc.activeUser.user_metadata.name.split(" ")[0])
         }
+        else {
+            setName("User")
+        }
 
     };
 
