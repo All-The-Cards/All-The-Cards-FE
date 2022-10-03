@@ -124,6 +124,7 @@ const Login = () => {
       }
       else if (session !== null) {
         gc.setActiveSession(session)
+        localStorage.setItem("userName", JSON.stringify(session.user.user_metadata.name.split(" ")[0]));
       }
     })
 
