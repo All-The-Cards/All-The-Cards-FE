@@ -44,8 +44,8 @@ const UserSettings = (props) => {
       gc.setSearchBar(props.hasSearchBar)
       
       let id = "id="
-      if(gc.activeSession.access_token){
-      id += gc.activeUser.id
+      if(gc.activeSession){
+        id += gc.activeSession.user.id
       // id += "6a0cd1d6-1278-45d0-aa0e-419ae50add06"
       }
       else {
@@ -57,7 +57,7 @@ const UserSettings = (props) => {
     }, [])
 
     const getUserById = (query) => {
-      console.log(query)
+      // console.log(query)
       query = "/api/get/user/" + query
       //if query is empty, don't send
       if (query.trim() === "/api/get/user/" ) {
@@ -75,6 +75,7 @@ const UserSettings = (props) => {
           updateState({
             data: response[0],
           })
+          // console.log(response[0])
           populateUserData(response[0])
         }  
       })
@@ -87,7 +88,7 @@ const UserSettings = (props) => {
       updateState({
         inputs: {
           ...state.inputs, 
-          email: gc.activeUser.email,
+          email: gc.activeSession.user.email,
           username: data.username || "",
           bio: data.bio || "",
           name: data.name || "",
@@ -99,7 +100,7 @@ const UserSettings = (props) => {
 
 
     const submitUserSettings = () => {
-      console.log("state.inputs:", state.inputs)
+      // console.log("state.inputs:", state.inputs)
       let sendData = {
         email: "",
         username: "",
