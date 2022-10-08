@@ -172,6 +172,46 @@ const Card = (props) => {
         })
       }
     }
+
+    const setAsAvatar = () => {
+      let imgLink = ""
+      if (state.data.image_uris !== null) {
+          imgLink = state.data.image_uris.art_crop
+      }
+      else if (state.data.card_faces) {
+          imgLink = state.data.card_faces[0].image_uris.art_crop
+      }
+      else {
+        imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+      }
+      const sendData = {
+        avatar: imgLink
+      }
+
+      console.log("Setting avatar: ", sendData)
+      fetch(server.buildAPIUrl("/api/features/user/update"),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token': gc.activeSession.access_token
+          },
+          //send inputs
+          body: JSON.stringify(sendData),
+
+        }
+      )
+        .then((response) => {
+          console.log(response);
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   return (
     <>
       <div className='Container'>
@@ -187,6 +227,10 @@ const Card = (props) => {
           <div className="CardPage-Left">
             <div className="LargeCard">
             {state.card}
+            <button className="FancyButton"
+             onClick={() => {
+              setAsAvatar()
+             }}>Avatar</button>
             </div>
           </div>
           <div className="CardPage-Right">

@@ -79,7 +79,7 @@ const Navbar = () => {
         if (id === '0') {
             setLayerMenu(false)
             setLoggedUserMenu(false)
-            nav(`/user/?id=${activeUser.id}`)
+            nav(`/user/?id=${activeSession.user.id}`)
         }
         else if (id === '1') {
             setLayerMenu(false)
@@ -124,8 +124,8 @@ const Navbar = () => {
 
     const getName = () => {
 
-        if (gc.activeUser && gc.activeUser.user_metadata.name) {
-            setName(gc.activeUser.user_metadata.name.split(" ")[0])
+        if (gc.activeSession && gc.activeSession.user.user_metadata.name) {
+            setName(gc.activeSession.user.user_metadata.name.split(" ")[0])
         }
         else {
             setName("User")
