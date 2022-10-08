@@ -31,15 +31,15 @@ const Home = (props) => {
 
   useEffect(() => {
 
-    console.log(gc.activeSession)
+    console.log("Active Session:", gc.activeSession)
 
   }, [])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log(gc.activeUser)
+  //   console.log(gc.activeUser)
 
-  }, [gc.activeSession])
+  // }, [gc.activeSession])
 
   const updateState = (objectToUpdate) => {
     setState((previous) => ({
