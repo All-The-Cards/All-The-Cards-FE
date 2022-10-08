@@ -107,7 +107,7 @@ const UserSettings = (props) => {
         bio: "",
         name: "",
         location: "",
-        avatar: ""
+        // avatar: ""
       }
       //if password update matches, send password change
       if (state.inputs.typePassword === state.inputs.confirmPassword && state.inputs.typePassword !== ""){
@@ -127,7 +127,7 @@ const UserSettings = (props) => {
       sendData.bio = state.inputs.bio
       sendData.name = state.inputs.name
       sendData.location = state.inputs.location
-      sendData.avatar = state.inputs.avatar
+      // sendData.avatar = state.inputs.avatar
 
       console.log("Sending: ", sendData)
       fetch(server.buildAPIUrl("/api/features/user/update"),
@@ -139,7 +139,7 @@ const UserSettings = (props) => {
             'token': gc.activeSession.access_token
           },
           //send inputs
-          body: JSON.stringify(state.sendData),
+          body: JSON.stringify(sendData),
 
         }
       )
@@ -229,13 +229,13 @@ const UserSettings = (props) => {
                       onChange={(e) => {updateState({inputs: {...state.inputs, location: e.target.value}})}}
                     />
                 </div>
-                <div className="AdvOption">
+                {/* <div className="AdvOption">
                     Avatar: 
                     <input
                       value={state.inputs.avatar}
                       onChange={(e) => {updateState({inputs: {...state.inputs, avatar: e.target.value}})}}
                     />
-                </div>
+                </div> */}
                 <button className='FancyButton'>Save</button>
             </form>
           </div>
