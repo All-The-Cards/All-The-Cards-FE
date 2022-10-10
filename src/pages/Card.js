@@ -236,13 +236,9 @@ const Card = (props) => {
             {state.card}
             </div>
             <br></br>
-            <button className="FancyButton"
-             onClick={() => {
-              setAsAvatar()
-             }}>Set as Avatar</button>
             <br></br>
-            <br></br>
-            <div style={{fontSize:'24px'}}><b>Market Info:</b></div>
+            <div id="priceInfo">
+            {/* <div style={{fontSize:'24px'}}><b>Market Info:</b></div> */}
             {/* {
               (state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
               <div style={{fontSize:'24px'}}><b>Market Info:</b></div>
@@ -277,13 +273,13 @@ const Card = (props) => {
               <a href={"https://www.tcgplayer.com/product/" + state.data.tcgplayer_id}>
               <i>View on TCGPlayer</i>
               </a>
-              <br></br>
-              <br></br>
             </div>
             }
             {
               state.data.prices.tix && 
-              <div>{("MTGO Price: " + (state.data.prices.tix && state.data.prices.tix + " TIX"))}
+              <div>
+              <br></br>
+              {("MTGO Price: " + (state.data.prices.tix && state.data.prices.tix + " TIX"))}
               <br></br>
               </div>
             }
@@ -300,6 +296,7 @@ const Card = (props) => {
               !(state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
               <div><i>Pricing info not available</i></div>
             }
+            </div>
             {/* <div onClick={() => {
               toggleFavorite()
              }}>
@@ -316,9 +313,15 @@ const Card = (props) => {
                     
                   { state.versionOptions }
                 </select> }
+                  <button className="FancyButton" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
+                  onClick={() => {
+                    setAsAvatar()
+                  }}>Set as Avatar</button>
+                </div>
                 <div className="HeaderText" id="cardName"> 
                 {state.data.name}
                 </div>
+                <div>
               </div>
               <div className="SubHeaderText" id="typeLine"> 
               {state.data.type_one} {(state.data.subtype_one !== null) && " - "}{state.data.subtype_one}
@@ -353,13 +356,13 @@ const Card = (props) => {
               }
               </div>
               <div className="BodyText" id="legalities"> 
-              <b>Legality:</b> {"\n"}
-              <div className='legalities-Left'>
-              {state.legalitiesDisplayLeft}
-              </div>
-              <div className='legalities-Right'>
-              {state.legalitiesDisplayRight}
-              </div>
+                <b>Legality:</b> {"\n"}
+                <div className='legalities-Left'>
+                {state.legalitiesDisplayLeft}
+                </div>
+                <div className='legalities-Right'>
+                {state.legalitiesDisplayRight}
+                </div>
               </div>
             </div>
           </div>
