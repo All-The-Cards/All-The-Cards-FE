@@ -26,7 +26,9 @@ const Login = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    getRandomBgImg()
+    // getRandomBgImg()
+    
+    document.title = "Login"
   }, [])
 
   const getRandomBgImg = () => {

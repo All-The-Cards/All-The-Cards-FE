@@ -42,6 +42,7 @@ const UserSettings = (props) => {
 
     useEffect(() => {
       gc.setSearchBar(props.hasSearchBar)
+      document.title = "Settings"
       
       let id = "id="
       if(gc.activeSession){
@@ -49,7 +50,7 @@ const UserSettings = (props) => {
       // id += "6a0cd1d6-1278-45d0-aa0e-419ae50add06"
       }
       else {
-      nav('/')
+        nav('/')
       }
 
       // console.log(id)
@@ -130,6 +131,7 @@ const UserSettings = (props) => {
       // sendData.avatar = state.inputs.avatar
 
       console.log("Sending: ", sendData)
+
       fetch(server.buildAPIUrl("/api/features/user/update"),
         {
           method: 'POST',
@@ -143,15 +145,16 @@ const UserSettings = (props) => {
 
         }
       )
-        .then((response) => {
-          console.log(response);
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((response) => {
+        console.log(response);
+      })
+      
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
   return (
     <>

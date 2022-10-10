@@ -10,6 +10,7 @@ const CardCreator = (props) => {
   const gc = useContext(GlobalContext)
 
   useEffect(() => {
+    document.title = "Card Creator"
     gc.setSearchBar(props.hasSearchBar)
   }, [])
   

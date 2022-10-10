@@ -24,6 +24,7 @@ const Home = (props) => {
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
+    document.title = "All The Cards"
     // getRandomBgImg()
     getRecentDecks()
 

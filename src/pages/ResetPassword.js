@@ -24,7 +24,8 @@ const ResetPassword = (props) => {
 
   useEffect(() => {
     setSearchBar(props)
-    getRandomBgImg()
+    document.title = "Reset Password"
+    // getRandomBgImg()
     setHash(window.location.hash)
   }, [])
 

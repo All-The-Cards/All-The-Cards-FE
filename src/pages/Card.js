@@ -12,6 +12,7 @@ const Card = (props) => {
 
     const [state, setState] = useState({
       card: <div></div>,
+      isFavorited: false,
       data: {},
       versionOptions: [<option value={"null"}>null</option>],
       hasGottenVersions: false,
@@ -212,6 +213,12 @@ const Card = (props) => {
           console.log(error);
         });
     }
+
+    const toggleFavorite = () => {
+      updateState({
+        isFavorited: !state.isFavorited
+      })
+    }
   return (
     <>
       <div className='Container'>
@@ -227,11 +234,61 @@ const Card = (props) => {
           <div className="CardPage-Left">
             <div className="LargeCard">
             {state.card}
+            </div>
+            <br></br>
             <button className="FancyButton"
              onClick={() => {
               setAsAvatar()
-             }}>Avatar</button>
+             }}>Set as Avatar</button>
+            <br></br>
+            <br></br>
+            {
+            state.data.prices.usd && 
+              <div>{"Market (USD): " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
+              <br></br>
+              </div>
+            }
+            {/* {state.data.prices.usd_foil && " / Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") } */}
+            {
+            state.data.prices.eur &&
+              <div>{"Market (EUR): " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }
+              <br></br>
+              </div>
+            }
+            {/* {state.data.prices.eur_foil && " / Foil: " + ((state.data.prices.eur_foil && "€" + state.data.prices.eur_foil) || "N/A") } */}
+            {
+            state.data.tcgplayer_id && 
+            <div>
+              <a href={"https://www.tcgplayer.com/product/" + state.data.tcgplayer_id}>
+              <i>View on TCGPlayer</i>
+              </a>
+              <br></br>
+              <br></br>
             </div>
+            }
+            {
+              state.data.prices.tix && 
+              <div>{("MTGO Price: " + (state.data.prices.tix && state.data.prices.tix + " TIX"))}
+              <br></br>
+              </div>
+            }
+            {
+              state.data.mtgo_id && 
+              <div>
+                <a href={"https://www.cardhoarder.com/cards/" + state.data.mtgo_id}>
+                <i>View on Cardhoarder</i> 
+                </a>
+                <br></br>
+              </div>
+            }
+            {/* <div onClick={() => {
+              toggleFavorite()
+             }}>
+            { state.isFavorited &&
+              <div style={{backgroundColor: "Gold", width: '20px', height:'20px'}}></div> ||
+              <div style={{backgroundColor: "#dadada", width: '20px', height:'20px'}}></div>
+            }
+            </div> */}
           </div>
           <div className="CardPage-Right">
             <div className="CardPage-RightContent">
