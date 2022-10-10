@@ -242,20 +242,35 @@ const Card = (props) => {
              }}>Set as Avatar</button>
             <br></br>
             <br></br>
+            <div style={{fontSize:'24px'}}><b>Market Info:</b></div>
+            {/* {
+              (state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
+              <div style={{fontSize:'24px'}}><b>Market Info:</b></div>
+            } */}
             {
             state.data.prices.usd && 
-              <div>{"Market (USD): " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
+              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
               <br></br>
               </div>
             }
-            {/* {state.data.prices.usd_foil && " / Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") } */}
             {
+              state.data.prices.usd_foil && 
+                <div>{"Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") }
+                <br></br>
+                </div>
+            }
+            {/* {
             state.data.prices.eur &&
-              <div>{"Market (EUR): " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }
+              <div>{"EUR: " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }
               <br></br>
               </div>
             }
-            {/* {state.data.prices.eur_foil && " / Foil: " + ((state.data.prices.eur_foil && "€" + state.data.prices.eur_foil) || "N/A") } */}
+            {
+              state.data.prices.eur_foil && 
+                <div>{"Foil: " + ((state.data.prices.eur_foil && "€" + state.data.prices.eur_foil) || "N/A") }
+                <br></br>
+                </div>
+            } */}
             {
             state.data.tcgplayer_id && 
             <div>
@@ -280,6 +295,10 @@ const Card = (props) => {
                 </a>
                 <br></br>
               </div>
+            }
+            {
+              !(state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
+              <div><i>Pricing info not available</i></div>
             }
             {/* <div onClick={() => {
               toggleFavorite()
