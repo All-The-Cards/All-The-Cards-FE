@@ -106,9 +106,9 @@ const User = (props) => {
           </div>
         </div>
         <div className="UserPageContent" id="deckContent">
-        <div className="HeaderText">
+        {state.decks.length > 1 && <div className="HeaderText">
           Decks
-        </div>
+        </div>}
         { state.decks.map((item, i) => <DeckTileObject data={item} key={i}/>) }
         </div>
       </div>

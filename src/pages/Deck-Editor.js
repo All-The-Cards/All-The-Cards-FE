@@ -16,6 +16,8 @@ const DeckEditor = (props) => {
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
+    document.title = "Deck Editor"
+          
     setState((previous) => ({
       ...previous,
       cards: wipDeck.cards

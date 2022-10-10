@@ -24,7 +24,8 @@ const Registration = (props) => {
 
 
   useEffect(() => {
-    getRandomBgImg()
+    // getRandomBgImg()
+    document.title = "Registration"
   }, [])
 
   const getRandomBgImg = () => {

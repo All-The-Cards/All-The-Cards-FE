@@ -80,3 +80,14 @@
     width: 50%;
     /* background-color: blue; */
 }
+
+#priceInfo {
+    background-color: #e8e8e8;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    /* max-width: 200px; */
+    /* min-width: 200px; */
+    width: 200px;
+    margin: auto;
+}
