@@ -17,12 +17,12 @@ const DeckEditor = (props) => {
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     document.title = "Deck Editor"
-          
+
     setState((previous) => ({
       ...previous,
       cards: wipDeck.cards
     }))
-  }, [])
+  }, [gc])
   const handleChanges = (event) => {
     setWipDeck((previous) => ({
       ...previous,
@@ -59,7 +59,7 @@ const DeckEditor = (props) => {
   }
 
   const formatWipDeck = () => {
-    let result = {...wipDeck,cards: [], coverCard: wipDeck.coverCard.id}
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id }
     wipDeck.cards.forEach(card => {
       result.cards.push(card.id)
     });
@@ -90,6 +90,20 @@ const DeckEditor = (props) => {
         console.log(error);
       });
   }
+
+  const clearDeck = (event) => {
+    gc.setWipDeck({
+      authorID: "",
+      cards: [],
+      coverCard: "",
+      deckID: "",
+      description: "",
+      formatTag: "",
+      tags: [],
+      title: ""
+    })
+  }
+
   return (
     <div>
       <form>
@@ -121,10 +135,12 @@ const DeckEditor = (props) => {
           <option value="gladiator">Gladiator</option>
         </select>
         <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
-        <input type="button" onClick={handleSubmit} value="Save Deck" />
         <>{wipDeck.tags.map((tag, index) => (
           <>{tag}, </>
         ))}</>
+        <input type="button" onClick={handleSubmit} value="Save Deck" />
+        <input type="button" onClick={clearDeck} value="Clear Deck" />
+
       </form>
       {state.cards.map((card, index) => (
         <CardObject data={card} />
