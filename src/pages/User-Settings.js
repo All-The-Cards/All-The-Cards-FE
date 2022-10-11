@@ -174,64 +174,78 @@ const UserSettings = (props) => {
               </div>
             </div>
           </div>
-          <div className="UserPage-Right">
-            <div className="HeaderText" style={{fontSize: "28px"}}>
-              User Settings
+          <div className="UserSettingsPage-Right">
+            <div className="HeaderText" style={{fontSize: "28px", marginBottom:'20px'}}>
+              Settings
             </div>
             <form onSubmit={(event) => { 
               console.log("form submit")
               event.preventDefault()
               submitUserSettings()
             }}>
-                <div className="AdvOption">
-                    Email: 
-                    <input
-                      value={state.inputs.email}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, email: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Change Password: 
-                    <input
-                      value={state.inputs.typePassword}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, typePassword: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Confirm Password: 
-                    <input
-                      value={state.inputs.confirmPassword}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, confirmPassword: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Username: 
-                    <input
-                      value={state.inputs.username}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, username: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Bio: 
-                    <input
-                      value={state.inputs.bio}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, bio: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Name: 
-                    <input
-                      value={state.inputs.name}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, name: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Location: 
-                    <input
-                      value={state.inputs.location}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, location: e.target.value}})}}
-                    />
-                </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Email: 
+              </div>
+              <input
+                value={state.inputs.email}
+                onChange={(e) => {updateState({inputs: {...state.inputs, email: e.target.value}})}}
+              />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Change Password: 
+              </div>
+                  <input
+                    value={state.inputs.typePassword}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, typePassword: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Confirm Password: 
+              </div>
+                  <input
+                    value={state.inputs.confirmPassword}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, confirmPassword: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Username: 
+              </div>
+                  <input
+                    value={state.inputs.username}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, username: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Bio: 
+              </div>
+                  <input
+                    value={state.inputs.bio}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, bio: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Name: 
+              </div>
+                  <input
+                    value={state.inputs.name}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, name: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Location: 
+              </div>
+                  <input
+                    value={state.inputs.location}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, location: e.target.value}})}}
+                  />
+            </div>
                 {/* <div className="AdvOption">
                     Avatar: 
                     <input

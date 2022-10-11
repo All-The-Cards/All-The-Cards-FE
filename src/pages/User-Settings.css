@@ -18,11 +18,11 @@
 
 }
 
-.UserPage-Right {
+.UserSettingsPage-Right {
     /* background-color: rgba(0,0,255,.2); */
     float: left;
-    max-width: 30%;
-    min-width: 15%;
+    max-width: 40%;
+    min-width: 20%;
     /* min-width: 400px; */
     /* margin-top: 10px;
     margin-left: 20px;
@@ -55,4 +55,13 @@
     /* background-color: red; */
     margin-top: 140px;
     width: 1110px;
+}
+
+#userSettings {
+    /* background-color: aliceblue; */
+    width: 350px;
+}
+
+#userSettingsText {
+    margin-left: -20px;
 }
