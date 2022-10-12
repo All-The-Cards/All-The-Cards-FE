@@ -86,6 +86,15 @@ const Deck = (props) => {
     nav('/deckeditor')
   }
 
+  const copyURLToClipboard = (event) => {
+    let element = document.createElement('input');
+    element.value = window.location.href;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
+  }
+
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
       {state.data.name} - {state.data.user_name}
@@ -109,6 +118,7 @@ const Deck = (props) => {
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
         <input type="button" onClick={copyDeck} value="Copy Deck" />
+        <input type="button" onClick={copyURLToClipboard} value="Get Shareable Link" />
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
         {state.viewMode === "Spread" ? <>
