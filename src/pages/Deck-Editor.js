@@ -2,6 +2,8 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
 import * as server from "../functions/ServerTalk";
+import Footer from '../components/Footer/Footer';
+import './Deck-Editor.css'
 
 const DeckEditor = (props) => {
 
@@ -105,7 +107,7 @@ const DeckEditor = (props) => {
   }
 
   return (
-    <div>
+    <div className='Page'>
       <form>
         <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" />
         <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" />
@@ -146,6 +148,7 @@ const DeckEditor = (props) => {
         <CardObject data={card} />
       ))}
       {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
+      <Footer />
     </div>
   )
 }
