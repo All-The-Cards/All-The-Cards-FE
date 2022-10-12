@@ -1,7 +1,7 @@
-import React from 'react';
+import { React, useContext } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { GlobalContext, GlobalProvider } from './context/GlobalContext';
+import { GlobalProvider } from './context/GlobalContext';
 
 // Pages
 import Home from './pages/Home';
@@ -16,9 +16,10 @@ import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword'
+import Footer from './components/Footer/Footer';
+
 
 function App() {
-
     return (
         <BrowserRouter>
             <GlobalProvider>

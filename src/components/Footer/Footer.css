@@ -1,0 +1,30 @@
+.FooterContainer {
+    background-color: #E8E8E8;
+    height: 65px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 48px;
+}
+
+.Legality {
+    height: 50%;
+    font-size: 12px;
+    text-align: center;
+}
+
+.NavigationBox {
+    text-align: center;
+    height: 50%;
+    padding-top: 5px;
+}
+
+.Links {
+    color: rgba(219, 30, 79, 1);
+    text-decoration: underline;
+    /* margin-right: 10px; */
+}
+
+.Links:hover {
+    color: rgba(113, 56, 209, 1);
+    text-decoration: none;
+}

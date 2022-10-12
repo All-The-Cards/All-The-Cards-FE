@@ -26,6 +26,7 @@ const Login = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
+    gc.setFooter(false)
     getRandomBgImg()
   }, [])
 

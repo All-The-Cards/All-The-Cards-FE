@@ -6,6 +6,7 @@ import * as utilities from '../functions/Utilities.js';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
+import Footer from '../components/Footer/Footer.js';
 
 const Deck = (props) => {
 
@@ -104,6 +105,7 @@ const Deck = (props) => {
           ))}
         </> : <></>}
       </div>
+      <Footer />
     </div>
   );
 

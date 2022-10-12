@@ -1,10 +1,11 @@
 import { React, useState, useEffect, useContext } from 'react';
+import Footer from '../components/Footer/Footer';
 import { GlobalContext } from "../context/GlobalContext";
 
 const CardCreator = (props) => {
 
   const [state, setState] = useState({
-    
+
   })
 
   const gc = useContext(GlobalContext)
@@ -12,14 +13,18 @@ const CardCreator = (props) => {
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
   }, [])
-  
+
 
   return (
 
     <div>
-        CardCreator
+      CardCreator
+
+      {/* Place code above this... */}
+      <Footer />
     </div>
 
-  )}
+  )
+}
 
 export default CardCreator
