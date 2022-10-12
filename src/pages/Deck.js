@@ -21,7 +21,8 @@ const Deck = (props) => {
       cards: []
     },
     viewMode: "Spread",
-    compactView: false
+    compactView: false,
+    shared: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -87,6 +88,19 @@ const Deck = (props) => {
     nav('/deckeditor')
   }
 
+  const copyURLToClipboard = (event) => {
+    let element = document.createElement('input');
+    element.value = window.location.href;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
+    setState((previous) => ({
+      ...previous,
+      shared: true
+    }))
+  }
+
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
       {state.data.name} - {state.data.user_name}
@@ -110,6 +124,8 @@ const Deck = (props) => {
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
         <input type="button" onClick={copyDeck} value="Copy Deck" />
+        {/* TODO:: notification instead of button text switch, replace text with icon */}
+        <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
         {state.viewMode === "Spread" ? <>
