@@ -26,8 +26,8 @@ const Login = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    gc.setFooter(false)
-    getRandomBgImg()
+    // getRandomBgImg()
+    document.title = "Login"
   }, [])
 
   const getRandomBgImg = () => {
@@ -125,6 +125,7 @@ const Login = () => {
       }
       else if (session !== null) {
         gc.setActiveSession(session)
+        localStorage.setItem("userName", JSON.stringify(session.user.user_metadata.name.split(" ")[0]));
       }
     })
 

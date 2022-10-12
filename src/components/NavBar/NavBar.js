@@ -21,7 +21,7 @@ const Navbar = () => {
     const gc = useContext(GlobalContext);
     const { activeSession, setActiveSession } = useContext(GlobalContext);
     const { activeUser, setUser } = useContext(GlobalContext);
-    let name = "";
+    const [name, setName] = useState("");
 
     // Variables strickly on the NavBar
     const [layerShadow, setLayerShadow] = useState(false);
@@ -29,6 +29,21 @@ const Navbar = () => {
     const [openLayerMenu, setLayerMenu] = useState(false);
     const [openUserMenu, setUserMenu] = useState(false);
     const [loggedInUserMenu, setLoggedUserMenu] = useState(false);
+
+    useEffect(() => {
+
+        if (activeSession === null) {
+            let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
+            setActiveSession(JSON.parse(data))
+            data = localStorage.getItem("userName")
+            setName(JSON.parse(data))
+        }
+
+    }, []);
+
+    useEffect(() => {
+        getName()
+    }, [activeSession]);
 
     // Opens the menu when an icon is clicked
     const onClickHandler = () => {
@@ -64,7 +79,7 @@ const Navbar = () => {
         if (id === '0') {
             setLayerMenu(false)
             setLoggedUserMenu(false)
-            nav(`/user/?id=${activeUser.id}`)
+            nav(`/user/?id=${activeSession.user.id}`)
         }
         else if (id === '1') {
             setLayerMenu(false)
@@ -93,7 +108,7 @@ const Navbar = () => {
         }
         else if (id === '7') {
             setLayerMenu(false)
-            setUserMenu(false)
+            setLoggedUserMenu(false)
             nav('/settings')
         }
         else if (id === 'logout') {
@@ -107,15 +122,14 @@ const Navbar = () => {
 
     };
 
-    function displayName() {
+    const getName = () => {
 
-        if (gc.activeUser && gc.activeUser.user_metadata.name)
-            name = gc.activeUser.user_metadata.name.split(" ")[0]
-
-        if (name !== "")
-            return name
-        else
-            return "User"
+        if (gc.activeSession && gc.activeSession.user.user_metadata.name) {
+            setName(gc.activeSession.user.user_metadata.name.split(" ")[0])
+        }
+        else {
+            setName("User")
+        }
 
     };
 
@@ -126,6 +140,7 @@ const Navbar = () => {
                 if (error === null) {
                     alert("You have successfully logged out")
                     setActiveSession(null)
+                    localStorage.removeItem("userName")
                     nav('/')
                 }
                 else {
@@ -192,7 +207,7 @@ const Navbar = () => {
                 {loggedInUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
-                            <div className="MenuText">Hello {displayName()}</div>
+                            <div className="MenuText">Hello {name}</div>
                             <div id={'0'} className="MenuItems" onClick={handleClose}>Profile</div>
                             {/* <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div> */}
                             <div id={'7'} className="MenuItems" onClick={handleClose}>Settings</div>

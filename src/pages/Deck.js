@@ -75,9 +75,27 @@ const Deck = (props) => {
     console.log(state.compactView)
   }
 
+  const copyDeck = (event) => {
+    gc.setWipDeck((previous) => ({
+      ...previous,
+      title: state.data.name,
+      description: state.data.description,
+      tags: state.data.tags,
+      formatTag: state.data.format,
+      cards: state.data.cards
+    }))
+    nav('/deckeditor')
+  }
+
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
-      {state.data.name}
+      {state.data.name} - {state.data.user_name}
+      <br/>
+      {state.data.description}
+      <br/>
+      Format: {state.data.format}
+      <br/>
+      Tags: {state.data.tags != undefined ? (state.data.tags.map((tag, index) => (<>{tag},</>))) : (<></>) }
       <div style={{ display: "flex", flexFlow: "row nowrap" }}>
         <label>
           View mode:
@@ -91,6 +109,7 @@ const Deck = (props) => {
           Compact:
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
+        <input type="button" onClick={copyDeck} value="Copy Deck" />
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
         {state.viewMode === "Spread" ? <>

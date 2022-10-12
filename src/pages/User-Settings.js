@@ -42,14 +42,15 @@ const UserSettings = (props) => {
 
     useEffect(() => {
       gc.setSearchBar(props.hasSearchBar)
+      document.title = "Settings"
       
       let id = "id="
-      if(gc.activeSession.access_token){
-      id += gc.activeUser.id
+      if(gc.activeSession){
+        id += gc.activeSession.user.id
       // id += "6a0cd1d6-1278-45d0-aa0e-419ae50add06"
       }
       else {
-      nav('/')
+        nav('/')
       }
 
       // console.log(id)
@@ -57,7 +58,7 @@ const UserSettings = (props) => {
     }, [])
 
     const getUserById = (query) => {
-      console.log(query)
+      // console.log(query)
       query = "/api/get/user/" + query
       //if query is empty, don't send
       if (query.trim() === "/api/get/user/" ) {
@@ -75,6 +76,7 @@ const UserSettings = (props) => {
           updateState({
             data: response[0],
           })
+          // console.log(response[0])
           populateUserData(response[0])
         }  
       })
@@ -87,7 +89,7 @@ const UserSettings = (props) => {
       updateState({
         inputs: {
           ...state.inputs, 
-          email: gc.activeUser.email,
+          email: gc.activeSession.user.email,
           username: data.username || "",
           bio: data.bio || "",
           name: data.name || "",
@@ -99,14 +101,14 @@ const UserSettings = (props) => {
 
 
     const submitUserSettings = () => {
-      console.log("state.inputs:", state.inputs)
+      // console.log("state.inputs:", state.inputs)
       let sendData = {
         email: "",
         username: "",
         bio: "",
         name: "",
         location: "",
-        avatar: ""
+        // avatar: ""
       }
       //if password update matches, send password change
       if (state.inputs.typePassword === state.inputs.confirmPassword && state.inputs.typePassword !== ""){
@@ -126,9 +128,10 @@ const UserSettings = (props) => {
       sendData.bio = state.inputs.bio
       sendData.name = state.inputs.name
       sendData.location = state.inputs.location
-      sendData.avatar = state.inputs.avatar
+      // sendData.avatar = state.inputs.avatar
 
       console.log("Sending: ", sendData)
+
       fetch(server.buildAPIUrl("/api/features/user/update"),
         {
           method: 'POST',
@@ -138,19 +141,20 @@ const UserSettings = (props) => {
             'token': gc.activeSession.access_token
           },
           //send inputs
-          body: JSON.stringify(state.sendData),
+          body: JSON.stringify(sendData),
 
         }
       )
-        .then((response) => {
-          console.log(response);
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((response) => {
+        console.log(response);
+      })
+      
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
   return (
     <>
@@ -170,71 +174,85 @@ const UserSettings = (props) => {
               </div>
             </div>
           </div>
-          <div className="UserPage-Right">
-            <div className="HeaderText" style={{fontSize: "28px"}}>
-              User Settings
+          <div className="UserSettingsPage-Right">
+            <div className="HeaderText" style={{fontSize: "28px", marginBottom:'20px'}}>
+              Settings
             </div>
             <form onSubmit={(event) => { 
               console.log("form submit")
               event.preventDefault()
               submitUserSettings()
             }}>
-                <div className="AdvOption">
-                    Email: 
-                    <input
-                      value={state.inputs.email}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, email: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Change Password: 
-                    <input
-                      value={state.inputs.typePassword}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, typePassword: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Confirm Password: 
-                    <input
-                      value={state.inputs.confirmPassword}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, confirmPassword: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Username: 
-                    <input
-                      value={state.inputs.username}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, username: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Bio: 
-                    <input
-                      value={state.inputs.bio}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, bio: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Name: 
-                    <input
-                      value={state.inputs.name}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, name: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
-                    Location: 
-                    <input
-                      value={state.inputs.location}
-                      onChange={(e) => {updateState({inputs: {...state.inputs, location: e.target.value}})}}
-                    />
-                </div>
-                <div className="AdvOption">
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Email: 
+              </div>
+              <input
+                value={state.inputs.email}
+                onChange={(e) => {updateState({inputs: {...state.inputs, email: e.target.value}})}}
+              />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Change Password: 
+              </div>
+                  <input
+                    value={state.inputs.typePassword}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, typePassword: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Confirm Password: 
+              </div>
+                  <input
+                    value={state.inputs.confirmPassword}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, confirmPassword: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Username: 
+              </div>
+                  <input
+                    value={state.inputs.username}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, username: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Bio: 
+              </div>
+                  <input
+                    value={state.inputs.bio}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, bio: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Name: 
+              </div>
+                  <input
+                    value={state.inputs.name}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, name: e.target.value}})}}
+                  />
+            </div>
+            <div className="AdvRow" id="userSettings">
+              <div className="AdvOption" id="userSettingsText">
+                  Location: 
+              </div>
+                  <input
+                    value={state.inputs.location}
+                    onChange={(e) => {updateState({inputs: {...state.inputs, location: e.target.value}})}}
+                  />
+            </div>
+                {/* <div className="AdvOption">
                     Avatar: 
                     <input
                       value={state.inputs.avatar}
                       onChange={(e) => {updateState({inputs: {...state.inputs, avatar: e.target.value}})}}
                     />
-                </div>
+                </div> */}
                 <button className='FancyButton'>Save</button>
             </form>
           </div>

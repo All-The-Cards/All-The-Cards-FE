@@ -22,6 +22,7 @@ const Home = (props) => {
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
+    document.title = "All The Cards"
     // getRandomBgImg()
     getRecentDecks()
 
@@ -29,15 +30,15 @@ const Home = (props) => {
 
   useEffect(() => {
 
-    console.log(gc.activeSession)
+    console.log("Active Session:", gc.activeSession)
 
   }, [])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log(gc.activeUser)
+  //   console.log(gc.activeUser)
 
-  }, [gc.activeSession])
+  // }, [gc.activeSession])
 
   const updateState = (objectToUpdate) => {
     setState((previous) => ({

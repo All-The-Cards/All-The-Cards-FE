@@ -12,6 +12,7 @@ const Card = (props) => {
 
     const [state, setState] = useState({
       card: <div></div>,
+      isFavorited: false,
       data: {},
       versionOptions: [<option value={"null"}>null</option>],
       hasGottenVersions: false,
@@ -172,6 +173,52 @@ const Card = (props) => {
         })
       }
     }
+
+    const setAsAvatar = () => {
+      let imgLink = ""
+      if (state.data.image_uris !== null) {
+          imgLink = state.data.image_uris.art_crop
+      }
+      else if (state.data.card_faces) {
+          imgLink = state.data.card_faces[0].image_uris.art_crop
+      }
+      else {
+        imgLink = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+      }
+      const sendData = {
+        avatar: imgLink
+      }
+
+      console.log("Setting avatar: ", sendData)
+      fetch(server.buildAPIUrl("/api/features/user/update"),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token': gc.activeSession.access_token
+          },
+          //send inputs
+          body: JSON.stringify(sendData),
+
+        }
+      )
+        .then((response) => {
+          console.log(response);
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    const toggleFavorite = () => {
+      updateState({
+        isFavorited: !state.isFavorited
+      })
+    }
   return (
     <>
       <div className='Container'>
@@ -188,6 +235,76 @@ const Card = (props) => {
             <div className="LargeCard">
             {state.card}
             </div>
+            <br></br>
+            <br></br>
+            <div id="priceInfo">
+            {/* <div style={{fontSize:'24px'}}><b>Market Info:</b></div> */}
+            {/* {
+              (state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
+              <div style={{fontSize:'24px'}}><b>Market Info:</b></div>
+            } */}
+            {
+            state.data.prices.usd && 
+              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
+              <br></br>
+              </div>
+            }
+            {
+              state.data.prices.usd_foil && 
+                <div>{"Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") }
+                <br></br>
+                </div>
+            }
+            {/* {
+            state.data.prices.eur &&
+              <div>{"EUR: " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }
+              <br></br>
+              </div>
+            }
+            {
+              state.data.prices.eur_foil && 
+                <div>{"Foil: " + ((state.data.prices.eur_foil && "€" + state.data.prices.eur_foil) || "N/A") }
+                <br></br>
+                </div>
+            } */}
+            {
+            state.data.tcgplayer_id && 
+            <div>
+              <a href={"https://www.tcgplayer.com/product/" + state.data.tcgplayer_id}>
+              <i>View on TCGPlayer</i>
+              </a>
+            </div>
+            }
+            {
+              state.data.prices.tix && 
+              <div>
+              <br></br>
+              {("MTGO Price: " + (state.data.prices.tix && state.data.prices.tix + " TIX"))}
+              <br></br>
+              </div>
+            }
+            {
+              state.data.mtgo_id && 
+              <div>
+                <a href={"https://www.cardhoarder.com/cards/" + state.data.mtgo_id}>
+                <i>View on Cardhoarder</i> 
+                </a>
+                <br></br>
+              </div>
+            }
+            {
+              !(state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
+              <div><i>Pricing info not available</i></div>
+            }
+            </div>
+            {/* <div onClick={() => {
+              toggleFavorite()
+             }}>
+            { state.isFavorited &&
+              <div style={{backgroundColor: "Gold", width: '20px', height:'20px'}}></div> ||
+              <div style={{backgroundColor: "#dadada", width: '20px', height:'20px'}}></div>
+            }
+            </div> */}
           </div>
           <div className="CardPage-Right">
             <div className="CardPage-RightContent">
@@ -196,9 +313,15 @@ const Card = (props) => {
                     
                   { state.versionOptions }
                 </select> }
+                  <button className="FancyButton" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
+                  onClick={() => {
+                    setAsAvatar()
+                  }}>Set as Avatar</button>
+                </div>
                 <div className="HeaderText" id="cardName"> 
                 {state.data.name}
                 </div>
+                <div>
               </div>
               <div className="SubHeaderText" id="typeLine"> 
               {state.data.type_one} {(state.data.subtype_one !== null) && " - "}{state.data.subtype_one}
@@ -233,13 +356,13 @@ const Card = (props) => {
               }
               </div>
               <div className="BodyText" id="legalities"> 
-              <b>Legality:</b> {"\n"}
-              <div className='legalities-Left'>
-              {state.legalitiesDisplayLeft}
-              </div>
-              <div className='legalities-Right'>
-              {state.legalitiesDisplayRight}
-              </div>
+                <b>Legality:</b> {"\n"}
+                <div className='legalities-Left'>
+                {state.legalitiesDisplayLeft}
+                </div>
+                <div className='legalities-Right'>
+                {state.legalitiesDisplayRight}
+                </div>
               </div>
             </div>
           </div>
