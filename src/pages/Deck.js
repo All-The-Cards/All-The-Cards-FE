@@ -83,7 +83,9 @@ const Deck = (props) => {
       description: state.data.description,
       tags: state.data.tags,
       formatTag: state.data.format,
-      cards: state.data.cards
+      cards: state.data.cards,
+      deckID: gc.activeSession != null ? state.data.deck_id : "",
+      authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
     nav('/deckeditor')
   }
