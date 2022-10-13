@@ -124,6 +124,7 @@ const Deck = (props) => {
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
         <input type="button" onClick={copyDeck} value="Copy Deck" />
+        <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
         {/* TODO:: notification instead of button text switch, replace text with icon */}
         <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
       </div>
