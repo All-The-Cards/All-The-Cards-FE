@@ -61,7 +61,10 @@ const DeckEditor = (props) => {
   }
 
   const formatWipDeck = () => {
-    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id }
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id}
+    if (result.coverCard === undefined) {
+      result.coverCard = wipDeck.cards[0].id
+    }
     wipDeck.cards.forEach(card => {
       result.cards.push(card.id)
     });
