@@ -74,6 +74,11 @@ const DeckEditor = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let deckData = formatWipDeck()
+    deckData = {
+      ...deckData, 
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
     console.log(deckData)
     fetch(server.buildAPIUrl("/api/features/editor/decks"),
       {
