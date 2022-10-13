@@ -140,6 +140,7 @@ const DeckEditor = (props) => {
           <option value="gladiator">Gladiator</option>
         </select>
         <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
+        {/* TODO:: make tags deletable lmao */}
         <>{wipDeck.tags.map((tag, index) => (
           <>{tag}, </>
         ))}</>
