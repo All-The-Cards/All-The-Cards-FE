@@ -61,7 +61,10 @@ const DeckEditor = (props) => {
   }
 
   const formatWipDeck = () => {
-    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id }
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id}
+    if (result.coverCard === undefined) {
+      result.coverCard = wipDeck.cards[0].id
+    }
     wipDeck.cards.forEach(card => {
       result.cards.push(card.id)
     });
@@ -71,6 +74,11 @@ const DeckEditor = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let deckData = formatWipDeck()
+    deckData = {
+      ...deckData, 
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
     console.log(deckData)
     fetch(server.buildAPIUrl("/api/features/editor/decks"),
       {
@@ -137,6 +145,7 @@ const DeckEditor = (props) => {
           <option value="gladiator">Gladiator</option>
         </select>
         <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
+        {/* TODO:: make tags deletable lmao */}
         <>{wipDeck.tags.map((tag, index) => (
           <>{tag}, </>
         ))}</>

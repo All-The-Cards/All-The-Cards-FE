@@ -83,7 +83,9 @@ const Deck = (props) => {
       description: state.data.description,
       tags: state.data.tags,
       formatTag: state.data.format,
-      cards: state.data.cards
+      cards: state.data.cards,
+      deckID: gc.activeSession != null ? state.data.deck_id : "",
+      authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
     nav('/deckeditor')
   }
@@ -123,7 +125,7 @@ const Deck = (props) => {
           Compact:
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
-        <input type="button" onClick={copyDeck} value="Copy Deck" />
+        <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
         {/* TODO:: notification instead of button text switch, replace text with icon */}
         <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
       </div>
