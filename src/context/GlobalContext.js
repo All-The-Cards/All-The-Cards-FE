@@ -72,7 +72,7 @@ export const GlobalProvider = ({ children }) => {
                 setUser,
                 name,
                 setName,
-                getName
+                getName,
                 isEditing,
                 setIsEditing
 
