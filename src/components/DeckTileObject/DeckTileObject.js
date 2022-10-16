@@ -51,7 +51,7 @@ const DeckTileObject = (props) => {
             className="DeckTileObjectContainer"
             style={{backgroundImage: 'radial-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.3) ), url(' + state.imgLink + ')'}}
         >
-            <Link to={"/deck/?id=" + props.data.id}>
+            <Link to={"/deck/?id=" + (props.data.id || props.data.deck_id)}>
                 <div className="DeckClickable">
                     <div className="DeckInfo">
                         <div className="DeckTitle">{state.data.name}</div>

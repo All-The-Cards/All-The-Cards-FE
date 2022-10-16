@@ -6,6 +6,7 @@ import './User.css'
 import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
 
 import { GlobalContext } from "../context/GlobalContext";
+import CardObject from '../components/CardObject/CardObject.js';
 
 const User = (props) => {
 
@@ -13,7 +14,9 @@ const User = (props) => {
 
     const [state, setState] = useState({
       data: {},
-      decks: []
+      decks: [],
+      favCards: [],
+      favDecks: []
       })
 
     const updateState = (objectToUpdate) => {
@@ -28,9 +31,14 @@ const User = (props) => {
 
     useEffect(() => {
       gc.setSearchBar(props.hasSearchBar)
+      updateState({
+        favCards: [],
+        favDecks: []
+      })
       // console.log(id)
       getUserById(id)
       getDecksByUserId(id)
+
     }, [id])
 
     const getUserById = (query) => {
@@ -41,7 +49,7 @@ const User = (props) => {
       }
   
       server.post(query).then(response => {
-        console.log("User: ", response[0])
+        // console.log("User: ", response[0])
         //if invalid, just direct to search page
         if (response.length === 0) {
           nav('/search/')
@@ -51,9 +59,61 @@ const User = (props) => {
           updateState({
             data: response[0],
           })
+          buildFavCards(response[0].favorites.cards)
+          buildFavDecks(response[0].favorites.decks)
         }  
       })
   
+    }
+
+    const buildFavCards = (cards) => {
+      // console.log("FAV CARDS: ", cards)
+      const arr = []
+      const query = "/api/get/card/id=" 
+      for (let i = 0; i < cards.length; i++){
+        server.post(query + cards[i]).then(response => {
+          // console.log(response[0])
+          //if invalid, just direct to search page
+          if (response.length === 0) {
+            nav('/search/')
+          }
+          else { 
+           arr.push(response[0])
+           updateState({
+             favCards: arr
+           })
+          }
+        })
+      }
+    }
+    const sortByName = (a, b) => {
+      if (a.name >= b.name) {
+        return 1
+      }
+      else {
+        return -1
+      }
+    }
+    const buildFavDecks = (decks) => {
+      // console.log("FAV DECKS: ", decks)
+      const arr = []
+
+      const query = "/api/get/deck/id="
+      for (let i = 0; i < decks.length; i++){
+        server.post(query + decks[i]).then(response => {
+          // console.log("DECK FOUND:", response)
+          //if invalid, just direct to search page
+          if (response.length === 0) {
+            nav('/')
+          }
+          else { 
+           arr.push(response)
+           updateState({
+             favDecks: arr
+           })
+          }
+        })
+      }
     }
 
     const getDecksByUserId = (query) => {
@@ -64,7 +124,7 @@ const User = (props) => {
       }
   
       server.post(query).then(response => {
-        console.log("User Decks: ", response)
+        // console.log("User Decks: ", response)
         //if invalid, just direct to search page
         if (response.length === 0) {
           // nav('/search/')
@@ -105,12 +165,40 @@ const User = (props) => {
             </div>
           </div>
         </div>
-        <div className="UserPageContent" id="deckContent">
-        {state.decks.length > 1 && <div className="HeaderText">
+        {state.decks.length > 1 && 
+        <div className="UserPageContent" id="deckContent"><div className="HeaderText">
           Decks
+        </div>
         </div>}
         { state.decks.map((item, i) => <DeckTileObject data={item} key={i}/>) }
+
+        {state.data.favorites && 
+        <div className="UserPageContent" id="deckContent"><div className="HeaderText">
+          Favorite Cards
         </div>
+        {state.favCards.sort(sortByName).slice(0,4).map((item, i) => <div style={{marginLeft: '10px', float:'left'}}key={i}>
+            {/* { gc.devMode && <CardObject data={item} isCompact={true} 
+            // count={i % 4}
+            // count={4 - i % 4}
+            // count={4}
+            /> } */}
+            <div className="RegularCard">
+              <CardObject clickable data={item}/>
+            </div>
+          </div>)}
+        </div>}
+        {state.data.favorites && 
+        <div className="UserPageContent" id="deckContent"><div className="HeaderText">
+          Favorite Decks
+        </div>
+        
+        { state.favDecks.slice(0, 3).map((item, i) => <div style={{marginLeft: '10px', float:'left'}}key={i}>
+          <DeckTileObject data={item}/>
+          </div>) }
+        </div>}
+        
+        
+
       </div>
     </>
   );
