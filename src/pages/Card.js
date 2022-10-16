@@ -375,21 +375,30 @@ const Card = (props) => {
                     
                   { state.versionOptions }
                 </select> }
+                {
+                  gc.activeSession &&
                   <button className="FancyButton" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
                   onClick={() => {
                     setAsAvatar()
                   }}>Set as Avatar</button>
+                }
+
+                {
+                  gc.activeSession &&
                 <div onClick={() => {
                   toggleFavorite()
                   }}
                   style={{float: 'right', marginRight: '20px', marginTop: '10px', cursor:'pointer'}}
                   >
+                
                 { state.isFavorited &&
                   <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
                   <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
                 }
                   </div>
+}
                 </div>
+                
                 <div className="HeaderText" id="cardName"> 
                 {state.data.name}
                 </div>
