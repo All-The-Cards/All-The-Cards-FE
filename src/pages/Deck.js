@@ -179,6 +179,8 @@ const Deck = (props) => {
 
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
+    {
+      gc.activeSession &&
       <div onClick={() => {
         toggleFavorite()
         }}
@@ -189,6 +191,7 @@ const Deck = (props) => {
         <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
       }
       </div>
+}
       {state.data.name} - {state.data.user_name}
       <br/>
       {state.data.description}

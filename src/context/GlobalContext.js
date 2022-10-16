@@ -29,6 +29,8 @@ export const GlobalProvider = ({ children }) => {
         title: ""
     })
 
+    const [isEditing, setIsEditing] = useState(false)
+
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
     const [activeSession, setActiveSession] = useState(null)
     const [activeUser, setUser] = useState(null)
@@ -56,6 +58,8 @@ export const GlobalProvider = ({ children }) => {
                 setActiveSession,
                 activeUser,
                 setUser,
+                isEditing,
+                setIsEditing,
 
             }}
         >
