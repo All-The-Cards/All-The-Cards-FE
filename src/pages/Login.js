@@ -27,7 +27,6 @@ const Login = () => {
 
   useEffect(() => {
     // getRandomBgImg()
-    
     document.title = "Login"
   }, [])
 

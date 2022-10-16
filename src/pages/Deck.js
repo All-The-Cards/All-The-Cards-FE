@@ -6,6 +6,7 @@ import * as utilities from '../functions/Utilities.js';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
+import Footer from '../components/Footer/Footer.js';
 
 const Deck = (props) => {
 
@@ -21,7 +22,8 @@ const Deck = (props) => {
     },
     isFavorited: false,
     viewMode: "Spread",
-    compactView: false
+    compactView: false,
+    shared: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -123,7 +125,9 @@ const Deck = (props) => {
       description: state.data.description,
       tags: state.data.tags,
       formatTag: state.data.format,
-      cards: state.data.cards
+      cards: state.data.cards,
+      deckID: gc.activeSession != null ? state.data.deck_id : "",
+      authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
     nav('/deckeditor')
   }
@@ -160,6 +164,18 @@ const Deck = (props) => {
         isFavorited: !state.isFavorited
       })
     }
+  const copyURLToClipboard = (event) => {
+    let element = document.createElement('input');
+    element.value = window.location.href;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
+    setState((previous) => ({
+      ...previous,
+      shared: true
+    }))
+  }
 
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
@@ -193,7 +209,9 @@ const Deck = (props) => {
           Compact:
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
-        <input type="button" onClick={copyDeck} value="Copy Deck" />
+        <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
+        {/* TODO:: notification instead of button text switch, replace text with icon */}
+        <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
         {state.viewMode === "Spread" ? <>
@@ -208,6 +226,7 @@ const Deck = (props) => {
           ))}
         </> : <></>}
       </div>
+      <Footer />
     </div>
   );
 

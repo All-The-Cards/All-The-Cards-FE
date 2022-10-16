@@ -2,6 +2,8 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
 import * as server from "../functions/ServerTalk";
+import Footer from '../components/Footer/Footer';
+import './Deck-Editor.css'
 
 const DeckEditor = (props) => {
 
@@ -17,12 +19,12 @@ const DeckEditor = (props) => {
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     document.title = "Deck Editor"
-          
+
     setState((previous) => ({
       ...previous,
       cards: wipDeck.cards
     }))
-  }, [])
+  }, [gc])
   const handleChanges = (event) => {
     setWipDeck((previous) => ({
       ...previous,
@@ -59,7 +61,10 @@ const DeckEditor = (props) => {
   }
 
   const formatWipDeck = () => {
-    let result = {...wipDeck,cards: [], coverCard: wipDeck.coverCard.id}
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id}
+    if (result.coverCard === undefined) {
+      result.coverCard = wipDeck.cards[0].id
+    }
     wipDeck.cards.forEach(card => {
       result.cards.push(card.id)
     });
@@ -69,6 +74,11 @@ const DeckEditor = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let deckData = formatWipDeck()
+    deckData = {
+      ...deckData, 
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
     console.log(deckData)
     fetch(server.buildAPIUrl("/api/features/editor/decks"),
       {
@@ -90,8 +100,22 @@ const DeckEditor = (props) => {
         console.log(error);
       });
   }
+
+  const clearDeck = (event) => {
+    gc.setWipDeck({
+      authorID: "",
+      cards: [],
+      coverCard: "",
+      deckID: "",
+      description: "",
+      formatTag: "",
+      tags: [],
+      title: ""
+    })
+  }
+
   return (
-    <div>
+    <div className='Page'>
       <form>
         <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" />
         <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" />
@@ -121,15 +145,19 @@ const DeckEditor = (props) => {
           <option value="gladiator">Gladiator</option>
         </select>
         <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
-        <input type="button" onClick={handleSubmit} value="Save Deck" />
+        {/* TODO:: make tags deletable lmao */}
         <>{wipDeck.tags.map((tag, index) => (
           <>{tag}, </>
         ))}</>
+        <input type="button" onClick={handleSubmit} value="Save Deck" />
+        <input type="button" onClick={clearDeck} value="Clear Deck" />
+
       </form>
       {state.cards.map((card, index) => (
         <CardObject data={card} />
       ))}
       {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
+      <Footer />
     </div>
   )
 }

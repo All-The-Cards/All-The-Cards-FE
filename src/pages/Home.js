@@ -6,6 +6,7 @@ import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
 import { GlobalContext } from '../context/GlobalContext.js';
 import SearchBar from '../components/SearchBar/SearchBar.js';
 import * as server from '../functions/ServerTalk.js';
+import Footer from '../components/Footer/Footer';
 
 const Home = (props) => {
 
@@ -16,10 +17,7 @@ const Home = (props) => {
   })
 
   const gc = useContext(GlobalContext)
-  const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
-  const { searchQuery, setSearchQuery } = useContext(GlobalContext);
-  const { searchType, setSearchType } = useContext(GlobalContext);
-  const { supabase } = useContext(GlobalContext)
+
   const nav = useNavigate()
 
   useEffect(() => {
@@ -74,7 +72,7 @@ const Home = (props) => {
   }
 
   return (
-    <div className="Container">
+    <div className="Container Page">
       <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
         <div className="blur" />
         <div className="SearchBarObject">
@@ -138,6 +136,7 @@ const Home = (props) => {
         }}/></span> */}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
