@@ -10,6 +10,7 @@ import * as server from '../functions/ServerTalk.js';
 const Login = () => {
 
   const gc = useContext(GlobalContext)
+  const { activeSession, setActiveSession } = useContext(GlobalContext)
 
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)
@@ -31,10 +32,12 @@ const Login = () => {
   }, [])
 
   const getRandomBgImg = () => {
+
     server.post("/api/features/random/art").then(response => {
       let res = response
       setRandomPic(res.randomArt)
     })
+
   }
 
   const handleChange = (event) => {
@@ -91,9 +94,9 @@ const Login = () => {
     setModal(true)
   };
 
-  const LoginQuery = () => {
+  async function LoginQuery() {
 
-    gc.setActiveSession(gc.supabase.auth.signInWithPassword(
+    await gc.supabase.auth.signInWithPassword(
       {
         email: inputs.email,
         password: inputs.password,
@@ -102,10 +105,11 @@ const Login = () => {
         data: {
           fullname: inputs.name
         },
-      }).then(({ user, session, error }) => {
+      }).then(({ error, data }) => {
         if (error === null) {
           alert("Login Successful! Routing to homepage.")
-          GetUserInfo()
+          setActiveSession(data.session)
+          setLocalUsername(data)
           nav('/')
         }
         else {
@@ -113,31 +117,43 @@ const Login = () => {
           inputs.email = ""
           inputs.password = ""
         }
-      }))
+      })
 
   }
 
-  const GetUserInfo = () => {
+  //   const GetUserInfo = () => {
 
-    gc.supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error !== null) {
-        alert(error)
-      }
-      else if (session !== null) {
-        gc.setActiveSession(session)
-        localStorage.setItem("userName", JSON.stringify(session.user.user_metadata.name.split(" ")[0]));
-      }
-    })
+  //     gc.supabase.auth.getSession().then(({ data: { session }, error }) => {
+  //       if (error !== null) {
+  //         alert(error)
+  //       }
+  //       else if (session !== null) {
+  //         setActiveSession(session)
+  //       }
+  //     })
 
-    gc.supabase.auth.getUser().then(({ data: { user }, error }) => {
-      if (error !== null) {
-        alert(error)
-      }
-      else {
-        gc.setUser(user)
-      }
-    })
+  //   gc.supabase.auth.getUser().then(({ data: { user }, error }) => {
+  //     if (error !== null) {
+  //       alert(error)
+  //     }
+  //     else {
+  //       gc.setUser(user)
+  //     }
+  //   })
 
+  // }
+
+  // useEffect(() => {
+
+  //   console.log(activeSession)
+
+  // }, [activeSession]);
+
+  const setLocalUsername = (data) => {
+    if (data !== null && Object.keys(data.user.user_metadata).length !== 0)
+      localStorage.setItem("userName", JSON.stringify(data.user.user_metadata.name.split(" ")[0]));
+    else
+      localStorage.setItem("userName", "User");
   }
 
   useEffect(() => {

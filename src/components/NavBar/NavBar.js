@@ -35,13 +35,21 @@ const Navbar = () => {
         if (activeSession === null) {
             let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
             setActiveSession(JSON.parse(data))
-            data = localStorage.getItem("userName")
-            setName(JSON.parse(data))
+            if (localStorage.getItem("userName") === "User")
+                setName("User")
+            else {
+                let firstName = JSON.parse(localStorage.getItem("userName"))
+                setName(firstName)
+            }
+        }
+        else {
+            getName()
         }
 
     }, []);
 
     useEffect(() => {
+        console.log(activeSession)
         getName()
     }, [activeSession]);
 
@@ -124,8 +132,8 @@ const Navbar = () => {
 
     const getName = () => {
 
-        if (gc.activeSession && gc.activeSession.user.user_metadata.name) {
-            setName(gc.activeSession.user.user_metadata.name.split(" ")[0])
+        if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
+            setName(activeSession.user.user_metadata.name.split(" ")[0])
         }
         else {
             setName("User")
@@ -136,7 +144,6 @@ const Navbar = () => {
     const logout = () => {
         gc.supabase.auth.signOut()
             .then(({ error }) => {
-                console.log(error)
                 if (error === null) {
                     alert("You have successfully logged out")
                     setActiveSession(null)
