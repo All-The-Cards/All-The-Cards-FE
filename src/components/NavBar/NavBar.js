@@ -21,7 +21,7 @@ const Navbar = () => {
     const gc = useContext(GlobalContext);
     const { activeSession, setActiveSession } = useContext(GlobalContext);
     const { activeUser, setUser } = useContext(GlobalContext);
-    const [name, setName] = useState("");
+    const { name, setName } = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
     const [layerShadow, setLayerShadow] = useState(false);
@@ -43,14 +43,14 @@ const Navbar = () => {
             }
         }
         else {
-            getName()
+            gc.getName()
         }
 
     }, []);
 
     useEffect(() => {
         console.log(activeSession)
-        getName()
+        gc.getName()
     }, [activeSession]);
 
     // Opens the menu when an icon is clicked
@@ -130,16 +130,16 @@ const Navbar = () => {
 
     };
 
-    const getName = () => {
+    // const getName = () => {
 
-        if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
-            setName(activeSession.user.user_metadata.name.split(" ")[0])
-        }
-        else {
-            setName("User")
-        }
+    //     if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
+    //         setName(activeSession.user.user_metadata.name.split(" ")[0])
+    //     }
+    //     else {
+    //         setName("User")
+    //     }
 
-    };
+    // };
 
     const logout = () => {
         gc.supabase.auth.signOut()
