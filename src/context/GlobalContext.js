@@ -34,8 +34,20 @@ export const GlobalProvider = ({ children }) => {
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
     const [activeSession, setActiveSession] = useState(null)
     const [activeUser, setUser] = useState(null)
+    const [name, setName] = useState("");
 
     // Global Function Below
+    const getName = () => {
+
+        if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
+            setName(activeSession.user.user_metadata.name.split(" ")[0])
+        }
+        else {
+            setName("User")
+        }
+
+    };
+
 
     return (
 
@@ -58,8 +70,11 @@ export const GlobalProvider = ({ children }) => {
                 setActiveSession,
                 activeUser,
                 setUser,
+                name,
+                setName,
+                getName
                 isEditing,
-                setIsEditing,
+                setIsEditing
 
             }}
         >

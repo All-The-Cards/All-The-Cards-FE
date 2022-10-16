@@ -28,12 +28,6 @@ const Home = (props) => {
 
   }, [])
 
-  useEffect(() => {
-
-    console.log("Active Session:", gc.activeSession)
-
-  }, [])
-
   // useEffect(() => {
 
   //   console.log(gc.activeUser)

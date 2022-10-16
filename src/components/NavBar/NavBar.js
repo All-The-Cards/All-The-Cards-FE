@@ -21,7 +21,7 @@ const Navbar = () => {
     const gc = useContext(GlobalContext);
     const { activeSession, setActiveSession } = useContext(GlobalContext);
     const { activeUser, setUser } = useContext(GlobalContext);
-    const [name, setName] = useState("");
+    const { name, setName } = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
     const [layerShadow, setLayerShadow] = useState(false);
@@ -35,14 +35,22 @@ const Navbar = () => {
         if (activeSession === null) {
             let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
             setActiveSession(JSON.parse(data))
-            data = localStorage.getItem("userName")
-            setName(JSON.parse(data))
+            if (localStorage.getItem("userName") === "User")
+                setName("User")
+            else {
+                let firstName = JSON.parse(localStorage.getItem("userName"))
+                setName(firstName)
+            }
+        }
+        else {
+            gc.getName()
         }
 
     }, []);
 
     useEffect(() => {
-        getName()
+        console.log(activeSession)
+        gc.getName()
     }, [activeSession]);
 
     // Opens the menu when an icon is clicked
@@ -122,21 +130,20 @@ const Navbar = () => {
 
     };
 
-    const getName = () => {
+    // const getName = () => {
 
-        if (gc.activeSession && gc.activeSession.user.user_metadata.name) {
-            setName(gc.activeSession.user.user_metadata.name.split(" ")[0])
-        }
-        else {
-            setName("User")
-        }
+    //     if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
+    //         setName(activeSession.user.user_metadata.name.split(" ")[0])
+    //     }
+    //     else {
+    //         setName("User")
+    //     }
 
-    };
+    // };
 
     const logout = () => {
         gc.supabase.auth.signOut()
             .then(({ error }) => {
-                console.log(error)
                 if (error === null) {
                     alert("You have successfully logged out")
                     setActiveSession(null)
