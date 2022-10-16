@@ -31,7 +31,7 @@ const CardObject = (props) => {
         maxNameLength: 0,
         listHover: false
     })
-
+    const gc = useContext(GlobalContext)
     const { wipDeck, setWipDeck } = useContext(GlobalContext)
 
     const nav = useNavigate()
@@ -45,6 +45,7 @@ const CardObject = (props) => {
 
     useEffect(() => {
         getData()
+
     }, [props, wipDeck])
 
     function getData() {
@@ -451,11 +452,13 @@ const CardObject = (props) => {
                             <img src={flipIcon} className="flipIcon" style={{ transform: 'scaleX(' + transformFlipIcon() + ')' }}></img>
                         </div>
                     }
+                    {gc.isEditing &&
                     <div className="plusMinusBox">
                         <img src={plusIcon} className="plusMinusIcon" onClick={addToDeck}/>
                         {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" onClick={removeFromDeck}/>: <></>}
                         <img src={imageIcon} className="plusMinusIcon" onClick={setAsCoverCard}/>
                     </div>
+}
                 </div>}
         </div>
     );

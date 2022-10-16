@@ -20,8 +20,10 @@ const Deck = (props) => {
     data: {
       cards: []
     },
+    isFavorited: false,
     viewMode: "Spread",
-    compactView: false
+    compactView: false,
+    shared: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -36,7 +38,11 @@ const Deck = (props) => {
 
   useEffect(() => {
     //clean up string from id format to search query format
+    updateState({
+      id: id
+    })
     getDeckById(id)
+    getFavStatus(id)
   }, [id])
 
   const getDeckById = (query) => {
@@ -47,7 +53,7 @@ const Deck = (props) => {
     }
 
     server.post(query).then(response => {
-      console.log(response)
+      // console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
         nav('/search/')
@@ -57,14 +63,51 @@ const Deck = (props) => {
         updateState({
           data: response
         })
-        console.log(response)
+        // console.log(response)
         console.log(utilities.mapCardsToTypes(response))
       }
 
     })
 
   }
+  const getFavStatus = (id) => {
+    id = id.substring(3)
+    // console.log("FAV ID:", id)
 
+    if (gc.activeSession) {
+      const uid = gc.activeSession.user.id
+      const query = "/api/get/user/" + "id=" + uid
+      //if query is empty, don't send
+      if (query.trim() === "/api/get/user/" ) {
+        return
+      }
+      server.post(query).then(response => {
+        // console.log("User: ", response[0])
+        //if invalid, just direct to search page
+        if (response.length === 0) {
+          nav('/')
+        }
+        else {
+          // console.log("user:",response[0])
+          // console.log(id)
+          if (response[0].favorites.decks.includes(id)){
+            // console.log("Favorite found")
+            updateState({
+              isFavorited: true
+            })
+          }
+          else {
+            // console.log("No match")
+            updateState({
+              isFavorited: false
+            })
+          }
+        }  
+      })
+    }
+          
+    
+  }
   const handleDropdown = (event) => {
     updateState({ viewMode: event.target.value })
   }
@@ -82,13 +125,73 @@ const Deck = (props) => {
       description: state.data.description,
       tags: state.data.tags,
       formatTag: state.data.format,
-      cards: state.data.cards
+      cards: state.data.cards,
+      deckID: gc.activeSession != null ? state.data.deck_id : "",
+      authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
     nav('/deckeditor')
   }
 
+  const toggleFavorite = () => {
+    const sendData = {
+      deck: state.id.substring(3)
+    }
+    console.log("Sending fav update: ", sendData)
+
+    fetch(server.buildAPIUrl("/api/features/user/favorite"),
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': gc.activeSession.access_token
+        },
+        //send inputs
+        body: JSON.stringify(sendData),
+
+      }
+    )
+    .then((response) => {
+      console.log(response);
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+      updateState({
+        isFavorited: !state.isFavorited
+      })
+    }
+  const copyURLToClipboard = (event) => {
+    let element = document.createElement('input');
+    element.value = window.location.href;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
+    setState((previous) => ({
+      ...previous,
+      shared: true
+    }))
+  }
+
   return (
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
+    {
+      gc.activeSession &&
+      <div onClick={() => {
+        toggleFavorite()
+        }}
+        style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
+        >
+      { state.isFavorited &&
+        <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
+        <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+      }
+      </div>
+}
       {state.data.name} - {state.data.user_name}
       <br/>
       {state.data.description}
@@ -109,7 +212,9 @@ const Deck = (props) => {
           Compact:
           <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
         </label>
-        <input type="button" onClick={copyDeck} value="Copy Deck" />
+        <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
+        {/* TODO:: notification instead of button text switch, replace text with icon */}
+        <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
       </div>
       <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
         {state.viewMode === "Spread" ? <>

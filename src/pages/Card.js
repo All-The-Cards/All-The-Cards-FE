@@ -39,6 +39,8 @@ const Card = (props) => {
       gc.setSearchBar(props.hasSearchBar)
       //clean up string from id format to search query format
       getCardById(id)
+
+      getFavStatus(id)
     }, [id])
 
     const getCardById = (query) => {
@@ -51,7 +53,7 @@ const Card = (props) => {
       updateState({ card: <div></div> })
   
       server.post(query).then(response => {
-        console.log(response[0])
+        // console.log(response[0])
         //if invalid, just direct to search page
         if (response.length === 0) {
           nav('/search/')
@@ -69,7 +71,7 @@ const Card = (props) => {
       })
   
     }
-
+    
     const getAllVersions = (name) => {
       // name = name.replaceAll(',', '')
 
@@ -214,11 +216,78 @@ const Card = (props) => {
         });
     }
 
-    const toggleFavorite = () => {
+    const toggleFavorite = (id) => {
+    const sendData = {
+      card: state.data.id
+    }
+    console.log("Sending fav update: ", sendData)
+
+    fetch(server.buildAPIUrl("/api/features/user/favorite"),
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': gc.activeSession.access_token
+        },
+        //send inputs
+        body: JSON.stringify(sendData),
+
+      }
+    )
+    .then((response) => {
+      console.log(response);
+    })
+    
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
       updateState({
         isFavorited: !state.isFavorited
       })
     }
+
+    const getFavStatus = (id) => {
+      id = id.substring(3)
+      // console.log("FAV ID:", id)
+
+      if (gc.activeSession) {
+        const uid = gc.activeSession.user.id
+        const query = "/api/get/user/" + "id=" + uid
+        //if query is empty, don't send
+        if (query.trim() === "/api/get/user/" ) {
+          return
+        }
+        server.post(query).then(response => {
+          // console.log("User: ", response[0])
+          //if invalid, just direct to search page
+          if (response.length === 0) {
+            nav('/')
+          }
+          else {
+            // console.log(id)
+            if (response[0].favorites.cards.includes(id)){
+              // console.log("Favorite found")
+              updateState({
+                isFavorited: true
+              })
+            }
+            else {
+              // console.log("No match")
+              updateState({
+                isFavorited: false
+              })
+            }
+          }  
+        })
+      }
+            
+      
+    }
+
   return (
     <>
       <div className='Container'>
@@ -297,14 +366,7 @@ const Card = (props) => {
               <div><i>Pricing info not available</i></div>
             }
             </div>
-            {/* <div onClick={() => {
-              toggleFavorite()
-             }}>
-            { state.isFavorited &&
-              <div style={{backgroundColor: "Gold", width: '20px', height:'20px'}}></div> ||
-              <div style={{backgroundColor: "#dadada", width: '20px', height:'20px'}}></div>
-            }
-            </div> */}
+            
           </div>
           <div className="CardPage-Right">
             <div className="CardPage-RightContent">
@@ -313,11 +375,30 @@ const Card = (props) => {
                     
                   { state.versionOptions }
                 </select> }
+                {
+                  gc.activeSession &&
                   <button className="FancyButton" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
                   onClick={() => {
                     setAsAvatar()
                   }}>Set as Avatar</button>
+                }
+
+                {
+                  gc.activeSession &&
+                <div onClick={() => {
+                  toggleFavorite()
+                  }}
+                  style={{float: 'right', marginRight: '20px', marginTop: '10px', cursor:'pointer'}}
+                  >
+                
+                { state.isFavorited &&
+                  <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
+                  <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                }
+                  </div>
+}
                 </div>
+                
                 <div className="HeaderText" id="cardName"> 
                 {state.data.name}
                 </div>
