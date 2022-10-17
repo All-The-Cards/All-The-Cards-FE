@@ -32,14 +32,14 @@ export const GlobalProvider = ({ children }) => {
     const [isEditing, setIsEditing] = useState(false)
 
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
-    const [activeSession, setActiveSession] = useState(null)
+    const [activeSession, setActiveSession] = useState(JSON.parse(localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")))
     const [activeUser, setUser] = useState(null)
     const [name, setName] = useState("");
 
     // Global Function Below
     const getName = () => {
 
-        if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
+        if (activeSession && activeSession.user.user_metadata) {
             setName(activeSession.user.user_metadata.name.split(" ")[0])
         }
         else {
@@ -72,7 +72,7 @@ export const GlobalProvider = ({ children }) => {
                 setUser,
                 name,
                 setName,
-                getName
+                getName,
                 isEditing,
                 setIsEditing
 

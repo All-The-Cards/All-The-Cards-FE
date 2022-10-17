@@ -139,7 +139,7 @@ const ResetPassword = (props) => {
   return (
 
     <div className='LoginContainer'>
-      <div style={{ backgroundImage: `url(${randomPic})` }} className='LeftContainer'>
+      <div style={{ backgroundImage: `url("https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092")` }} className='LeftContainer'>
         <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>

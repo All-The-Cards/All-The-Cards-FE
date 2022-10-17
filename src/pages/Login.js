@@ -150,8 +150,8 @@ const Login = () => {
   // }, [activeSession]);
 
   const setLocalUsername = (data) => {
-    if (data !== null && Object.keys(data.user.user_metadata).length !== 0)
-      localStorage.setItem("userName", JSON.stringify(data.user.user_metadata.name.split(" ")[0]));
+    if (data && data.user.user_metadata)
+      localStorage.setItem("userName", data.user.user_metadata.name.split(" ")[0]);
     else
       localStorage.setItem("userName", "User");
   }
