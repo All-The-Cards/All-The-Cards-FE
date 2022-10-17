@@ -32,13 +32,13 @@ const Navbar = () => {
 
     useEffect(() => {
 
-        if (activeSession === null) {
-            let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
-            setActiveSession(JSON.parse(data))
+        if (activeSession) {
+            //let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
+            //setActiveSession(JSON.parse(data))
             if (localStorage.getItem("userName") === "User")
                 setName("User")
             else {
-                let firstName = JSON.parse(localStorage.getItem("userName"))
+                let firstName = localStorage.getItem("userName")
                 setName(firstName)
             }
         }
@@ -129,17 +129,6 @@ const Navbar = () => {
             console.log("Dark Mode Activated")
 
     };
-
-    // const getName = () => {
-
-    //     if (activeSession !== null && Object.keys(activeSession.user.user_metadata).length !== 0) {
-    //         setName(activeSession.user.user_metadata.name.split(" ")[0])
-    //     }
-    //     else {
-    //         setName("User")
-    //     }
-
-    // };
 
     const logout = () => {
         gc.supabase.auth.signOut()
