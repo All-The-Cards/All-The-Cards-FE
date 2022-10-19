@@ -132,45 +132,54 @@ const DeckEditor = (props) => {
   }
   return (
     <div className='Page'>
-      <form>
-        <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" />
-        <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" />
-        <select
-          value={wipDeck.formatTag}
-          onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
-        >
-          <option value="">Any Format</option>
-          <option value="standard">Standard</option>
-          <option value="commander">Commander</option>
-          <option value="pioneer">Pioneer</option>
-          <option value="explorer">Explorer</option>
-          <option value="modern">Modern</option>
-          <option value="premodern">Premodern</option>
-          <option value="vintage">Vintage</option>
-          <option value="legacy">Legacy</option>
-          <option value="oldschool">Old School</option>
-          <option value="pauper">Pauper</option>
-          <option value="historic">Historic</option>
-          <option value="alchemy">Alchemy</option>
-          <option value="brawl">Brawl</option>
-          <option value="paupercommander">Pauper Commander</option>
-          <option value="historicbrawl">Historic Brawl</option>
-          <option value="penny">Penny Dreadful</option>
-          <option value="duel">Duel</option>
-          <option value="future">Future</option>
-          <option value="gladiator">Gladiator</option>
-        </select>
-        <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
-        {/* TODO:: make tags deletable lmao */}
-        <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true}/>
-        <input type="button" onClick={handleSubmit} value="Save Deck" />
-        <input type="button" onClick={clearDeck} value="Clear Deck" />
+      <div style={{ minWidth: '300px', maxWidth: '80%', margin: 'auto' }}>
+        <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
+          <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
+            <div>
+              <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
+              <input type="button" onClick={handleSubmit} value="Save Deck" />
+              <input type="button" onClick={clearDeck} value="Clear Deck" />
+            </div>
+            <select
+              value={wipDeck.formatTag}
+              onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
+            >
+              <option value="">Any Format</option>
+              <option value="standard">Standard</option>
+              <option value="commander">Commander</option>
+              <option value="pioneer">Pioneer</option>
+              <option value="explorer">Explorer</option>
+              <option value="modern">Modern</option>
+              <option value="premodern">Premodern</option>
+              <option value="vintage">Vintage</option>
+              <option value="legacy">Legacy</option>
+              <option value="oldschool">Old School</option>
+              <option value="pauper">Pauper</option>
+              <option value="historic">Historic</option>
+              <option value="alchemy">Alchemy</option>
+              <option value="brawl">Brawl</option>
+              <option value="paupercommander">Pauper Commander</option>
+              <option value="historicbrawl">Historic Brawl</option>
+              <option value="penny">Penny Dreadful</option>
+              <option value="duel">Duel</option>
+              <option value="future">Future</option>
+              <option value="gladiator">Gladiator</option>
+            </select>
+          </div>
+          <div style={{ width: '100%' }}>
+            <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
+            <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
+          </div>
+          <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{width: '100%', margin:'8px 0 0 8px'}} />
 
-      </form>
-      {state.cards.map((card, index) => (
-        <CardObject data={card} />
-      ))}
-      {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
+        </form>
+        <div style={{display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0'}}>
+          {state.cards.map((card, index) => (
+            <CardObject data={card} />
+          ))}
+        </div>
+        {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
+      </div>
       <Footer />
     </div>
   )
