@@ -7,6 +7,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
 import Footer from '../components/Footer/Footer.js';
+import TagList from '../components/TagList/TagList.js';
 
 const Deck = (props) => {
 
@@ -198,7 +199,9 @@ const Deck = (props) => {
       <br/>
       Format: {state.data.format}
       <br/>
-      Tags: {state.data.tags != undefined ? (state.data.tags.map((tag, index) => (<>{tag},</>))) : (<></>) }
+      <div>
+      Tags: {state.data.tags != undefined ? (<TagList tags={state.data.tags}/>) : (<></>) }
+      </div>
       <div style={{ display: "flex", flexFlow: "row nowrap" }}>
         <label>
           View mode:
