@@ -79,7 +79,7 @@ const Deck = (props) => {
       const uid = gc.activeSession.user.id
       const query = "/api/get/user/" + "id=" + uid
       //if query is empty, don't send
-      if (query.trim() === "/api/get/user/" ) {
+      if (query.trim() === "/api/get/user/") {
         return
       }
       server.post(query).then(response => {
@@ -91,7 +91,7 @@ const Deck = (props) => {
         else {
           // console.log("user:",response[0])
           // console.log(id)
-          if (response[0].favorites.decks.includes(id)){
+          if (response[0].favorites.decks.includes(id)) {
             // console.log("Favorite found")
             updateState({
               isFavorited: true
@@ -103,11 +103,11 @@ const Deck = (props) => {
               isFavorited: false
             })
           }
-        }  
+        }
       })
     }
-          
-    
+
+
   }
   const handleDropdown = (event) => {
     updateState({ viewMode: event.target.value })
@@ -152,19 +152,19 @@ const Deck = (props) => {
 
       }
     )
-    .then((response) => {
-      console.log(response);
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-      updateState({
-        isFavorited: !state.isFavorited
+      .then((response) => {
+        console.log(response);
       })
-    }
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    updateState({
+      isFavorited: !state.isFavorited
+    })
+  }
   const copyURLToClipboard = (event) => {
     let element = document.createElement('input');
     element.value = window.location.href;
@@ -179,58 +179,64 @@ const Deck = (props) => {
   }
 
   return (
-    <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
-    {
-      gc.activeSession &&
-      <div onClick={() => {
-        toggleFavorite()
-        }}
-        style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
-        >
-      { state.isFavorited &&
-        <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-        <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
-      }
-      </div>
-}
-      {state.data.name} - {state.data.user_name}
-      <br/>
-      {state.data.description}
-      <br/>
-      Format: {state.data.format}
-      <br/>
-      <div>
-      Tags: {state.data.tags != undefined ? (<TagList tags={state.data.tags}/>) : (<></>) }
-      </div>
-      <div style={{ display: "flex", flexFlow: "row nowrap" }}>
-        <label>
-          View mode:
-          <select value={state.viewMode} onChange={handleDropdown}>
-            <option value="Spread">Spread</option>
-            <option value="Stacked">Stacked</option>
-            <option value="Categorized">Categorized</option>
-          </select>
-        </label>
-        <label>
-          Compact:
-          <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
-        </label>
-        <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
-        {/* TODO:: notification instead of button text switch, replace text with icon */}
-        <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
-      </div>
-      <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
-        {state.viewMode === "Spread" ? <>
-          {state.data.cards.map((card, i) =>
-            <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} /></div>
-          )}
-        </> : <></>}
-        {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
-        {state.viewMode === "Categorized" ? <>
-          {utilities.mapCardsToTypes(state.data.cards).map((typeList) => (
-            <CardStack cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
-          ))}
-        </> : <></>}
+    <div>
+      <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '80%' }}>
+        {
+          gc.activeSession &&
+          <div onClick={() => {
+            toggleFavorite()
+          }}
+            style={{ float: 'right', marginRight: '20px', marginTop: '10px' }}
+          >
+            {state.isFavorited &&
+              <div className="FavoriteIcon" style={{ backgroundColor: "Gold" }}>-</div> ||
+              <div className="FavoriteIcon" style={{ backgroundColor: "#dadada" }}>+</div>
+            }
+          </div>
+        }
+        <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
+          <div>
+            <span style={{ fontSize: '2rem' }}>{state.data.name} - </span><span style={{ fontSize: '1.5rem', marginLeft: '0.5rem' }}>{state.data.user_name}</span>
+            <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
+            {/* TODO:: notification instead of button text switch, replace text with icon */}
+            <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
+          </div>
+          <span>{`Format: ${state.data.format}`}</span>
+        </div>
+        <br />
+        <div style={{ width: '100%' }}>
+          {state.data.tags != undefined ? (<TagList tags={state.data.tags} />) : (<></>)}
+        </div>
+        <div style={{ width: "100%", margin: '8px 0 0 24px' }}>
+          {state.data.description}
+        </div>
+        <div style={{ display: "flex", flexFlow: "row nowrap", width: "100%", margin: '16px 0 0 8px', gap: '16px' }}>
+          <label>
+            View mode:
+            <select style={{ marginLeft: '8px' }} value={state.viewMode} onChange={handleDropdown}>
+              <option value="Spread">Spread</option>
+              <option value="Stacked">Stacked</option>
+              <option value="Categorized">Categorized</option>
+            </select>
+          </label>
+          <label>
+            Compact:
+            <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
+          </label>
+        </div>
+        <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
+          {state.viewMode === "Spread" ? <>
+            {state.data.cards.map((card, i) =>
+              <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} /></div>
+            )}
+          </> : <></>}
+          {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
+          {state.viewMode === "Categorized" ? <>
+            {utilities.mapCardsToTypes(state.data.cards).map((typeList) => (
+              <CardStack cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
+            ))}
+          </> : <></>}
+        </div>
       </div>
       <Footer />
     </div>
