@@ -4,14 +4,14 @@ import { GlobalContext } from "../context/GlobalContext";
 import * as server from "../functions/ServerTalk";
 import Footer from '../components/Footer/Footer';
 import './Deck-Editor.css'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const DeckEditor = (props) => {
-
   const [state, setState] = useState({
     cards: [],
     tagInput: ""
   })
-
   const gc = useContext(GlobalContext)
   const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
   const { wipDeck, setWipDeck } = useContext(GlobalContext);
@@ -25,6 +25,7 @@ const DeckEditor = (props) => {
       cards: wipDeck.cards
     }))
   }, [gc])
+
   const handleChanges = (event) => {
     setWipDeck((previous) => ({
       ...previous,
@@ -59,9 +60,8 @@ const DeckEditor = (props) => {
       }
     }
   }
-
   const formatWipDeck = () => {
-    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id}
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id }
     if (result.coverCard === undefined) {
       result.coverCard = wipDeck.cards[0].id
     }
@@ -70,12 +70,11 @@ const DeckEditor = (props) => {
     });
     return result
   }
-
   const handleSubmit = (event) => {
     event.preventDefault();
     let deckData = formatWipDeck()
     deckData = {
-      ...deckData, 
+      ...deckData,
       token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
       authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
     }
@@ -100,18 +99,30 @@ const DeckEditor = (props) => {
         console.log(error);
       });
   }
-
   const clearDeck = (event) => {
-    gc.setWipDeck({
-      authorID: "",
-      cards: [],
-      coverCard: "",
-      deckID: "",
-      description: "",
-      formatTag: "",
-      tags: [],
-      title: ""
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to clear this deck?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => (gc.setWipDeck({
+            authorID: "",
+            cards: [],
+            coverCard: "",
+            deckID: "",
+            description: "",
+            formatTag: "",
+            tags: [],
+            title: ""
+          }))
+        }, {
+          label: 'No',
+          onClick: null
+        }
+      ]
     })
+
   }
 
   return (
