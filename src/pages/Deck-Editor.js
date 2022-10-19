@@ -6,6 +6,7 @@ import Footer from '../components/Footer/Footer';
 import './Deck-Editor.css'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import TagList from '../components/TagList/TagList';
 
 const DeckEditor = (props) => {
   const [state, setState] = useState({
@@ -124,7 +125,11 @@ const DeckEditor = (props) => {
     })
 
   }
-
+  const handleDeleteTag = (tagID) => {
+    let newTags = wipDeck.tags
+    newTags.splice(tagID, 1)
+    setWipDeck((previous) => ({ ...previous, tags: newTags }))
+  }
   return (
     <div className='Page'>
       <form>
@@ -157,9 +162,7 @@ const DeckEditor = (props) => {
         </select>
         <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
         {/* TODO:: make tags deletable lmao */}
-        <>{wipDeck.tags.map((tag, index) => (
-          <>{tag}, </>
-        ))}</>
+        <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true}/>
         <input type="button" onClick={handleSubmit} value="Save Deck" />
         <input type="button" onClick={clearDeck} value="Clear Deck" />
 
