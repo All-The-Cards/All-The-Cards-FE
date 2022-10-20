@@ -16,6 +16,7 @@ import minusIcon from './minus-solid.svg'
 import imageIcon from './image-regular.svg'
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
+import RoundButton from "../RoundButton/RoundButton";
 
 const CardObject = (props) => {
     const [state, setState] = useState({
@@ -200,7 +201,7 @@ const CardObject = (props) => {
             coverCard: props.data
         }))
     }
-    
+
     function generateListBackgroundColor() {
         let bgclr = "#cbd3d3"
         let bgclr2 = "#dbdbe0"
@@ -381,7 +382,7 @@ const CardObject = (props) => {
     function setListHover(value) {
         updateState({ listHover: value })
     }
-    
+
 
     return (
         <div className="RegularCard">
@@ -389,29 +390,29 @@ const CardObject = (props) => {
                 className="CardListObjectContainer"
                 style={{ backgroundColor: state.listBackgroundColorV2 }}
             >
-                {props.clickable && 
-                <Link to={("/card/?id=" + props.data.id)}
+                {props.clickable &&
+                    <Link to={("/card/?id=" + props.data.id)}
 
-                onMouseEnter={() => setListHover(true)}
-                onMouseLeave={() => setListHover(false)}
-            >
-                    <div className="CardListInfo">
-                        <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
-                            {(state.data !== undefined && state.data.name !== undefined && state.data.layout === "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.slice(0, state.maxNameLength).trim() + (state.data.name.length > state.maxNameLength ? "..." : "") : <></>}
-                            {(state.data !== undefined && state.data.name !== undefined && state.data.layout !== "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0, state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "") : <></>}
+                        onMouseEnter={() => setListHover(true)}
+                        onMouseLeave={() => setListHover(false)}
+                    >
+                        <div className="CardListInfo">
+                            <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
+                                {(state.data !== undefined && state.data.name !== undefined && state.data.layout === "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.slice(0, state.maxNameLength).trim() + (state.data.name.length > state.maxNameLength ? "..." : "") : <></>}
+                                {(state.data !== undefined && state.data.name !== undefined && state.data.layout !== "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.split('/')[0].trim().slice(0, state.maxNameLength).trim() + (state.data.name.split('/')[0].trim().length > state.maxNameLength ? "..." : "") : <></>}
+                            </div>
+                            <div className="CardListContent" id="cardListRight">
+                                {state.manaCostSymbols}
+                            </div>
                         </div>
-                        <div className="CardListContent" id="cardListRight">
-                            {state.manaCostSymbols}
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
                 }
-                {!props.clickable && 
+                {!props.clickable &&
                     <div
-    
-                    onMouseEnter={() => setListHover(true)}
-                    onMouseLeave={() => setListHover(false)}
-                >
+
+                        onMouseEnter={() => setListHover(true)}
+                        onMouseLeave={() => setListHover(false)}
+                    >
                         <div className="CardListInfo">
                             <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
                                 {(state.data !== undefined && state.data.name !== undefined && state.data.layout === "split") ? (props.count > 1 ? props.count + "x " : "") + state.data.name.slice(0, state.maxNameLength).trim() + (state.data.name.length > state.maxNameLength ? "..." : "") : <></>}
@@ -422,7 +423,7 @@ const CardObject = (props) => {
                             </div>
                         </div>
                     </div>
-                    }
+                }
                 {state.listHover &&
                     <img src={state.imgLink} id="cardList"></img>
                 }
@@ -430,22 +431,21 @@ const CardObject = (props) => {
                 : <div
                     className="CardObjectContainer"
                 >
-                    {props.clickable && 
-                <Link to={"/card/?id=" + props.data.id}
-                    >
+                    {props.clickable &&
+                        <Link to={"/card/?id=" + props.data.id}
+                        >
+                            <img
+                                src={state.imgLink}
+                                className="CardObjectImage">
+                            </img>
+                        </Link>}
+                    {!props.clickable &&
+
                         <img
                             src={state.imgLink}
                             className="CardObjectImage">
                         </img>
-                </Link> }
-                {!props.clickable && 
-                <div
-                    >
-                        <img
-                            src={state.imgLink}
-                            className="CardObjectImage">
-                        </img>
-                </div> }
+                    }
                     {(state.data.card_faces && state.data.layout === "transform" || state.data.layout === "modal_dfc") &&
                         <div className="flipBox"
                             onClick={flipArt}>
@@ -453,13 +453,14 @@ const CardObject = (props) => {
                         </div>
                     }
                     {gc.isEditing &&
-                    <div className="plusMinusBox">
-                        <img src={plusIcon} className="plusMinusIcon" onClick={addToDeck}/>
-                        {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <img src={minusIcon} className="plusMinusIcon" onClick={removeFromDeck}/>: <></>}
-                        <img src={imageIcon} className="plusMinusIcon" onClick={setAsCoverCard}/>
-                    </div>
-}
-                </div>}
+                        <div style={{ position: "absolute", top: "8px", right: "8px", display: "inline-flex", flexFlow: "column nowrap", width: "100%", alignItems:"flex-end", gap:"8px" }}>
+                            {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <RoundButton icon={minusIcon} onClick={removeFromDeck} /> : <RoundButton icon={plusIcon} onClick={addToDeck} />}
+
+                            <RoundButton icon={imageIcon} onClick={setAsCoverCard} />
+                        </div>
+                    }
+                </div>
+            }
         </div>
     );
 };
