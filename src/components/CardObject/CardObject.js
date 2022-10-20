@@ -454,8 +454,8 @@ const CardObject = (props) => {
                     }
                     {gc.isEditing &&
                         <div style={{ position: "absolute", top: "8px", right: "8px", display: "inline-flex", flexFlow: "column nowrap", width: "100%", alignItems:"flex-end", gap:"8px" }}>
-                            {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <RoundButton icon={minusIcon} onClick={removeFromDeck} /> : <RoundButton icon={plusIcon} onClick={addToDeck} />}
-
+                            <RoundButton icon={plusIcon} onClick={addToDeck} />
+                            {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <RoundButton icon={minusIcon} onClick={removeFromDeck} /> : <></>}
                             <RoundButton icon={imageIcon} onClick={setAsCoverCard} />
                         </div>
                     }
