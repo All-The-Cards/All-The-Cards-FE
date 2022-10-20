@@ -19,6 +19,7 @@ const DeckEditor = (props) => {
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
+    gc.setIsEditing(true)
     document.title = "Deck Editor"
 
     setState((previous) => ({
