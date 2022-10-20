@@ -2,7 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
-
+import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
@@ -11,6 +11,7 @@ import Footer from '../components/Footer/Footer.js';
 const Deck = (props) => {
 
   const gc = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext)
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
@@ -78,7 +79,7 @@ const Deck = (props) => {
       const uid = gc.activeSession.user.id
       const query = "/api/get/user/" + "id=" + uid
       //if query is empty, don't send
-      if (query.trim() === "/api/get/user/" ) {
+      if (query.trim() === "/api/get/user/") {
         return
       }
       server.post(query).then(response => {
@@ -90,7 +91,7 @@ const Deck = (props) => {
         else {
           // console.log("user:",response[0])
           // console.log(id)
-          if (response[0].favorites.decks.includes(id)){
+          if (response[0].favorites.decks.includes(id)) {
             // console.log("Favorite found")
             updateState({
               isFavorited: true
@@ -102,11 +103,11 @@ const Deck = (props) => {
               isFavorited: false
             })
           }
-        }  
+        }
       })
     }
-          
-    
+
+
   }
   const handleDropdown = (event) => {
     updateState({ viewMode: event.target.value })
@@ -151,19 +152,19 @@ const Deck = (props) => {
 
       }
     )
-    .then((response) => {
-      console.log(response);
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-      updateState({
-        isFavorited: !state.isFavorited
+      .then((response) => {
+        console.log(response);
       })
-    }
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    updateState({
+      isFavorited: !state.isFavorited
+    })
+  }
   const copyURLToClipboard = (event) => {
     let element = document.createElement('input');
     element.value = window.location.href;
@@ -178,27 +179,27 @@ const Deck = (props) => {
   }
 
   return (
-    <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
-    {
-      gc.activeSession &&
-      <div onClick={() => {
-        toggleFavorite()
+    <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
+      {
+        gc.activeSession &&
+        <div onClick={() => {
+          toggleFavorite()
         }}
-        style={{float: 'right', marginRight: '20px', marginTop: '10px'}}
+          style={{ float: 'right', marginRight: '20px', marginTop: '10px' }}
         >
-      { state.isFavorited &&
-        <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-        <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+          {state.isFavorited &&
+            <div className="FavoriteIcon" style={{ backgroundColor: "Gold" }}>-</div> ||
+            <div className="FavoriteIcon" style={{ backgroundColor: "#dadada" }}>+</div>
+          }
+        </div>
       }
-      </div>
-}
-      {state.data.name} - {state.data.user_name}
-      <br/>
-      {state.data.description}
-      <br/>
-      Format: {state.data.format}
-      <br/>
-      Tags: {state.data.tags != undefined ? (state.data.tags.map((tag, index) => (<>{tag},</>))) : (<></>) }
+      <span>{state.data.name} - {state.data.user_name}</span>
+      <br />
+      <span>{state.data.description}</span>
+      <br />
+      <span>Format: {state.data.format}</span>
+      <br />
+      <span>Tags: {state.data.tags != undefined ? (state.data.tags.map((tag, index) => (<>{tag},</>))) : (<></>)}</span>
       <div style={{ display: "flex", flexFlow: "row nowrap" }}>
         <label>
           View mode:

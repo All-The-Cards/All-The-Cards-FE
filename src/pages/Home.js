@@ -17,6 +17,7 @@ const Home = (props) => {
   })
 
   const gc = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext);
 
   const nav = useNavigate()
 
@@ -66,7 +67,7 @@ const Home = (props) => {
   }
 
   return (
-    <div className="Container Page">
+    <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
       <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
         <div className="blur" />
         <div className="SearchBarObject">
@@ -79,7 +80,7 @@ const Home = (props) => {
         {state.recentDecks.length > 0 &&
           <div>
 
-            <header className="HeaderText">Recent Decks</header>
+            <header className={`HeaderText ${darkMode ? "HeaderTextDark" : ''}`}>Recent Decks</header>
             {state.recentDecks.map((item, i) => <DeckTileObject data={item} key={i} />)}
 
           </div>

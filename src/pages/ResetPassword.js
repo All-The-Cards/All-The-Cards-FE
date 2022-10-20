@@ -9,8 +9,8 @@ import * as server from '../functions/ServerTalk.js';
 
 const ResetPassword = (props) => {
 
-  const { supabase } = useContext(GlobalContext)
-  const { setSearchBar } = useContext(GlobalContext)
+  const gc = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext)
 
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -23,7 +23,7 @@ const ResetPassword = (props) => {
   const nav = useNavigate()
 
   useEffect(() => {
-    setSearchBar(props)
+    gc.setSearchBar(props.value)
     document.title = "Reset Password"
     // getRandomBgImg()
     setHash(window.location.hash)
@@ -54,26 +54,6 @@ const ResetPassword = (props) => {
       isShowingConfirmPass ? setIsShowningConfirmPass(false) : setIsShowningConfirmPass(true)
 
   };
-
-  // const handleSubmit = (event) => {
-
-  //   event.preventDefault()
-
-  //   let check = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/
-
-  //   if (newPassword !== confirmPassword) {
-  //     alert("Passwords do not match. Please try again...")
-  //     setConfirmPassword('')
-  //   }
-  //   else if (!newPassword.match(check)) {
-  //     alert("Password does not meet requirements. Hover of the password title to view requirements.")
-  //     setNewPassword("")
-  //     setConfirmPassword("")
-  //     return
-  //   }
-  //   else
-  //     updatePassword(event)
-  // }
 
   const updatePassword = async (event) => {
     event.preventDefault()
@@ -121,7 +101,7 @@ const ResetPassword = (props) => {
         }
 
         //   now we will change the password
-        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        const { error } = await gc.supabase.auth.updateUser({ password: newPassword });
 
         if (error) {
           alert(error)
@@ -138,16 +118,16 @@ const ResetPassword = (props) => {
 
   return (
 
-    <div className='LoginContainer'>
+    <div className={`LoginContainer ${darkMode ? "LoginContainerDark" : ''}`}>
       <div style={{ backgroundImage: `url("https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092")` }} className='LeftContainer'>
         <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
 
-        <div className='LoginTitle'>Reset Password</div>
+        <div className={`LoginTitle ${darkMode ? "LoginTitleDark" : ''}`}>Reset Password</div>
         <div className='FormBox'>
           <form className='FormContainer'>
-            <div className='InputTitles' onMouseEnter={() => setToolTip(true)} onMouseLeave={() => setToolTip(false)}>New Password</div>
+            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`} onMouseEnter={() => setToolTip(true)} onMouseLeave={() => setToolTip(false)}>New Password</div>
             <input
               id='resetPass'
               type={isShowingNewPass ? "text" : "password"}
@@ -157,7 +137,7 @@ const ResetPassword = (props) => {
               value={newPassword}
               onChange={handleChange}
             />
-            <div className='InputTitles'>Confirm Password</div>
+            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Confirm Password</div>
             <input
               id='confirmPass'
               type={isShowingConfirmPass ? "text" : "password"}

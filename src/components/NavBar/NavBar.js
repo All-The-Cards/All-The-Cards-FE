@@ -4,9 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
 import Logo_Star from './logo_star.png'
 import Logo_Name from './logo_text_marginleft.png'
+import Logo_Name_Dark from './logo_text_white.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
+import LayerIconWhite from './layers_icon_white.png'
 import UsersIcon from './users_icon.png'
+import UsersIconWhite from './users_icon_white.png'
 import * as server from '../../functions/ServerTalk.js'
 import SearchGlass from './SearchGlass.png';
 import { Link } from "react-router-dom";
@@ -20,7 +23,7 @@ const Navbar = () => {
     // Global Context Variables
     const gc = useContext(GlobalContext);
     const { activeSession, setActiveSession } = useContext(GlobalContext);
-    const { activeUser, setUser } = useContext(GlobalContext);
+    const { darkMode, setDarkMode } = useContext(GlobalContext);
     const { name, setName } = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
@@ -114,6 +117,10 @@ const Navbar = () => {
             setUserMenu(false)
             nav('/registration')
         }
+        else if (id === '6') {
+            setDarkMode(current => !current)
+            localStorage.setItem("DarkMode", darkMode)
+        }
         else if (id === '7') {
             setLayerMenu(false)
             setLoggedUserMenu(false)
@@ -137,6 +144,8 @@ const Navbar = () => {
                     alert("You have successfully logged out")
                     setActiveSession(null)
                     localStorage.removeItem("userName")
+                    setDarkMode(current => !current)
+                    localStorage.removeItem("DarkMode")
                     nav('/')
                 }
                 else {
@@ -155,19 +164,30 @@ const Navbar = () => {
 
     return (
 
-        <div className="NavBarContainer">
+        <div className={`NavBarContainer ${darkMode ? "NavBarContainerDark" : ''}`}>
             <Link to={"/"}
                 className="LogoContainer">
                 <img
                     src={Logo_Star}
                     alt="logo"
                     className="Logo"
-                /><img
-                    src={Logo_Name}
-                    alt="logo"
-                    className="Logo"
-                    id="Logo-responsive"
                 />
+                {!darkMode &&
+                    <img
+                        src={Logo_Name}
+                        alt="logo"
+                        className="Logo"
+                        id="Logo-responsive"
+                    />
+                }
+                {darkMode &&
+                    <img
+                        src={Logo_Name_Dark}
+                        alt="logo"
+                        className="Logo"
+                        id="Logo-responsive"
+                    />
+                }
             </Link>
 
             <div className="IconContainer">
@@ -182,7 +202,12 @@ const Navbar = () => {
                     id="Searchicon-responsive"
 
                 />
-                <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
+                {!darkMode &&
+                    <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
+                }
+                {darkMode &&
+                    <img src={LayerIconWhite} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
+                }
                 {openLayerMenu &&
                     <div className="LayerMenu" ref={wrapperRef}>
                         <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div>
@@ -190,13 +215,18 @@ const Navbar = () => {
                         <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
                     </div>
                 }
-                <img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                {!darkMode &&
+                    <img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                }
+                {darkMode &&
+                    <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                }
                 {openUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
                             <div id={'4'} className="MenuItems" onClick={handleClose}>Login</div>
                             <div id={'5'} className="MenuItems" onClick={handleClose}>Register</div>
-                            {/* <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div> */}
+                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
                         </div>
                     </div>
                 }
@@ -205,7 +235,7 @@ const Navbar = () => {
                         <div className="UserMenu" ref={wrapperRef}>
                             <div className="MenuText">Hello {name}</div>
                             <div id={'0'} className="MenuItems" onClick={handleClose}>Profile</div>
-                            {/* <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div> */}
+                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
                             <div id={'7'} className="MenuItems" onClick={handleClose}>Settings</div>
                             <div id={'logout'} className="MenuItems" onClick={handleClose}>Signout</div>
                         </div>
