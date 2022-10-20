@@ -1,12 +1,19 @@
 /* Page Container */
 
-.LoginContainer{
+.LoginContainer {
     display: flex;
     flex-direction: row;
     height: 94.6vh;
 }
 
-.LeftContainer{
+.LoginContainerDark {
+    background-color: #2d2d2d;
+    display: flex;
+    flex-direction: row;
+    height: 94.6vh;
+}
+
+.LeftContainer {
     background-color: grey;
     height: 100%;
     width: 40%;
@@ -15,14 +22,14 @@
     background-size: cover;
 }
 
-.ArtBlur{
+.ArtBlur {
     backdrop-filter: blur(4px);
     width: 100%;
     height: 100%;
-    background:rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
 }
 
-.RightContainer{
+.RightContainer {
     height: 100%;
     width: 60%;
     margin-left: 150px;
@@ -30,37 +37,51 @@
 
 /* Elements from top to bottom */
 
-.LoginTitle{
+.LoginTitle {
     margin-top: 150px;
     font-weight: bold;
     font-size: 30px;
 }
 
-.RegisterLink{
+.LoginTitleDark {
+    color: whitesmoke;
+    margin-top: 150px;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.RegisterLink {
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
 }
 
-.RegisterLinkAlt{
+.RegisterLinkAlt {
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
     text-decoration-line: underline;
 }
 
-.FormContainer{
+.FormContainer {
     width: 310px;
     margin-top: 30px;
     display: flex;
     flex-direction: column;
 }
 
-.InputTitles{
+.InputTitles {
     margin-top: 10px;
     font-weight: bold;
     font-size: 20px;
 }
 
-.RegistrationInputs{
+.InputTitlesDark {
+    color: whitesmoke;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.RegistrationInputs {
     margin-top: 10px;
     background-color: lightgrey;
     padding: 5px;
@@ -71,7 +92,7 @@
     /* border-style: solid; */
 }
 
-.EyeIcon{
+.EyeIcon {
     height: 20px;
     width: 20px;
     cursor: pointer;
@@ -82,7 +103,7 @@
     left: 280px;
 }
 
-.EyeIconAlt{
+.EyeIconAlt {
     height: 20px;
     width: 20px;
     cursor: pointer;
@@ -93,7 +114,7 @@
     left: 280px;
 }
 
-.ForgotPasswordLink{
+.ForgotPasswordLink {
     align-self: flex-end;
     margin-top: 10px;
     font-size: 15px;
@@ -101,7 +122,7 @@
     cursor: pointer;
 }
 
-.ForgotPasswordLinkAlt{
+.ForgotPasswordLinkAlt {
     /* margin-left: 185px; */
     font-size: 15px;
     color: rgba(219, 30, 79, 1);
@@ -109,7 +130,7 @@
     cursor: pointer;
 }
 
-.SubmitButton{
+.SubmitButton {
     align-self: center;
     border-radius: 25px;
     background-color: lightgray;
@@ -119,11 +140,11 @@
     cursor: pointer;
 }
 
-.SubmitButton:hover{
+.SubmitButton:hover {
     background-color: rgb(202, 202, 202)
 }
 
-.ModalWindowBackground{
+.ModalWindowBackground {
     background-color: rgb(0, 0, 0, 0.8);
     height: 94.6vh;
     width: 100%;
@@ -134,25 +155,50 @@
     align-items: center;
 }
 
-.ModalWindowContainer{
+.ModalWindowContainer {
     background-color: white;
     width: 450px;
     height: 220px;
 }
 
-.ModalWindowContainer > h2 {
+.ModalWindowContainerDark {
+    background-color: #2d2d2d;
+    width: 450px;
+    height: 220px;
+}
+
+
+.ModalWindowContainer>h2 {
     margin: 0;
     background-color: rgba(113, 56, 209, 1);
     text-align: center;
 }
 
-.ModalWindowContainer > p {
+.ModalWindowContainerDark>h2 {
+    color: whitesmoke;
+    margin: 0;
+    background-color: rgba(113, 56, 209, 1);
+    text-align: center;
+}
+
+.ModalWindowContainer>p {
     align-items: center;
     text-align: center;
     margin: 20px;
 }
 
-.ModalWindowContainer > form {
+.ModalWindowContainerDark>p {
+    color: whitesmoke;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+}
+
+.ModalWindowContainerDark>form {
+    color: whitesmoke;
+}
+
+.ModalWindowContainer>form {
     text-align: center;
     margin-top: 30px;
 }

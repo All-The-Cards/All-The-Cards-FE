@@ -18,6 +18,7 @@ import Footer from '../components/Footer/Footer.js';
 const SearchResults = (props) => {
 
   const gc = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext)
 
 
   const [state, setState] = useState({
@@ -597,7 +598,7 @@ const SearchResults = (props) => {
       threshold={50}
     >
       { }
-      <div className="Container Page" style={{ paddingBottom: '200px' }}>
+      <div className={`Container ${darkMode ? "ContainerDark" : ''}`} style={{ paddingBottom: '200px' }}>
         {/* Advanced search options */}
         <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{ position: 'absolute', right: '0', marginRight: '20px' }}>{getTypeName()}</button>
         <div className="AdvancedContainer" style={{ display: state.advancedContainerDisplay }}>

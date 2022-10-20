@@ -2,7 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
-
+import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
@@ -12,6 +12,7 @@ import TagList from '../components/TagList/TagList.js';
 const Deck = (props) => {
 
   const gc = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext)
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
@@ -179,7 +180,7 @@ const Deck = (props) => {
   }
 
   return (
-    <div>
+    <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
       <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '80%' }}>
         {
           gc.activeSession &&
@@ -238,10 +239,8 @@ const Deck = (props) => {
           </> : <></>}
         </div>
       </div>
-      <Footer />
     </div>
   );
-
 };
 
 export default Deck;
