@@ -12,9 +12,7 @@ export const GlobalProvider = ({ children }) => {
     // Global Variables Below
 
     const [devMode, setDevMode] = useState(false)
-
     const [hasSearchBar, setSearchBar] = useState(true)
-
     const [searchType, setSearchType] = useState("DEF")
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -30,11 +28,11 @@ export const GlobalProvider = ({ children }) => {
     })
 
     const [isEditing, setIsEditing] = useState(false)
-
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
     const [activeSession, setActiveSession] = useState(JSON.parse(localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")))
     const [activeUser, setUser] = useState(null)
     const [name, setName] = useState("");
+    const [darkMode, setDarkMode] = useState(localStorage.getItem("DarkMode"))
 
     // Global Function Below
     const getName = () => {
@@ -74,7 +72,9 @@ export const GlobalProvider = ({ children }) => {
                 setName,
                 getName,
                 isEditing,
-                setIsEditing
+                setIsEditing,
+                darkMode,
+                setDarkMode
 
             }}
         >

@@ -12,6 +12,18 @@
 
 }
 
+.NavBarContainerDark {
+    background-color: #1B1B1B;
+    position: sticky;
+    top: 0;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: row;
+    z-index: 999
+}
+
 /* Left Side Container of NavBar */
 
 .LogoContainer {

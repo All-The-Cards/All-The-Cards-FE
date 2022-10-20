@@ -1,0 +1,18 @@
+.DeckPage {
+    display: 'flex';
+    flex-flow: 'column nowrap'
+}
+
+.DeckPageDark {
+    background-color: #2d2d2d;
+    display: 'flex';
+    flex-flow: 'column nowrap'
+}
+
+.DeckPageDark>span {
+    color: whitesmoke;
+}
+
+.DeckPageDark label {
+    color: whitesmoke;
+}

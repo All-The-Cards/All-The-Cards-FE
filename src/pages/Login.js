@@ -7,10 +7,11 @@ import EyePassword2 from '../images/HiddenEyePassword.png'
 import { GlobalContext } from '../context/GlobalContext'
 import * as server from '../functions/ServerTalk.js';
 
-const Login = () => {
+const Login = (props) => {
 
   const gc = useContext(GlobalContext)
   const { activeSession, setActiveSession } = useContext(GlobalContext)
+  const { darkMode } = useContext(GlobalContext)
 
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)
@@ -27,6 +28,7 @@ const Login = () => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
+    gc.setSearchBar(props.value)
     // getRandomBgImg()
     document.title = "Login"
   }, [])
@@ -121,34 +123,6 @@ const Login = () => {
 
   }
 
-  //   const GetUserInfo = () => {
-
-  //     gc.supabase.auth.getSession().then(({ data: { session }, error }) => {
-  //       if (error !== null) {
-  //         alert(error)
-  //       }
-  //       else if (session !== null) {
-  //         setActiveSession(session)
-  //       }
-  //     })
-
-  //   gc.supabase.auth.getUser().then(({ data: { user }, error }) => {
-  //     if (error !== null) {
-  //       alert(error)
-  //     }
-  //     else {
-  //       gc.setUser(user)
-  //     }
-  //   })
-
-  // }
-
-  // useEffect(() => {
-
-  //   console.log(activeSession)
-
-  // }, [activeSession]);
-
   const setLocalUsername = (data) => {
     if (data && data.user.user_metadata)
       localStorage.setItem("userName", data.user.user_metadata.name.split(" ")[0]);
@@ -165,17 +139,17 @@ const Login = () => {
 
   return (
 
-    <div className='LoginContainer'>
+    <div className={`LoginContainer ${darkMode ? "LoginContainerDark" : ''}`}>
       <div style={{ backgroundImage: `url("https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092")` }} className='LeftContainer'>
         <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
 
-        <div className='LoginTitle'>Login</div>
+        <div className={`LoginTitle ${darkMode ? "LoginTitleDark" : ''}`}>Login</div>
         <Link to='/registration' className={`RegisterLink ${underlineRegister ? "RegisterLinkAlt" : ''}`} onMouseEnter={() => setUnderlineRegister(true)} onMouseLeave={() => setUnderlineRegister(false)}>Need an Account?</Link>
         <div className='FormBox'>
           <form className='FormContainer'>
-            <div className='InputTitles'>Email</div>
+            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Email</div>
             <input
               type="email"
               name="email"
@@ -185,7 +159,7 @@ const Login = () => {
               value={inputs.email}
               onChange={handleChange}
             />
-            <div className='InputTitles'>Password</div>
+            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Password</div>
             <input
               type={isShowing ? "text" : "password"}
               name="password"
@@ -211,7 +185,7 @@ const Login = () => {
 
       {isModalActive &&
         <div className='ModalWindowBackground'>
-          <div className='ModalWindowContainer' ref={wrapperRef}>
+          <div className={`ModalWindowContainer ${darkMode ? "ModalWindowContainerDark" : ''}`} ref={wrapperRef}>
             <h2>Password Reset</h2>
             <p>In order to reset your password, you will need to provide the email you registered with.</p>
             <form>

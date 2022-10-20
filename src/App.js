@@ -16,8 +16,6 @@ import Navbar from './components/NavBar/NavBar';
 import SearchResults from './pages/SearchResults';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword'
-import Footer from './components/Footer/Footer';
-
 
 function App() {
     return (
