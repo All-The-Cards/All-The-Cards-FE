@@ -1,0 +1,31 @@
+.DeckListContainer {
+    backdrop-filter: blur(6px);
+    background-color: #e8e8e8;
+    /* background: rgba(255,255,255, 0.3); */
+    box-shadow: 10px 10px 20px rgba(0,0,0,.2);
+    width: 280px;
+    min-height: 25vh;
+    max-height: 66vh;
+    position: fixed;
+    margin-left: 2vw;
+    margin-top: 3vh;
+    z-index: 100;
+    border-radius: 10px;
+    justify-content: center;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.DeckListCard {
+    display: inline-block;
+    margin-top:2px;
+}
+
+.DeckListSmallIcon {
+    display: inline-block;
+    width: 20px;
+    background-color: #dadada;
+    color:rgba(0,0,0,.6);
+    border-radius: 50%;
+}

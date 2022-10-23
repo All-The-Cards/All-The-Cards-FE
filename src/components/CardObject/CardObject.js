@@ -385,7 +385,7 @@ const CardObject = (props) => {
 
 
     return (
-        <div className="RegularCard">
+        <>
             {props.isCompact === true ? <div
                 className="CardListObjectContainer"
                 style={{ backgroundColor: state.listBackgroundColorV2 }}
@@ -429,7 +429,7 @@ const CardObject = (props) => {
                 }
             </div>
                 : <div
-                    className="CardObjectContainer"
+                    className="CardObjectContainer RegularCard"
                 >
                     {props.clickable &&
                         <Link to={"/card/?id=" + props.data.id}
@@ -461,7 +461,7 @@ const CardObject = (props) => {
                     }
                 </div>
             }
-        </div>
+        </>
     );
 };
 

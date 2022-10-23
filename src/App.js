@@ -13,6 +13,7 @@ import DeckEditor from './pages/Deck-Editor';
 import CardCreator from './pages/CardCreator';
 import Registration from './pages/User-Registration';
 import Navbar from './components/NavBar/NavBar';
+import WIPDeckList from './components/WIPDeckList/WIPDeckList';
 import SearchResults from './pages/SearchResults';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword'
@@ -22,6 +23,7 @@ function App() {
         <BrowserRouter>
             <GlobalProvider>
                 <Navbar />
+                <WIPDeckList/>
                 <Routes>
                     <Route exact path='/' element={<Home hasSearchBar={false} />} />
                     <Route path="/search" element={<SearchResults hasSearchBar={true} />}>

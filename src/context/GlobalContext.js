@@ -27,6 +27,7 @@ export const GlobalProvider = ({ children }) => {
         title: ""
     })
 
+    const [showActiveDeckList, setShowActiveDeckList] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_API_KEY)
     const [activeSession, setActiveSession] = useState(JSON.parse(localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")))
@@ -74,7 +75,9 @@ export const GlobalProvider = ({ children }) => {
                 isEditing,
                 setIsEditing,
                 darkMode,
-                setDarkMode
+                setDarkMode,
+                showActiveDeckList,
+                setShowActiveDeckList
 
             }}
         >

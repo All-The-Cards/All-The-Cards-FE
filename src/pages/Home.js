@@ -27,6 +27,7 @@ const Home = (props) => {
     // getRandomBgImg()
     getRecentDecks()
 
+      console.log(gc.wipDeck)
   }, [])
 
   // useEffect(() => {

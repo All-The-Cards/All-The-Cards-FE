@@ -166,12 +166,14 @@ const User = (props) => {
             </div>
           </div>
         </div>
-        {state.decks.length > 1 &&
+        {state.decks.length > 0 &&
           <div className="UserPageContent" id="deckContent"><div className="HeaderText">
             Decks
-          </div>
+          </div>{state.decks.map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}>
+              <DeckTileObject data={item} />
+            </div>)}
           </div>}
-        {state.decks.map((item, i) => <DeckTileObject data={item} key={i} />)}
+          
 
         {state.data.favorites &&
           <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent"><div className="HeaderText">
