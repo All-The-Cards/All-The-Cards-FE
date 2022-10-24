@@ -53,7 +53,7 @@ const Card = (props) => {
       updateState({ card: <div></div> })
   
       server.post(query).then(response => {
-        // console.log(response[0])
+        console.log(response[0])
         //if invalid, just direct to search page
         if (response.length === 0) {
           nav('/search/')

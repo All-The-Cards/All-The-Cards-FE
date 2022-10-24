@@ -198,7 +198,7 @@ const Deck = (props) => {
         <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
           <div>
             <span style={{ fontSize: '2rem' }}>{state.data.name} - </span><span style={{ fontSize: '1.5rem', marginLeft: '0.5rem' }}>{state.data.user_name}</span>
-            <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
+            {state.data.cards.length > 0 && <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />}
             {/* TODO:: notification instead of button text switch, replace text with icon */}
             <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
           </div>

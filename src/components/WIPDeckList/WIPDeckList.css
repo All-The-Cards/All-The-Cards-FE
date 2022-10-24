@@ -1,0 +1,64 @@
+.DeckListContainer {
+    backdrop-filter: blur(6px);
+    background-color: #e8e8e8;
+    /* background: rgba(255,255,255, 0.3); */
+    box-shadow: 10px 10px 20px rgba(0,0,0,.2);
+    width: 300px;
+    min-height: 25vh;
+    max-height: 66vh;
+    position: fixed;
+    margin-left: 2vw;
+    margin-top: 3vh;
+    z-index: 100;
+    border-radius: 10px;
+    justify-content: center;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.DeckListCard {
+    display: inline-block;
+    margin-top:2px;
+}
+
+.DeckListSmallIcon {
+    display: inline-block;
+    width: 20px;
+    background-color: #d0d0d0;
+    color:rgba(0,0,0,.7);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    left: 5px;
+    top: -8px;
+}
+
+.DeckListCover {
+    color:#0e0e0e;
+    height:120px;
+    border-radius: 10px;
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom:10px; 
+    background-position: top 15%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.DeckListTitle {
+    padding-top: 10px;
+    color:#f7f7f7;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
+}
+
+.DeckListFormat {
+    font-style: italic;
+    color:#f7f7f7;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
+    position: absolute;
+    right: 0;
+    margin-right: 30px;
+    margin-top: 52px;
+}

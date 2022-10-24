@@ -1,0 +1,140 @@
+// This Component displays a User List View from User .JSON info
+
+import { React, useEffect, useState, useContext } from "react";
+import './WIPDeckList.css'
+import '../../pages/GlobalStyles.css'
+import { Link } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext";
+import CardObject from "../CardObject/CardObject";
+
+const UserObject = (props) => {
+
+    const gc = useContext(GlobalContext)
+    const [state, setState] = useState({
+        
+    })
+
+    const updateState = (objectToUpdate) => {
+        setState((previous) => ({
+          ...previous,
+          ...objectToUpdate
+        }))
+    }
+    useEffect(() => {
+      //TODO:: DEBUG USAGE HERE THIS NEEDS TO BE SET BY THE DECK EDITOR
+        gc.setIsEditing(true)
+        getData()
+    }, [props])
+
+
+    const getData = () =>{
+        console.log("deck:", gc.wipDeck)
+        // updateState({ 
+
+        // })
+    }
+    
+    const sortByCMC = (a, b) => {
+        if (a.cmc >= b.cmc) {
+          return 1
+        }
+        else {
+          return -1
+        }
+      }
+      
+      const sortByLand = (a, b) => {
+        if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
+          return 1
+        }
+        else {
+          return -1
+        }
+      }
+
+      const makeUniqueDeck = (deck) => {
+        let uniqueDeck = deck
+
+        let uniqueRes = []
+        let uniqueNames = []
+        uniqueRes = deck.filter((item) => {
+          let duplicate = uniqueNames.includes(item.name)
+          if (!duplicate) {
+            uniqueNames.push(item.name)
+            return true;
+          }
+          return false;
+        })
+        uniqueDeck = uniqueRes
+
+        return uniqueDeck
+      }
+
+      const removeFromDeck = (item) => {
+        console.log(item)
+        let tempCards = gc.wipDeck.cards
+        let index = gc.wipDeck.cards.indexOf(item)
+        tempCards.splice(index, 1)
+        gc.setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
+      }
+      
+      const addToDeck = (item) => {
+        let tempCards = gc.wipDeck.cards
+        tempCards.push(item)
+        gc.setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
+    }
+
+    const getCount = (card, cards) => {
+      return cards.filter((item) => { return item.name === card.name }).length
+    }
+
+    return(
+        <>
+        {
+            gc.isEditing && 
+            <div className="DeckListContainer">
+              <Link to="/deckeditor">
+                <div className="DeckListCover" 
+                  style={{
+                    backgroundImage:"url(" + (gc.wipDeck.coverCard && gc.wipDeck.coverCard.image_uris.art_crop)  + ")",
+                    // backgroundPosition: "center",
+                    // backgroundRepeat: "no-repeat",
+                    // backgroundSize: "cover"
+                  }}>
+                  <div className="DeckTitle DeckListTitle">
+                    {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
+                  </div>
+                  <div className="DeckListFormat">{gc.wipDeck.formatTag}</div>
+                </div>
+              </Link>
+                {
+                    makeUniqueDeck(gc.wipDeck.cards).sort(sortByCMC).sort(sortByLand).map((item, i) => 
+                    <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                        <div className="CardListObject" style={{display:"inline-block"}}
+                          onClick={() => {
+                            removeFromDeck(item)
+                          }}>
+                        <CardObject data={item} isCompact={true} 
+                        count={getCount(item, gc.wipDeck.cards)}/>
+                        </div>
+                        <div className="DeckListSmallIcon"
+                          onClick={() => {
+                            addToDeck(item)
+                          }}>
+                          +
+                        </div>
+                    </div>)
+                }
+            </div>
+        }
+        </>
+    )
+}
+
+export default UserObject
