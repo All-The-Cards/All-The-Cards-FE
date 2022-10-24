@@ -128,6 +128,26 @@ const DeckEditor = (props) => {
     })
 
   }
+  const cancelEditingDeck = (event) => {
+    confirmAlert({
+      title: 'Quit without saving',
+      message: 'Are you sure you want to quit without saving?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: (() => {
+            gc.setIsEditing(false)
+            gc.setWipDeck(null)
+            nav("/")
+          })
+        }, {
+          label: 'No',
+          onClick: null
+        }
+      ]
+    })
+
+  }
   const handleDeleteTag = (tagID) => {
     let newTags = wipDeck.tags
     newTags.splice(tagID, 1)
@@ -135,20 +155,21 @@ const DeckEditor = (props) => {
   }
   return (
     <div className='Page'>
-      <div style={{ minWidth: '300px', maxWidth: '80%', margin: 'auto' }}>
+      <div style={{ minWidth: '300px', maxWidth: '60%', margin: 'auto' }}>
         <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
           <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
             <div>
               <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
-              <input type="button" onClick={handleSubmit} value="Save Deck" />
-              <input type="button" onClick={clearDeck} value="Clear Deck" />
-              <input type="button" onClick={(event) => {
+              <input type="button" className="FancyButton"  onClick={handleSubmit} value="Save Deck" />
+              <input type="button" className="FancyButton"  onClick={clearDeck} value="Clear Deck" />
+              <input type="button" className="FancyButton"  onClick={(event) => {
                 handleSubmit(event)
                 gc.setIsEditing(false)
                 gc.setWipDeck(null)
                 nav("/")
                 
-              }} value="Finish Editing" />
+              }} value="Publish Deck" />
+              <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit without Saving" />
             </div>
             <select
               value={wipDeck.formatTag}

@@ -181,7 +181,7 @@ const Deck = (props) => {
 
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
-      <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '80%' }}>
+      <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}>
         {
           gc.activeSession &&
           <div onClick={() => {
