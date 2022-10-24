@@ -22,13 +22,23 @@ const UserObject = (props) => {
     }
     useEffect(() => {
       //TODO:: DEBUG USAGE HERE THIS NEEDS TO BE SET BY THE DECK EDITOR
-        gc.setIsEditing(true)
+        // gc.setIsEditing(true)
         getData()
     }, [props])
 
 
     const getData = () =>{
         console.log("deck:", gc.wipDeck)
+        if (!gc.wipDeck.coverCard || gc.wipDeck.coverCard == "") {
+          gc.setWipDeck((previous) => ({
+            ...previous,
+            coverCard: {
+              image_uris: {
+                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+              }
+            }
+          }))
+        }
         // updateState({ 
 
         // })
@@ -36,6 +46,15 @@ const UserObject = (props) => {
     
     const sortByCMC = (a, b) => {
         if (a.cmc >= b.cmc) {
+          return -1
+        }
+        else {
+          return 1
+        }
+      }
+      
+      const sortByLand = (a, b) => {
+        if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
           return 1
         }
         else {
@@ -43,8 +62,8 @@ const UserObject = (props) => {
         }
       }
       
-      const sortByLand = (a, b) => {
-        if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
+      const sortByName = (a, b) => {
+        if (a.name >= b.name) {
           return 1
         }
         else {
@@ -108,12 +127,14 @@ const UserObject = (props) => {
                     // backgroundSize: "cover"
                   }}>
                   <div className="DeckTitle DeckListTitle">
+                    {gc.wipDeck.title.length < 1 && "New Deck"}
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
                   <div className="DeckListFormat">{gc.wipDeck.formatTag}</div>
                 </div>
               </Link>
                 {
+                    gc.wipDeck.cards.length > 0 &&
                     makeUniqueDeck(gc.wipDeck.cards).sort(sortByCMC).sort(sortByLand).map((item, i) => 
                     <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
                         <div className="CardListObject" style={{display:"inline-block"}}

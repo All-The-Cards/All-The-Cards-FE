@@ -35,7 +35,7 @@ function App() {
                     <Route path="/card/:id?" element={<Card hasSearchBar={true} />} />
                     <Route path='/user' element={<User hasSearchBar={true} />} />
                     <Route path="/user/:id?" element={<User hasSearchBar={true} />} />
-                    <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={false} />} />
+                    <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={true} />} />
                     <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false} />} />
                     <Route exact path='/registration' element={<Registration hasSearchBar={false} />} />
                     <Route exact path='/login' element={<Login hasSearchBar={false} />} />
