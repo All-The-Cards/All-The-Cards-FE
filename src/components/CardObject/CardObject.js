@@ -224,6 +224,9 @@ const CardObject = (props) => {
         else if (props.data.card_faces) {
             colorobject = props.data.card_faces[0].mana_cost
         }
+        else if (props.data.type_one.toLowerCase().includes("Land".toLowerCase())) {
+            colorobject = props.data.color_identity
+        }
         // else if (props.data.color_identity) {
         //     colorobject = props.data.color_identity
         // }
@@ -312,6 +315,11 @@ const CardObject = (props) => {
 
                 }
 
+            }
+            if (uniqueColors > 1){
+                bgclr = "#d6be73"
+                bgclr2 = "#d6be73"
+                altclr = "#efd26e"
             }
             //if multicolored
             if (splitcount > 0) {

@@ -141,7 +141,9 @@ const Navbar = () => {
         gc.supabase.auth.signOut()
             .then(({ error }) => {
                 if (error === null) {
-                    alert("You have successfully logged out")
+                    // alert("You have successfully logged out")
+                    gc.setIsEditing(false)
+                    gc.setWipDeck(null)
                     setActiveSession(null)
                     localStorage.removeItem("userName")
                     setDarkMode(current => !current)
@@ -211,7 +213,7 @@ const Navbar = () => {
                 {openLayerMenu &&
                     <div className="LayerMenu" ref={wrapperRef}>
                         <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div>
-                        <div id={'2'} className="MenuItems" onClick={handleClose}>New Deck</div>
+                        <div id={'2'} className="MenuItems" onClick={handleClose}>{(!gc.isEditing && "New Deck") || "Deck Editor"}</div>
                         <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
                     </div>
                 }

@@ -21,7 +21,8 @@ const UserObject = (props) => {
         }))
     }
     useEffect(() => {
-        gc.setShowActiveDeckList(true)
+      //TODO:: DEBUG USAGE HERE THIS NEEDS TO BE SET BY THE DECK EDITOR
+        gc.setIsEditing(true)
         getData()
     }, [props])
 
@@ -35,6 +36,15 @@ const UserObject = (props) => {
     
     const sortByCMC = (a, b) => {
         if (a.cmc >= b.cmc) {
+          return 1
+        }
+        else {
+          return -1
+        }
+      }
+      
+      const sortByLand = (a, b) => {
+        if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
           return 1
         }
         else {
@@ -60,22 +70,65 @@ const UserObject = (props) => {
         return uniqueDeck
       }
 
+      const removeFromDeck = (item) => {
+        console.log(item)
+        let tempCards = gc.wipDeck.cards
+        let index = gc.wipDeck.cards.indexOf(item)
+        tempCards.splice(index, 1)
+        gc.setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
+      }
+      
+      const addToDeck = (item) => {
+        let tempCards = gc.wipDeck.cards
+        tempCards.push(item)
+        gc.setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
+    }
+
+    const getCount = (card, cards) => {
+      return cards.filter((item) => { return item.name === card.name }).length
+    }
+
     return(
         <>
         {
-            gc.showActiveDeckList && 
+            gc.isEditing && 
             <div className="DeckListContainer">
-                <div className="DeckTitle" style={{marginBottom:"10px"}}>{gc.wipDeck.title}</div>
+              <Link to="/deckeditor">
+                <div className="DeckListCover" 
+                  style={{
+                    backgroundImage:"url(" + (gc.wipDeck.coverCard && gc.wipDeck.coverCard.image_uris.art_crop)  + ")",
+                    // backgroundPosition: "center",
+                    // backgroundRepeat: "no-repeat",
+                    // backgroundSize: "cover"
+                  }}>
+                  <div className="DeckTitle DeckListTitle">
+                    {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
+                  </div>
+                  <div className="DeckListFormat">{gc.wipDeck.formatTag}</div>
+                </div>
+              </Link>
                 {
-                    makeUniqueDeck(gc.wipDeck.cards).sort(sortByCMC).map((item, i) => 
-                    <div key={i} className="DeckListCard">
-                        <div className="CardListObject" style={{display:"inline-block"}}>
-                        <CardObject data={item} isCompact={true} count={gc.wipDeck.cards.filter((f) => {
-                            return f.name === item.name
-                        }).length}/>
+                    makeUniqueDeck(gc.wipDeck.cards).sort(sortByCMC).sort(sortByLand).map((item, i) => 
+                    <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                        <div className="CardListObject" style={{display:"inline-block"}}
+                          onClick={() => {
+                            removeFromDeck(item)
+                          }}>
+                        <CardObject data={item} isCompact={true} 
+                        count={getCount(item, gc.wipDeck.cards)}/>
                         </div>
-                        {/* <div className="DeckListSmallIcon"><div style={{marginLeft:'5px'}}>+</div></div>
-                        <div className="DeckListSmallIcon"><div style={{marginLeft:'6px'}}>-</div></div> */}
+                        <div className="DeckListSmallIcon"
+                          onClick={() => {
+                            addToDeck(item)
+                          }}>
+                          +
+                        </div>
                     </div>)
                 }
             </div>

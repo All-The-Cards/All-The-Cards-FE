@@ -75,9 +75,7 @@ export const GlobalProvider = ({ children }) => {
                 isEditing,
                 setIsEditing,
                 darkMode,
-                setDarkMode,
-                showActiveDeckList,
-                setShowActiveDeckList
+                setDarkMode
 
             }}
         >

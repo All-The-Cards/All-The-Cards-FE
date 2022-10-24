@@ -109,7 +109,7 @@ const Login = (props) => {
         },
       }).then(({ error, data }) => {
         if (error === null) {
-          alert("Login Successful! Routing to homepage.")
+          // alert("Login Successful! Routing to homepage.")
           setActiveSession(data.session)
           setLocalUsername(data)
           nav('/')

@@ -7,12 +7,14 @@ import './Deck-Editor.css'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TagList from '../components/TagList/TagList';
+import { useNavigate } from 'react-router-dom';
 
 const DeckEditor = (props) => {
   const [state, setState] = useState({
     cards: [],
     tagInput: ""
   })
+  const nav = useNavigate()
   const gc = useContext(GlobalContext)
   const { hasSearchBar, setSearchBar } = useContext(GlobalContext);
   const { wipDeck, setWipDeck } = useContext(GlobalContext);
@@ -140,6 +142,13 @@ const DeckEditor = (props) => {
               <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
               <input type="button" onClick={handleSubmit} value="Save Deck" />
               <input type="button" onClick={clearDeck} value="Clear Deck" />
+              <input type="button" onClick={(event) => {
+                handleSubmit(event)
+                gc.setIsEditing(false)
+                gc.setWipDeck(null)
+                nav("/")
+                
+              }} value="Finish Editing" />
             </div>
             <select
               value={wipDeck.formatTag}
