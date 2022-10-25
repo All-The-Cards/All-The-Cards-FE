@@ -103,6 +103,39 @@ const DeckEditor = (props) => {
         console.log(error);
       });
   }
+  
+  const handleSubmitRedirect = (event) => {
+    event.preventDefault();
+    let deckData = formatWipDeck()
+    deckData = {
+      ...deckData,
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
+    console.log(deckData)
+    fetch(server.buildAPIUrl("/api/features/editor/decks"),
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deckData)
+      }
+    )
+      .then((response) => {
+        console.log(response);
+        gc.setIsEditing(false)
+        gc.setWipDeck(null)
+        nav("/")
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   const clearDeck = (event) => {
     confirmAlert({
       title: 'Confirm Deletion',
@@ -163,10 +196,10 @@ const DeckEditor = (props) => {
               <input type="button" className="FancyButton"  onClick={handleSubmit} value="Save Deck" />
               <input type="button" className="FancyButton"  onClick={clearDeck} value="Clear Deck" />
               <input type="button" className="FancyButton"  onClick={(event) => {
-                handleSubmit(event)
-                gc.setIsEditing(false)
-                gc.setWipDeck(null)
-                nav("/")
+                handleSubmitRedirect(event)
+                // gc.setIsEditing(false)
+                // gc.setWipDeck(null)
+                // nav("/")
                 
               }} value="Publish Deck" />
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit without Saving" />
