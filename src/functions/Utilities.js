@@ -2,17 +2,17 @@ export function mapCardsToTypes(unsortedCards) {
     //unsortedCards is assumed to be an array of card objects
     //what we want our result to look like is an array of objects, which holds the category name and a list of all cards that belong to it
     let results = []
-    
+
     if (unsortedCards.length > 0) {
         unsortedCards.forEach(card => {
-            if(card.type_one.toLowerCase().includes("creature")) {
+            if (card.type_one.toLowerCase().includes("creature")) {
                 card.type_one = "Creature"
             }
             let i = results.findIndex(object => {
                 return object.type === card.type_one
             })
             if (i <= -1) {
-                results.push({type: card.type_one, cards: [card]})
+                results.push({ type: card.type_one, cards: [card] })
             }
             else {
                 results[i].cards.push(card)
@@ -23,10 +23,10 @@ export function mapCardsToTypes(unsortedCards) {
     return results;
 }
 
-export function getProperFormatName(format){
+export function getProperFormatName(format) {
     let correctFormat = "<format>"
-    
-    switch (format){
+
+    switch (format) {
         case "standard":
             correctFormat = "Standard"
             break;
@@ -88,10 +88,15 @@ export function getProperFormatName(format){
 
     return correctFormat
 }
+
 export function saveToLocalStorage(key, value) {
     localStorage.setItem(key, JSON.stringify(value))
 }
 
 export function loadFromLocalStorage(key) {
-    return JSON.parse(localStorage.getItem(key))
+    let data = localStorage.getItem(key)
+    if (data) {
+        data = JSON.parse(data)
+    }
+    return data
 }
