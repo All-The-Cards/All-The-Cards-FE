@@ -18,7 +18,7 @@
     /* width: 60%; */
     /* max-width: 80%; */
     /* float: left; */
-    width: 1210px;
+    width: 1410px;
 }
 
 .UserPageContentDark {
@@ -30,7 +30,7 @@
     /* width: 60%; */
     /* max-width: 80%; */
     /* float: left; */
-    width: 1210px;
+    width: 1410px;
 }
 
 .UserPage-Left {
@@ -78,5 +78,5 @@
 #deckContent {
     /* background-color: red; */
     margin-top: 140px;
-    width: 1210px;
+    /* width: 1410px; */
 }

@@ -22,3 +22,69 @@ export function mapCardsToTypes(unsortedCards) {
 
     return results;
 }
+
+export function getProperFormatName(format){
+    let correctFormat = "<format>"
+    
+    switch (format){
+        case "standard":
+            correctFormat = "Standard"
+            break;
+        case "commander":
+            correctFormat = "Commander"
+            break;
+        case "pioneer":
+            correctFormat = "Pioneer"
+            break;
+        case "explorer":
+            correctFormat = "Explorer"
+            break;
+        case "modern":
+            correctFormat = "Modern"
+            break;
+        case "premodern":
+            correctFormat = "Premodern"
+            break;
+        case "vintage":
+            correctFormat = "Vintage"
+            break;
+        case "legacy":
+            correctFormat = "Legacy"
+            break;
+        case "oldschool":
+            correctFormat = "Old School"
+            break;
+        case "pauper":
+            correctFormat = "Pauper"
+            break;
+        case "historic":
+            correctFormat = "Historic"
+            break;
+        case "alchemy":
+            correctFormat = "Alchemy"
+            break;
+        case "brawl":
+            correctFormat = "Brawl"
+            break;
+        case "paupercommander":
+            correctFormat = "Pauper Commander"
+            break;
+        case "historicbrawl":
+            correctFormat = "Historic Brawl"
+            break;
+        case "penny":
+            correctFormat = "Penny Dreadful"
+            break;
+        case "duel":
+            correctFormat = "Duel"
+            break;
+        case "future":
+            correctFormat = "Future"
+            break;
+        case "gladiator":
+            correctFormat = "Gladiator"
+            break;
+    }
+
+    return correctFormat
+}

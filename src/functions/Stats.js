@@ -56,6 +56,12 @@ export function getDeckStats(deck) {
             0, //g
             0, //c
         ],
+        //total price of deck
+        total_prices: {
+            usd: 0,
+            eur: 0,
+            tix: 0,
+        }
     }
     //base stats
 
@@ -72,7 +78,7 @@ export function getDeckStats(deck) {
     //avg_cmc
 
     let avg_cmc = statResults.total_cmc / deck.length
-    statResults.avg_cmc = avg_cmc
+    statResults.avg_cmc = Math.round(avg_cmc * 100) / 100
 
     //avg_cmc_no_lands
 
@@ -81,7 +87,7 @@ export function getDeckStats(deck) {
     })
     let dnl = deck_no_lands
     let avg_cmc_no_lands = statResults.total_cmc / deck_no_lands.length
-    statResults.avg_cmc_no_lands = avg_cmc_no_lands
+    statResults.avg_cmc_no_lands = Math.round(avg_cmc_no_lands * 100) / 100
 
     //land_percent
 
@@ -90,7 +96,13 @@ export function getDeckStats(deck) {
     })
     let dol = deck_only_lands
     let land_percent = deck_only_lands.length / deck.length
-    statResults.land_percent = land_percent
+    statResults.land_percent = Math.round(land_percent * 100) / 100
+
+    //deck no basic lands 
+    let deck_no_basics = deck.filter((item) => {
+        return !item.type_one.toLowerCase().includes("Basic Land".toLowerCase())
+    })
+    let dnb = deck_no_basics
 
     //mana_curve
 
@@ -154,9 +166,8 @@ export function getDeckStats(deck) {
     let color_percents = [0,0,0,0,0,0]
 
     for (let i = 0; i < color_counts.length; i++){
-        color_percents[i] = color_counts[i] / dnl.length
+        color_percents[i] = Math.round(color_counts[i] / dnl.length * 100) / 100
     }
-    
     statResults.color_percents = color_percents
 
     //mana_source_counts
@@ -203,12 +214,51 @@ export function getDeckStats(deck) {
 
     if (mana_source_counts_sum > 0) {
         for (let i = 0; i < mana_source_counts.length; i++){
-            mana_source_percents[i] = mana_source_counts[i] / mana_source_counts_sum
+            mana_source_percents[i] =  Math.round(mana_source_counts[i] / mana_source_counts_sum * 100) / 100
         }
     }
 
     statResults.mana_source_percents = mana_source_percents
 
+    //total_prices
+
+    let total_prices = {
+        usd: 0,
+        eur: 0,
+        tix: 0,
+    }
+
+    for (let i = 0; i < dnb.length; i++){
+        if (dnb[i].prices){
+            //add usd price if available
+            if (dnb[i].prices.usd || dnb[i].prices.usd_foil){
+                if (dnb[i].prices.usd){
+                    total_prices.usd += parseFloat(dnb[i].prices.usd)
+                }
+                else if (dnb[i].prices.usd_foil){
+                    total_prices.usd += parseFloat(dnb[i].prices.usd_foil)
+                }
+            }
+            //add eur price if available
+            if (dnb[i].prices.eur || dnb[i].prices.eur_foil){
+                if (dnb[i].prices.eur){
+                    total_prices.eur += parseFloat(dnb[i].prices.eur)
+                }
+                else if (dnb[i].prices.eur_foil){
+                    total_prices.eur += parseFloat(dnb[i].prices.eur_foil)
+                }
+            }
+            //add tix price if available
+            if (dnb[i].prices.tix){
+                total_prices.tix += parseFloat(dnb[i].prices.tix)
+            }
+        }
+    }
+
+    total_prices.usd = total_prices.usd.toFixed(2)
+    total_prices.eur = total_prices.eur.toFixed(2)
+    total_prices.tix = total_prices.tix.toFixed(2)
+    statResults.total_prices = total_prices
 
     return statResults;
 }

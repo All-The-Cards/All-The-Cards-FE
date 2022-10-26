@@ -2,7 +2,7 @@
 
 import { React, useEffect, useState } from "react";
 import './DeckTileObject.css'
-import * as server from '../../functions/ServerTalk.js';
+import * as utilities from '../../functions/Utilities';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
@@ -55,7 +55,7 @@ const DeckTileObject = (props) => {
                 <div className="DeckClickable">
                     <div className="DeckInfo">
                         <div className="DeckTitle">{state.data.name.substring(0,25).trim()}{state.data.name.length > 20 && "..."}</div>
-                        <div className="DeckAuthor">{state.data.format}</div>
+                        <div className="DeckAuthor">{utilities.getProperFormatName(state.data.format)}</div>
                         <div className="DeckFormat">{state.data.user_name}</div>
                     </div>
                 </div>
