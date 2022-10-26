@@ -81,11 +81,11 @@
 }
 
 .DeckListToggle {
-    background-color: #d0d0d0;
+    background-color: rgba(0, 0, 0, .1);
     cursor: pointer;
     width: 30px;
     height: 30px;
     position: absolute;
-    right: -40px;
+    right: -38px;
     border-radius: 50%;
 }

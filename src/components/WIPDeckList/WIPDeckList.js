@@ -132,7 +132,7 @@ const UserObject = (props) => {
                 updateState({
                   showSideList: !state.showSideList
                 })
-              }}>o</div>
+              }}><div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>x</div></div>
               <Link to="/deckeditor">
                 <div className="DeckListCover" 
                   style={{
