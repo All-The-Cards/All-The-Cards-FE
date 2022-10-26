@@ -7,7 +7,7 @@ const TagList = ({tags, handleDeleteTag, editMode}) => {
     return(
         <>
         {tags.map((tag, index) => (
-            <span className="tag" onClick={editMode ? () => (handleDeleteTag(index)) : null}>{tag}</span>
+            <span key={index} className="tag" onClick={editMode ? () => (handleDeleteTag(index)) : null}>{tag}</span>
         ))}
         </>
     )
