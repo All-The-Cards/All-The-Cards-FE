@@ -21,6 +21,21 @@ const DeckEditor = (props) => {
   const { wipDeck, setWipDeck } = useContext(GlobalContext);
 
   useEffect(() => {
+    if (gc.wipDeck === null) {
+      gc.setWipDeck({
+        authorID: "",
+        cards: [],
+        coverCard: "",
+        deckID: "",
+        description: "",
+        formatTag: "",
+        tags: [],
+        title: ""
+      })
+    }
+  }, [])
+
+  useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     gc.setIsEditing(true)
     document.title = "Deck Editor"
@@ -131,7 +146,16 @@ const DeckEditor = (props) => {
       .then((response) => {
         console.log(response);
         gc.setIsEditing(false)
-        gc.setWipDeck(null)
+        gc.setWipDeck({
+          authorID: "",
+          cards: [],
+          coverCard: "",
+          deckID: "",
+          description: "",
+          formatTag: "",
+          tags: [],
+          title: ""
+        })
         saveToLocalStorage("wipDeck", gc.wipDeck)
         nav("/")
       })
@@ -179,7 +203,16 @@ const DeckEditor = (props) => {
           label: 'Yes',
           onClick: (() => {
             gc.setIsEditing(false)
-            gc.setWipDeck(null)
+            gc.setWipDeck({
+              authorID: "",
+              cards: [],
+              coverCard: "",
+              deckID: "",
+              description: "",
+              formatTag: "",
+              tags: [],
+              title: ""
+            })
             saveToLocalStorage("wipDeck", gc.wipDeck)
             nav("/")
           })

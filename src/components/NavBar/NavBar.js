@@ -144,7 +144,16 @@ const Navbar = () => {
                 if (error === null) {
                     // alert("You have successfully logged out")
                     gc.setIsEditing(false)
-                    gc.setWipDeck(null)
+                    gc.setWipDeck({
+                        authorID: "",
+                        cards: [],
+                        coverCard: "",
+                        deckID: "",
+                        description: "",
+                        formatTag: "",
+                        tags: [],
+                        title: ""
+                      })
                     saveToLocalStorage("wipDeck", gc.wipDeck)
                     setActiveSession(null)
                     localStorage.removeItem("userName")
