@@ -8,6 +8,8 @@ export function getDeckStats(deck) {
         total_cmc: 0,
         //percent of lands in deck
         land_percent: 0,
+        //amount of lands in deck
+        land_count: 0,
         //mana cost frequency, doesn't include lands
         mana_curve: [
             0, //0
@@ -97,6 +99,7 @@ export function getDeckStats(deck) {
     let dol = deck_only_lands
     let land_percent = deck_only_lands.length / deck.length
     statResults.land_percent = Math.round(land_percent * 100) / 100
+    statResults.land_count = dol.length
 
     //deck no basic lands 
     let deck_no_basics = deck.filter((item) => {

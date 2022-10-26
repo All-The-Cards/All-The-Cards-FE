@@ -218,7 +218,7 @@ const DeckEditor = (props) => {
                 // nav("/")
                 
               }} value="Publish Deck" />
-              <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit without Saving" />
+              <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
             </div>
             <select
               value={wipDeck.formatTag}
