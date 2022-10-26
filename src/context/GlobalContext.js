@@ -1,5 +1,6 @@
 import { createContext, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { loadFromLocalStorage } from '../functions/Utilities';
 
 export const GlobalContext = createContext()
 
@@ -16,7 +17,7 @@ export const GlobalProvider = ({ children }) => {
     const [searchType, setSearchType] = useState("DEF")
     const [searchQuery, setSearchQuery] = useState("")
 
-    const [wipDeck, setWipDeck] = useState({
+    let initialDeckState = {
         authorID: "",
         cards: [],
         coverCard: "",
@@ -25,7 +26,15 @@ export const GlobalProvider = ({ children }) => {
         formatTag: "",
         tags: [],
         title: ""
-    })
+    }
+
+    let loadedWipDeckData = loadFromLocalStorage("wipDeck")
+
+    if(loadedWipDeckData) {
+        initialDeckState = loadedWipDeckData
+    }
+
+    const [wipDeck, setWipDeck] = useState(initialDeckState)
 
     const [showActiveDeckList, setShowActiveDeckList] = useState(false)
     const [isEditing, setIsEditing] = useState(false)

@@ -13,6 +13,7 @@ import UsersIconWhite from './users_icon_white.png'
 import * as server from '../../functions/ServerTalk.js'
 import SearchGlass from './SearchGlass.png';
 import { Link } from "react-router-dom";
+import { saveToLocalStorage } from "../../functions/Utilities";
 
 
 const Navbar = () => {
@@ -144,6 +145,7 @@ const Navbar = () => {
                     // alert("You have successfully logged out")
                     gc.setIsEditing(false)
                     gc.setWipDeck(null)
+                    saveToLocalStorage("wipDeck", gc.wipDeck)
                     setActiveSession(null)
                     localStorage.removeItem("userName")
                     setDarkMode(current => !current)

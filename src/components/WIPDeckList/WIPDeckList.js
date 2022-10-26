@@ -6,6 +6,7 @@ import '../../pages/GlobalStyles.css'
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
 import CardObject from "../CardObject/CardObject";
+import { saveToLocalStorage } from "../../functions/Utilities";
 
 const UserObject = (props) => {
 
@@ -38,6 +39,8 @@ const UserObject = (props) => {
               }
             }
           }))
+          saveToLocalStorage("wipDeck", gc.wipDeck)
+
         }
         // updateState({ 
 
@@ -98,6 +101,8 @@ const UserObject = (props) => {
             ...previous,
             cards: tempCards
         }))
+        saveToLocalStorage("wipDeck", gc.wipDeck)
+
       }
       
       const addToDeck = (item) => {
@@ -107,6 +112,7 @@ const UserObject = (props) => {
             ...previous,
             cards: tempCards
         }))
+        saveToLocalStorage("wipDeck", gc.wipDeck)
     }
 
     const getCount = (card, cards) => {
