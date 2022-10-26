@@ -147,13 +147,17 @@ const Navbar = () => {
                     gc.setWipDeck({
                         authorID: "",
                         cards: [],
-                        coverCard: "",
+                        coverCard: {
+                            image_uris: {
+                                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                            }
+                        },
                         deckID: "",
                         description: "",
                         formatTag: "",
                         tags: [],
                         title: ""
-                      })
+                    })
                     saveToLocalStorage("wipDeck", gc.wipDeck)
                     setActiveSession(null)
                     localStorage.removeItem("userName")

@@ -20,7 +20,11 @@ export const GlobalProvider = ({ children }) => {
     let initialDeckState = {
         authorID: "",
         cards: [],
-        coverCard: "",
+        coverCard: {
+            image_uris: {
+                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+            }
+        }, 
         deckID: "",
         description: "",
         formatTag: "",
@@ -30,7 +34,7 @@ export const GlobalProvider = ({ children }) => {
 
     let loadedWipDeckData = loadFromLocalStorage("wipDeck")
 
-    if(loadedWipDeckData) {
+    if (loadedWipDeckData) {
         initialDeckState = loadedWipDeckData
     }
 
