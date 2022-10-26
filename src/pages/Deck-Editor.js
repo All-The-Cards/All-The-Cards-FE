@@ -239,10 +239,11 @@ const DeckEditor = (props) => {
         </form>
         <div style={{display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0'}}>
           {state.cards.map((card, index) => (
-            <CardObject data={card} />
+            <CardObject key={index} data={card} />
           ))}
         </div>
-        {wipDeck.coverCard != "" ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>}
+        
+        {/* {(wipDeck.coverCard !== null) ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>} */}
       </div>
       <Footer />
     </div>

@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
+import * as stats from '../functions/Stats.js';
 import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
@@ -23,9 +24,10 @@ const Deck = (props) => {
       cards: []
     },
     isFavorited: false,
-    viewMode: "Spread",
-    compactView: false,
-    shared: false
+    viewMode: "Categorized",
+    compactView: true,
+    shared: false,
+    deckStats: {}
   })
 
   const updateState = (objectToUpdate) => {
@@ -63,10 +65,11 @@ const Deck = (props) => {
       else {
         document.title = response.name
         updateState({
-          data: response
+          data: response,
+          deckStats: stats.getDeckStats(response.cards)
         })
         // console.log(response)
-        console.log(utilities.mapCardsToTypes(response))
+        // console.log(utilities.mapCardsToTypes(response))
       }
 
     })
@@ -128,6 +131,11 @@ const Deck = (props) => {
       tags: state.data.tags,
       formatTag: state.data.format,
       cards: state.data.cards,
+      coverCard: {
+        image_uris: {
+          art_crop: state.data.cover_art
+        }
+      },
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
@@ -225,6 +233,9 @@ const Deck = (props) => {
             <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
           </label>
         </div>
+        <div>
+          {/* {JSON.stringify(state.deckStats, null, '\n')} */}
+        </div>
         <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
             {state.data.cards.map((card, i) =>
@@ -233,8 +244,8 @@ const Deck = (props) => {
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
           {state.viewMode === "Categorized" ? <>
-            {utilities.mapCardsToTypes(state.data.cards).map((typeList) => (
-              <CardStack cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
+            {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
+              <CardStack key={i} cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
             ))}
           </> : <></>}
         </div>
