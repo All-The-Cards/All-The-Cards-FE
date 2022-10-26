@@ -13,6 +13,7 @@ import UsersIconWhite from './users_icon_white.png'
 import * as server from '../../functions/ServerTalk.js'
 import SearchGlass from './SearchGlass.png';
 import { Link } from "react-router-dom";
+import { saveToLocalStorage } from "../../functions/Utilities";
 
 
 const Navbar = () => {
@@ -143,7 +144,21 @@ const Navbar = () => {
                 if (error === null) {
                     // alert("You have successfully logged out")
                     gc.setIsEditing(false)
-                    gc.setWipDeck(null)
+                    gc.setWipDeck({
+                        authorID: "",
+                        cards: [],
+                        coverCard: {
+                            image_uris: {
+                                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                            }
+                        },
+                        deckID: "",
+                        description: "",
+                        formatTag: "",
+                        tags: [],
+                        title: ""
+                    })
+                    saveToLocalStorage("wipDeck", gc.wipDeck)
                     setActiveSession(null)
                     localStorage.removeItem("userName")
                     setDarkMode(current => !current)

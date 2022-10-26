@@ -1,5 +1,6 @@
 import { createContext, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { loadFromLocalStorage } from '../functions/Utilities';
 
 export const GlobalContext = createContext()
 
@@ -16,16 +17,28 @@ export const GlobalProvider = ({ children }) => {
     const [searchType, setSearchType] = useState("DEF")
     const [searchQuery, setSearchQuery] = useState("")
 
-    const [wipDeck, setWipDeck] = useState({
+    let initialDeckState = {
         authorID: "",
         cards: [],
-        coverCard: "",
+        coverCard: {
+            image_uris: {
+                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+            }
+        }, 
         deckID: "",
         description: "",
         formatTag: "",
         tags: [],
         title: ""
-    })
+    }
+
+    let loadedWipDeckData = loadFromLocalStorage("wipDeck")
+
+    if (loadedWipDeckData) {
+        initialDeckState = loadedWipDeckData
+    }
+
+    const [wipDeck, setWipDeck] = useState(initialDeckState)
 
     const [showActiveDeckList, setShowActiveDeckList] = useState(false)
     const [isEditing, setIsEditing] = useState(false)

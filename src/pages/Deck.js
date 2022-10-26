@@ -139,6 +139,7 @@ const Deck = (props) => {
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
     }))
+    utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
     nav('/deckeditor')
   }
 

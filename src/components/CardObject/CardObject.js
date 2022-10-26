@@ -17,6 +17,7 @@ import imageIcon from './image-regular.svg'
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
 import RoundButton from "../RoundButton/RoundButton";
+import { saveToLocalStorage } from "../../functions/Utilities";
 
 const CardObject = (props) => {
     const [state, setState] = useState({
@@ -185,6 +186,7 @@ const CardObject = (props) => {
             ...previous,
             cards: tempCards
         }))
+        saveToLocalStorage("wipDeck", wipDeck)
     }
     const removeFromDeck = () => {
         let tempCards = wipDeck.cards
@@ -193,13 +195,15 @@ const CardObject = (props) => {
         setWipDeck((previous) => ({
             ...previous,
             cards: tempCards
-        }))
+        }))        
+        saveToLocalStorage("wipDeck", wipDeck)
     }
     const setAsCoverCard = () => {
         setWipDeck((previous) => ({
             ...previous,
             coverCard: props.data
         }))
+        saveToLocalStorage("wipDeck", wipDeck)
     }
 
     function generateListBackgroundColor() {

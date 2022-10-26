@@ -37,6 +37,8 @@ const UserObject = (props) => {
               }
             }
           }))
+          utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
+
         }
         // updateState({ 
 
@@ -97,6 +99,8 @@ const UserObject = (props) => {
             ...previous,
             cards: tempCards
         }))
+        utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
+
       }
       
       const addToDeck = (item) => {
@@ -106,6 +110,7 @@ const UserObject = (props) => {
             ...previous,
             cards: tempCards
         }))
+        utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
     }
 
     const getCount = (card, cards) => {

@@ -8,6 +8,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import TagList from '../components/TagList/TagList';
 import { useNavigate } from 'react-router-dom';
+import { saveToLocalStorage } from '../functions/Utilities';
 
 const DeckEditor = (props) => {
   const [state, setState] = useState({
@@ -21,6 +22,25 @@ const DeckEditor = (props) => {
   const { wipDeck, setWipDeck } = useContext(GlobalContext);
 
   useEffect(() => {
+    if (gc.wipDeck === null) {
+      gc.setWipDeck({
+        authorID: "",
+        cards: [],
+        coverCard: {
+          image_uris: {
+            art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+          }
+        },
+        deckID: "",
+        description: "",
+        formatTag: "",
+        tags: [],
+        title: ""
+      })
+    }
+  }, [])
+
+  useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     gc.setIsEditing(true)
     document.title = "Deck Editor"
@@ -29,6 +49,7 @@ const DeckEditor = (props) => {
       ...previous,
       cards: wipDeck.cards
     }))
+    saveToLocalStorage("wipDeck", wipDeck)
   }, [gc])
 
   const handleChanges = (event) => {
@@ -36,12 +57,14 @@ const DeckEditor = (props) => {
       ...previous,
       [event.target.name]: event.target.value
     }))
+    saveToLocalStorage("wipDeck", wipDeck)
   }
   const updateWipDeck = (objectToUpdate) => {
     setWipDeck((previous) => ({
       ...previous,
       ...objectToUpdate
     }))
+    saveToLocalStorage("wipDeck", wipDeck)
   }
   const handleStateChanges = (event) => {
     setState((previous) => ({
@@ -58,6 +81,7 @@ const DeckEditor = (props) => {
           ...previous,
           tags: tempTags
         }))
+        saveToLocalStorage("wipDeck", wipDeck)
         setState((previous) => ({
           ...previous,
           tagInput: ""
@@ -104,7 +128,7 @@ const DeckEditor = (props) => {
         console.log(error);
       });
   }
-  
+
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
     setState((previous) => ({
@@ -135,7 +159,21 @@ const DeckEditor = (props) => {
           publishBlocker: false
         }))
         gc.setIsEditing(false)
-        gc.setWipDeck(null)
+        gc.setWipDeck({
+          authorID: "",
+          cards: [],
+          coverCard: {
+            image_uris: {
+              art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+            }
+          },
+          deckID: "",
+          description: "",
+          formatTag: "",
+          tags: [],
+          title: ""
+        })
+        saveToLocalStorage("wipDeck", gc.wipDeck)
         nav("/")
       })
       .then((data) => {
@@ -152,16 +190,23 @@ const DeckEditor = (props) => {
       buttons: [
         {
           label: 'Yes',
-          onClick: () => (gc.setWipDeck({
-            authorID: "",
-            cards: [],
-            coverCard: "",
-            deckID: "",
-            description: "",
-            formatTag: "",
-            tags: [],
-            title: ""
-          }))
+          onClick: () => {
+            gc.setWipDeck({
+              authorID: "",
+              cards: [],
+              coverCard: {
+                image_uris: {
+                  art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                }
+              },
+              deckID: "",
+              description: "",
+              formatTag: "",
+              tags: [],
+              title: ""
+            })
+            saveToLocalStorage("wipDeck", gc.wipDeck)
+          }
         }, {
           label: 'No',
           onClick: null
@@ -179,7 +224,21 @@ const DeckEditor = (props) => {
           label: 'Yes',
           onClick: (() => {
             gc.setIsEditing(false)
-            gc.setWipDeck(null)
+            gc.setWipDeck({
+              authorID: "",
+              cards: [],
+              coverCard: {
+                image_uris: {
+                  art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                }
+              },
+              deckID: "",
+              description: "",
+              formatTag: "",
+              tags: [],
+              title: ""
+            })
+            saveToLocalStorage("wipDeck", gc.wipDeck)
             nav("/")
           })
         }, {
@@ -194,6 +253,7 @@ const DeckEditor = (props) => {
     let newTags = wipDeck.tags
     newTags.splice(tagID, 1)
     setWipDeck((previous) => ({ ...previous, tags: newTags }))
+    saveToLocalStorage("wipDeck", wipDeck)
   }
   return (
     <div className='Page'>
@@ -209,14 +269,14 @@ const DeckEditor = (props) => {
           <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
             <div>
               <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
-              <input type="button" className="FancyButton"  onClick={handleSubmit} value="Save Deck" />
-              <input type="button" className="FancyButton"  onClick={clearDeck} value="Clear Deck" />
-              <input type="button" className="FancyButton"  onClick={(event) => {
+              <input type="button" className="FancyButton" onClick={handleSubmit} value="Save Deck" />
+              <input type="button" className="FancyButton" onClick={clearDeck} value="Clear Deck" />
+              <input type="button" className="FancyButton" onClick={(event) => {
                 handleSubmitRedirect(event)
                 // gc.setIsEditing(false)
                 // gc.setWipDeck(null)
                 // nav("/")
-                
+
               }} value="Publish Deck" />
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit without Saving" />
             </div>
@@ -250,15 +310,15 @@ const DeckEditor = (props) => {
             <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
             <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
           </div>
-          <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{width: '100%', margin:'8px 0 0 8px'}} />
+          <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
 
         </form>
-        <div style={{display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0'}}>
+        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0' }}>
           {state.cards.map((card, index) => (
             <CardObject key={index} data={card} />
           ))}
         </div>
-        
+
         {/* {(wipDeck.coverCard !== null) ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>} */}
       </div>
       <Footer />
