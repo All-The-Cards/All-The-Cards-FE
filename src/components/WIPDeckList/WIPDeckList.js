@@ -7,12 +7,13 @@ import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
 import CardObject from "../CardObject/CardObject";
 import * as utilities from '../../functions/Utilities'
+import * as stats from '../../functions/Stats'
 
 const UserObject = (props) => {
 
     const gc = useContext(GlobalContext)
     const [state, setState] = useState({
-        
+        showSideList: true
     })
 
     const updateState = (objectToUpdate) => {
@@ -46,12 +47,13 @@ const UserObject = (props) => {
     }
     
     const sortByCMC = (a, b) => {
-        if (a.cmc >= b.cmc) {
-          return -1
-        }
-        else {
+        if (a.cmc > b.cmc) {
           return 1
         }
+        if (a.cmc < b.cmc) {
+          return -1
+        }
+        return 0
       }
       
       const sortByLand = (a, b) => {
@@ -117,11 +119,25 @@ const UserObject = (props) => {
       return cards.filter((item) => { return item.name === card.name }).length
     }
 
+    const getMargin = () => {
+      if (state.showSideList) {
+        return '0px'
+      }
+      else {
+        return '-340px'
+      }
+    }
+
     return(
         <>
         {
             gc.isEditing && 
-            <div className="DeckListContainer">
+            <div className="DeckListContainer" style={{left: getMargin()}}>
+              <div className="DeckListToggle" onClick={() => {
+                updateState({
+                  showSideList: !state.showSideList
+                })
+              }}><div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>x</div></div>
               <Link to="/deckeditor">
                 <div className="DeckListCover" 
                   style={{
@@ -135,17 +151,23 @@ const UserObject = (props) => {
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
                   <div className="DeckListFormat">{utilities.getProperFormatName(gc.wipDeck.formatTag)}</div>
+                  <div className="DeckListSize">{gc.wipDeck.cards.length} cards</div>
                 </div>
               </Link>
                 {
                     gc.wipDeck.cards.length > 0 &&
                     <div>
+                    <div className="wipDeckListGroupTitle">
+                    </div>
+                    <div className="wipDeckListGroupTitle">
+                    Spells - {gc.wipDeck.cards.length - stats.getDeckStats(gc.wipDeck.cards).land_count}
+                    </div>
                       { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
                         console.log(item)
                         return !item.type_one.toLowerCase().includes("land")
                       })
-                      .sort(sortByCMC).sort(sortByLand).map((item, i) => 
+                      .sort(sortByName).sort(sortByCMC).map((item, i) => 
                       <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
                           <div className="CardListObject" style={{display:"inline-block"}}
                             onClick={() => {
@@ -162,6 +184,9 @@ const UserObject = (props) => {
                           </div>
                       </div>)
                     }  
+                    <div className="wipDeckListGroupTitle">
+                    Lands - {stats.getDeckStats(gc.wipDeck.cards).land_count}
+                    </div>
                     { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
                         console.log(item)
