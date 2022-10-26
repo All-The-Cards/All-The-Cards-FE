@@ -139,22 +139,52 @@ const UserObject = (props) => {
               </Link>
                 {
                     gc.wipDeck.cards.length > 0 &&
-                    makeUniqueDeck(gc.wipDeck.cards).sort(sortByCMC).sort(sortByLand).map((item, i) => 
-                    <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
-                        <div className="CardListObject" style={{display:"inline-block"}}
-                          onClick={() => {
-                            removeFromDeck(item)
-                          }}>
-                        <CardObject data={item} isCompact={true} 
-                        count={getCount(item, gc.wipDeck.cards)}/>
-                        </div>
-                        <div className="DeckListSmallIcon"
-                          onClick={() => {
-                            addToDeck(item)
-                          }}>
-                          +
-                        </div>
-                    </div>)
+                    <div>
+                      { makeUniqueDeck(gc.wipDeck.cards)
+                      .filter((item) => { 
+                        console.log(item)
+                        return !item.type_one.toLowerCase().includes("land")
+                      })
+                      .sort(sortByCMC).sort(sortByLand).map((item, i) => 
+                      <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                          <div className="CardListObject" style={{display:"inline-block"}}
+                            onClick={() => {
+                              removeFromDeck(item)
+                            }}>
+                          <CardObject data={item} isCompact={true} 
+                          count={getCount(item, gc.wipDeck.cards)}/>
+                          </div>
+                          <div className="DeckListSmallIcon"
+                            onClick={() => {
+                              addToDeck(item)
+                            }}>
+                            +
+                          </div>
+                      </div>)
+                    }  
+                    { makeUniqueDeck(gc.wipDeck.cards)
+                      .filter((item) => { 
+                        console.log(item)
+                        return item.type_one.toLowerCase().includes("land")
+                      })
+                      .sort(sortByName).map((item, i) => 
+                      <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                          <div className="CardListObject" style={{display:"inline-block"}}
+                            onClick={() => {
+                              removeFromDeck(item)
+                            }}>
+                          <CardObject data={item} isCompact={true} 
+                          count={getCount(item, gc.wipDeck.cards)}/>
+                          </div>
+                          <div className="DeckListSmallIcon"
+                            onClick={() => {
+                              addToDeck(item)
+                            }}>
+                            +
+                          </div>
+                      </div>)
+                    }
+                    </div>
                 }
             </div>
         }
