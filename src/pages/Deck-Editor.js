@@ -12,7 +12,8 @@ import { useNavigate } from 'react-router-dom';
 const DeckEditor = (props) => {
   const [state, setState] = useState({
     cards: [],
-    tagInput: ""
+    tagInput: "",
+    publishBlocker: false
   })
   const nav = useNavigate()
   const gc = useContext(GlobalContext)
@@ -106,6 +107,10 @@ const DeckEditor = (props) => {
   
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
+    setState((previous) => ({
+      ...previous,
+      publishBlocker: true
+    }))
     let deckData = formatWipDeck()
     deckData = {
       ...deckData,
@@ -125,6 +130,10 @@ const DeckEditor = (props) => {
     )
       .then((response) => {
         console.log(response);
+        setState((previous) => ({
+          ...previous,
+          publishBlocker: false
+        }))
         gc.setIsEditing(false)
         gc.setWipDeck(null)
         nav("/")
@@ -188,6 +197,13 @@ const DeckEditor = (props) => {
   }
   return (
     <div className='Page'>
+      { state.publishBlocker && <div className='PublishBlocker'>
+        <div className="PublishText">
+          Publishing...
+          <br></br>
+            <img style={{width: '50px'}}src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/>
+          </div>
+        </div> }
       <div style={{ minWidth: '300px', maxWidth: '60%', margin: 'auto' }}>
         <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
           <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>

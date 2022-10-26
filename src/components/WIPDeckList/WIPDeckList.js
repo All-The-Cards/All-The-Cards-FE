@@ -6,6 +6,7 @@ import '../../pages/GlobalStyles.css'
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
 import CardObject from "../CardObject/CardObject";
+import * as utilities from '../../functions/Utilities'
 
 const UserObject = (props) => {
 
@@ -21,15 +22,13 @@ const UserObject = (props) => {
         }))
     }
     useEffect(() => {
-      //TODO:: DEBUG USAGE HERE THIS NEEDS TO BE SET BY THE DECK EDITOR
-        // gc.setIsEditing(true)
         getData()
     }, [props])
 
 
     const getData = () =>{
-        console.log("deck:", gc.wipDeck)
-        if (!gc.wipDeck.coverCard || gc.wipDeck.coverCard == "") {
+        // console.log("deck:", gc.wipDeck)
+        if (gc.wipDeck && !gc.wipDeck.coverCard) {
           gc.setWipDeck((previous) => ({
             ...previous,
             coverCard: {
@@ -130,7 +129,7 @@ const UserObject = (props) => {
                     {gc.wipDeck.title.length < 1 && "New Deck"}
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
-                  <div className="DeckListFormat">{gc.wipDeck.formatTag}</div>
+                  <div className="DeckListFormat">{utilities.getProperFormatName(gc.wipDeck.formatTag)}</div>
                 </div>
               </Link>
                 {
