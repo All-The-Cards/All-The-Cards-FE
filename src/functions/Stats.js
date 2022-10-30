@@ -1,3 +1,4 @@
+
 export function getDeckStats(deck) {
     let statResults = {
         //average cost of all cards
@@ -63,6 +64,26 @@ export function getDeckStats(deck) {
             usd: 0,
             eur: 0,
             tix: 0,
+        },
+        //amount of lands in deck
+        card_types_counts: {
+            creature: 0,
+            instant: 0,
+            sorcery: 0,
+            enchantment: 0,
+            artifact: 0,
+            planeswalker: 0,
+            land: 0,
+        },
+        //percent of cards in deck
+        card_types_percents: {
+            creature: 0,
+            instant: 0,
+            sorcery: 0,
+            enchantment: 0,
+            artifact: 0,
+            planeswalker: 0,
+            land: 0,
         }
     }
     //base stats
@@ -262,6 +283,56 @@ export function getDeckStats(deck) {
     total_prices.eur = total_prices.eur.toFixed(2)
     total_prices.tix = total_prices.tix.toFixed(2)
     statResults.total_prices = total_prices
+
+    //card_types_counts
+
+    let card_types = [
+        'creature',
+        'instant',
+        'sorcery',
+        'enchantment',
+        'artifact',
+        'planeswalker',
+        'land' 
+    ]
+        
+    let type_counts = {
+        creature: 0,
+        instant: 0,
+        sorcery: 0,
+        enchantment: 0,
+        artifact: 0,
+        planeswalker: 0,
+        land: 0,
+    }
+
+    for (let i = 0; i < deck.length; i++){
+        for (let k = 0; k < card_types.length; k++){
+            if (deck[i].type_one.toLowerCase().includes(card_types[k])) {
+                type_counts[card_types[k]]++
+            }
+        }
+    }
+
+    statResults.card_types_counts = type_counts
+
+    //card_types_percents
+
+    let type_percents = {
+        creature: 0,
+        instant: 0,
+        sorcery: 0,
+        enchantment: 0,
+        artifact: 0,
+        planeswalker: 0,
+        land: 0,
+    }
+    
+    for (let i = 0; i < card_types.length; i++){
+        type_percents[card_types[i]] = Math.round(type_counts[card_types[i]] / deck.length * 100) / 100
+    }
+
+    statResults.card_types_percents = type_percents
 
     return statResults;
 }

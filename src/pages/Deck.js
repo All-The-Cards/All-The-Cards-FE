@@ -235,7 +235,7 @@ const Deck = (props) => {
           </label>
         </div>
         <div>
-          {/* {JSON.stringify(state.deckStats, null, '\n')} */}
+          {JSON.stringify(state.deckStats, null, '\n')}
         </div>
         <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
