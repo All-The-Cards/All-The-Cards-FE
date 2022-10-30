@@ -53,12 +53,12 @@ const Deck = (props) => {
   }, [id])
 
   const getDeckOffline = () => {
-    let response = JSON.parse(localStorage.getItem("TEST_DECK"))
-    document.title = response.name
+    let deck = JSON.parse(localStorage.getItem("TEST_DECK"))
+    document.title = deck.name
       updateState({
-        data: response,
-        deckStats: stats.getDeckStats(response.cards),
-        deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
+        data: deck,
+        deckStats: stats.getDeckStats(deck.cards),
+        deckGraphs: graphs.makeGraphs(stats.getDeckStats(deck.cards)),
         })
   }
 
