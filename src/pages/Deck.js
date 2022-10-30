@@ -47,9 +47,20 @@ const Deck = (props) => {
     updateState({
       id: id
     })
-    getDeckById(id)
-    getFavStatus(id)
+    getDeckOffline()
+    // getDeckById(id)
+    // getFavStatus(id)
   }, [id])
+
+  const getDeckOffline = () => {
+    let response = JSON.parse(localStorage.getItem("TEST_DECK"))
+    document.title = response.name
+      updateState({
+        data: response,
+        deckStats: stats.getDeckStats(response.cards),
+        deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
+        })
+  }
 
   const getDeckById = (query) => {
     query = "/api/get/deck/" + query
@@ -59,7 +70,8 @@ const Deck = (props) => {
     }
 
     server.post(query).then(response => {
-      // console.log(response)
+      localStorage.setItem("TEST_DECK", JSON.stringify(response))
+      console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
         nav('/search/')
