@@ -3,6 +3,7 @@ import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
 import * as stats from '../functions/Stats.js';
+import * as graphs from '../functions/Graphs.js';
 import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
@@ -27,7 +28,8 @@ const Deck = (props) => {
     viewMode: "Categorized",
     compactView: true,
     shared: false,
-    deckStats: {}
+    deckStats: {},
+    deckGraphs: {},
   })
 
   const updateState = (objectToUpdate) => {
@@ -66,8 +68,9 @@ const Deck = (props) => {
         document.title = response.name
         updateState({
           data: response,
-          deckStats: stats.getDeckStats(response.cards)
-        })
+          deckStats: stats.getDeckStats(response.cards),
+          deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
+          })
         // console.log(response)
         // console.log(utilities.mapCardsToTypes(response))
       }
@@ -188,6 +191,7 @@ const Deck = (props) => {
     }))
   }
 
+
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
       <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}>
@@ -235,7 +239,26 @@ const Deck = (props) => {
           </label>
         </div>
         <div>
-          {JSON.stringify(state.deckStats, null, '\n')}
+        { 
+          Object.keys(state.deckStats).map((key, index) => {
+            return (
+              <div key={index}>
+              {key} 
+              <br></br>
+              Stat: 
+              <br></br>
+              {JSON.stringify(state.deckStats[key], null, '\n')}
+              <br></br>
+              Graph: 
+              <br></br>
+              {state.deckGraphs[key]}
+              <br></br>
+              <br></br>
+                {/* {key}: {state.deckStats[key]} */}
+              </div>
+            )
+          })
+        }
         </div>
         <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
