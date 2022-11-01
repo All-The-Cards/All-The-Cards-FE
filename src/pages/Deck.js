@@ -3,6 +3,7 @@ import CardObject from '../components/CardObject/CardObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
 import * as stats from '../functions/Stats.js';
+import * as graphs from '../functions/Graphs.js';
 import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
@@ -27,7 +28,9 @@ const Deck = (props) => {
     viewMode: "Categorized",
     compactView: true,
     shared: false,
-    deckStats: {}
+    deckStats: {},
+    deckGraphs: {},
+    showRawGraphs: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -45,9 +48,20 @@ const Deck = (props) => {
     updateState({
       id: id
     })
+    // getDeckOffline()
     getDeckById(id)
     getFavStatus(id)
   }, [id])
+
+  const getDeckOffline = () => {
+    let deck = JSON.parse(localStorage.getItem("TEST_DECK"))
+    document.title = deck.name
+      updateState({
+        data: deck,
+        deckStats: stats.getDeckStats(deck.cards),
+        deckGraphs: graphs.makeGraphs(stats.getDeckStats(deck.cards)),
+        })
+  }
 
   const getDeckById = (query) => {
     query = "/api/get/deck/" + query
@@ -57,7 +71,8 @@ const Deck = (props) => {
     }
 
     server.post(query).then(response => {
-      // console.log(response)
+      localStorage.setItem("TEST_DECK", JSON.stringify(response))
+      console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
         nav('/search/')
@@ -66,8 +81,9 @@ const Deck = (props) => {
         document.title = response.name
         updateState({
           data: response,
-          deckStats: stats.getDeckStats(response.cards)
-        })
+          deckStats: stats.getDeckStats(response.cards),
+          deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
+          })
         // console.log(response)
         // console.log(utilities.mapCardsToTypes(response))
       }
@@ -188,6 +204,13 @@ const Deck = (props) => {
     }))
   }
 
+  const toggleGraphs = () => {
+    updateState({
+      showRawGraphs: !state.showRawGraphs
+    })
+  }
+
+
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
       <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}>
@@ -207,9 +230,11 @@ const Deck = (props) => {
         <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
           <div>
             <span style={{ fontSize: '2rem' }}>{state.data.name} - </span><span style={{ fontSize: '1.5rem', marginLeft: '0.5rem' }}>{state.data.user_name}</span>
-            {state.data.cards.length > 0 && <input type="button" onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />}
+            {state.data.cards.length > 0 && <input type="button" className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />}
             {/* TODO:: notification instead of button text switch, replace text with icon */}
-            <input type="button" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
+            <input type="button" className='FancyButton' id="alt" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
+            <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+          
           </div>
           <span>{`Format: ${state.data.format}`}</span>
         </div>
@@ -235,12 +260,32 @@ const Deck = (props) => {
           </label>
         </div>
         <div>
-          {JSON.stringify(state.deckStats, null, '\n')}
+        { 
+          state.showRawGraphs && 
+          Object.keys(state.deckStats).map((key, index) => {
+            return (
+              <div key={index}>
+              {key} 
+              <br></br>
+              Stat: 
+              <br></br>
+              {JSON.stringify(state.deckStats[key], null, '\n')}
+              <br></br>
+              Graph: 
+              <br></br>
+              {state.deckGraphs[key]}
+              <br></br>
+              <br></br>
+                {/* {key}: {state.deckStats[key]} */}
+              </div>
+            )
+          })
+        }
         </div>
         <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
             {state.data.cards.map((card, i) =>
-              <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} /></div>
+              <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} clickable /></div>
             )}
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}

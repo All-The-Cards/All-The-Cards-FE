@@ -93,7 +93,7 @@ const UserObject = (props) => {
       }
 
       const removeFromDeck = (item) => {
-        console.log(item)
+        // console.log(item)
         let tempCards = gc.wipDeck.cards
         let index = gc.wipDeck.cards.indexOf(item)
         tempCards.splice(index, 1)
@@ -137,7 +137,7 @@ const UserObject = (props) => {
                 updateState({
                   showSideList: !state.showSideList
                 })
-              }}><div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>x</div></div>
+              }}><div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>{state.showSideList ? "<" : ">"}</div></div>
               <Link to="/deckeditor">
                 <div className="DeckListCover" 
                   style={{
@@ -164,7 +164,7 @@ const UserObject = (props) => {
                     </div>
                       { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
-                        console.log(item)
+                        // console.log(item)
                         return !item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).sort(sortByCMC).map((item, i) => 
@@ -189,7 +189,7 @@ const UserObject = (props) => {
                     </div>
                     { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
-                        console.log(item)
+                        // console.log(item)
                         return item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).map((item, i) => 

@@ -2,6 +2,9 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
 import * as server from "../functions/ServerTalk";
+import * as utilities from '../functions/Utilities.js';
+import * as stats from '../functions/Stats.js';
+import * as graphs from '../functions/Graphs.js';
 import Footer from '../components/Footer/Footer';
 import './Deck-Editor.css'
 import { confirmAlert } from 'react-confirm-alert';
@@ -14,7 +17,10 @@ const DeckEditor = (props) => {
   const [state, setState] = useState({
     cards: [],
     tagInput: "",
-    publishBlocker: false
+    publishBlocker: false,
+    deckStats: {},
+    deckGraphs: {},
+    showRawGraphs: false
   })
   const nav = useNavigate()
   const gc = useContext(GlobalContext)
@@ -38,7 +44,12 @@ const DeckEditor = (props) => {
         title: ""
       })
     }
-  }, [])
+    setState((previous) => ({
+      ...previous,
+      deckStats: stats.getDeckStats(wipDeck.cards),
+      deckGraphs: graphs.makeGraphs(stats.getDeckStats(wipDeck.cards)),
+    }))
+  }, [gc.wipDeck])
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
@@ -255,6 +266,14 @@ const DeckEditor = (props) => {
     setWipDeck((previous) => ({ ...previous, tags: newTags }))
     saveToLocalStorage("wipDeck", wipDeck)
   }
+
+  const toggleGraphs = () => {
+    setState((previous) => ({
+      ...previous,
+      showRawGraphs: !state.showRawGraphs
+    }))
+  }
+
   return (
     <div className='Page'>
       { state.publishBlocker && <div className='PublishBlocker'>
@@ -279,6 +298,8 @@ const DeckEditor = (props) => {
 
               }} value="Publish Deck" />
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
+              <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+          
             </div>
             <select
               value={wipDeck.formatTag}
@@ -313,9 +334,32 @@ const DeckEditor = (props) => {
           <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
 
         </form>
+        <div>
+        { 
+          state.showRawGraphs && 
+          Object.keys(state.deckStats).map((key, index) => {
+            return (
+              <div key={index}>
+              {key} 
+              <br></br>
+              Stat: 
+              <br></br>
+              {JSON.stringify(state.deckStats[key], null, '\n')}
+              <br></br>
+              Graph: 
+              <br></br>
+              {state.deckGraphs[key]}
+              <br></br>
+              <br></br>
+                {/* {key}: {state.deckStats[key]} */}
+              </div>
+            )
+          })
+        }
+        </div>
         <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0' }}>
           {state.cards.map((card, index) => (
-            <CardObject key={index} data={card} />
+            <CardObject key={index} data={card} clickable/>
           ))}
         </div>
 
