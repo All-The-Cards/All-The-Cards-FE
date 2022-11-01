@@ -41,6 +41,8 @@ export function getDeckStats(deck) {
             g: 0,
             c: 0,
         },
+        //sum of mana sources
+        mana_source_count: 0,
         //number of mana production
         mana_source_counts: {
             w: 0,
@@ -164,14 +166,32 @@ export function getDeckStats(deck) {
     }
 
     for (let i = 0; i < dnl.length; i++){
-        if (dnl[i].color_identity){
-            if (dnl[i].color_identity == "[]") {
+        if (dnl[i].colors){
+            if (dnl[i].colors == "[]") {
                 color_counts['c']++
             }
             else {
                 for (let k = 0; k < colors.length; k++) {
-                    if (deck[i].color_identity.toLowerCase().includes(colors[k])) {
-                        color_counts[colors[k]]++
+                    for (let j = 0; j < dnl[i].mana_cost.length; j++){
+                        if (dnl[i].mana_cost[j].toLowerCase().includes(colors[k])) {
+                            color_counts[colors[k]]++
+                        }
+                    }
+                }
+            }
+        }
+        else if (dnl[i].card_faces){
+            if (dnl[i].card_faces[0].colors){
+                if (dnl[i].card_faces[0].colors[0] == "[]") {
+                    color_counts['c']++
+                }
+                else {
+                    for (let k = 0; k < colors.length; k++) {
+                        for (let j = 0; j < dnl[i].card_faces[0].mana_cost.length; j++){
+                            if (dnl[i].card_faces[0].mana_cost[j].toLowerCase().includes(colors[k])) {
+                                color_counts[colors[k]]++
+                            }
+                        }
                     }
                 }
             }
@@ -225,7 +245,7 @@ export function getDeckStats(deck) {
     }
 
     statResults.mana_source_counts = mana_source_counts
-
+    statResults.mana_source_count = mana_source_counts_sum
     //mana_source_percents
 
     let mana_source_percents = {

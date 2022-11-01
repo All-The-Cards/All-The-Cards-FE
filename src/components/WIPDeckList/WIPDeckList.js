@@ -93,7 +93,7 @@ const UserObject = (props) => {
       }
 
       const removeFromDeck = (item) => {
-        console.log(item)
+        // console.log(item)
         let tempCards = gc.wipDeck.cards
         let index = gc.wipDeck.cards.indexOf(item)
         tempCards.splice(index, 1)
@@ -164,7 +164,7 @@ const UserObject = (props) => {
                     </div>
                       { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
-                        console.log(item)
+                        // console.log(item)
                         return !item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).sort(sortByCMC).map((item, i) => 
@@ -189,7 +189,7 @@ const UserObject = (props) => {
                     </div>
                     { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
-                        console.log(item)
+                        // console.log(item)
                         return item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).map((item, i) => 

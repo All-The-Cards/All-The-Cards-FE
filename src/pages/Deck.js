@@ -47,9 +47,9 @@ const Deck = (props) => {
     updateState({
       id: id
     })
-    getDeckOffline()
-    // getDeckById(id)
-    // getFavStatus(id)
+    // getDeckOffline()
+    getDeckById(id)
+    getFavStatus(id)
   }, [id])
 
   const getDeckOffline = () => {
@@ -275,7 +275,7 @@ const Deck = (props) => {
         <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
             {state.data.cards.map((card, i) =>
-              <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} /></div>
+              <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} clickable /></div>
             )}
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}

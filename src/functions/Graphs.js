@@ -3,7 +3,7 @@ import { BarChart, Bar, PieChart, Pie, LineChart, Line, Cell, XAxis, YAxis, Cart
 
 export function makeGraphs(stats) {
 
-    console.log("All stats:", Object.keys(stats))
+    // console.log("All stats:", Object.keys(stats))
     
     // OBJECT MAP EXAMPLE:
     // let data = []
@@ -39,18 +39,20 @@ export function makeGraphs(stats) {
         color_counts: "g",
         //percent of cards in a color
         color_percents: "h",
+        //sum of mana production
+        mana_source_count: "i",
         //number of mana production
-        mana_source_counts: "i",
+        mana_source_counts: "j",
         //percent of mana production
-        mana_source_percents: "j",
+        mana_source_percents: "k",
         //total price of deck
-        total_prices: "k",
+        total_prices: "l",
         //amount of lands in deck
-        card_types_counts: "l",
+        card_types_counts: "m",
         //percent of cards in deck
-        card_types_percents: "m",
+        card_types_percents: "n",
         //ratio of producers to costs
-        mana_ratio: "n"
+        mana_ratio: "o"
     }
 
     Object.keys(stats).forEach((value, index) => {
@@ -74,7 +76,8 @@ export function makeGraphs(stats) {
         if (num > 7) num = "8+"
         return {
             cost: num,
-            count: item
+            count: item,
+            fill: "#DB1E4F",
         }
     })
     graphResults.mana_curve = <ComposedChart
@@ -92,9 +95,9 @@ export function makeGraphs(stats) {
         <XAxis dataKey="cost" />
         <YAxis />
         <Tooltip />
-        <Legend />
-        <Bar dataKey="count" fill="#8884d8" />
-        <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
+        {/* <Legend /> */}
+        <Bar dataKey="count"/>
+        <Line type="monotone" dataKey="count" stroke="#7138D1" activeDot={{ r: 8 }} />
     </ComposedChart>
 
     //color_counts
@@ -102,10 +105,16 @@ export function makeGraphs(stats) {
     let color_counts_data = []
     
     Object.values(stats["color_counts"]).forEach((item, index) => {
-        color_counts_data.push({
-            name: Object.keys(stats["color_counts"])[index],
-            count: item
-        })
+        let fill = getColor(Object.keys(stats["color_counts"])[index])
+        let name = getName(Object.keys(stats["color_counts"])[index])
+        
+        if (item > 0) {
+            color_counts_data.push({
+                name: name + " mana costs",
+                count: item,
+                fill: fill
+            })
+        }
     })
 
     graphResults.color_counts = <PieChart 
@@ -130,10 +139,16 @@ export function makeGraphs(stats) {
     let color_percents_data = []
     Object.values(stats["color_percents"]).forEach((item, index) => {
     
-        color_percents_data.push({
-            name: Object.keys(stats["color_percents"])[index],
-            percent: item
-        })
+        let fill = getColor(Object.keys(stats["color_percents"])[index])
+        let name = getName(Object.keys(stats["color_percents"])[index])
+
+        if (item > 0) {
+            color_percents_data.push({
+                name: name + " card %",
+                percent: item,
+                fill: fill
+            })
+        }
     })
 
     graphResults.color_percents = <PieChart 
@@ -158,10 +173,16 @@ export function makeGraphs(stats) {
     let mana_source_counts_data = []
     Object.values(stats["mana_source_counts"]).forEach((item, index) => {
     
-        mana_source_counts_data.push({
-            name: Object.keys(stats["mana_source_counts"])[index],
-            count: item
-        })
+        let fill = getColor(Object.keys(stats["mana_source_counts"])[index])
+        let name = getName(Object.keys(stats["mana_source_counts"])[index])
+
+        if (item > 0) {
+            mana_source_counts_data.push({
+                name: name + " mana sources",
+                fill: fill,
+                count: item
+            })
+        }
     })
     
     graphResults.mana_source_counts = <PieChart 
@@ -186,10 +207,16 @@ export function makeGraphs(stats) {
     let mana_source_percents_data = []
     Object.values(stats["mana_source_percents"]).forEach((item, index) => {
     
-        mana_source_percents_data.push({
-            name: Object.keys(stats["mana_source_percents"])[index],
-            percent: item
-        })
+        let fill = getColor(Object.keys(stats["mana_source_percents"])[index])
+        let name = getName(Object.keys(stats["mana_source_percents"])[index])
+
+        if (item > 0) {
+            mana_source_percents_data.push({
+                name: name + " mana sources %",
+                fill: fill,
+                percent: item
+            })
+        }
     })
     
     graphResults.mana_source_percents = <PieChart 
@@ -215,11 +242,17 @@ export function makeGraphs(stats) {
 
     let card_types_counts_data = []
     Object.values(stats["card_types_counts"]).forEach((item, index) => {
-    
-        card_types_counts_data.push({
-            name: Object.keys(stats["card_types_counts"])[index],
-            percent: item
-        })
+        
+        let fill = getColor(Object.keys(stats["card_types_counts"])[index])
+        let name = getName(Object.keys(stats["card_types_counts"])[index])
+
+        if (item > 0) {
+            card_types_counts_data.push({
+                name: name,
+                fill: fill,
+                count: item
+            })
+        }
     })
     
     graphResults.card_types_counts = <PieChart 
@@ -227,7 +260,7 @@ export function makeGraphs(stats) {
         height={400}
     >
         <Pie
-        dataKey="percent"
+        dataKey="count"
         isAnimationActive={false}
         data={card_types_counts_data}
         cx="50%"
@@ -243,10 +276,16 @@ export function makeGraphs(stats) {
     let card_types_percents_data = []
     Object.values(stats["card_types_percents"]).forEach((item, index) => {
     
-        card_types_percents_data.push({
-            name: Object.keys(stats["card_types_percents"])[index],
-            percent: item
-        })
+        let fill = getColor(Object.keys(stats["card_types_counts"])[index])
+        let name = getName(Object.keys(stats["card_types_counts"])[index])
+
+        if (item > 0) {
+            card_types_percents_data.push({
+                name: name + " %",
+                fill: fill,
+                percent: item
+            })
+        }
     })
     
     graphResults.card_types_percents = <PieChart 
@@ -279,4 +318,94 @@ export function makeGraphs(stats) {
     </PieChart>
 
     return graphResults;
+}
+
+const getColor = (symbol) => {
+    let color = "#c4c4c4"
+    let color2 = "#c6bdbd"
+
+    switch(symbol){
+        case 'w':
+            color = "#ebe6d9"
+            break;
+        case 'u':
+            color = "#c5d6eb"
+            break;
+        case 'b':
+            color = "#bab7b9"
+            break;
+        case 'r':
+            color = "#eac3ad"
+            break;
+        case 'g':
+            color = "#c7dece"
+            break;
+        case 'creature':
+            color = "#c7aace"
+            break;
+        case 'instant':
+            color = "#aadece"
+            break;
+        case 'sorcery':
+            color = "#c7deaa"
+            break;
+        case 'enchantment':
+            color = "#caaece"
+            break;
+        case 'artifact':
+            color = "#c7daae"
+            break;
+        case 'planeswalker':
+            color = "#a7deca"
+            break;
+        case 'land':
+            color = "#c7dece"
+            break;
+    }
+
+    return color
+}
+
+const getName = (symbol) => {
+    let name = "Colorless"
+    switch(symbol){
+        case 'w':
+            name = "White"
+            break;
+        case 'u':
+            name = "Blue"
+            break;
+        case 'b':
+            name = "Black"
+            break;
+        case 'r':
+            name = "Red"
+            break;
+        case 'g':
+            name = "Green"
+            break;
+        case 'creature':
+            name = "Creature"
+            break;
+        case 'instant':
+            name = "Instant"
+            break;
+        case 'sorcery':
+            name = "Sorcery"
+            break;
+        case 'enchantment':
+            name = "Enchantment"
+            break;
+        case 'artifact':
+            name = "Artifact"
+            break;
+        case 'planeswalker':
+            name = "Planeswalker"
+            break;
+        case 'land':
+            name = "Land"
+            break;
+    }
+
+    return name
 }

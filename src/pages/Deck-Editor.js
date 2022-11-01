@@ -2,6 +2,9 @@ import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject';
 import { GlobalContext } from "../context/GlobalContext";
 import * as server from "../functions/ServerTalk";
+import * as utilities from '../functions/Utilities.js';
+import * as stats from '../functions/Stats.js';
+import * as graphs from '../functions/Graphs.js';
 import Footer from '../components/Footer/Footer';
 import './Deck-Editor.css'
 import { confirmAlert } from 'react-confirm-alert';
@@ -14,7 +17,9 @@ const DeckEditor = (props) => {
   const [state, setState] = useState({
     cards: [],
     tagInput: "",
-    publishBlocker: false
+    publishBlocker: false,
+    deckStats: {},
+    deckGraphs: {},
   })
   const nav = useNavigate()
   const gc = useContext(GlobalContext)
@@ -38,7 +43,12 @@ const DeckEditor = (props) => {
         title: ""
       })
     }
-  }, [])
+    setState((previous) => ({
+      ...previous,
+      deckStats: stats.getDeckStats(wipDeck.cards),
+      deckGraphs: graphs.makeGraphs(stats.getDeckStats(wipDeck.cards)),
+    }))
+  }, [gc.wipDeck])
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
@@ -313,9 +323,31 @@ const DeckEditor = (props) => {
           <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
 
         </form>
+        <div>
+        { 
+          Object.keys(state.deckStats).map((key, index) => {
+            return (
+              <div key={index}>
+              {key} 
+              <br></br>
+              Stat: 
+              <br></br>
+              {JSON.stringify(state.deckStats[key], null, '\n')}
+              <br></br>
+              Graph: 
+              <br></br>
+              {state.deckGraphs[key]}
+              <br></br>
+              <br></br>
+                {/* {key}: {state.deckStats[key]} */}
+              </div>
+            )
+          })
+        }
+        </div>
         <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0' }}>
           {state.cards.map((card, index) => (
-            <CardObject key={index} data={card} />
+            <CardObject key={index} data={card} clickable/>
           ))}
         </div>
 
