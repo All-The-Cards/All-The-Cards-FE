@@ -20,6 +20,7 @@ const DeckEditor = (props) => {
     publishBlocker: false,
     deckStats: {},
     deckGraphs: {},
+    showRawGraphs: false
   })
   const nav = useNavigate()
   const gc = useContext(GlobalContext)
@@ -265,6 +266,14 @@ const DeckEditor = (props) => {
     setWipDeck((previous) => ({ ...previous, tags: newTags }))
     saveToLocalStorage("wipDeck", wipDeck)
   }
+
+  const toggleGraphs = () => {
+    setState((previous) => ({
+      ...previous,
+      showRawGraphs: !state.showRawGraphs
+    }))
+  }
+
   return (
     <div className='Page'>
       { state.publishBlocker && <div className='PublishBlocker'>
@@ -289,6 +298,8 @@ const DeckEditor = (props) => {
 
               }} value="Publish Deck" />
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
+              <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+          
             </div>
             <select
               value={wipDeck.formatTag}
@@ -325,6 +336,7 @@ const DeckEditor = (props) => {
         </form>
         <div>
         { 
+          state.showRawGraphs && 
           Object.keys(state.deckStats).map((key, index) => {
             return (
               <div key={index}>
