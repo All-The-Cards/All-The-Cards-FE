@@ -84,6 +84,10 @@ export function getDeckStats(deck) {
             artifact: 0,
             planeswalker: 0,
             land: 0,
+        },
+        mana_ratio: {
+            colors: 0,
+            sources: 0,
         }
     }
     //base stats
@@ -330,6 +334,13 @@ export function getDeckStats(deck) {
     }
 
     statResults.card_types_percents = type_percents
+
+    //mana_ratio
+
+    statResults.mana_ratio = {
+        colors: color_counts,
+        sources: mana_source_counts
+    }
 
     return statResults;
 }

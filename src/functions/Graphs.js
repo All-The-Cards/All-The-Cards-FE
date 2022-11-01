@@ -1,5 +1,5 @@
 
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, LineChart, Line, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';
 
 export function makeGraphs(stats) {
 
@@ -48,7 +48,9 @@ export function makeGraphs(stats) {
         //amount of lands in deck
         card_types_counts: "l",
         //percent of cards in deck
-        card_types_percents: "m"
+        card_types_percents: "m",
+        //ratio of producers to costs
+        mana_ratio: "n"
     }
 
     Object.keys(stats).forEach((value, index) => {
@@ -75,7 +77,7 @@ export function makeGraphs(stats) {
             count: item
         }
     })
-    graphResults.mana_curve = <BarChart
+    graphResults.mana_curve = <ComposedChart
         width={500}
         height={300}
         data={mana_curve_data}
@@ -92,7 +94,8 @@ export function makeGraphs(stats) {
         <Tooltip />
         <Legend />
         <Bar dataKey="count" fill="#8884d8" />
-    </BarChart>
+        <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
+    </ComposedChart>
 
     //color_counts
     
@@ -119,22 +122,161 @@ export function makeGraphs(stats) {
         fill="#8884d8"
         label
         />
-    <Tooltip />
-  </PieChart>
+        <Tooltip />
+    </PieChart>
 
     //color_percents
+    
+    let color_percents_data = []
+    Object.values(stats["color_percents"]).forEach((item, index) => {
+    
+        color_percents_data.push({
+            name: Object.keys(stats["color_percents"])[index],
+            percent: item
+        })
+    })
+
+    graphResults.color_percents = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie
+        dataKey="percent"
+        isAnimationActive={false}
+        data={color_percents_data}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        fill="#8884d8"
+        label
+        />
+        <Tooltip />
+    </PieChart>
 
     //mana_source_counts
 
+    let mana_source_counts_data = []
+    Object.values(stats["mana_source_counts"]).forEach((item, index) => {
+    
+        mana_source_counts_data.push({
+            name: Object.keys(stats["mana_source_counts"])[index],
+            count: item
+        })
+    })
+    
+    graphResults.mana_source_counts = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie
+        dataKey="count"
+        isAnimationActive={false}
+        data={mana_source_counts_data}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        fill="#8884d8"
+        label
+        />
+        <Tooltip />
+    </PieChart>
+
     //mana_source_percents
+
+    let mana_source_percents_data = []
+    Object.values(stats["mana_source_percents"]).forEach((item, index) => {
+    
+        mana_source_percents_data.push({
+            name: Object.keys(stats["mana_source_percents"])[index],
+            percent: item
+        })
+    })
+    
+    graphResults.mana_source_percents = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie
+        dataKey="percent"
+        isAnimationActive={false}
+        data={mana_source_percents_data}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        fill="#8884d8"
+        label
+        />
+        <Tooltip />
+    </PieChart>
 
     //total_prices
 
     //card_types_counts
 
+    let card_types_counts_data = []
+    Object.values(stats["card_types_counts"]).forEach((item, index) => {
+    
+        card_types_counts_data.push({
+            name: Object.keys(stats["card_types_counts"])[index],
+            percent: item
+        })
+    })
+    
+    graphResults.card_types_counts = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie
+        dataKey="percent"
+        isAnimationActive={false}
+        data={card_types_counts_data}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        fill="#8884d8"
+        label
+        />
+        <Tooltip />
+    </PieChart>
+
     //card_types_percents
+    let card_types_percents_data = []
+    Object.values(stats["card_types_percents"]).forEach((item, index) => {
+    
+        card_types_percents_data.push({
+            name: Object.keys(stats["card_types_percents"])[index],
+            percent: item
+        })
+    })
+    
+    graphResults.card_types_percents = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie
+        dataKey="percent"
+        isAnimationActive={false}
+        data={card_types_percents_data}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        fill="#8884d8"
+        label
+        />
+        <Tooltip />
+    </PieChart>
 
+    //mana_ratio
 
+    graphResults.mana_ratio = <PieChart 
+        width={400} 
+        height={400}
+    >
+        <Pie data={mana_source_counts_data} dataKey="count" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" />
+        <Pie data={color_counts_data} dataKey="count" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label />
+        
+        <Tooltip />
+    </PieChart>
 
     return graphResults;
 }
