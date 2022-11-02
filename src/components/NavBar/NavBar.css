@@ -1,4 +1,4 @@
-.NavBarContainer{
+.NavBarContainer {
     background-color: #E8E8E8;
     position: sticky;
     top: 0;
@@ -7,63 +7,166 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    /* border-style: solid; */
-    
+    z-index: 999
+        /* border-style: solid; */
+
+}
+
+.NavBarContainerDark {
+    background-color: #1B1B1B;
+    position: sticky;
+    top: 0;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: row;
+    z-index: 999
 }
 
 /* Left Side Container of NavBar */
 
-.LogoContainer{
-    width: 20%;
+.LogoContainer {
     display: flex;
     align-items: center;
     /* border-style: solid; */
 }
 
-.Logo{
+.Logo {
     margin-left: 5px;
-    height: 70%;
+    height: 80%;
     width: auto;
     /* border-style: solid; */
     cursor: pointer;
+    vertical-align: middle;
 }
 
-.WebsiteTitle{
+.WebsiteTitle {
     margin-left: 5px;
     font-weight: bold;
     font-size: 22px;
 }
 
-/* Center Container of NavBar */
-
-.SearchContainer{
-    width: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* border-style: solid; */
-}
-
-.SearchBar{
-    width: 60%;
-    /* border-style: solid; */
-}
 
 /* Right Side Container of NavBar */
 
-.IconContainer{
-    width: 30%;
+.IconContainer {
+    width: 50%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     /* border-style: solid; */
 }
 
-.Icons{
-    height: 50%;
+.Icons {
+    margin: 3px;
+    height: 40%;
     width: auto;
-    padding: 5px;
+    padding: 7px;
+    border-width: 2px;
+    cursor: pointer;
+}
+
+.LayerIcon {
+    height: 40%;
+    width: auto;
+    padding: 7px;
     /* border-style: solid; */
     border-width: 2px;
     cursor: pointer;
+    background-color: lightgrey;
+    border-radius: 50%;
+}
+
+.UserIcon {
+    margin: 3px;
+    height: 40%;
+    width: auto;
+    padding: 7px;
+    border-width: 2px;
+    cursor: pointer;
+    background-color: lightgray;
+    border-radius: 50%;
+}
+
+/*Dropdown Menu*/
+.LayerMenu {
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: auto;
+    width: 100px;
+    box-shadow: 1px 3px 5px black;
+    position: absolute;
+    z-index: 1;
+    right: 15px;
+    top: 40px
+}
+
+.UserMenu {
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: auto;
+    width: auto;
+    box-shadow: 1px 3px 5px black;
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    top: 40px
+}
+
+.MenuItems {
+    padding: 2px;
+    cursor: pointer;
+}
+
+.MenuText {
+    padding: 2px;
+}
+
+.SearchIcon {
+    height: 40%;
+    width: auto;
+    padding: 7px;
+    /* border-style: solid; */
+    border-width: 2px;
+    cursor: pointer;
+    display: none;
+}
+
+@media only screen and (max-width: 800px) {
+    #Logo-responsive {
+        display: none;
+    }
+
+}
+
+@media only screen and (max-width: 1000px) {
+
+    #Searchbar-responsive {
+        display: none;
+    }
+
+    #Searchicon-responsive {
+        display: block;
+    }
+
+
+}
+
+@media (prefers-color-scheme: dark) {
+    .day.dark-scheme {
+        background: #333;
+        color: white;
+    }
+
+    .night.dark-scheme {
+        background: black;
+        color: #ddd;
+    }
 }

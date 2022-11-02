@@ -1,0 +1,23 @@
+.roundButton{
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+    right: 10px;
+    top: 10px;
+    box-shadow: 5px 5px 8px rgba(0,0,0,.3);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.buttonIcon {
+    max-width: 25px;
+    min-width: 25px;
+    position: relative;
+    align-self: center;
+}

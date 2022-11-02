@@ -1,0 +1,113 @@
+.Page {
+    min-height: 130vh;
+}
+
+.Container {
+    margin: 0 auto;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
+.ContainerDark {
+    margin: 0 auto;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    background-color: #2d2d2d;
+    height: 100vh;
+}
+
+.FancyButton {
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100px;
+    height: 30px;
+    font-family: 'Rubik';
+    border: 0;
+    border-radius: 5px;
+    background-color: #DB1E4F;
+    color: #f7f7f7;
+    /* box-shadow: 10px 10px 10px rgba(0,0,0,.1); */
+}
+
+.FancyButton:hover {
+    background-color: #c6214d;
+}
+
+#alt {
+    background-color: #7138D1;
+}
+
+#alt:hover {
+    background-color: #5d32a7;
+}
+
+
+.HeaderText {
+    margin-top: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.HeaderTextDark {
+    margin-top: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: left;
+    color: whitesmoke;
+}
+
+.SubHeaderText {
+    margin-top: 10px;
+    font-size: 20px;
+    font-style: italic;
+    text-align: left;
+}
+
+.SubHeaderTextDark {
+    color: whitesmoke;
+    margin-top: 10px;
+    font-size: 20px;
+    font-style: italic;
+    text-align: left;
+}
+
+.BodyText {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: left;
+    white-space: pre-line;
+}
+
+.BodyTextDark {
+    color: whitesmoke;
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: left;
+    white-space: pre-line;
+}
+
+
+
+button+button {
+    margin-left: 20px;
+}
+
+
+
+.LargeCard {
+    max-width: 500px;
+    max-height: 700px;
+    /* background-color: rgba(255,0,0,.3); */
+    display: inline-block;
+}
+
+.RegularCard {
+    width: 250px;
+    height: 350px;
+    min-height: 350px;
+    /* background-color: rgba(255,0,0,.3); */
+    display: inline-block;
+}

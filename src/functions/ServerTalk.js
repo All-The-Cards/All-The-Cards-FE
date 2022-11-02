@@ -2,15 +2,14 @@
 
 // Production server link
 const production = { 
-    api_url: 'https://mighty-stream-19939.herokuapp.com',
-    redirect_url: 'https://arcane-harbor-98707.herokuapp.com' 
+    api_url: 'https://allthecards-api.herokuapp.com',
+    redirect_url: 'https://allthecards.herokuapp.com' 
 }
 const development = { 
     api_url: 'http://localhost:5000', 
     redirect_url: 'http://localhost:3000' 
 }
 const config = process.env.NODE_ENV === 'development' ? development : production;
-
 
 // Run HTTP GET from the target location
 // Parameters:
