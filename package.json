@@ -2,6 +2,9 @@
   "name": "all-the-cards-fe",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@saeris/react-mana": "^1.0.3",
     "@supabase/supabase-js": "^2.0.0-rc.8",
