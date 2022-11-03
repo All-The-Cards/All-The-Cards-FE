@@ -182,11 +182,22 @@ const CardObject = (props) => {
     const addToDeck = () => {
         let tempCards = wipDeck.cards
         tempCards.push(props.data)
-        setWipDeck((previous) => ({
-            ...previous,
-            cards: tempCards
-        }))
-        saveToLocalStorage("wipDeck", wipDeck)
+        console.log(wipDeck)
+        if (wipDeck.coverCard == null || wipDeck.coverCard.image_uris.art_crop == "") {
+            setWipDeck((previous) => ({
+                ...previous,
+                cards: tempCards,
+                coverCard: props.data
+            }))
+            saveToLocalStorage("wipDeck", wipDeck)
+        }
+        else {
+            setWipDeck((previous) => ({
+                ...previous,
+                cards: tempCards,
+            }))
+            saveToLocalStorage("wipDeck", wipDeck)
+        }
     }
     const removeFromDeck = () => {
         let tempCards = wipDeck.cards

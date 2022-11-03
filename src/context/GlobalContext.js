@@ -22,14 +22,17 @@ export const GlobalProvider = ({ children }) => {
         cards: [],
         coverCard: {
             image_uris: {
-                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                art_crop: ""
             }
         }, 
         deckID: "",
         description: "",
         formatTag: "",
         tags: [],
-        title: ""
+        title: "",
+        commanderSlot: {
+            name: ""
+        },
     }
 
     let loadedWipDeckData = loadFromLocalStorage("wipDeck")

@@ -8,12 +8,14 @@ import { GlobalContext } from "../../context/GlobalContext";
 import CardObject from "../CardObject/CardObject";
 import * as utilities from '../../functions/Utilities'
 import * as stats from '../../functions/Stats'
+import { saveToLocalStorage } from '../../functions/Utilities';
 
-const UserObject = (props) => {
+const WIPDeckList = (props) => {
 
     const gc = useContext(GlobalContext)
     const [state, setState] = useState({
-        showSideList: true
+        showSideList: true,
+        showCommanderDropdown: true,
     })
 
     const updateState = (objectToUpdate) => {
@@ -34,7 +36,7 @@ const UserObject = (props) => {
             ...previous,
             coverCard: {
               image_uris: {
-                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                art_crop: ""
               }
             }
           }))
@@ -124,7 +126,123 @@ const UserObject = (props) => {
         return '0px'
       }
       else {
-        return '-340px'
+        return '-360px'
+      }
+    }
+
+    const updateWipDeck = (objectToUpdate) => {
+      gc.setWipDeck((previous) => ({
+        ...previous,
+        ...objectToUpdate
+      }))
+      saveToLocalStorage("wipDeck", gc.wipDeck)
+    }
+
+    const getValidCommanders = () => {
+      // console.log(gc.wipDeck.commanderSlot)
+      let results = makeUniqueDeck(gc.wipDeck.cards)
+        .filter((item) => { 
+          // return item === gc.wipDeck.commanderSlot
+          return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature")
+        })
+        .sort(sortByName).map((item, i) => {
+        // console.log(item)
+        return(<option key={i} value={JSON.stringify(item)}>
+          { item.name }
+        </option>)
+        })
+        console.log(results)
+        if (results.length > 0) {
+          results.push(<option key={999999} value={"REMOVE"}>
+            ***Remove Commander***
+          </option>)
+        }
+        else {
+          results.push(<option key={999999} value={"ADD"}>
+            Add a valid commander...
+          </option>)
+        }
+
+        let commanders = makeUniqueDeck(gc.wipDeck.cards)
+        .filter((item) => { 
+          // return item === gc.wipDeck.commanderSlot
+          return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature")
+        }).sort(sortByName)
+
+        if (commanders.length > 1 && (JSON.stringify(gc.wipDeck.commanderSlot) == "{}" || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"image_uris":{"art_crop":""},"name":""}) ||JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":"","image_uris":{"art_crop":""}}) || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":""}))) {
+          updateWipDeck({
+            commanderSlot: commanders[0],
+            coverCard: commanders[0]
+          })
+        }
+
+        if (commanders.length > 1 && gc.wipDeck.commanderSlot == undefined  && commanders[0] !== <option key={999999} value={"REMOVE"}>
+        ***Remove Commander***
+      </option>) {
+          updateWipDeck({
+            commanderSlot: commanders[0],
+            coverCard: commanders[0]
+          })
+        }
+
+        return results
+    }
+
+    const toggleCommanderDropdown = () => {
+      updateState({showCommanderDropdown: !state.showCommanderDropdown})
+    }
+
+    const setCommander = (event) => {
+      let otherCommanders = []
+      if(gc.wipDeck.cards.length > 0) {
+
+        otherCommanders = makeUniqueDeck(gc.wipDeck.cards)
+        .filter((item) => { 
+          // return item === gc.wipDeck.commanderSlot
+          if (gc.wipDeck.commanderSlot) return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature") && item.name !== gc.wipDeck.commanderSlot.name
+          else {
+            return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature")
+          }
+        })
+      }
+
+      if (otherCommanders.length === 0){
+        otherCommanders.push({
+            name: ""
+        })
+      }
+
+      if (event.target.value === "REMOVE"){
+        // console.log("COMMANDER TO REMOVE: ", gc.wipDeck.commanderSlot)
+        let tempCards = gc.wipDeck.cards
+        let index = gc.wipDeck.cards.indexOf(gc.wipDeck.commanderSlot)
+        tempCards.splice(index, 1)
+        gc.setWipDeck((previous) => ({
+            ...previous,
+            cards: tempCards
+        }))
+        utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
+
+        // console.log(otherCommanders[0])
+        updateWipDeck({ 
+          commanderSlot: otherCommanders[0],
+          coverCard: otherCommanders[0]
+        }) 
+        if (otherCommanders[0].image_uris) {
+           updateWipDeck({ 
+          coverCard: otherCommanders[0]
+        }) 
+        }
+      }
+      else if (event.target.value === "ADD"){
+
+      }
+      else {
+        // console.log("Changed commander")
+        updateWipDeck({ 
+          commanderSlot: JSON.parse(event.target.value),
+          coverCard: JSON.parse(event.target.value)
+        }) 
       }
     }
 
@@ -132,12 +250,15 @@ const UserObject = (props) => {
         <>
         {
             gc.isEditing && 
-            <div className="DeckListContainer" style={{left: getMargin()}}>
+            <div>
               <div className="DeckListToggle" onClick={() => {
                 updateState({
                   showSideList: !state.showSideList
                 })
-              }}><div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>{state.showSideList ? "<" : ">"}</div></div>
+              }}> 
+                <div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>{state.showSideList ? "<" : ">"}</div>
+              </div>
+            <div className="DeckListContainer" style={{left: getMargin()}}>
               <Link to="/deckeditor">
                 <div className="DeckListCover" 
                   style={{
@@ -157,15 +278,62 @@ const UserObject = (props) => {
                 {
                     gc.wipDeck.cards.length > 0 &&
                     <div>
+                    { 
+                      gc.wipDeck && gc.wipDeck.formatTag === "commander" &&
+                      <div>
+                        <div className="wipDeckListGroupTitle">
+                          Commander
+                          <div className="DeckListSmallIcon"
+                            style={{top:"0px", left:'10px', marginBottom:'4px'}}
+                            onClick={() => {
+                              toggleCommanderDropdown()
+                            }}>
+                            {state.showCommanderDropdown ? "-" : "+"}
+                          </div>
+                        </div>
+                        {
+                          gc.wipDeck && 
+                          <div>
+                            {
+                              state.showCommanderDropdown &&
+                              <select 
+                                style={{marginBottom:"10px"}}
+                                value={JSON.stringify(gc.wipDeck.commanderSlot)} onChange={(event) => { 
+                                  setCommander(event)
+                                }}>
+                                { getValidCommanders() }
+                              </select>
+                            }
+                          </div>
+                        }
+                        { makeUniqueDeck(gc.wipDeck.cards)
+                        .filter((item) => { 
+                          let iname = item.name
+                          // console.log(gc.wipDeck)
+                          // return item === gc.wipDeck.commanderSlot
+                          if(gc.wipDeck.commanderSlot) return iname === gc.wipDeck.commanderSlot.name
+                        })
+                        .sort(sortByName).map((item, i) => 
+                        <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                            <div className="CardListObject" style={{display:"inline-block"}}
+                              >
+                            <CardObject data={item} isCompact={true} 
+                            count={getCount(item, gc.wipDeck.cards)}/>
+                            </div>
+                        </div>)
+                      }
+                      </div>
+                    }
                     <div className="wipDeckListGroupTitle">
-                    </div>
-                    <div className="wipDeckListGroupTitle">
-                    Spells - {gc.wipDeck.cards.length - stats.getDeckStats(gc.wipDeck.cards).land_count}
+                    Spells - {gc.wipDeck.cards.filter((item) => {
+                      return item.name !== gc.wipDeck.commanderSlot.name
+                    }).length- stats.getDeckStats(gc.wipDeck.cards).land_count}
                     </div>
                       { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
                         // console.log(item)
-                        return !item.type_one.toLowerCase().includes("land")
+                        if (gc.wipDeck.commanderSlot) return !item.type_one.toLowerCase().includes("land") && item.name !== gc.wipDeck.commanderSlot.name
+                        else return !item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).sort(sortByCMC).map((item, i) => 
                       <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
@@ -212,9 +380,10 @@ const UserObject = (props) => {
                     </div>
                 }
             </div>
+            </div>
         }
         </>
     )
 }
 
-export default UserObject
+export default WIPDeckList
