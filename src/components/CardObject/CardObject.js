@@ -183,7 +183,7 @@ const CardObject = (props) => {
         let tempCards = wipDeck.cards
         tempCards.push(props.data)
         console.log(wipDeck)
-        if (wipDeck.coverCard == null || wipDeck.coverCard.image_uris.art_crop == "") {
+        if (wipDeck.coverCard == null || wipDeck.coverCard.image_uris == null || wipDeck.coverCard.image_uris.art_crop == "") {
             setWipDeck((previous) => ({
                 ...previous,
                 cards: tempCards,

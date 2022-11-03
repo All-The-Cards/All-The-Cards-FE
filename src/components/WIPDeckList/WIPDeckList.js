@@ -153,6 +153,9 @@ const WIPDeckList = (props) => {
         })
         console.log(results)
         if (results.length > 0) {
+          results.unshift(<option key={-1} value={"SET"}>
+          Choose a commander...
+        </option>)
           results.push(<option key={999999} value={"REMOVE"}>
             ***Remove Commander***
           </option>)
@@ -169,21 +172,21 @@ const WIPDeckList = (props) => {
           return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature")
         }).sort(sortByName)
 
-        if (commanders.length > 1 && (JSON.stringify(gc.wipDeck.commanderSlot) == "{}" || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"image_uris":{"art_crop":""},"name":""}) ||JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":"","image_uris":{"art_crop":""}}) || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":""}))) {
-          updateWipDeck({
-            commanderSlot: commanders[0],
-            coverCard: commanders[0]
-          })
-        }
+      //   if (commanders.length > 1 && (JSON.stringify(gc.wipDeck.commanderSlot) == "{}" || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"image_uris":{"art_crop":""},"name":""}) ||JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":"","image_uris":{"art_crop":""}}) || JSON.stringify(gc.wipDeck.commanderSlot) == JSON.stringify({"name":""}))) {
+      //     updateWipDeck({
+      //       commanderSlot: commanders[0],
+      //       coverCard: commanders[0]
+      //     })
+      //   }
 
-        if (commanders.length > 1 && gc.wipDeck.commanderSlot == undefined  && commanders[0] !== <option key={999999} value={"REMOVE"}>
-        ***Remove Commander***
-      </option>) {
-          updateWipDeck({
-            commanderSlot: commanders[0],
-            coverCard: commanders[0]
-          })
-        }
+      //   if (commanders.length > 1 && gc.wipDeck.commanderSlot == undefined  && commanders[0] !== <option key={999999} value={"REMOVE"}>
+      //   ***Remove Commander***
+      // </option>) {
+      //     updateWipDeck({
+      //       commanderSlot: commanders[0],
+      //       coverCard: commanders[0]
+      //     })
+      //   }
 
         return results
     }
@@ -225,20 +228,17 @@ const WIPDeckList = (props) => {
 
         // console.log(otherCommanders[0])
         updateWipDeck({ 
-          commanderSlot: otherCommanders[0],
-          coverCard: otherCommanders[0]
+          commanderSlot: otherCommanders[0]
         }) 
-        if (otherCommanders[0].image_uris) {
-           updateWipDeck({ 
-          coverCard: otherCommanders[0]
-        }) 
-        }
       }
       else if (event.target.value === "ADD"){
 
       }
+      else if (event.target.value === "SET"){
+
+      }
       else {
-        // console.log("Changed commander")
+        console.log("Changed commander")
         updateWipDeck({ 
           commanderSlot: JSON.parse(event.target.value),
           coverCard: JSON.parse(event.target.value)
@@ -262,7 +262,7 @@ const WIPDeckList = (props) => {
               <Link to="/deckeditor">
                 <div className="DeckListCover" 
                   style={{
-                    backgroundImage:"url(" + (gc.wipDeck.coverCard && gc.wipDeck.coverCard.image_uris.art_crop)  + ")",
+                    backgroundImage:"url(" + (gc.wipDeck.coverCard && gc.wipDeck.coverCard.image_uris && gc.wipDeck.coverCard.image_uris.art_crop)  + ")",
                     // backgroundPosition: "center",
                     // backgroundRepeat: "no-repeat",
                     // backgroundSize: "cover"
@@ -297,7 +297,7 @@ const WIPDeckList = (props) => {
                             {
                               state.showCommanderDropdown &&
                               <select 
-                                style={{marginBottom:"10px"}}
+                                style={{marginBottom:"10px", width: "90%"}}
                                 value={JSON.stringify(gc.wipDeck.commanderSlot)} onChange={(event) => { 
                                   setCommander(event)
                                 }}>
@@ -320,6 +320,14 @@ const WIPDeckList = (props) => {
                             <CardObject data={item} isCompact={true} 
                             count={getCount(item, gc.wipDeck.cards)}/>
                             </div>
+                          <div className="DeckListSmallIcon"
+                            onClick={() => {
+                              updateWipDeck({
+                                coverCard: item
+                              })
+                            }}>
+                            @
+                          </div>
                         </div>)
                       }
                       </div>
