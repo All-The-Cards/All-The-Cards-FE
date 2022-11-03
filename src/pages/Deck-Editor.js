@@ -32,17 +32,25 @@ const DeckEditor = (props) => {
       gc.setWipDeck({
         authorID: "",
         cards: [],
-        coverCard: {
-          image_uris: {
-            art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
-          }
-        },
         deckID: "",
         description: "",
         formatTag: "",
         tags: [],
-        title: ""
+        title: "",
+        commanderSlot: {
+          name: ""
+      },
+      coverCard: {
+        image_uris: {
+          art_crop: ""
+        }
+      },
       })
+    }
+    if (gc.wipDeck.commanderSlot === undefined) {
+        updateWipDeck({commanderSlot: {
+          name: ""
+      },})
     }
     setState((previous) => ({
       ...previous,
@@ -101,9 +109,12 @@ const DeckEditor = (props) => {
     }
   }
   const formatWipDeck = () => {
-    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id }
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id }
     if (result.coverCard === undefined) {
       result.coverCard = wipDeck.cards[0].id
+    }
+    if (result.commander === undefined) {
+      result.commander = ""
     }
     wipDeck.cards.forEach(card => {
       result.cards.push(card.id)
@@ -175,14 +186,17 @@ const DeckEditor = (props) => {
           cards: [],
           coverCard: {
             image_uris: {
-              art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+              art_crop: ""
             }
           },
           deckID: "",
           description: "",
           formatTag: "",
           tags: [],
-          title: ""
+          title: "",
+          commanderSlot: {
+            name: ""
+          },
         })
         saveToLocalStorage("wipDeck", gc.wipDeck)
         nav("/")
@@ -205,16 +219,19 @@ const DeckEditor = (props) => {
             gc.setWipDeck({
               authorID: "",
               cards: [],
-              coverCard: {
-                image_uris: {
-                  art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
-                }
-              },
               deckID: "",
               description: "",
               formatTag: "",
               tags: [],
-              title: ""
+              title: "",
+              commanderSlot: {
+                  name: ""
+              },
+              coverCard: {
+                image_uris: {
+                  art_crop: ""
+                }
+              },
             })
             saveToLocalStorage("wipDeck", gc.wipDeck)
           }
@@ -240,14 +257,17 @@ const DeckEditor = (props) => {
               cards: [],
               coverCard: {
                 image_uris: {
-                  art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                  art_crop: ""
                 }
               },
               deckID: "",
               description: "",
               formatTag: "",
               tags: [],
-              title: ""
+              title: "",
+              commanderSlot: {
+                name: ""
+            },
             })
             saveToLocalStorage("wipDeck", gc.wipDeck)
             nav("/")
