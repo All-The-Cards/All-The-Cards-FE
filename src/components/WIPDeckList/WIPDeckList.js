@@ -16,6 +16,7 @@ const WIPDeckList = (props) => {
     const [state, setState] = useState({
         showSideList: true,
         showCommanderDropdown: true,
+        validCommanders: ""
     })
 
     const updateState = (objectToUpdate) => {
@@ -26,7 +27,7 @@ const WIPDeckList = (props) => {
     }
     useEffect(() => {
         getData()
-    }, [props])
+    }, [props, gc.wipDeck])
 
 
     const getData = () =>{
@@ -46,6 +47,7 @@ const WIPDeckList = (props) => {
         // updateState({ 
 
         // })
+        updateState({validCommanders: getValidCommanders()})
     }
     
     const sortByCMC = (a, b) => {
@@ -151,7 +153,7 @@ const WIPDeckList = (props) => {
           { item.name }
         </option>)
         })
-        console.log(results)
+        // console.log(results)
         if (results.length > 0) {
           results.unshift(<option key={-1} value={"SET"}>
           Choose a commander...
@@ -238,7 +240,7 @@ const WIPDeckList = (props) => {
 
       }
       else {
-        console.log("Changed commander")
+        // console.log("Changed commander")
         updateWipDeck({ 
           commanderSlot: JSON.parse(event.target.value),
           coverCard: JSON.parse(event.target.value)
@@ -272,7 +274,7 @@ const WIPDeckList = (props) => {
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
                   <div className="DeckListFormat">{utilities.getProperFormatName(gc.wipDeck.formatTag)}</div>
-                  <div className="DeckListSize">{gc.wipDeck.cards.length} cards</div>
+                  <div className="DeckListSize">{gc.wipDeck.cards.length} card{gc.wipDeck.cards.length != 1 && "s"}</div>
                 </div>
               </Link>
                 {
@@ -301,7 +303,7 @@ const WIPDeckList = (props) => {
                                 value={JSON.stringify(gc.wipDeck.commanderSlot)} onChange={(event) => { 
                                   setCommander(event)
                                 }}>
-                                { getValidCommanders() }
+                                { state.validCommanders }
                               </select>
                             }
                           </div>
@@ -314,20 +316,22 @@ const WIPDeckList = (props) => {
                           if(gc.wipDeck.commanderSlot) return iname === gc.wipDeck.commanderSlot.name
                         })
                         .sort(sortByName).map((item, i) => 
-                        <div key={i} className="DeckListCard" style={{userSelect:"none"}}>
+                        <div key={i} className="DeckListCard" style={{userSelect:"none", marginLeft:"-24px"}}>
                             <div className="CardListObject" style={{display:"inline-block"}}
                               >
                             <CardObject data={item} isCompact={true} 
                             count={getCount(item, gc.wipDeck.cards)}/>
                             </div>
-                          <div className="DeckListSmallIcon"
+                          {/* <div className="DeckListSmallIcon"
+                          title="Set as cover art"
                             onClick={() => {
                               updateWipDeck({
                                 coverCard: item
                               })
+                            
                             }}>
-                            @
-                          </div>
+                            [o]
+                          </div> */}
                         </div>)
                       }
                       </div>
