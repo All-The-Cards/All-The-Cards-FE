@@ -243,7 +243,7 @@ const WIPDeckList = (props) => {
         // console.log("Changed commander")
         updateWipDeck({ 
           commanderSlot: JSON.parse(event.target.value),
-          coverCard: JSON.parse(event.target.value)
+          // coverCard: JSON.parse(event.target.value)
         }) 
       }
     }
