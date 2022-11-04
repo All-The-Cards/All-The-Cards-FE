@@ -71,7 +71,7 @@ const Deck = (props) => {
     }
 
     server.post(query).then(response => {
-      localStorage.setItem("TEST_DECK", JSON.stringify(response))
+      // localStorage.setItem("TEST_DECK", JSON.stringify(response))
       console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
@@ -79,6 +79,7 @@ const Deck = (props) => {
       }
       else {
         document.title = response.name
+        // console.log(response)
         updateState({
           data: response,
           deckStats: stats.getDeckStats(response.cards),
@@ -154,6 +155,7 @@ const Deck = (props) => {
       },
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
+      commanderSlot: state.data.commander
     }))
     utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
     nav('/deckeditor')
@@ -290,9 +292,9 @@ const Deck = (props) => {
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
           {state.viewMode === "Categorized" ? <>
-            {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
+            {/* {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
               <CardStack key={i} cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
-            ))}
+            ))} */}
           </> : <></>}
         </div>
       </div>

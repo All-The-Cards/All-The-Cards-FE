@@ -19,6 +19,7 @@ export function mapCardsToTypes(unsortedCards) {
             }
         });
     }
+    // results = unsortedCards
 
     return results;
 }
