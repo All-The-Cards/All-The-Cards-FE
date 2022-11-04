@@ -45,6 +45,7 @@ const DeckEditor = (props) => {
           art_crop: ""
         }
       },
+      isValid: false,
       })
     }
     if (gc.wipDeck.commanderSlot === undefined) {
@@ -109,7 +110,7 @@ const DeckEditor = (props) => {
     }
   }
   const formatWipDeck = () => {
-    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id }
+    let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id, isValid: wipDeck.isValid }
     if (result.coverCard === undefined) {
       result.coverCard = wipDeck.cards[0].id
     }
@@ -197,6 +198,7 @@ const DeckEditor = (props) => {
           commanderSlot: {
             name: ""
           },
+          isValid: false,
         })
         saveToLocalStorage("wipDeck", gc.wipDeck)
         nav("/")
@@ -232,6 +234,7 @@ const DeckEditor = (props) => {
                   art_crop: ""
                 }
               },
+              isValid: false,
             })
             saveToLocalStorage("wipDeck", gc.wipDeck)
           }
@@ -268,6 +271,7 @@ const DeckEditor = (props) => {
               commanderSlot: {
                 name: ""
             },
+            isValid: false,
             })
             saveToLocalStorage("wipDeck", gc.wipDeck)
             nav("/")

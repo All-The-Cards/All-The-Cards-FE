@@ -48,6 +48,7 @@ const WIPDeckList = (props) => {
 
         // })
         updateState({validCommanders: getValidCommanders()})
+        checkValidity()
     }
     
     const sortByCMC = (a, b) => {
@@ -141,9 +142,9 @@ const WIPDeckList = (props) => {
     }
 
     const getValidCommanders = () => {
-      // console.log(gc.wipDeck.commanderSlot)
       let results = makeUniqueDeck(gc.wipDeck.cards)
         .filter((item) => { 
+          console.log(item)
           // return item === gc.wipDeck.commanderSlot
           return item.type_one.toLowerCase().includes("legendary") && item.type_one.toLowerCase().includes("creature")
         })
@@ -248,6 +249,14 @@ const WIPDeckList = (props) => {
       }
     }
 
+    const checkValidity = () => {
+      // let valid = true
+      // let cards = gc.wipDeck.cards
+      // for (let i = 0; i < cards.length; i++){
+      //   if (cards[i].)
+      // }
+    }
+
     return(
         <>
         {
@@ -273,6 +282,7 @@ const WIPDeckList = (props) => {
                     {gc.wipDeck.title.length < 1 && "New Deck"}
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
+                    <div className="DeckValidity">{gc.wipDeck.isValid ? "" : "Error!"}</div>
                   <div className="DeckListFormat">{utilities.getProperFormatName(gc.wipDeck.formatTag)}</div>
                   <div className="DeckListSize">{gc.wipDeck.cards.length} card{gc.wipDeck.cards.length != 1 && "s"}</div>
                 </div>

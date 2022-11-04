@@ -33,6 +33,7 @@ export const GlobalProvider = ({ children }) => {
         commanderSlot: {
             name: ""
         },
+        isValid: false,
     }
 
     let loadedWipDeckData = loadFromLocalStorage("wipDeck")
