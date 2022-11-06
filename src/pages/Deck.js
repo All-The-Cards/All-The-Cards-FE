@@ -292,9 +292,9 @@ const Deck = (props) => {
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
           {state.viewMode === "Categorized" ? <>
-            {/* {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
+            {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
               <CardStack key={i} cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
-            ))} */}
+            ))}
           </> : <></>}
         </div>
       </div>

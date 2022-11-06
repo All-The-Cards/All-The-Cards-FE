@@ -271,6 +271,13 @@ const WIPDeckList = (props) => {
       let valid = true
       let errorCards = []
       let cards = gc.wipDeck.cards
+      let unlimitedCopies = [
+        "persistent petitioners",
+        "relentless rats",
+        "rat colony",
+        "shadowborn apostle",
+        "dragon's approach"
+      ]
 
       //check format legality of list
       for (let i = 0; i < cards.length; i++){
@@ -287,7 +294,8 @@ const WIPDeckList = (props) => {
           errorName = "Card not Legal"
           foundError = true
         }
-        else if (
+        //card counts
+        if (
           //too many copies and not basic land
           (getCount(card, cards) > 4 
             && !card.type_one.toLowerCase().includes("basic land"))
@@ -297,10 +305,25 @@ const WIPDeckList = (props) => {
           || (gc.wipDeck.formatTag == "commander" && 
               (getCount(card, cards) > 1 && !card.type_one.toLowerCase().includes("basic land")) )
           ){
-          errorName = "Too many copies"
+            if (unlimitedCopies.includes(card.name.toLowerCase())) {
+              // console.log(card.name)
+            }
+            else if (card.name.toLowerCase() == "seven dwarves" && getCount(card, cards) <= 7) {
+
+            }
+            else {
+              errorName = "Too many copies"
+              foundError = true
+            }
+        }
+        if (
+          (gc.wipDeck.formatTag == "commander" && cardInCommander(card, gc.wipDeck) == false)
+        ) {
+          //cards not in identity
+          errorName = "Not in Commander Identity"
           foundError = true
         }
-        else if ( 
+        if ( 
           //if commander deck and not 100 cards
           cards.length !== 100 && gc.wipDeck.formatTag == "commander"
           //if any other format and less than 60 cards
@@ -312,19 +335,70 @@ const WIPDeckList = (props) => {
             
           valid = false
         }
-        else {
-          //must be legal
-        }
-
         if (foundError) {
           valid = false
           errorCards = generateError(card, errorName, errorCards)
         }
       }
 
-      console.log(errorCards)
-      console.log("Found deck to be: ", valid)
+      // console.log("Errors", errorCards)
+      // console.log("Found deck to be: ", valid)
       updateState({errorList: errorCards})
+      return valid
+    }
+
+    const cardInCommander = (card, deck) => {
+      let valid = true;
+
+      let cardColors = []
+      let commanderColors = []
+      for (let i = 0; i < card.color_identity.length; i++){
+        switch (card.color_identity[i]){
+          case "W":
+            cardColors.push("W")
+            break;
+          case "U":
+            cardColors.push("U")
+            break;
+          case "B":
+            cardColors.push("B")
+            break;
+          case "R":
+            cardColors.push("R")
+            break;
+          case "G":
+            cardColors.push("G")
+            break;
+        }
+      } 
+      
+      for (let i = 0; i < deck.commanderSlot.color_identity.length; i++){
+        switch (deck.commanderSlot.color_identity[i]){
+          case "W":
+            commanderColors.push("W")
+            break;
+          case "U":
+            commanderColors.push("U")
+            break;
+          case "B":
+            commanderColors.push("B")
+            break;
+          case "R":
+            commanderColors.push("R")
+            break;
+          case "G":
+            commanderColors.push("G")
+            break;
+        }
+      }
+
+      // console.log("card:", cardColors, "commander:", commanderColors)
+
+      for (let i = 0; i < cardColors.length; i++){
+        if (!commanderColors.includes(cardColors[i])) valid = false
+      }
+
+
       return valid
     }
 
@@ -471,10 +545,10 @@ const WIPDeckList = (props) => {
                           if(gc.wipDeck.commanderSlot) return iname === gc.wipDeck.commanderSlot.name
                         })
                         .sort(sortByName).map((item, i) => {
-                        for (let i = 0; i < state.errorList.length; i++){
-                          console.log(state.errorList[i])
-                          if (state.errorList[i].card == item) console.log("error: ", item)
-                        }
+                        // for (let i = 0; i < state.errorList.length; i++){
+                        //   // console.log(state.errorList[i])
+                        //   if (state.errorList[i].card == item) console.log("error: ", item)
+                        // }
                         return (<div key={i} className="DeckListCard" style={{userSelect:"none", marginLeft:"-24px"}}>
                           {
                           state.errorList.map((errorItem ,i) => {
@@ -514,7 +588,7 @@ const WIPDeckList = (props) => {
                       { makeUniqueDeck(gc.wipDeck.cards)
                       .filter((item) => { 
                         // console.log(item)
-                        if (gc.formatTag == "commander") return !item.type_one.toLowerCase().includes("land") && (item.name !== gc.wipDeck.commanderSlot.name)
+                        if (gc.wipDeck.formatTag == "commander") return !item.type_one.toLowerCase().includes("land") && (item.name !== gc.wipDeck.commanderSlot.name)
                         else return !item.type_one.toLowerCase().includes("land")
                       })
                       .sort(sortByName).sort(sortByCMC).map((item, i) => 
