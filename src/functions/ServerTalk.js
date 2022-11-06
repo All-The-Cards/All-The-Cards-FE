@@ -75,7 +75,7 @@ export function post(query){
             return response.json()
         })
         .then((result) => {
-            console.log(result)
+            // console.log(result)
             return result
         })
         .catch((error) => {

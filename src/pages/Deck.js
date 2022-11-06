@@ -72,7 +72,7 @@ const Deck = (props) => {
 
     server.post(query).then(response => {
       // localStorage.setItem("TEST_DECK", JSON.stringify(response))
-      console.log(response)
+      // console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
         nav('/search/')
@@ -292,9 +292,9 @@ const Deck = (props) => {
           </> : <></>}
           {state.viewMode === "Stacked" ? <CardStack cards={state.data.cards} isCompact={state.compactView} /> : <></>}
           {state.viewMode === "Categorized" ? <>
-            {/* {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
+            {utilities.mapCardsToTypes(state.data.cards).map((typeList, i) => (
               <CardStack key={i} cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
-            ))} */}
+            ))}
           </> : <></>}
         </div>
       </div>
