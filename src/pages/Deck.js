@@ -72,7 +72,7 @@ const Deck = (props) => {
 
     server.post(query).then(response => {
       // localStorage.setItem("TEST_DECK", JSON.stringify(response))
-      console.log(response)
+      // console.log(response)
       //if invalid, just direct to search page
       if (response.length === 0) {
         nav('/search/')
