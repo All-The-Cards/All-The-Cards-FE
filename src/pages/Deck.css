@@ -16,3 +16,29 @@
 .DeckPageDark label {
     color: whitesmoke;
 }
+
+.DeckPageBanner { 
+    padding-top: 0px;
+    /* padding-left: 20%;
+    padding-right: 20%; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 10% 22%;
+    /* filter: blur(5px); */
+    height: 340px;
+    /* backdrop-filter: blur(5px); */
+}
+
+.DeckPageContent {
+    width: 100%;
+}
+
+.DeckInfoContent {
+    padding-left: 20%;
+    padding-right: 20%;
+    position: absolute;
+    width: 60%;
+    top: 100px;
+    color: #f7f7f7;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
+}

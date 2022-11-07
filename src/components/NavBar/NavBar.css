@@ -7,8 +7,10 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    z-index: 999
+    z-index: 999;
         /* border-style: solid; */
+    padding-left: 20%;
+    padding-right: 20%;
 
 }
 
@@ -101,8 +103,8 @@
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
-    right: 15px;
-    top: 40px
+    top: 60px;
+    right: 21%;
 }
 
 .UserMenu {
@@ -116,8 +118,8 @@
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
-    right: 5px;
-    top: 40px
+    right: 20%;
+    top: 60px
 }
 
 .MenuItems {

@@ -447,12 +447,12 @@ const CardObject = (props) => {
                         </div>
                     </div>
                 }
-                {state.listHover &&
+                { !props.dontHover && state.listHover &&
                     <img src={state.imgLink} id="cardList"></img>
                 }
             </div>
                 : <div
-                    className="CardObjectContainer RegularCard"
+                    className={"CardObjectContainer " + props.size}
                 >
                     {props.clickable &&
                         <Link to={"/card/?id=" + props.data.id}

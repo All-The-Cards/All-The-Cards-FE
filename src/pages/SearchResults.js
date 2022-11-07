@@ -10,7 +10,6 @@ import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
 import UserObject from '../components/UserObject/UserObject.js';
-import Footer from '../components/Footer/Footer.js';
 
 
 
@@ -598,7 +597,7 @@ const SearchResults = (props) => {
       threshold={50}
     >
       { }
-      <div className={`Container ${darkMode ? "ContainerDark" : ''}`} style={{ paddingBottom: '200px' }}>
+      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`} style={{ paddingBottom: '200px' }}>
         {/* Advanced search options */}
         <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{ position: 'absolute', right: '0', marginRight: '20px' }}>{getTypeName()}</button>
         <div className="AdvancedContainer" style={{ display: state.advancedContainerDisplay }}>
@@ -1137,7 +1136,6 @@ const SearchResults = (props) => {
             </div>
           }
         </div>}
-        <Footer />
       </div>
     </InfiniteScroll>
   );
