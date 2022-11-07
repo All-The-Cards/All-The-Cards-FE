@@ -554,7 +554,7 @@ const Deck = (props) => {
           </div>
 
 
-          <div className="DeckPageGroup" style={{marginBottom: "100px", textAlign:'left'}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "150px", textAlign:'center'}}> 
                   {/* <b className='HeaderText'>Decklist:</b>
                   <br></br> */}
                   <div style={{width: "20%", float:"left"}}>
@@ -594,13 +594,13 @@ const Deck = (props) => {
                     </div>
                   </div>
                   
-                  <div style={{display:"inline-block", paddingLeft: "10px"}}>
+                  <div style={{display:"inline-block", width: "78%"}}>
                   { makeDecklist(state.data.cards) }
                   </div>
           </div> 
 
 
-          <div className="DeckPageGroup" style={{marginBottom: "200px"}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "400px"}}> 
                   {/* <b className='HeaderText'>Deck Info:</b>
                   <br></br> */}
                   {/* <b className='BodyText'>Deck Stats:</b>

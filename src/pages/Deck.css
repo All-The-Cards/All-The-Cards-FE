@@ -67,8 +67,11 @@
 
 .columns {
     min-height: 400px;
-    max-height: 500px;
+    max-height: 400px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    float: left;
+    align-content: flex-start;
 }
