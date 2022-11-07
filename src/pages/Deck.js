@@ -85,13 +85,13 @@ const Deck = (props) => {
       }
       else {
         document.title = response.name
-        // console.log(response)
+        console.log(response)
         updateState({
           data: response,
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
           hasGottenDeck: true,
-          activeCard: (response.format =="commander" && response.commander) || response.coverCard || response.cards[0]
+          activeCard: (response.format =="commander" && response.commander) || response.cover_card || response.cards[0]
         })
         getUserById("id=" + response.user_id)
         // console.log(response)
@@ -162,7 +162,7 @@ const Deck = (props) => {
           art_crop: state.data.cover_art
         }
       },
-      coverCard: state.data.coverCard,
+      coverCard: state.data.cover_card,
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
       commanderSlot: state.data.commander
