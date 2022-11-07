@@ -91,7 +91,7 @@ const Deck = (props) => {
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
           hasGottenDeck: true,
-          activeCard: (response.format =="commander" && response.commander) || response.cards[0]
+          activeCard: (response.format =="commander" && response.commander) || response.coverCard || response.cards[0]
         })
         getUserById("id=" + response.user_id)
         // console.log(response)
@@ -162,6 +162,7 @@ const Deck = (props) => {
           art_crop: state.data.cover_art
         }
       },
+      coverCard: state.data.coverCard,
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
       commanderSlot: state.data.commander
@@ -334,10 +335,11 @@ const Deck = (props) => {
     for (let i = 0; i < Object.keys(groups).length; i++) {
       for (let k = 0; k < Object.values(groups)[i].length; k++) {
         let currentCard = groupCards[Object.keys(groups)[i]][k]
-        console.log(currentCard)
+        // console.log(currentCard)
         // console.log("HERE:", currentCard)
         if (currentCard.type !== "div"){
         groups[Object.keys(groups)[i]][k] = <div
+        key={i * 100 + k}
         style={{
           marginBottom:"6px"
         }}
@@ -345,7 +347,7 @@ const Deck = (props) => {
           // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
           updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
         }}>
-        <CardObject key={k + 1} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
+        <CardObject key={k + 100} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
     
       </div>}
       
@@ -391,7 +393,7 @@ const Deck = (props) => {
         
     //     </div>
     // })
-    console.log(cards[1])
+    // console.log(cards[1])
     return (
       <div className="columns" style={{marginTop:"5px", 
         maxHeight:state.data.format == "commander" && "1000px"}}>

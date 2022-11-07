@@ -50,8 +50,9 @@ export const GlobalProvider = ({ children }) => {
     const [activeSession, setActiveSession] = useState(JSON.parse(localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")))
     const [activeUser, setUser] = useState(null)
     const [name, setName] = useState("");
-    const [darkMode, setDarkMode] = useState(localStorage.getItem("DarkMode"))
-
+    let darkModeString = localStorage.getItem("DarkMode")
+    let darkModeBool = (darkModeString === "true")
+    const [darkMode, setDarkMode] = useState(darkModeBool)
     // Global Function Below
     const getName = () => {
 
