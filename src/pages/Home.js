@@ -61,7 +61,7 @@ const Home = (props) => {
   }
 
   return (
-    <div className={`Container ${darkMode ? "ContainerDark" : ''}`}>
+    <div className={`Container Page${darkMode ? "ContainerDark Page" : ''}`}>
       <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
         <div className="blur" />
         <div className="SearchBarObject">
