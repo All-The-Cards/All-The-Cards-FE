@@ -456,10 +456,10 @@ const CardCreator = (props) => {
             }
           </div>
           <textarea className='TextAreaContainer' value={textArea} onChange={handleTextArea} />
-          {!isDisabled1 &&
+          {!isDisabled2 &&
             <div className='PowerContainer'> {attack} / {defense} </div>
           }
-          {isDisabled1 &&
+          {isDisabled2 &&
             <div className='PowerContainer'> </div>
           }
           <img className='EmptyCard' src={cardImage} alt='Blank Card'></img>

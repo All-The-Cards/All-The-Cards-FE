@@ -191,7 +191,7 @@
     cursor: pointer;
     height: fit-content;
     margin-top: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-right: 10px;
     padding: 4px;
 }
@@ -207,5 +207,5 @@
 }
 
 .Filler {
-    height: 155px;
+    height: 155.5px;
 }
