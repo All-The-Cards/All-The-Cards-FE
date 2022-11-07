@@ -29,12 +29,6 @@ const Home = (props) => {
       // console.log(gc.wipDeck)
   }, [])
 
-  // useEffect(() => {
-
-  //   console.log(gc.activeUser)
-
-  // }, [gc.activeSession])
-
   const updateState = (objectToUpdate) => {
     setState((previous) => ({
       ...previous,
@@ -67,7 +61,7 @@ const Home = (props) => {
   }
 
   return (
-    <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
+    <div className={`Container ${darkMode ? "ContainerDark" : ''}`}>
       <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
         <div className="blur" />
         <div className="SearchBarObject">

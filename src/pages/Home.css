@@ -35,14 +35,13 @@
     margin: auto;
 }
 
-
-
 .DeckContent {
     /* background-color: rgb(255,0,0,.4); */
     margin: 0 auto;
     margin-top: 80px;
     display: inline-block;
     max-width: 1110px;
+    margin-bottom: 50px;
 }
 
 .DeckRow {
