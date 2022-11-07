@@ -312,10 +312,31 @@ const DeckEditor = (props) => {
           <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
             <div>
               <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
+              
+              <div className="DeckValidity" style={{color: gc.wipDeck.isValid ? "black" : "red"}}>{gc.wipDeck.isValid ? "" : "Error!"}</div>
               <input type="button" className="FancyButton" onClick={handleSubmit} value="Save Deck" />
               <input type="button" className="FancyButton" onClick={clearDeck} value="Clear Deck" />
               <input type="button" className="FancyButton" onClick={(event) => {
-                handleSubmitRedirect(event)
+                let msg = 'Are you sure you want to upload your deck?'
+                if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
+                confirmAlert({
+                  title: 'Publish Deck',
+                  message: msg,
+                  buttons: [
+                    {
+                      label: 'Yes',
+                      onClick: (() => {
+                        
+                        handleSubmitRedirect(event)
+                      })
+                    }, {
+                      label: 'No',
+                      onClick: null
+                    }
+                  ]
+                })
+            
+                // handleSubmitRedirect(event)
                 // gc.setIsEditing(false)
                 // gc.setWipDeck(null)
                 // nav("/")
@@ -383,7 +404,7 @@ const DeckEditor = (props) => {
         </div>
         <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0' }}>
           {state.cards.map((card, index) => (
-            <CardObject key={index} data={card} clickable/>
+            <CardObject size={"RegularCard"} key={index} data={card} clickable/>
           ))}
         </div>
 

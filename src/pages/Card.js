@@ -338,9 +338,9 @@ const Card = (props) => {
             } */}
             {
             state.data.tcgplayer_id && 
-            <div>
+            <div> 
               <a href={"https://www.tcgplayer.com/product/" + state.data.tcgplayer_id}>
-              <i>View on TCGPlayer</i>
+              <i style={{color:"#7138D1"}}>View on TCGPlayer</i>
               </a>
             </div>
             }
@@ -356,14 +356,14 @@ const Card = (props) => {
               state.data.mtgo_id && 
               <div>
                 <a href={"https://www.cardhoarder.com/cards/" + state.data.mtgo_id}>
-                <i>View on Cardhoarder</i> 
+                <i style={{color:"#7138D1"}}>View on Cardhoarder</i> 
                 </a>
                 <br></br>
               </div>
             }
             {
               !(state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
-              <div><i>Pricing info not available</i></div>
+              <div><i style={{color:"#7138D1"}}>Pricing info not available</i></div>
             }
             </div>
             

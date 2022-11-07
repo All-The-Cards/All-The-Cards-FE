@@ -98,7 +98,7 @@ button+button {
 
 
 .LargeCard {
-    max-width: 500px;
+    max-width: 380px;
     max-height: 700px;
     /* background-color: rgba(255,0,0,.3); */
     display: inline-block;

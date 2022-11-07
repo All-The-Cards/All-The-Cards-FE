@@ -98,21 +98,23 @@ const WIPDeckList = (props) => {
       }
 
       const makeUniqueDeck = (deck) => {
-        let uniqueDeck = deck
-
-        let uniqueRes = []
+        // list of card objects
+        let uniqueResults = []
+        // list of unique names
         let uniqueNames = []
-        uniqueRes = deck.filter((item) => {
+
+        uniqueResults = deck.filter((item) => {
+          // check if already found that card
           let duplicate = uniqueNames.includes(item.name)
+          // if not found yet, add it to the list
           if (!duplicate) {
             uniqueNames.push(item.name)
             return true;
           }
           return false;
         })
-        uniqueDeck = uniqueRes
 
-        return uniqueDeck
+        return uniqueResults
       }
 
       const removeFromDeck = (item) => {
@@ -138,8 +140,8 @@ const WIPDeckList = (props) => {
         utilities.saveToLocalStorage("wipDeck", gc.wipDeck)
     }
 
-    const getCount = (card, cards) => {
-      return cards.filter((item) => { return item.name === card.name }).length
+    const getCount = (card, deck) => {
+      return deck.filter((item) => { return item.name === card.name }).length
     }
 
     const getMargin = () => {
@@ -480,7 +482,7 @@ const WIPDeckList = (props) => {
                     {gc.wipDeck.title.length < 1 && "New Deck"}
                     {gc.wipDeck.title.substring(0,16).trim()}{gc.wipDeck.title.length > 16 && "..."}
                   </div>
-                    <div className="DeckValidity" style={{color: gc.wipDeck.isValid ? "lime" : "red"}}>{gc.wipDeck.isValid ? "Legal!" : "Error!"}</div>
+                    {/* <div className="DeckValidity" style={{color: gc.wipDeck.isValid ? "lime" : "red"}}>{gc.wipDeck.isValid ? "Legal!" : "Error!"}</div> */}
                   <div className="DeckListFormat">{utilities.getProperFormatName(gc.wipDeck.formatTag)}</div>
                   {
                     ((gc.wipDeck.formatTag !== "commander" && gc.wipDeck.cards.length < 60)
@@ -560,10 +562,14 @@ const WIPDeckList = (props) => {
                           })
                           
                         }
-                            <div className="CardListObject" style={{display:"inline-block"}}
-                              >
-                            <CardObject data={item} isCompact={true} 
-                            count={getCount(item, gc.wipDeck.cards)}/>
+                            <div className="CardListObject" style={{display:"inline-block"}}>
+
+                            <CardObject 
+                              data={item} 
+                              isCompact={true} 
+                              count={getCount(item, gc.wipDeck.cards)}
+                            />
+                            
                             </div>
                           {/* <div className="DeckListSmallIcon"
                           title="Set as cover art"

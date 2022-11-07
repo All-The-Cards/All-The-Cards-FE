@@ -31,6 +31,7 @@
     display: table;
     width: 250px;
     height: 30px;
+    max-height: 400px;
 }
 
 .CardListContent {
@@ -95,8 +96,12 @@
     position: absolute;
     max-width: 250px;
     max-height: 350px;
-    z-index: 100;
+    z-index: 120;
     box-shadow: 5px 5px 10px rgba(0,0,0,.3);
     margin-top: 5px;
     border-radius: 12px;
+    /* left: 50px;
+    bottom: 50px; */
+    pointer-events: none;
+
 }

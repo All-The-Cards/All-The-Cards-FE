@@ -1,5 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import CardObject from '../components/CardObject/CardObject.js';
+import UserObject from '../components/UserObject/UserObject.js';
 import * as server from '../functions/ServerTalk.js';
 import * as utilities from '../functions/Utilities.js';
 import * as stats from '../functions/Stats.js';
@@ -10,6 +11,8 @@ import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
 import Footer from '../components/Footer/Footer.js';
 import TagList from '../components/TagList/TagList.js';
+import Card from './Card.js';
+import { Link } from "react-router-dom";
 
 const Deck = (props) => {
 
@@ -30,7 +33,9 @@ const Deck = (props) => {
     shared: false,
     deckStats: {},
     deckGraphs: {},
-    showRawGraphs: false
+    showRawGraphs: false,
+    hasGottenDeck: false,
+    showFullDescription: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -79,12 +84,14 @@ const Deck = (props) => {
       }
       else {
         document.title = response.name
-        // console.log(response)
+        console.log(response)
         updateState({
           data: response,
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
-          })
+          hasGottenDeck: true
+        })
+        getUserById("id=" + response.user_id)
         // console.log(response)
         // console.log(utilities.mapCardsToTypes(response))
       }
@@ -161,6 +168,27 @@ const Deck = (props) => {
     nav('/deckeditor')
   }
 
+  const getUserById = (query) => {
+    query = "/api/get/user/" + query
+    //if query is empty, don't send
+    if (query.trim() === "/api/get/user/") {
+      return
+    }
+
+    server.post(query).then(response => {
+      // console.log("User: ", response[0])
+      //if invalid, just direct to search page
+      if (response.length === 0) {
+        nav('/search/')
+      }
+      else {
+        updateState({
+          deckAuthor: response[0],
+        })
+      }
+    })
+
+  }
   const toggleFavorite = () => {
     const sendData = {
       deck: state.id.substring(3)
@@ -212,56 +240,156 @@ const Deck = (props) => {
     })
   }
 
+  const makeDecklist = (deck) => {
+    let unique = makeUniqueDeck(deck)
+    let cards = unique.map((item, i) => {
+      // return <div>{item.name} x{getCount(item, deck)}</div>
+      return <div style={{marginBottom:"5px"}}><CardObject clickable isCompact={true} count={getCount(item, deck)} data={item}></CardObject></div>
+    })
+    return (
+      <div>
+        {cards}
+      </div>
+    )
+  }
+  
+  const getCount = (card, deck) => {
+    return deck.filter((item) => { return item.name === card.name }).length
+  }
+
+  const makeUniqueDeck = (deck) => {
+    // list of card objects
+    let uniqueResults = []
+    // list of unique names
+    let uniqueNames = []
+
+    uniqueResults = deck.filter((item) => {
+      // check if already found that card
+      let duplicate = uniqueNames.includes(item.name)
+      // if not found yet, add it to the list
+      if (!duplicate) {
+        uniqueNames.push(item.name)
+        return true;
+      }
+      return false;
+    })
+
+    return uniqueResults
+  }
+
+  const toggleDescription = () => {
+    updateState({
+      showFullDescription: !state.showFullDescription
+    })
+  }
 
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
-      <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}>
+  
+      <div className='Container'>
         {
-          gc.activeSession &&
-          <div onClick={() => {
-            toggleFavorite()
-          }}
-            style={{ float: 'right', marginRight: '20px', marginTop: '10px' }}
-          >
-            {state.isFavorited &&
-              <div className="FavoriteIcon" style={{ backgroundColor: "Gold" }}>-</div> ||
-              <div className="FavoriteIcon" style={{ backgroundColor: "#dadada" }}>+</div>
-            }
+          !state.hasGottenDeck && 
+          <div className="HeaderText" style={{textAlign:'center'}}>
+          Loading...
+          {/* <img src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/> */}
           </div>
         }
-        <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
-          <div>
-            <span style={{ fontSize: '2rem' }}>{state.data.name} - </span><span style={{ fontSize: '1.5rem', marginLeft: '0.5rem' }}>{state.data.user_name}</span>
-            {state.data.cards.length > 0 && <input type="button" className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />}
-            {/* TODO:: notification instead of button text switch, replace text with icon */}
-            <input type="button" className='FancyButton' id="alt" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
-            <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+        { state.hasGottenDeck &&
+          <div className="DeckPageContent">
+          <div className="DeckPageBanner" style={{backgroundImage: "url(" + state.data.cover_art + ")"}}>
+          {/* <div className="DeckPageBanner" style={{backgroundImage: ""}}> */}
+          <div className="blur"/>
+          <div className="DeckInfoContent">
+          {/* <div className="DeckPageBanner" style={{background: "url(" + "" + ")"}}> */}
+              <div className="DeckPage-Buttons">
+              
+                {
+                  gc.activeSession &&
+                  <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
+                }
+                
+                <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+          
+                {
+                  gc.activeSession &&
+                  <div onClick={() => {
+                    toggleFavorite()
+                    }}
+                    style={{float: 'right', marginRight: '20px', marginTop: '10px', cursor:'pointer'}}
+                    >
+                  
+                  { state.isFavorited &&
+                    <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
+                    <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                  }
+                    </div>
+                }   
+                
+              </div>
+              { state.data.user_id && <Link to={"/user/?id=" + state.data.user_id}> 
+              <div className="SubHeaderText" id="typeLine" title="Author" style={{marginBottom: "4px", color:"#f7f7f7", fontStyle:"normal"}}> 
+                
+                {/* { 
+                  state.deckAuthor && 
+                  <UserObject data={state.deckAuthor}/>
+                } */}
+                {state.data.user_name}
+              </div>
+              </Link>
+              }
+              {
+                !state.data.isValid && 
+                <div className="CardError" style={{fontSize: "32px", height: "40px", width: "40px", marginLeft: "-60px", top:"40px"}}>!</div>
+                
+              }<div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
+                  {state.data.name}
+                </div>
+             
+              <div className="SubHeaderText" style={{marginTop: "0px"}}> 
+                { utilities.getProperFormatName(state.data.format)}
+              </div>
+              
+              
+              <div className="SubHeaderText"> 
+                {/* <div className="DeckValidity" style={{color: state.data.isValid ? "black" : "red"}}>{state.data.cards.length > 0 && (state.data.isValid ? "" : "This deck is not legal!")}</div> */}
+              </div>
+              <div className="SubHeaderText" style={{marginTop: '20px', fontSize: '16px', color:"black"}}> 
+                {state.data.tags != undefined ? (<TagList tags={state.data.tags} />) : (<></>)}
+                
+              </div>
+             
+              
+              {/* <div className="BodyText" style={{whiteSpace:"pre-line"}} onClick={() => {
+                toggleDescription()
+              }}> 
+                { state.showFullDescription ? 
+                  <div>
+                    { state.data.description.slice(0,800) }
+                  </div> 
+                  : <div>
+                    { state.data.description.slice(0,400) }
+                  </div>
+                }
+              </div>  */}
+              
+              <div className="BodyText" style={{whiteSpace:"pre-line"}}>
+                    { state.data.description.slice(0,800) }
+                    { state.data.description.length > 800 && "..."}
+              </div> 
+              {/* <div className="BodyText" id="legalities">  */}
+              
           
           </div>
-          <span>{`Format: ${state.data.format}`}</span>
+          </div>
+          <div className="BodyText"> 
+                  <b>Decklist:</b>
+                  { makeDecklist(state.data.cards) }
+          </div>
         </div>
-        <br />
-        <div style={{ width: '100%' }}>
-          {state.data.tags != undefined ? (<TagList tags={state.data.tags} />) : (<></>)}
-        </div>
-        <div style={{ width: "100%", margin: '8px 0 0 24px' }}>
-          {state.data.description}
-        </div>
-        <div style={{ display: "flex", flexFlow: "row nowrap", width: "100%", margin: '16px 0 0 8px', gap: '16px' }}>
-          <label>
-            View mode:
-            <select style={{ marginLeft: '8px' }} value={state.viewMode} onChange={handleDropdown}>
-              <option value="Spread">Spread</option>
-              <option value="Stacked">Stacked</option>
-              <option value="Categorized">Categorized</option>
-            </select>
-          </label>
-          <label>
-            Compact:
-            <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
-          </label>
-        </div>
-        <div>
+        } 
+      </div>
+          
+      <div>
         { 
           state.showRawGraphs && 
           Object.keys(state.deckStats).map((key, index) => {
@@ -284,7 +412,31 @@ const Deck = (props) => {
           })
         }
         </div>
-        <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
+      {/* <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}> */}
+     
+        {/* <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
+          <div>
+            <input type="button" className='FancyButton' id="alt" onClick={copyURLToClipboard} value={state.shared ? "Shareable Link Copied" : "Get Shareable Link"} />
+            <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+          
+          </div>
+        </div>
+        <div style={{ display: "flex", flexFlow: "row nowrap", width: "100%", margin: '16px 0 0 8px', gap: '16px' }}>
+          <label>
+            View mode:
+            <select style={{ marginLeft: '8px' }} value={state.viewMode} onChange={handleDropdown}>
+              <option value="Spread">Spread</option>
+              <option value="Stacked">Stacked</option>
+              <option value="Categorized">Categorized</option>
+            </select>
+          </label>
+          <label>
+            Compact:
+            <input type="checkbox" checked={state.compactView} onChange={handleCheckbox} />
+          </label>
+        </div> */}
+        
+        {/* <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "center", width: "100%", gap: "16px" }}>
           {state.viewMode === "Spread" ? <>
             {state.data.cards.map((card, i) =>
               <div style={{ margin: '10px', display: 'inline-block' }} key={i}><CardObject data={card} isCompact={state.compactView} clickable /></div>
@@ -296,8 +448,8 @@ const Deck = (props) => {
               <CardStack key={i} cards={typeList.cards} label={typeList.type} isCompact={state.compactView} />
             ))}
           </> : <></>}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 };

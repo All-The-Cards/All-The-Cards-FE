@@ -31,6 +31,7 @@
 .DeckListCard {
     display: inline-block;
     margin-top:2px;
+    /* pointer-events: none; */
 }
 
 .DeckListSmallIcon {
@@ -120,7 +121,7 @@
 }
 
 .CardError {
-    background: rgba(255,120,0, .7);
+    background: rgba(255,190,0, .7);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, .3);
     position: absolute;
     /* top: 26px; */
