@@ -279,7 +279,7 @@ const Deck = (props) => {
 
   const makeDecklist = (deck) => {
     let unique = makeUniqueDeck(deck)
-
+    // console.log(deck)
     unique = unique.sort(sortByName).sort(sortByCMC)
 
     //card groups
@@ -299,14 +299,16 @@ const Deck = (props) => {
     //if card in type, push to group, remove from main list
     for (let i = 0; i < Object.keys(groups).length; i++) {
       // console.log(Object.keys(groups)[i])
-      for (let k = 0; k < deckCopy.length; k++){
-        if (deck.format == "commander"){
-          if (deck[k].name == deck.commander.name){
-            groups["Commander"].push(deckCopy[k])
-            deckCopy.splice(k--, 1)
-
+      if (state.data.format == "commander" && groups["Commander"].length < 1){
+        for (let k = 0; k < deckCopy.length; k++){
+            if (deckCopy[k].name == state.data.commander.name){
+              groups["Commander"].push(deckCopy[k])
+              deckCopy.splice(k--, 1)
+            }
           }
         }
+      for (let k = 0; k < deckCopy.length; k++){
+        
         if (deckCopy[k].type_one.toLowerCase().includes("land".toLowerCase())){
           // console.log(deckCopy[k])
           groups["Land"].push(deckCopy[k])
@@ -339,7 +341,7 @@ const Deck = (props) => {
         // console.log("HERE:", currentCard)
         if (currentCard.type !== "div"){
         groups[Object.keys(groups)[i]][k] = <div
-        key={i * 100 + k}
+        key={i * 100 + k + 1}
         style={{
           marginBottom:"6px"
         }}
@@ -373,7 +375,14 @@ const Deck = (props) => {
     
     let cards = []
     for (let i = 0; i < Object.keys(groups).length; i++) {
-      cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
+      if (i == 0) {
+        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
+        i++
+      }
+      else {
+
+        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
+      }
       // for (let k = 0; k < Object.values(groups)[i].length; k++) {
       //   // console.log(Object.values(groups)[i][k])
       //   cards.push(Object.values(groups)[i][k]

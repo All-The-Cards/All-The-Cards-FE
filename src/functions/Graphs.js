@@ -1,5 +1,6 @@
 
 import { BarChart, Bar, PieChart, Pie, LineChart, Line, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';
+import './Graphs.css'
 
 export function makeGraphs(stats) {
 
@@ -85,6 +86,20 @@ export function makeGraphs(stats) {
             fill: "#DB1E4F",
         }
     })
+
+    //mana curve tooltip
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+          return (
+            <div className="custom-tooltip">
+              <p className="label">{`${label} CMC : ${payload[0].value}`}</p>
+            </div>
+          );
+        }
+      
+        return null;
+      };
+
     graphResults.mana_curve = <ComposedChart
         width={gWidth}
         height={gHeight}
@@ -99,7 +114,7 @@ export function makeGraphs(stats) {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="cost" />
         <YAxis />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip/>}/>
         {/* <Legend /> */}
         <Bar dataKey="count"/>
         <Line type="monotone" dataKey="count" stroke="#7138D1" activeDot={{ r: 5 }} />
@@ -273,6 +288,7 @@ export function makeGraphs(stats) {
         outerRadius={80}
         fill="#8884d8"
         label
+        stroke="0"
         />
         <Tooltip />
     </PieChart>
@@ -316,8 +332,8 @@ export function makeGraphs(stats) {
         width={gWidth} 
         height={gHeight}
     >
-        <Pie data={mana_source_counts_data} dataKey="count" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" />
-        <Pie data={color_counts_data} dataKey="count" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label />
+        <Pie data={mana_source_counts_data} dataKey="count" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" stroke="0"/>
+        <Pie data={color_counts_data} dataKey="count" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" stroke="0" label />
         
         <Tooltip />
     </PieChart>
@@ -326,45 +342,44 @@ export function makeGraphs(stats) {
 }
 
 const getColor = (symbol) => {
-    let color = "#c4c4c4"
-    let color2 = "#c6bdbd"
+    let color = "#B4ADAD"
 
     switch(symbol){
         case 'w':
-            color = "#ebe6d9"
+            color = "#F7EFC4"
             break;
         case 'u':
-            color = "#c5d6eb"
+            color = "#6F96F7"
             break;
         case 'b':
-            color = "#bab7b9"
+            color = "#706363"
             break;
         case 'r':
-            color = "#eac3ad"
+            color = "#EC4949"
             break;
         case 'g':
-            color = "#c7dece"
+            color = "#3FB860"
             break;
         case 'creature':
-            color = "#c7aace"
+            color = "#EA5356"
             break;
         case 'instant':
-            color = "#aadece"
+            color = "#53D5EA"
             break;
         case 'sorcery':
-            color = "#c7deaa"
+            color = "#5373EA"
             break;
         case 'enchantment':
-            color = "#caaece"
+            color = "#FAE150"
             break;
         case 'artifact':
-            color = "#c7daae"
+            color = "#EA8E53"
             break;
         case 'planeswalker':
-            color = "#a7deca"
+            color = "#9553EA"
             break;
         case 'land':
-            color = "#c7dece"
+            color = "#53EA73"
             break;
     }
 

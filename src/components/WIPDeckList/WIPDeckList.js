@@ -267,12 +267,17 @@ const WIPDeckList = (props) => {
         // console.log("Changed commander")
         updateWipDeck({ 
           commanderSlot: JSON.parse(event.target.value),
+          isValid: checkValidity(JSON.parse(event.target.value))
           // coverCard: JSON.parse(event.target.value)
         }) 
       }
+
+      
     }
 
-    const checkValidity = () => {
+    const checkValidity = (optionalCommander) => {
+      // console.log(gc.wipDeck.commanderSlot)
+      let commander = optionalCommander || gc.wipDeck.commanderSlot
       let valid = true
       let errorCards = []
       let cards = gc.wipDeck.cards
@@ -322,7 +327,7 @@ const WIPDeckList = (props) => {
             }
         }
         if (
-          (gc.wipDeck.formatTag == "commander" && cardInCommander(card, gc.wipDeck) == false)
+          (gc.wipDeck.formatTag == "commander" && cardInCommander(card, commander) == false)
         ) {
           //cards not in identity
           errorName = "Not in Commander Identity"
@@ -352,7 +357,7 @@ const WIPDeckList = (props) => {
       return valid
     }
 
-    const cardInCommander = (card, deck) => {
+    const cardInCommander = (card, commander) => {
       let valid = true;
 
       let cardColors = []
@@ -377,8 +382,8 @@ const WIPDeckList = (props) => {
         }
       } 
       
-      for (let i = 0; i < deck.commanderSlot.color_identity.length; i++){
-        switch (deck.commanderSlot.color_identity[i]){
+      for (let i = 0; i < commander.color_identity.length; i++){
+        switch (commander.color_identity[i]){
           case "W":
             commanderColors.push("W")
             break;
