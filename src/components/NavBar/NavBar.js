@@ -35,7 +35,6 @@ const Navbar = () => {
     const [loggedInUserMenu, setLoggedUserMenu] = useState(false);
 
     useEffect(() => {
-        console.log(gc)
         if (activeSession) {
             //let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
             //setActiveSession(JSON.parse(data))
