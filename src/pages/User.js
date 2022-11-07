@@ -161,7 +161,7 @@ const User = (props) => {
             <div className={`HeaderText ${darkMode ? "HeaderTextDark" : ''}`} style={{ fontSize: "28px" }}>
               About Me
             </div>
-            <div className={`SubHeaderText ${darkMode ? "SubHeaderTextDark" : ''}`} style={{ fontSize: "28px" }}>
+            <div className={`BodyText ${darkMode ? "BodyTextDark" : ''}`} style={{ fontStyle:'italic' }}>
               {state.data.bio}
             </div>
           </div>
@@ -191,7 +191,7 @@ const User = (props) => {
             </div>)}
           </div>}
         {state.data.favorites &&
-          <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent"><div className="HeaderText">
+          <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Favorite Decks
           </div>
 

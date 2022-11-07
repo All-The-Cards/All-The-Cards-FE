@@ -342,7 +342,7 @@ const DeckEditor = (props) => {
 
               }} value="Publish Deck" />
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
-              <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+              {/* <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
           
             </div>
             <select

@@ -42,3 +42,36 @@
     color: #f7f7f7;
     text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
 }
+
+.DeckPageGroup {
+    margin-top:60px;
+    text-align: left;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: center;
+    /* background-color: rgba(255,0,0,.3); */
+    max-height: 600px;
+    /* overflow:scroll; */
+}
+
+.itemPrices {
+    /* position: absolute; */
+    top: -3px;
+    /* margin-top: -20px; */
+    width: 96%;
+    float: right;
+    text-align: center;
+    margin-right: 10px;
+    font-style: italic;
+}
+
+.columns {
+    min-height: 400px;
+    max-height: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    float: left;
+    align-content: flex-start;
+}

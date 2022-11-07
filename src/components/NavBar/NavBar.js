@@ -35,7 +35,6 @@ const Navbar = () => {
     const [loggedInUserMenu, setLoggedUserMenu] = useState(false);
 
     useEffect(() => {
-
         if (activeSession) {
             //let data = localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")
             //setActiveSession(JSON.parse(data))
@@ -119,8 +118,10 @@ const Navbar = () => {
             nav('/registration')
         }
         else if (id === '6') {
-            setDarkMode(current => !current)
-            localStorage.setItem("DarkMode", darkMode)
+            let darkModeString = localStorage.getItem("DarkMode")
+            let darkModeBool = (darkModeString === "true")
+            setDarkMode(!darkModeBool)
+            localStorage.setItem("DarkMode", !darkModeBool)
         }
         else if (id === '7') {
             setLayerMenu(false)

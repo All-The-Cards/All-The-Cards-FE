@@ -34,7 +34,9 @@ const Deck = (props) => {
     deckGraphs: {},
     showRawGraphs: false,
     hasGottenDeck: false,
-    showFullDescription: false
+    showFullDescription: false,
+    priceFormat: "usd",
+    activeCard: {}
   })
 
   const updateState = (objectToUpdate) => {
@@ -83,12 +85,13 @@ const Deck = (props) => {
       }
       else {
         document.title = response.name
-        console.log(response)
+        // console.log(response)
         updateState({
           data: response,
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
-          hasGottenDeck: true
+          hasGottenDeck: true,
+          activeCard: (response.format =="commander" && response.commander) || response.coverCard || response.cards[0]
         })
         getUserById("id=" + response.user_id)
         // console.log(response)
@@ -159,6 +162,7 @@ const Deck = (props) => {
           art_crop: state.data.cover_art
         }
       },
+      coverCard: state.data.coverCard,
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
       commanderSlot: state.data.commander
@@ -238,21 +242,182 @@ const Deck = (props) => {
       showRawGraphs: !state.showRawGraphs
     })
   }
+  const sortByCMC = (a, b) => {
+    if (a.cmc > b.cmc) {
+      return 1
+    }
+    if (a.cmc < b.cmc) {
+      return -1
+    }
+    return 0
+  }
+  
+  const sortByName = (a, b) => {
+    if (a.name >= b.name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
+  const sortByLand = (a, b) => {
+    if (a.type_one.toLowerCase().includes("Land".toLowerCase()) && b.type_one.toLowerCase().includes("Land".toLowerCase())){
+      return 0
+    }
+    if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
+  const sortDeckFull = (a,b) => {
+
+  }
 
   const makeDecklist = (deck) => {
     let unique = makeUniqueDeck(deck)
-    let cards = unique.map((item, i) => {
-      // return <div>{item.name} x{getCount(item, deck)}</div>
-      return <div key={i} style={{marginBottom:"5px"}}><CardObject clickable isCompact={true} count={getCount(item, deck)} data={item}></CardObject></div>
-    })
+    // console.log(deck)
+    unique = unique.sort(sortByName).sort(sortByCMC)
+
+    //card groups
+    let groups = {
+      Commander: [],
+      Creature: [],
+      Planeswalker: [],
+      Artifact: [],
+      Enchantment: [],
+      Instant: [],
+      Sorcery: [],
+      Land: [],
+    }
+    let deckCopy = [...unique]
+
+    //fill groups
+    //if card in type, push to group, remove from main list
+    for (let i = 0; i < Object.keys(groups).length; i++) {
+      // console.log(Object.keys(groups)[i])
+      if (state.data.format == "commander" && groups["Commander"].length < 1){
+        for (let k = 0; k < deckCopy.length; k++){
+            if (deckCopy[k].name == state.data.commander.name){
+              groups["Commander"].push(deckCopy[k])
+              deckCopy.splice(k--, 1)
+            }
+          }
+        }
+      for (let k = 0; k < deckCopy.length; k++){
+        
+        if (deckCopy[k].type_one.toLowerCase().includes("land".toLowerCase())){
+          // console.log(deckCopy[k])
+          groups["Land"].push(deckCopy[k])
+          deckCopy.splice(k--, 1)
+        }
+        else if (deckCopy[k].type_one.toLowerCase().includes("creature".toLowerCase())){
+          // console.log(deckCopy[k])
+          groups["Creature"].push(deckCopy[k])
+          deckCopy.splice(k--, 1)
+        }
+        else if (deckCopy[k].type_one.toLowerCase().includes(Object.keys(groups)[i].toLowerCase())){
+          // console.log(deckCopy[k])
+          groups[Object.keys(groups)[i]].push(deckCopy[k])
+          deckCopy.splice(k--, 1)
+        } 
+      }
+    }
+    
+    //sort groups    
+    for (let i = 0; i < Object.keys(groups).length; i++) {
+      groups[Object.keys(groups)[i]] = groups[Object.keys(groups)[i]].sort(sortByName).sort(sortByCMC)
+    }
+    let groupCards = structuredClone(groups)
+    // console.log(groups)
+    // map group items to cardobjects
+    for (let i = 0; i < Object.keys(groups).length; i++) {
+      for (let k = 0; k < Object.values(groups)[i].length; k++) {
+        let currentCard = groupCards[Object.keys(groups)[i]][k]
+        // console.log(currentCard)
+        // console.log("HERE:", currentCard)
+        if (currentCard.type !== "div"){
+        groups[Object.keys(groups)[i]][k] = <div
+        key={i * 100 + k + 1}
+        style={{
+          marginBottom:"6px"
+        }}
+        onMouseEnter={() => {
+          // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+          updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+        }}>
+        <CardObject key={k + 100} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
+    
+      </div>}
+      
+      }
+      // groups[Object.keys(groups)[i]] = <CardObject isCompact={true} clickable count={getCount(unique, groups[Object.keys(groups)[i]])} disableHover data={groups[Object.keys(groups)[i]]}/>
+    }
+    // divs to groups, if group.length > 0
+    for (let i = 0; i < Object.values(groups).length; i++) {
+      // console.log(groups[Object.keys(groups)[i]])
+      if (groups[Object.keys(groups)[i]].length > 0){
+        //get count of all cards in group
+        let groupCount = groups[Object.keys(groups)[i]].length
+        let totalCards = 0
+        for (let k = 0; k < groupCount; k++){
+          let currentCard = groupCards[Object.keys(groups)[i]][k]
+          totalCards += getCount(currentCard, deck)
+        }
+
+        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>{Object.keys(groups)[i]} - {totalCards}</div>)
+      }
+    }
+    // console.log(groups["Artifact"])
+    
+    let cards = []
+    for (let i = 0; i < Object.keys(groups).length; i++) {
+      if (i == 0) {
+        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
+        i++
+      }
+      else {
+
+        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
+      }
+      // for (let k = 0; k < Object.values(groups)[i].length; k++) {
+      //   // console.log(Object.values(groups)[i][k])
+      //   cards.push(Object.values(groups)[i][k]
+      //   )
+      // }
+    }
+
+    // let cards = Object.keys(groups).map((item, i) => {
+    //   // let cardCount = getCount(item, deck)
+    //   // return <div>{item.name} x{getCount(item, deck)}</div>
+    //   return <div 
+    //     key={i} 
+    //     style={{
+    //       marginBottom:"8px",
+    //       marginLeft: "20px"
+    //     }}
+    //     onMouseEnter={() => {
+    //       // updateState({activeCard: item})
+    //     }}
+    //     >
+    //     {/* <CardObject style={{marginTop:'5px'}} clickable disableHover isCompact={true} count={cardCount} data={item}/> */}
+    //     {item}
+        
+    //     </div>
+    // })
+    // console.log(cards[1])
     return (
-      <div>
+      <div className="columns" style={{marginTop:"5px"}}>
         {cards}
       </div>
     )
   }
   
   const getCount = (card, deck) => {
+    // console.log(deck)
     return deck.filter((item) => { return item.name === card.name }).length
   }
 
@@ -282,6 +447,10 @@ const Deck = (props) => {
     })
   }
 
+  const togglePriceFormat = () => {
+    if (state.priceFormat == "usd") updateState({priceFormat: "tix"})
+    else if (state.priceFormat == "tix") updateState({priceFormat: "usd"})
+  }
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
   
@@ -307,7 +476,7 @@ const Deck = (props) => {
                   <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
                 }
                 
-                <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+                {/* <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
           
                 {
                   gc.activeSession &&
@@ -318,8 +487,8 @@ const Deck = (props) => {
                     >
                   
                   { state.isFavorited &&
-                    <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-                    <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                    <div className="FavoriteIcon" id="isFavorited">-</div> ||
+                    <div className="FavoriteIcon" id="notFavorited">+</div>
                   }
                     </div>
                 }   
@@ -345,6 +514,26 @@ const Deck = (props) => {
                   {state.data.name}
                 </div>
              
+             <div 
+
+              title="Click to toggle price format"
+              style={{cursor:"pointer", userSelect:"none"}}
+             onClick={() => {
+              togglePriceFormat()
+             }}>
+             {
+              state.priceFormat == "usd" &&
+              <div  style={{float: 'right', marginRight: '20px', marginTop: '-30px'}}  >
+                  Total Price: ${state.deckGraphs["total_prices"].usd}
+              </div>
+             }
+              {
+              state.priceFormat == "tix" &&
+              <div  style={{float: 'right', marginRight: '20px', marginTop: '-30px'}}  >
+                  Total Price: {state.deckGraphs["total_prices"].tix} TIX
+              </div>
+             }
+             </div>
               <div className="SubHeaderText" style={{marginTop: "0px"}}> 
                 { utilities.getProperFormatName(state.data.format)}
               </div>
@@ -372,7 +561,7 @@ const Deck = (props) => {
                 }
               </div>  */}
               
-              <div className="BodyText" style={{whiteSpace:"pre-line"}}>
+              <div className="BodyText" style={{whiteSpace:"pre-line", width: "66%"}}>
                     { state.data.description.slice(0,800) }
                     { state.data.description.length > 800 && "..."}
               </div> 
@@ -380,37 +569,83 @@ const Deck = (props) => {
           
           </div>
           </div>
-          <div className="BodyText"> 
-                  <b>Decklist:</b>
+
+
+          <div className="DeckPageGroup" style={{marginBottom: "150px", textAlign:'center'}}> 
+                  {/* <b className='HeaderText'>Decklist:</b>
+                  <br></br> */}
+                  <div style={{width: "20%", float:"left"}}>
+                    <div style={{textAlign:'center'}} className="RegularCard">
+                    <CardObject clickable data={state.activeCard}/>
+                    <div className="itemPrices">
+                      {state.activeCard.name} - {state.activeCard.set_shorthand.toUpperCase()}
+                      <br></br>
+                      <br></br>
+                    {
+                      ((state.activeCard.prices.usd && !state.activeCard.type_one.toLowerCase().includes("basic")) && "$" + (parseFloat(state.activeCard.prices.usd)).toFixed(2) || "")
+                    }
+
+                    {
+                      state.activeCard.tcgplayer_id && 
+                      <div> 
+                        <a href={"https://www.tcgplayer.com/product/" + state.activeCard.tcgplayer_id}>
+                        <i style={{color:"#7138D1"}}>View on TCGPlayer</i>
+                        </a>
+                      </div>
+                    }
+                    
+                    <br></br>
+                    {
+                      ((state.activeCard.prices.tix && !state.activeCard.type_one.toLowerCase().includes("basic")) && (parseFloat(state.activeCard.prices.tix)).toFixed(2) + " TIX" || "")
+                      } 
+                    {
+                      state.activeCard.mtgo_id && 
+                      <div>
+                        <a href={"https://www.cardhoarder.com/cards/" + state.activeCard.mtgo_id}>
+                        <i style={{color:"#7138D1"}}>View on Cardhoarder</i> 
+                        </a>
+                        <br></br>
+                      </div>
+                    }
+                    </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{display:"inline-block", width: "78%", textAlign:'left'}}>
                   { makeDecklist(state.data.cards) }
+                  </div>
+          </div> 
+
+
+          <div className="DeckPageGroup" style={{marginBottom: "400px"}}> 
+                  {/* <b className='HeaderText'>Deck Info:</b>
+                  <br></br> */}
+                  {/* <b className='BodyText'>Deck Stats:</b>
+                    <br></br>
+                  <div style={{display:"inline-block"}}>
+                  Avg. CMC: {state.deckGraphs["avg_cmc"]}
+                  </div> 
+                    <br></br> */}
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Mana Curve</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["mana_curve"]}</div>
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Color Distribution</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["mana_ratio"]}</div>
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Card Types</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["card_types_counts"]}</div>
           </div>
         </div>
         } 
       </div>
-          
-      <div>
-        { 
-          state.showRawGraphs && 
-          Object.keys(state.deckStats).map((key, index) => {
-            return (
-              <div key={index}>
-              {key} 
-              <br></br>
-              Stat: 
-              <br></br>
-              {JSON.stringify(state.deckStats[key], null, '\n')}
-              <br></br>
-              Graph: 
-              <br></br>
-              {state.deckGraphs[key]}
-              <br></br>
-              <br></br>
-                {/* {key}: {state.deckStats[key]} */}
-              </div>
-            )
-          })
-        }
-        </div>
+       
       {/* <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}> */}
      
         {/* <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
