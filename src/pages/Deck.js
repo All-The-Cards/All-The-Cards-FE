@@ -358,16 +358,22 @@ const Deck = (props) => {
     for (let i = 0; i < Object.values(groups).length; i++) {
       // console.log(groups[Object.keys(groups)[i]])
       if (groups[Object.keys(groups)[i]].length > 0){
-        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>{Object.keys(groups)[i]}</div>)
+        //get count of all cards in group
+        let groupCount = groups[Object.keys(groups)[i]].length
+        let totalCards = 0
+        for (let k = 0; k < groupCount; k++){
+          let currentCard = groupCards[Object.keys(groups)[i]][k]
+          totalCards += getCount(currentCard, deck)
+        }
+
+        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>{Object.keys(groups)[i]} - {totalCards}</div>)
       }
     }
     // console.log(groups["Artifact"])
-
-    //change this map GROUP CHUNKS
     
     let cards = []
     for (let i = 0; i < Object.keys(groups).length; i++) {
-      cards.push(<div key={i} style={{marginLeft: "30px"}}>{Object.values(groups)[i]}</div>)
+      cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
       // for (let k = 0; k < Object.values(groups)[i].length; k++) {
       //   // console.log(Object.values(groups)[i][k])
       //   cards.push(Object.values(groups)[i][k]
@@ -395,8 +401,7 @@ const Deck = (props) => {
     // })
     // console.log(cards[1])
     return (
-      <div className="columns" style={{marginTop:"5px", 
-        maxHeight:state.data.format == "commander" && "1000px"}}>
+      <div className="columns" style={{marginTop:"5px"}}>
         {cards}
       </div>
     )
