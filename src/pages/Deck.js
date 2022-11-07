@@ -9,7 +9,6 @@ import './Deck.css'
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CardStack from '../components/CardStack/CardStack.js';
 import { GlobalContext } from "../context/GlobalContext";
-import Footer from '../components/Footer/Footer.js';
 import TagList from '../components/TagList/TagList.js';
 import Card from './Card.js';
 import { Link } from "react-router-dom";
@@ -286,7 +285,7 @@ const Deck = (props) => {
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
   
-      <div className='Container'>
+      <div className='Container Page'>
         {
           !state.hasGottenDeck && 
           <div className="HeaderText" style={{textAlign:'center'}}>
@@ -376,7 +375,6 @@ const Deck = (props) => {
                     { state.data.description.slice(0,800) }
                     { state.data.description.length > 800 && "..."}
               </div> 
-              {/* <div className="BodyText" id="legalities">  */}
               
           
           </div>

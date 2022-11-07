@@ -289,8 +289,7 @@ const Card = (props) => {
     }
 
   return (
-    <>
-      <div className='Container'>
+      <div className='Container Page'>
         {
           !state.hasGottenVersions && 
           <div className="HeaderText" style={{textAlign:'center'}}>
@@ -450,7 +449,6 @@ const Card = (props) => {
         </div>
         } 
       </div>
-    </>
   );
 
 };

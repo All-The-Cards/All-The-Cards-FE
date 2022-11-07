@@ -172,7 +172,7 @@ const UserSettings = (props) => {
   }
   return (
     <>
-      <div className={`Container ${darkMode ? "ContainerDark" : ''}`}>
+      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
         <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} >
           <div className="UserPage-Left">
             <div className="UserInfo">

@@ -227,7 +227,7 @@ const Navbar = () => {
                 }
                 {openLayerMenu &&
                     <div className="LayerMenu" ref={wrapperRef}>
-                        <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div>
+                        {/* <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div> */}
                         <div id={'2'} className="MenuItems" onClick={handleClose}>{(!gc.isEditing && "New Deck") || "Deck Editor"}</div>
                         <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
                     </div>
@@ -238,6 +238,7 @@ const Navbar = () => {
                 {darkMode &&
                     <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
                 }
+                <div style={{marginLeft: "2px"}}>{name}</div>
                 {openUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
@@ -250,10 +251,10 @@ const Navbar = () => {
                 {loggedInUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
-                            <div className="MenuText">Hello {name}</div>
+                            {/* <div className="MenuText">Hello {name}</div> */}
                             <div id={'0'} className="MenuItems" onClick={handleClose}>Profile</div>
-                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
                             <div id={'7'} className="MenuItems" onClick={handleClose}>Settings</div>
+                            <div id={'6'} className="MenuItems" onClick={handleClose}>Dark Mode</div>
                             <div id={'logout'} className="MenuItems" onClick={handleClose}>Signout</div>
                         </div>
                     </div>

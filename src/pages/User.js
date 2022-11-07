@@ -141,7 +141,7 @@ const User = (props) => {
 
   return (
     <>
-      <div className={`Container ${darkMode ? "ContainerDark" : ''}`}>
+      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
         <div className="UserPageContent" >
           <div className="UserPage-Left">
             <div className="UserInfo">

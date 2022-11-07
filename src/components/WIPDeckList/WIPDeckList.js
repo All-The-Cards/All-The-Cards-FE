@@ -489,7 +489,7 @@ const WIPDeckList = (props) => {
                     || (gc.wipDeck.formatTag == "commander" && gc.wipDeck.cards.length !== 100) )
                     &&
                     <div>
-                      <div className="CardError" style={{top: "108px"}} title={"Not enough cards"}>!</div>
+                      <div className="CardError" style={{top: "103px"}} title={"Not enough cards"}>!</div>
                     </div>
                   }
                   <div className="DeckListSize">{gc.wipDeck.cards.length} card{gc.wipDeck.cards.length != 1 && "s"}</div>

@@ -299,7 +299,7 @@ const DeckEditor = (props) => {
   }
 
   return (
-    <div className='Page'>
+    <div className='Container Page'>
       { state.publishBlocker && <div className='PublishBlocker'>
         <div className="PublishText">
           Publishing...
@@ -410,7 +410,6 @@ const DeckEditor = (props) => {
 
         {/* {(wipDeck.coverCard !== null) ? <>Cover card:<CardObject data={wipDeck.coverCard} /> </> : <></>} */}
       </div>
-      <Footer />
     </div>
   )
 }

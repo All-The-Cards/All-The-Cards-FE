@@ -103,8 +103,8 @@
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
-    right: 15px;
-    top: 40px
+    top: 60px;
+    right: 21%;
 }
 
 .UserMenu {
@@ -118,8 +118,8 @@
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
-    right: 5px;
-    top: 40px
+    right: 20%;
+    top: 60px
 }
 
 .MenuItems {
