@@ -352,7 +352,7 @@ const Deck = (props) => {
               <div className="SubHeaderText"> 
                 {/* <div className="DeckValidity" style={{color: state.data.isValid ? "black" : "red"}}>{state.data.cards.length > 0 && (state.data.isValid ? "" : "This deck is not legal!")}</div> */}
               </div>
-              <div className="SubHeaderText" style={{marginTop: '20px', fontSize: '16px', color:"black"}}> 
+              <div className="SubHeaderText" style={{marginTop: '10px', fontSize: '16px', color:"black", textShadow: "none", marginBottom:"20px"}}> 
                 {state.data.tags != undefined ? (<TagList tags={state.data.tags} />) : (<></>)}
                 
               </div>

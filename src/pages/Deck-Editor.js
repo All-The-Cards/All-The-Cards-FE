@@ -5,7 +5,6 @@ import * as server from "../functions/ServerTalk";
 import * as utilities from '../functions/Utilities.js';
 import * as stats from '../functions/Stats.js';
 import * as graphs from '../functions/Graphs.js';
-import Footer from '../components/Footer/Footer';
 import './Deck-Editor.css'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
