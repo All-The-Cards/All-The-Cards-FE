@@ -307,7 +307,7 @@ const Deck = (props) => {
                   <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
                 }
                 
-                <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} />
+                {/* <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
           
                 {
                   gc.activeSession &&
@@ -318,8 +318,8 @@ const Deck = (props) => {
                     >
                   
                   { state.isFavorited &&
-                    <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-                    <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                    <div className="FavoriteIcon" id="isFavorited">-</div> ||
+                    <div className="FavoriteIcon" id="notFavorited">+</div>
                   }
                     </div>
                 }   
@@ -380,37 +380,34 @@ const Deck = (props) => {
           
           </div>
           </div>
-          <div className="BodyText"> 
-                  <b>Decklist:</b>
+          <div className="DeckPageGroup" style={{marginBottom: "100px"}}> 
+                  {/* <b className='HeaderText'>Decklist:</b>
+                  <br></br> */}
                   { makeDecklist(state.data.cards) }
+          </div> 
+          <div className="DeckPageGroup" style={{marginBottom: "200px"}}> 
+                  {/* <b className='HeaderText'>Deck Info:</b>
+                  <br></br> */}
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Mana Curve</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["mana_curve"]}</div>
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Color Distribution</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["mana_ratio"]}</div>
+                  <div style={{display:"inline-block"}}>
+                  <b className='BodyText'>Card Types</b>
+                  <br></br>
+                  <br></br>
+                  {state.deckGraphs["card_types_counts"]}</div>
           </div>
         </div>
         } 
       </div>
-          
-      <div>
-        { 
-          state.showRawGraphs && 
-          Object.keys(state.deckStats).map((key, index) => {
-            return (
-              <div key={index}>
-              {key} 
-              <br></br>
-              Stat: 
-              <br></br>
-              {JSON.stringify(state.deckStats[key], null, '\n')}
-              <br></br>
-              Graph: 
-              <br></br>
-              {state.deckGraphs[key]}
-              <br></br>
-              <br></br>
-                {/* {key}: {state.deckStats[key]} */}
-              </div>
-            )
-          })
-        }
-        </div>
+       
       {/* <div style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', minWidth: '300px', maxWidth: '60%' }}> */}
      
         {/* <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>

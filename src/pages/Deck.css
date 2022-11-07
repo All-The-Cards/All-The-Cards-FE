@@ -42,3 +42,11 @@
     color: #f7f7f7;
     text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
 }
+
+.DeckPageGroup {
+    margin-top:60px;
+    text-align: left;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: center;
+}

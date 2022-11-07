@@ -313,7 +313,7 @@ const Card = (props) => {
             } */}
             {
             state.data.prices.usd && 
-              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
+              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") } 
               <br></br>
               </div>
             }

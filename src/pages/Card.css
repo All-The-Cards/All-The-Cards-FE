@@ -87,7 +87,7 @@
     border-radius: 10px;
     /* max-width: 200px; */
     /* min-width: 200px; */
-    width: 200px;
+    width: 280px;
     margin: auto;
 }
 
@@ -96,5 +96,19 @@
     height:30px;
     border-radius:50%;
     font-size:24px;
-    color:rgba(0,0,0,.3)
+    color:rgba(0,0,0,.3);
+}
+#notFavorited {
+    background-color:#dadada;
+}
+#notFavorited:hover {
+    background-color:#cacaca;
+}
+
+#isFavorited {
+    background-color: #ffd700;
+
+}
+#isFavorited:hover {
+    background-color: #eec000;
 }

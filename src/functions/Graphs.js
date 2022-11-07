@@ -21,6 +21,8 @@ export function makeGraphs(stats) {
     //         count: item
     //     }
     // })
+    let gHeight = 250;
+    let gWidth = 400;
 
     let graphResults = {
         //average cost of all cards
@@ -81,8 +83,8 @@ export function makeGraphs(stats) {
         }
     })
     graphResults.mana_curve = <ComposedChart
-        width={500}
-        height={300}
+        width={gWidth}
+        height={gHeight}
         data={mana_curve_data}
         margin={{
         top: 5,
@@ -97,7 +99,7 @@ export function makeGraphs(stats) {
         <Tooltip />
         {/* <Legend /> */}
         <Bar dataKey="count"/>
-        <Line type="monotone" dataKey="count" stroke="#7138D1" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="count" stroke="#7138D1" activeDot={{ r: 5 }} />
     </ComposedChart>
 
     //color_counts
@@ -118,8 +120,8 @@ export function makeGraphs(stats) {
     })
 
     graphResults.color_counts = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="count"
@@ -152,8 +154,8 @@ export function makeGraphs(stats) {
     })
 
     graphResults.color_percents = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="percent"
@@ -186,8 +188,8 @@ export function makeGraphs(stats) {
     })
     
     graphResults.mana_source_counts = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="count"
@@ -220,8 +222,8 @@ export function makeGraphs(stats) {
     })
     
     graphResults.mana_source_percents = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="percent"
@@ -256,8 +258,8 @@ export function makeGraphs(stats) {
     })
     
     graphResults.card_types_counts = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="count"
@@ -289,8 +291,8 @@ export function makeGraphs(stats) {
     })
     
     graphResults.card_types_percents = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie
         dataKey="percent"
@@ -308,8 +310,8 @@ export function makeGraphs(stats) {
     //mana_ratio
 
     graphResults.mana_ratio = <PieChart 
-        width={400} 
-        height={400}
+        width={gWidth} 
+        height={gHeight}
     >
         <Pie data={mana_source_counts_data} dataKey="count" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" />
         <Pie data={color_counts_data} dataKey="count" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label />
