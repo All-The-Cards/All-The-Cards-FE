@@ -343,7 +343,7 @@ const Deck = (props) => {
         }}
         onMouseEnter={() => {
           // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
-          if (k > 0) updateState({activeCard: groupCards[Object.keys(groups)[i]][k - 1]})
+          updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
         }}>
         <CardObject key={k + 1} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
     
@@ -594,7 +594,7 @@ const Deck = (props) => {
                     </div>
                   </div>
                   
-                  <div style={{display:"inline-block"}}>
+                  <div style={{display:"inline-block", paddingLeft: "10px"}}>
                   { makeDecklist(state.data.cards) }
                   </div>
           </div> 
