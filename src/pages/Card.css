@@ -81,7 +81,9 @@
 }
 
 #priceInfo {
-    background-color: #e8e8e8;
+    /* background-color: #e8e8e8; */
+    position: relative;
+    top: -20px;
     padding-top: 10px;
     padding-bottom: 15px;
     border-radius: 10px;
@@ -89,6 +91,7 @@
     /* min-width: 200px; */
     width: 280px;
     margin: auto;
+    font-style: italic;
 }
 
 .FavoriteIcon {

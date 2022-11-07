@@ -61,6 +61,9 @@ export function makeGraphs(stats) {
         graphResults[value] = JSON.stringify(stats[value], null, '\n')
     })
 
+    //total_prices fix
+    graphResults["total_prices"] = stats["total_prices"]
+    
     //avg_cmc
 
     //avg_cmc_no_lands

@@ -306,6 +306,10 @@ const Card = (props) => {
             <br></br>
             <br></br>
             <div id="priceInfo">
+              
+            {state.data.name} - {state.data.set_shorthand.toUpperCase()}
+            <br></br>
+            <br></br>
             {/* <div style={{fontSize:'24px'}}><b>Market Info:</b></div> */}
             {/* {
               (state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
@@ -317,12 +321,12 @@ const Card = (props) => {
               <br></br>
               </div>
             }
-            {
+            {/* {
               state.data.prices.usd_foil && 
                 <div>{"Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") }
                 <br></br>
                 </div>
-            }
+            } */}
             {/* {
             state.data.prices.eur &&
               <div>{"EUR: " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }

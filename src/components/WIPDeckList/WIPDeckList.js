@@ -80,11 +80,14 @@ const WIPDeckList = (props) => {
       }
       
       const sortByLand = (a, b) => {
+        if (a.type_one.toLowerCase().includes("Land".toLowerCase()) && b.type_one.toLowerCase().includes("Land".toLowerCase())){
+          return 0
+        }
         if (a.type_one.toLowerCase().includes("Land".toLowerCase())) {
-          return 1
+          return -1
         }
         else {
-          return -1
+          return 1
         }
       }
       

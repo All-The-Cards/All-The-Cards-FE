@@ -416,8 +416,12 @@ const CardObject = (props) => {
                 {props.clickable &&
                     <Link to={("/card/?id=" + props.data.id)}
 
-                        onMouseEnter={() => setListHover(true)}
-                        onMouseLeave={() => setListHover(false)}
+                        onMouseEnter={() => {
+                            if (!props.disableHover) setListHover(true)
+                        }}
+                        onMouseLeave={() => {
+                            if (!props.disableHover) setListHover(false)
+                        }}
                     >
                         <div className="CardListInfo">
                             <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
