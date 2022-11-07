@@ -243,7 +243,7 @@ const Deck = (props) => {
     let unique = makeUniqueDeck(deck)
     let cards = unique.map((item, i) => {
       // return <div>{item.name} x{getCount(item, deck)}</div>
-      return <div style={{marginBottom:"5px"}}><CardObject clickable isCompact={true} count={getCount(item, deck)} data={item}></CardObject></div>
+      return <div key={i} style={{marginBottom:"5px"}}><CardObject clickable isCompact={true} count={getCount(item, deck)} data={item}></CardObject></div>
     })
     return (
       <div>
@@ -336,11 +336,12 @@ const Deck = (props) => {
               </div>
               </Link>
               }
+             <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
               {
                 !state.data.isValid && 
-                <div className="CardError" style={{fontSize: "32px", height: "40px", width: "40px", marginLeft: "-60px", top:"40px"}}>!</div>
+                <div className="CardError" title="Deck not valid" style={{fontSize: "32px", height: "40px", width: "40px", top:"48px", marginTop: "-45px", left:"-50px", position:"relative"}}>!</div>
                 
-              }<div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
+              }
                   {state.data.name}
                 </div>
              
