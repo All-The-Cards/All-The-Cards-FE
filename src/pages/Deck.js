@@ -393,7 +393,8 @@ const Deck = (props) => {
     // })
     console.log(cards[1])
     return (
-      <div className="columns" style={{marginTop:"5px"}}>
+      <div className="columns" style={{marginTop:"5px", 
+        maxHeight:state.data.format == "commander" && "1000px"}}>
         {cards}
       </div>
     )
@@ -544,7 +545,7 @@ const Deck = (props) => {
                 }
               </div>  */}
               
-              <div className="BodyText" style={{whiteSpace:"pre-line"}}>
+              <div className="BodyText" style={{whiteSpace:"pre-line", width: "66%"}}>
                     { state.data.description.slice(0,800) }
                     { state.data.description.length > 800 && "..."}
               </div> 
@@ -594,7 +595,7 @@ const Deck = (props) => {
                     </div>
                   </div>
                   
-                  <div style={{display:"inline-block", width: "78%"}}>
+                  <div style={{display:"inline-block", width: "78%", textAlign:'left'}}>
                   { makeDecklist(state.data.cards) }
                   </div>
           </div> 
