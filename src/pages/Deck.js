@@ -371,10 +371,11 @@ const Deck = (props) => {
         }
 
         groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>
-          {Object.keys(groups)[i] !== "Commander" && 
+          {/* {Object.keys(groups)[i] !== "Commander" &&  */}
             <div style={{position:'relative', top:'-2px', display:"inline-block"}}>
               {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
-            </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
+            {/* </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards} */}
+            </div> {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
         </div>)
       }
     }
@@ -383,13 +384,14 @@ const Deck = (props) => {
     let cards = []
     for (let i = 0; i < Object.keys(groups).length; i++) {
       if (i == 0) {
-        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
+        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}> {Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
         i++
       }
       else {
 
         cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
       }
+      // cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
       // for (let k = 0; k < Object.values(groups)[i].length; k++) {
       //   // console.log(Object.values(groups)[i][k])
       //   cards.push(Object.values(groups)[i][k]
