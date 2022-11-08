@@ -505,7 +505,7 @@ const Deck = (props) => {
                 }   
                 
               </div>
-              { state.data.user_id && <Link to={"/user/?id=" + state.data.user_id}> 
+              { state.data.user_id && <div style={{maxWidth:'400px'}}><Link to={"/user/?id=" + state.data.user_id}> 
               <div className="SubHeaderText" id="typeLine" title="Author" style={{marginBottom: "4px", color:"#f7f7f7", fontStyle:"normal"}}> 
                 
                 {/* { 
@@ -514,7 +514,7 @@ const Deck = (props) => {
                 } */}
                 {state.data.user_name}
               </div>
-              </Link>
+              </Link></div>
               }
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
               {
