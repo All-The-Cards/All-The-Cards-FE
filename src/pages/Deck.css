@@ -75,3 +75,12 @@
     float: left;
     align-content: flex-start;
 }
+
+.symbol {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    position: relative;
+    top: 3px;
+    margin-right: 2px;
+}

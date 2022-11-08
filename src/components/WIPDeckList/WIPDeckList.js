@@ -149,10 +149,10 @@ const WIPDeckList = (props) => {
 
     const getMargin = () => {
       if (state.showSideList) {
-        return '0px'
+        return '-15px'
       }
       else {
-        return '-360px'
+        return '-380px'
       }
     }
 
@@ -504,7 +504,7 @@ const WIPDeckList = (props) => {
               </Link>
                 {
                     gc.wipDeck.cards.length > 0 &&
-                    <div>
+                    <div style={{marginBottom:'400px'}}>
                       {/* {
                         state.errorList.length > 0 &&
                         <div>
