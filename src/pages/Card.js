@@ -7,6 +7,7 @@ import './Card.css'
 
 import { GlobalContext } from "../context/GlobalContext";
 import * as mana from '../components/TextToMana/TextToMana.js'
+import Sparkles from '../images/sparkles.png'
 
 const Card = (props) => {
 
@@ -395,8 +396,10 @@ const Card = (props) => {
                   >
                 
                 { state.isFavorited &&
-                  <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-                  <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                  // <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
+                  // <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                    <img className="FavoriteIcon" title="Remove Favorite" id="isFavorited" src={Sparkles}></img> || 
+                    <img className="FavoriteIcon" title="Add Favorite" id="notFavorited" src={Sparkles}></img>
                 }
                   </div>
 }

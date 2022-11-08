@@ -182,9 +182,6 @@ const WIPDeckList = (props) => {
           results.unshift(<option key={-1} value={"SET"}>
           Choose a commander...
         </option>)
-          results.push(<option key={999999} value={"REMOVE"}>
-            ***Remove Commander***
-          </option>)
         }
         else {
           results.push(<option key={999999} value={"ADD"}>
@@ -242,7 +239,6 @@ const WIPDeckList = (props) => {
       }
 
       if (event.target.value === "REMOVE"){
-        // console.log("COMMANDER TO REMOVE: ", gc.wipDeck.commanderSlot)
         let tempCards = gc.wipDeck.cards
         let index = gc.wipDeck.cards.indexOf(gc.wipDeck.commanderSlot)
         tempCards.splice(index, 1)
@@ -257,6 +253,7 @@ const WIPDeckList = (props) => {
           commanderSlot: otherCommanders[0]
         }) 
       }
+
       else if (event.target.value === "ADD"){
 
       }
@@ -277,6 +274,7 @@ const WIPDeckList = (props) => {
 
     const checkValidity = (optionalCommander) => {
       // console.log(gc.wipDeck.commanderSlot)
+      // if (optionalCommander == null) return false
       let commander = optionalCommander || gc.wipDeck.commanderSlot
       let valid = true
       let errorCards = []
@@ -358,6 +356,7 @@ const WIPDeckList = (props) => {
     }
 
     const cardInCommander = (card, commander) => {
+      if (commander.name == "") return false
       let valid = true;
 
       let cardColors = []
@@ -537,13 +536,23 @@ const WIPDeckList = (props) => {
                           <div>
                             {
                               state.showCommanderDropdown &&
-                              <select 
-                                style={{marginBottom:"10px", width: "90%"}}
-                                value={JSON.stringify(gc.wipDeck.commanderSlot)} onChange={(event) => { 
-                                  setCommander(event)
-                                }}>
-                                { state.validCommanders }
-                              </select>
+                              <div>
+                                <select 
+                                  style={{marginBottom:"10px", width: "90%"}}
+                                  value={JSON.stringify(gc.wipDeck.commanderSlot)} onChange={(event) => { 
+                                    setCommander(event)
+                                  }}>
+                                  { state.validCommanders }
+                                </select>
+                                <div 
+                                  style={{marginBottom: '10px'}}
+                                  onClick={() => {
+                                    setCommander({target: {value: "REMOVE"}})
+                                  }}
+                                >
+                                  Remove Commander
+                                </div>
+                              </div>
                             }
                           </div>
                         }

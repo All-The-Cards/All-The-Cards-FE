@@ -12,6 +12,8 @@ import { GlobalContext } from "../context/GlobalContext";
 import TagList from '../components/TagList/TagList.js';
 import Card from './Card.js';
 import { Link } from "react-router-dom";
+import * as mana from '../components/TextToMana/TextToMana.js'
+import Sparkles from '../images/sparkles.png'
 
 const Deck = (props) => {
 
@@ -85,13 +87,13 @@ const Deck = (props) => {
       }
       else {
         document.title = response.name
-        // console.log(response)
+        console.log(response)
         updateState({
           data: response,
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
           hasGottenDeck: true,
-          activeCard: (response.format =="commander" && response.commander) || response.coverCard || response.cards[0]
+          activeCard: (response.format =="commander" && response.commander) || response.cover_card || response.cards[0]
         })
         getUserById("id=" + response.user_id)
         // console.log(response)
@@ -162,7 +164,7 @@ const Deck = (props) => {
           art_crop: state.data.cover_art
         }
       },
-      coverCard: state.data.coverCard,
+      coverCard: state.data.cover_card,
       deckID: gc.activeSession != null ? state.data.deck_id : "",
       authorID: gc.activeSession != null ? state.data.user_id : "",
       commanderSlot: state.data.commander
@@ -368,7 +370,12 @@ const Deck = (props) => {
           totalCards += getCount(currentCard, deck)
         }
 
-        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>{Object.keys(groups)[i]} - {totalCards}</div>)
+        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>
+          {Object.keys(groups)[i] !== "Commander" && 
+            <div style={{position:'relative', top:'-2px', display:"inline-block"}}>
+              {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
+            </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
+        </div>)
       }
     }
     // console.log(groups["Artifact"])
@@ -487,14 +494,18 @@ const Deck = (props) => {
                     >
                   
                   { state.isFavorited &&
-                    <div className="FavoriteIcon" id="isFavorited">-</div> ||
-                    <div className="FavoriteIcon" id="notFavorited">+</div>
+                    // <div className="FavoriteIcon" id="isFavorited">-</div> ||
+                    // <div className="FavoriteIcon" id="notFavorited">+</div>
+                    
+                    <img className="FavoriteIcon" title="Remove Favorite" id="isFavorited" src={Sparkles}></img> || 
+                    <img className="FavoriteIcon" title="Add Favorite" id="notFavorited" src={Sparkles}></img>
                   }
+                  
                     </div>
                 }   
                 
               </div>
-              { state.data.user_id && <Link to={"/user/?id=" + state.data.user_id}> 
+              { state.data.user_id && <div style={{maxWidth:'400px'}}><Link to={"/user/?id=" + state.data.user_id}> 
               <div className="SubHeaderText" id="typeLine" title="Author" style={{marginBottom: "4px", color:"#f7f7f7", fontStyle:"normal"}}> 
                 
                 {/* { 
@@ -503,7 +514,7 @@ const Deck = (props) => {
                 } */}
                 {state.data.user_name}
               </div>
-              </Link>
+              </Link></div>
               }
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
               {
