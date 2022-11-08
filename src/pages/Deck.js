@@ -12,6 +12,8 @@ import { GlobalContext } from "../context/GlobalContext";
 import TagList from '../components/TagList/TagList.js';
 import Card from './Card.js';
 import { Link } from "react-router-dom";
+import * as mana from '../components/TextToMana/TextToMana.js'
+import Sparkles from '../images/sparkles.png'
 
 const Deck = (props) => {
 
@@ -368,7 +370,12 @@ const Deck = (props) => {
           totalCards += getCount(currentCard, deck)
         }
 
-        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>{Object.keys(groups)[i]} - {totalCards}</div>)
+        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>
+          {Object.keys(groups)[i] !== "Commander" && 
+            <div style={{position:'relative', top:'-2px', display:"inline-block"}}>
+              {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
+            </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
+        </div>)
       }
     }
     // console.log(groups["Artifact"])
@@ -487,9 +494,13 @@ const Deck = (props) => {
                     >
                   
                   { state.isFavorited &&
-                    <div className="FavoriteIcon" id="isFavorited">-</div> ||
-                    <div className="FavoriteIcon" id="notFavorited">+</div>
+                    // <div className="FavoriteIcon" id="isFavorited">-</div> ||
+                    // <div className="FavoriteIcon" id="notFavorited">+</div>
+                    
+                    <img className="FavoriteIcon" title="Remove Favorite" id="isFavorited" src={Sparkles}></img> || 
+                    <img className="FavoriteIcon" title="Add Favorite" id="notFavorited" src={Sparkles}></img>
                   }
+                  
                     </div>
                 }   
                 
