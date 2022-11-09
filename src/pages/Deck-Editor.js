@@ -442,76 +442,81 @@ const DeckEditor = (props) => {
     let cardResults = []
     for (let i = 0; i < importObjects.length; i++){
       server.post("/api/search/card/query=" + importObjects[i].name).then(response => {
-        let res = response
+        if (response.length > 0) {
+          let res = response
 
-        let englishCards = res.filter((item) => {
-          return item.lang === "en"
-        })
-        res = englishCards
+          let englishCards = res.filter((item) => {
+            return item.lang === "en"
+          })
+          res = englishCards
 
-        //sort by release date
-        res = res.sort(sortByRelease)
+          //sort by release date
+          res = res.sort(sortByRelease)
 
-        //get cards that are "real" cards, buildable in a deck
-        let legalCards = res.filter((item) => {
-          return !Object.values(item.legalities).every(value => value === "not_legal")
-        })
-        res = legalCards
+          //get cards that are "real" cards, buildable in a deck
+          let legalCards = res.filter((item) => {
+            return !Object.values(item.legalities).every(value => value === "not_legal")
+          })
+          res = legalCards
 
-        //remove art-types 
-        const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
-        let regularCards = res.filter((item) => {
-          return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) })
-            && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
-            && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
-            && item.promo === "false"
-            && item.full_art === "false"
-            // && item.digital === "false"
-            && item.games !== "['arena']"
-            && item.set_shorthand !== "sld"
-            && item.set_type !== "masterpiece"
-            && item.finishes !== "['foil']"
-            && item.set_type !== "spellbook"
-        })
-        res = regularCards
+          //remove art-types 
+          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
+          let regularCards = res.filter((item) => {
+            return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) })
+              && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
+              && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
+              && item.promo === "false"
+              && item.full_art === "false"
+              // && item.digital === "false"
+              && item.games !== "['arena']"
+              && item.set_shorthand !== "sld"
+              && item.set_type !== "masterpiece"
+              && item.finishes !== "['foil']"
+              && item.set_type !== "spellbook"
+          })
+          res = regularCards
 
-        //find duplicates, omit from appearing
-        let uniqueRes = []
-        let uniqueNames = []
-        uniqueRes = res.filter((item) => {
-          let duplicate = uniqueNames.includes(item.name)
-          if (!duplicate) {
-            uniqueNames.push(item.name)
-            return true;
+          //find duplicates, omit from appearing
+          let uniqueRes = []
+          let uniqueNames = []
+          uniqueRes = res.filter((item) => {
+            let duplicate = uniqueNames.includes(item.name)
+            if (!duplicate) {
+              uniqueNames.push(item.name)
+              return true;
+            }
+            return false;
+          })
+          res = uniqueRes
+
+
+          // this is deprecated by the above function
+          // //remove invalid card types for deckbuilding
+          // let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
+          // // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
+          // let realCardRes = res.filter((item) => {
+          //   return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+          // })
+          // res = realCardRes
+
+          //remove some technically-duplicate cards
+          let noArenaRes = res.filter((item) => {
+            return !item.name.includes("A-")
+          })
+          res = noArenaRes
+
+          if (cardResults.length == 0) {
+            updateWipDeck({coverCard: res[0]})
           }
-          return false;
-        })
-        res = uniqueRes
-
-
-        // this is deprecated by the above function
-        // //remove invalid card types for deckbuilding
-        // let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
-        // // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
-        // let realCardRes = res.filter((item) => {
-        //   return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
-        // })
-        // res = realCardRes
-
-        //remove some technically-duplicate cards
-        let noArenaRes = res.filter((item) => {
-          return !item.name.includes("A-")
-        })
-        res = noArenaRes
-
-        if (cardResults.length == 0) {
-          updateWipDeck({coverCard: res[0]})
+          // console.log(response[0])
+          for (let k = 0; k < importObjects[i].count; k++){
+            cardResults.push(res[0])
+          }
+          updateWipDeck({cards: cardResults})
         }
-        // console.log(response[0])
-        for (let k = 0; k < importObjects[i].count; k++){
-          cardResults.push(res[0])
+        else {
+          console.log("Card not found:", importObjects[i].name)
         }
-        updateWipDeck({cards: cardResults})
       })
     }
   }
