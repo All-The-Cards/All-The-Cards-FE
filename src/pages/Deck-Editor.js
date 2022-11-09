@@ -467,7 +467,7 @@ const DeckEditor = (props) => {
                   </div>
                 }
               </div>  */}
-              
+              <input type="button" className='FancyButton' onClick={toggleGraphs} style={{float:'right'}} value={state.showRawGraphs ? "Hide Details" : "Show Details"} />
               <div className="BodyText" style={{whiteSpace:"pre-line", width: "50%"}}>
               <textarea rows="4" type="text"
               className='styledInput'  name="description" value={wipDeck.description} onChange={handleChanges} multiline placeholder="Deck Description" style={{ width: '100%' }} />
@@ -548,7 +548,7 @@ const DeckEditor = (props) => {
           <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
 
         </form> */}
-        <div>
+        {/* <div>
         { 
           state.showRawGraphs && 
           Object.keys(state.deckStats).map((key, index) => {
@@ -566,11 +566,39 @@ const DeckEditor = (props) => {
               <br></br>
               <br></br>
                 {/* {key}: {state.deckStats[key]} */}
-              </div>
+              {/* </div>
             )
           })
         }
-        </div>
+        </div> */} 
+        {
+          state.deckGraphs && state.showRawGraphs &&
+          <div className="DeckPageGroup" style={{marginBottom: "10px", marginTop: "40px"}}> 
+          {/* <b className='HeaderText'>Deck Info:</b>
+          <br></br> */}
+          {/* <b className='BodyText'>Deck Stats:</b>
+            <br></br>
+          <div style={{display:"inline-block"}}>
+          Avg. CMC: {state.deckGraphs["avg_cmc"]}
+          </div> 
+            <br></br> */}
+          <div style={{display:"inline-block"}}>
+          <b className='BodyText'>Mana Curve</b>
+          <br></br>
+          <br></br>
+          {state.deckGraphs["mana_curve"]}</div>
+          <div style={{display:"inline-block"}}>
+          <b className='BodyText'>Color Distribution</b>
+          <br></br>
+          <br></br>
+          {state.deckGraphs["mana_ratio"]}</div>
+          <div style={{display:"inline-block"}}>
+          <b className='BodyText'>Card Types</b>
+          <br></br>
+          <br></br>
+          {state.deckGraphs["card_types_counts"]}</div>
+  </div>
+        }
         <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', marginLeft:'15%', marginRight:'15%', marginBottom:'100px', marginTop:'40px' }}>
           {state.cards.filter((item) => { 
                         // console.log(item)
