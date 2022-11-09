@@ -10,7 +10,7 @@ const TagList = ({tags, handleDeleteTag, editMode}) => {
             <span key={index} 
                 className="tag" 
             // onClick={editMode ? () => (handleDeleteTag(index)) : null}
-            >{tag}{editMode && <div className='tagDelete' onClick={() => { handleDeleteTag(index) }}>x</div>}</span>
+            ><div className="tagText">{tag}</div>{editMode && <div className='tagDelete' onClick={() => { handleDeleteTag(index) }}>x</div>}</span>
         ))}
         </>
     )
