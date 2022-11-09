@@ -53,9 +53,23 @@
 
 #userSettings {
     /* background-color: aliceblue; */
-    width: 350px;
+    width: 550px;
 }
 
 #userSettingsText {
     margin-left: -20px;
+}
+
+.settingInput {
+    
+    padding: 8px;
+    border-radius: 5px;
+    margin-right: 10px;
+    border: 0;
+    width: 350px;
+    height: 10px;
+}
+
+.settingInput:focus {
+    outline: none
 }
