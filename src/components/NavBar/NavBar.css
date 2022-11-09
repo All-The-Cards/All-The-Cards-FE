@@ -132,6 +132,7 @@
 .MenuItems {
     padding: 5px;
     cursor: pointer;
+    user-select: none;
 }
 
 .MenuItems:hover {
@@ -195,4 +196,12 @@
 
 .profileMenuButton:hover {
     background-color: #cacaca;
+}
+
+#ignoreMenuItem {
+    color: #aaaaaa
+}
+
+#ignoreMenuItem:hover{
+    background-color: #FFFFFF;
 }

@@ -19,7 +19,9 @@ const DeckEditor = (props) => {
     publishBlocker: false,
     deckStats: {},
     deckGraphs: {},
-    showRawGraphs: false
+    showRawGraphs: false,
+    showImportMenu: false,
+    importList: ""
   })
   const nav = useNavigate()
   const gc = useContext(GlobalContext)
@@ -350,11 +352,187 @@ const DeckEditor = (props) => {
     setWipDeck((previous) => ({ ...previous, tags: newTags }))
     saveToLocalStorage("wipDeck", wipDeck)
   }
+  const sortByRelease = (a, b) => {
+    let aDate = new Date(a.released_at)
+    let bDate = new Date(b.released_at)
+    if (aDate >= bDate) {
+      return -1
+    }
+    else {
+      return 1
+    }
+  }
 
   const toggleGraphs = () => {
     setState((previous) => ({
       ...previous,
       showRawGraphs: !state.showRawGraphs
+    }))
+  }
+
+  const importDeckList = () => {
+    setState((previous) => ({
+      ...previous,
+      showImportMenu: true
+    }))
+  }
+
+  const submitImport = () => {
+    setState((previous) => ({
+      ...previous,
+      showImportMenu: false
+    }))
+
+    //clear deck info
+    gc.setWipDeck({
+      authorID: "",
+      cards: [],
+      coverCard: {
+        image_uris: {
+          art_crop: ""
+        }
+      },
+      deckID: "",
+      description: "",
+      formatTag: "",
+      tags: [],
+      title: "",
+      commanderSlot: {
+        name: ""
+      },
+      isValid: false,
+    })
+    saveToLocalStorage("wipDeck", gc.wipDeck)
+
+    let listOfCards = state.importList.split("\n")
+    for (let i = 0; i < listOfCards.length; i++){
+      if (listOfCards[i] == "") {
+        listOfCards.splice(i--, 1)
+      }
+    }
+    // console.log("Raw list:", listOfCards)
+    
+    let importObjects = []
+    for (let i = 0; i < listOfCards.length; i++){
+      let entry = listOfCards[i]
+      let obj = {
+        count: 1,
+        name: entry,
+        set_id: null
+      }
+
+      if (parseInt(entry[0])) {
+        obj.count = parseInt(entry.split(" ")[0])
+        let entryNoNum = entry.split(" ").splice(1,20).join(" ")
+        entry = entryNoNum
+      }
+
+      if(entry.includes("[") && entry.includes("]")){
+        let entrySet = entry.split("[")[1].split("]")[0]
+        obj.set_id = entrySet
+        let entryNoSet = entry.split("[")[0]
+        entry = entryNoSet
+      }
+
+      //remaining should be card name
+      obj.name = entry
+      importObjects.push(obj)
+    }
+
+    let cardResults = []
+    for (let i = 0; i < importObjects.length; i++){
+      server.post("/api/search/card/query=" + importObjects[i].name).then(response => {
+        if (response.length > 0) {
+          let res = response
+
+          let englishCards = res.filter((item) => {
+            return item.lang === "en"
+          })
+          res = englishCards
+
+          //sort by release date
+          res = res.sort(sortByRelease)
+
+          //get cards that are "real" cards, buildable in a deck
+          let legalCards = res.filter((item) => {
+            return !Object.values(item.legalities).every(value => value === "not_legal")
+          })
+          res = legalCards
+
+          //remove art-types 
+          const artTypes = ["borderless", "gold", "inverted", "showcase", "extendedart", "etched"]
+          let regularCards = res.filter((item) => {
+            return !artTypes.some(el => { if (item.border_color) return item.border_color.includes(el) })
+              && !artTypes.some(el => { if (item.frame_effects) return item.frame_effects.includes(el) })
+              && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
+              && item.promo === "false"
+              && item.full_art === "false"
+              // && item.digital === "false"
+              && item.games !== "['arena']"
+              && item.set_shorthand !== "sld"
+              && item.set_type !== "masterpiece"
+              && item.finishes !== "['foil']"
+              && item.set_type !== "spellbook"
+          })
+          res = regularCards
+
+          //find duplicates, omit from appearing
+          let uniqueRes = []
+          let uniqueNames = []
+          uniqueRes = res.filter((item) => {
+            let duplicate = uniqueNames.includes(item.name)
+            if (!duplicate) {
+              uniqueNames.push(item.name)
+              return true;
+            }
+            return false;
+          })
+          res = uniqueRes
+
+
+          // this is deprecated by the above function
+          // //remove invalid card types for deckbuilding
+          // let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
+          // // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
+          // let realCardRes = res.filter((item) => {
+          //   return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
+          // })
+          // res = realCardRes
+
+          //remove some technically-duplicate cards
+          let noArenaRes = res.filter((item) => {
+            return !item.name.includes("A-")
+          })
+          res = noArenaRes
+
+          if (cardResults.length == 0) {
+            updateWipDeck({coverCard: res[0]})
+          }
+          // console.log(response[0])
+          for (let k = 0; k < importObjects[i].count; k++){
+            cardResults.push(res[0])
+          }
+          updateWipDeck({cards: cardResults})
+        }
+        else {
+          console.log("Card not found:", importObjects[i].name)
+        }
+      })
+    }
+  }
+  
+  const cancelImport = () => {
+
+    setState((previous) => ({
+      ...previous,
+      showImportMenu: false,
+      importList: ""
+    }))
+  }
+  const updateImportList = (e) => {
+    setState((previous) => ({
+      ...previous,
+      importList: e.target.value
     }))
   }
 
@@ -365,6 +543,19 @@ const DeckEditor = (props) => {
           Publishing...
           <br></br>
             <img style={{width: '50px'}}src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/>
+          </div>
+        </div> }
+        { state.showImportMenu && <div className='PublishBlocker'>
+          <div className="importMenu">
+            <div className="HeaderText" style={{position: 'relative', top: '20px', left: '20px'}}>Import Decklist</div>
+            <div className="BodyText" style={{position: 'relative', top: '15px', left: '20px', color:'#bbbbbb', fontStyle:"italic"}}>Accepted formats: "4 Arclight Phoenix", "4 Arclight Phoenix [GRN]"</div>
+          <textarea rows="4" type="text"
+              className='styledInput importList'  name="importList" value={state.importList} onChange={updateImportList} multiline
+              placeholder="Enter a decklist here..." 
+              style={{color:'black'}}/>
+              <br></br>
+              <button className="FancyButton" style={{float:'right', marginRight: '20px'}} onClick={submitImport}>Import List</button>
+              <button className="FancyButton" style={{float:'right', marginRight: '20px'}} id='alt' onClick={cancelImport}>Cancel</button>
           </div>
         </div> }
           <div className="DeckPageContent">
@@ -403,8 +594,9 @@ const DeckEditor = (props) => {
               }}>Publish Deck</button>
               <button className="FancyButton" style={{float:'right'}} onClick={cancelEditingDeck}>Quit</button>
               <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
+              <button className="FancyButton" style={{float:'right'}} id='disabled' onClick={importDeckList}>Import List</button>
               <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
-              <button className="FancyButton" id='alt2' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
+              <button className="FancyButton" id='disabled' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
                 
               </div>
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 

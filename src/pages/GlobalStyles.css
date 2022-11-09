@@ -54,6 +54,15 @@
     background-color: #caa123;
 }
 
+#disabled {
+    background-color: #777777;
+    color: #aaaaaa
+}
+
+#alt4:hover {
+    /* background-color: #888888; */
+}
+
 .HeaderText {
     margin-top: 20px;
     font-size: 36px;
