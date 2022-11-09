@@ -45,13 +45,17 @@
 
 .DeckPageGroup {
     margin-top:60px;
-    text-align: left;
-    margin-left: 20%;
-    margin-right: 20%;
+    /* text-align: left; */
+    /* margin-left: 20%;
+    margin-right: 20%; */
     text-align: center;
     /* background-color: rgba(255,0,0,.3); */
-    max-height: 600px;
+    max-height: 500px;
+    /* max-width: 80%; */
+    margin: 0 auto;
     /* overflow:scroll; */
+    margin-left:20%;
+    margin-right:20%;
 }
 
 .itemPrices {
@@ -66,14 +70,20 @@
 }
 
 .columns {
-    min-height: 400px;
-    max-height: 400px;
-    width: 100%;
-    display: flex;
+    max-height: 500px;
+    /* display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
     float: left;
-    align-content: flex-start;
+    /* background-color: rgba(255,0,255,0.3); */
+    /* display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat() */
+    flex-direction: row;
+    flex-wrap: wrap;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    margin-left:50px;
 }
 
 .symbol {
@@ -83,4 +93,19 @@
     position: relative;
     top: 3px;
     margin-right: 2px;
+}
+.groupedCards {
+    margin-left: 10px;
+    margin-right: 10px;
+    max-height:460px;
+    overflow-y:scroll;
+    width: 280px;
+    display: inline-block;
+    writing-mode: horizontal-tb;
+    /* background-color: rgba(0,0,255,0.3); */
+}
+
+.cardAndDeck{
+    background-color: aquamarine;
+    display: inline-block;
 }

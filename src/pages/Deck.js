@@ -384,12 +384,12 @@ const Deck = (props) => {
     let cards = []
     for (let i = 0; i < Object.keys(groups).length; i++) {
       if (i == 0) {
-        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}> {Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
+        cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
         i++
       }
       else {
 
-        cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
+        cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[i]}</div>)
       }
       // cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
       // for (let k = 0; k < Object.values(groups)[i].length; k++) {
@@ -584,10 +584,10 @@ const Deck = (props) => {
           </div>
 
 
-          <div className="DeckPageGroup" style={{marginBottom: "150px", textAlign:'center'}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "40px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
                   {/* <b className='HeaderText'>Decklist:</b>
                   <br></br> */}
-                  <div style={{width: "20%", float:"left"}}>
+                  <div style={{marginRight:'50px', display:"inline-block", height: '100%'}}>
                     <div style={{textAlign:'center'}} className="RegularCard">
                     <CardObject clickable data={state.activeCard}/>
                     <div className="itemPrices">
@@ -624,7 +624,7 @@ const Deck = (props) => {
                     </div>
                   </div>
                   
-                  <div style={{display:"inline-block", width: "78%", textAlign:'left'}}>
+                  <div style={{display:"inline-block", textAlign:'left'}}>
                   { makeDecklist(state.data.cards) }
                   </div>
           </div> 
