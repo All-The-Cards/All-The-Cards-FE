@@ -39,7 +39,8 @@ const Deck = (props) => {
     showFullDescription: false,
     priceFormat: "usd",
     activeCard: {},
-    sampleHand: []
+    sampleHand: [],
+    showExportMenu: false
   })
 
   const updateState = (objectToUpdate) => {
@@ -488,6 +489,33 @@ const Deck = (props) => {
     return sample
   }
 
+  const showExportMenu = () => {
+    updateState({showExportMenu: !state.showExportMenu})
+  }
+
+  const exportDecklist = (format) => {
+
+    let list = ""
+    let uniqueDeck = makeUniqueDeck(state.data.cards)
+
+    if (format == "basic") {
+      for (let i = 0; i < uniqueDeck.length; i++){
+        let card = uniqueDeck[i]
+        list += getCount(card, state.data.cards) + " " + card.name.split("/")[0] + "\n"
+      }
+    }
+    if (format == "tcgplayer") {
+      for (let i = 0; i < uniqueDeck.length; i++){
+        let card = uniqueDeck[i]
+        list += getCount(card, state.data.cards) + " " + card.name.split("/")[0] + " [" + card.set_shorthand.toUpperCase() + "]" + "\n"
+        // list += getCount(card, state.data.cards) + " " + card.name.split("/")[0] + " [" + card.set_shorthand.toUpperCase() + "]" + " " + card.collector_number + "\n"
+      }
+    }
+
+    navigator.clipboard.writeText(list)
+    updateState({showExportMenu: false})
+  }
+
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
   
@@ -512,6 +540,21 @@ const Deck = (props) => {
                   gc.activeSession &&
                   <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} className='FancyButton' onClick={copyDeck} value={(gc.activeSession != null && gc.activeSession.user.id === state.data.user_id) ? "Edit Deck" : "Copy Deck"} />
                 }
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  float: 'right'
+                  }}>
+                <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} id='alt' className='FancyButton' onClick={showExportMenu} value={"Export Deck"} />
+                { state.showExportMenu && <div>
+                        <div className="UserMenu" style={{position: 'absolute', color: 'black', textAlign:'left', textShadow:'none', marginLeft:'-10px'}}>
+                            <div className="MenuItems" id="ignoreMenuItem">Send to Clipboard...</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("basic")}}>Basic</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("tcgplayer")}}>Advanced</div>
+                        </div>
+                    </div>
+                }
+                </div>
                 
                 {/* <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
           
