@@ -123,3 +123,10 @@
     position: relative;
     top: -20px;
 }
+
+#menuDivider {
+    background-color: #cccccc;
+    height: 1px;
+    padding: 0;
+    margin: 6px;
+}

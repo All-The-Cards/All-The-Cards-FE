@@ -505,13 +505,21 @@ const DeckEditor = (props) => {
           })
           res = noArenaRes
 
-          if (cardResults.length == 0) {
-            updateWipDeck({coverCard: res[0]})
+          
+          for (let n = 0; n < res.length; n++){
+            console.log(res[n], importObjects)
+            if (res[n].name && res[n].name == importObjects[i].name){
+              if (cardResults.length == 0) {
+
+                updateWipDeck({coverCard: res[n]})
+              }
+              for (let k = 0; k < importObjects[i].count; k++){
+                cardResults.push(res[n])
+              }
+            }
           }
           // console.log(response[0])
-          for (let k = 0; k < importObjects[i].count; k++){
-            cardResults.push(res[0])
-          }
+          
           updateWipDeck({cards: cardResults})
         }
         else {
@@ -550,7 +558,7 @@ const DeckEditor = (props) => {
             <div className="HeaderText" style={{position: 'relative', top: '20px', left: '20px'}}>Import Decklist</div>
             <div className="BodyText" style={{position: 'relative', top: '15px', left: '20px', color:'#bbbbbb', fontStyle:"italic"}}>Accepted formats: "4 Arclight Phoenix", "4 Arclight Phoenix [GRN]"</div>
           <textarea rows="4" type="text"
-              className='styledInput importList'  name="importList" value={state.importList} onChange={updateImportList} multiline
+              className='styledInput importList'  name="importList" value={state.importList} onChange={updateImportList}
               placeholder="Enter a decklist here..." 
               style={{color:'black'}}/>
               <br></br>
@@ -594,7 +602,7 @@ const DeckEditor = (props) => {
               }}>Publish Deck</button>
               <button className="FancyButton" style={{float:'right'}} onClick={cancelEditingDeck}>Quit</button>
               <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
-              <button className="FancyButton" style={{float:'right'}} id='disabled' onClick={importDeckList}>Import List</button>
+              <button className="FancyButton" style={{float:'right'}} id='' onClick={importDeckList}>Import List</button>
               <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
               <button className="FancyButton" id='disabled' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
                 
@@ -616,7 +624,7 @@ const DeckEditor = (props) => {
               value={wipDeck.formatTag}
               onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
             >
-              <option value="">Any Format</option>
+              <option value="">Choose Format</option>
               <option value="standard">Standard</option>
               <option value="commander">Commander</option>
               <option value="pioneer">Pioneer</option>
@@ -666,7 +674,7 @@ const DeckEditor = (props) => {
               <input type="button" className='FancyButton' onClick={toggleGraphs} style={{float:'right'}} value={state.showRawGraphs ? "Hide Details" : "Show Details"} />
               <div className="BodyText" style={{whiteSpace:"pre-line", width: "50%"}}>
               <textarea rows="4" type="text"
-              className='styledInput'  name="description" value={wipDeck.description} onChange={handleChanges} multiline placeholder="Deck Description" style={{ width: '100%' }} />
+              className='styledInput'  name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%' }} />
               </div> 
               
           
