@@ -19,6 +19,7 @@
     /* max-width: 80%; */
     /* float: left; */
     width: 1410px;
+    /* flex-wrap: nowrap; */
 }
 
 .UserPageContentDark {
@@ -79,4 +80,11 @@
     /* background-color: red; */
     /* margin-top: 140px; */
     /* width: 1410px; */
+    
+}
+
+.OverflowScroll {
+    display: flex;
+    overflow-y: scroll;
+    padding-bottom: 10px;
 }
