@@ -38,7 +38,8 @@ const Deck = (props) => {
     hasGottenDeck: false,
     showFullDescription: false,
     priceFormat: "usd",
-    activeCard: {}
+    activeCard: {},
+    sampleHand: []
   })
 
   const updateState = (objectToUpdate) => {
@@ -93,11 +94,13 @@ const Deck = (props) => {
           deckStats: stats.getDeckStats(response.cards),
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
           hasGottenDeck: true,
-          activeCard: (response.format =="commander" && response.commander) || response.cover_card || response.cards[0]
+          activeCard: (response.format =="commander" && response.commander) || response.cover_card || response.cards[0],
+        
         })
         getUserById("id=" + response.user_id)
         // console.log(response)
         // console.log(utilities.mapCardsToTypes(response))
+        drawNewHand(response.cards)
       }
 
     })
@@ -460,6 +463,31 @@ const Deck = (props) => {
     if (state.priceFormat == "usd") updateState({priceFormat: "tix"})
     else if (state.priceFormat == "tix") updateState({priceFormat: "usd"})
   }
+
+  const drawNewHand = (cards) => {
+    // console.log("Drawing new hand!")
+    let fullDeck = [...cards]
+    if (state.data.format == 'commander') {
+      fullDeck = fullDeck.filter((item) => {
+        return item.name !== state.data.commander.name
+      })
+    }
+    let shuffledDeck = []
+
+    for (let i = 0; i < fullDeck.length; i++){
+      let randomIndex = Math.floor(Math.random() * (fullDeck.length))
+      // console.log(randomIndex, i)
+      shuffledDeck.push(fullDeck[randomIndex])
+      fullDeck.splice(randomIndex, 1)
+    }
+
+    // console.log(shuffledDeck)
+    let sample = shuffledDeck.slice(0,7)
+    // let sample = shuffledDeck.slice(0,7)
+    updateState({sampleHand: sample})
+    return sample
+  }
+
   return (
     <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
   
@@ -584,7 +612,11 @@ const Deck = (props) => {
           </div>
 
 
-          <div className="DeckPageGroup" style={{marginBottom: "40px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
+          {/* <div className="DeckPageGroup" style={{marginTop: "20px", background:'#dadada', height:'50px', borderRadius:'10px'}}> 
+          Decklist actions - what content will go here? if any
+          </div> */}
+          <div className="DeckPageGroup" style={{marginBottom: "100px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
+          
                   {/* <b className='HeaderText'>Decklist:</b>
                   <br></br> */}
                   <div style={{marginRight:'50px', display:"inline-block", height: '100%'}}>
@@ -630,7 +662,8 @@ const Deck = (props) => {
           </div> 
 
 
-          <div className="DeckPageGroup" style={{marginBottom: "400px"}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "100px"}}> 
+            <div className='HeaderText' style={{marginBottom: '30px'}}>Deck Breakdown</div>
                   {/* <b className='HeaderText'>Deck Info:</b>
                   <br></br> */}
                   {/* <b className='BodyText'>Deck Stats:</b>
@@ -654,6 +687,18 @@ const Deck = (props) => {
                   <br></br>
                   <br></br>
                   {state.deckGraphs["card_types_counts"]}</div>
+          </div>
+          <div className="DeckPageGroup" style={{marginBottom: "200px"}}> 
+                    
+            
+          <div className='HeaderText' style={{marginBottom: '30px'}}>Sample Hand
+            <input type="button" style={{position: 'relative', top:'-6px', marginLeft:'40px'}} className='FancyButton' id='alt' onClick={() => {drawNewHand(state.data.cards)}} value={"Redraw"} /></div>
+            { state.sampleHand && <div>
+              <div style={{marginLeft: '-100px'}}>
+              { state.sampleHand.map((item, i) => {
+                return <div key={i} className='RegularCard' id="stackedCards" style={{marginRight: '-100px'}}><CardObject data={item}/></div>
+              })}</div>
+              </div>}
           </div>
         </div>
         } 
