@@ -493,7 +493,7 @@ const Deck = (props) => {
     updateState({showExportMenu: !state.showExportMenu})
   }
 
-  const exportDecklist = (format) => {
+  const exportDecklist = (format, method) => {
 
     let list = ""
     let uniqueDeck = makeUniqueDeck(state.data.cards)
@@ -504,7 +504,7 @@ const Deck = (props) => {
         list += getCount(card, state.data.cards) + " " + card.name.split("/")[0] + "\n"
       }
     }
-    if (format == "tcgplayer") {
+    if (format == "advanced") {
       for (let i = 0; i < uniqueDeck.length; i++){
         let card = uniqueDeck[i]
         list += getCount(card, state.data.cards) + " " + card.name.split("/")[0] + " [" + card.set_shorthand.toUpperCase() + "]" + "\n"
@@ -512,7 +512,17 @@ const Deck = (props) => {
       }
     }
 
-    navigator.clipboard.writeText(list)
+    if (method == "copy") {
+      navigator.clipboard.writeText(list)
+    }
+
+    if (method == "download") {
+      let el = document.createElement("a")
+      let file = new Blob([list], {type: 'text/plain'})
+      el.href = URL.createObjectURL(file)
+      el.download = state.data.name
+      el.click()
+    }
     updateState({showExportMenu: false})
   }
 
@@ -548,9 +558,13 @@ const Deck = (props) => {
                 <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}} id='alt' className='FancyButton' onClick={showExportMenu} value={"Export Deck"} />
                 { state.showExportMenu && <div>
                         <div className="UserMenu" style={{position: 'absolute', color: 'black', textAlign:'left', textShadow:'none', marginLeft:'-10px'}}>
-                            <div className="MenuItems" id="ignoreMenuItem">Send to Clipboard...</div>
-                            <div className="MenuItems" onClick={() => {exportDecklist("basic")}}>Basic</div>
-                            <div className="MenuItems" onClick={() => {exportDecklist("tcgplayer")}}>Advanced</div>
+                            <div className="MenuItems" id="ignoreMenuItem">Send to Clipboard</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("basic", "copy")}}>Basic</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("advanced", "copy")}}>Advanced</div>
+                            <div className="MenuItems" id="menuDivider"></div>
+                            <div className="MenuItems" id="ignoreMenuItem">Download</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("basic", "download")}}>Basic</div>
+                            <div className="MenuItems" onClick={() => {exportDecklist("advanced", "download")}}>Advanced</div>
                         </div>
                     </div>
                 }
