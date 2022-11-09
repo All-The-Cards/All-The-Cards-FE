@@ -211,8 +211,8 @@ const DeckEditor = (props) => {
   }
   const clearDeck = (event) => {
     confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to clear this deck?',
+      title: 'New Deck',
+      message: 'Are you sure you want to start a new deck? Your changes won\'t be saved.',
       buttons: [
         {
           label: 'Yes',
@@ -245,6 +245,48 @@ const DeckEditor = (props) => {
     })
 
   }
+
+  const deleteDeck = (event) => {
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to PERMANENTLY DELETE this deck? This action cannot be undone.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            //CLEAR LOCAL
+            // gc.setWipDeck({
+            //   authorID: "",
+            //   cards: [],
+            //   deckID: "",
+            //   description: "",
+            //   formatTag: "",
+            //   tags: [],
+            //   title: "",
+            //   commanderSlot: {
+            //       name: ""
+            //   },
+            //   coverCard: {
+            //     image_uris: {
+            //       art_crop: ""
+            //     }
+            //   },
+            //   isValid: false,
+            // })
+            // saveToLocalStorage("wipDeck", gc.wipDeck)
+            
+            //SEND DELETE REQUEST
+            //.then(nav("/"))
+          }
+        }, {
+          label: 'No',
+          onClick: null
+        }
+      ]
+    })
+
+  }
+
   const cancelEditingDeck = (event) => {
     confirmAlert({
       title: 'Quit without saving',
@@ -306,8 +348,117 @@ const DeckEditor = (props) => {
             <img style={{width: '50px'}}src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/>
           </div>
         </div> }
-      <div style={{ minWidth: '300px', maxWidth: '60%', margin: 'auto' }}>
-        <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
+          <div className="DeckPageContent">
+      <div className="DeckPageBanner" style={{backgroundImage: "url(" + gc.wipDeck.coverCard.image_uris.art_crop + ")"}}>
+          {/* <div className="DeckPageBanner" style={{backgroundImage: ""}}> */}
+          <div className="blur"/>
+          <div className="DeckInfoContent">
+          {/* <div className="DeckPageBanner" style={{background: "url(" + "" + ")"}}> */}
+              <div className="DeckPage-Buttons">
+              
+              <button className="FancyButton" id='alt' style={{float:'right', marginLeft:'20px'}} onClick={(event) => {
+                let msg = 'Are you sure you want to upload your deck?'
+                if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
+                confirmAlert({
+                  title: 'Publish Deck',
+                  message: msg,
+                  buttons: [
+                    {
+                      label: 'Yes',
+                      onClick: (() => {
+                        
+                        handleSubmitRedirect(event)
+                      })
+                    }, {
+                      label: 'No',
+                      onClick: null
+                    }
+                  ]
+                })
+            
+                // handleSubmitRedirect(event)
+                // gc.setIsEditing(false)
+                // gc.setWipDeck(null)
+                // nav("/")
+
+              }}>Publish Deck</button>
+              <button className="FancyButton" style={{float:'right'}} onClick={cancelEditingDeck}>Quit</button>
+              <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
+              <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
+              <button className="FancyButton" id='alt2' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
+                
+              </div>
+             <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
+                 {/* {gc.wipDeck.title} */}
+              <input type="text" name="title" className='styledInput' value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '48px', fontWeight:'bold'}} />
+              </div>
+             
+              <div 
+              className='styledInput' style={{marginTop: "10px", width:'210px'}}> 
+              <select
+              className='styledInput'
+              style={{borderRadius:'20px', background:'0', padding:'0'}}
+              value={wipDeck.formatTag}
+              onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
+            >
+              <option value="">Any Format</option>
+              <option value="standard">Standard</option>
+              <option value="commander">Commander</option>
+              <option value="pioneer">Pioneer</option>
+              <option value="explorer">Explorer</option>
+              <option value="modern">Modern</option>
+              <option value="premodern">Premodern</option>
+              <option value="vintage">Vintage</option>
+              <option value="legacy">Legacy</option>
+              <option value="oldschool">Old School</option>
+              <option value="pauper">Pauper</option>
+              <option value="historic">Historic</option>
+              <option value="alchemy">Alchemy</option>
+              <option value="brawl">Brawl</option>
+              <option value="paupercommander">Pauper Commander</option>
+              <option value="historicbrawl">Historic Brawl</option>
+              <option value="penny">Penny Dreadful</option>
+              <option value="duel">Duel</option>
+              <option value="future">Future</option>
+              <option value="gladiator">Gladiator</option>
+            </select>
+              </div>
+              
+              
+              <div className="SubHeaderText"> 
+                {/* <div className="DeckValidity" style={{color: state.data.isValid ? "black" : "red"}}>{state.data.cards.length > 0 && (state.data.isValid ? "" : "This deck is not legal!")}</div> */}
+              </div>
+              <div className="SubHeaderText" style={{marginTop: '10px', fontSize: '16px', color:"black", textShadow: "none", marginBottom:"20px"}}> 
+              <input type="text" name="tagInput" 
+              className='styledInput' value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag..." style={{marginRight:'20px'}}/>
+            <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
+                
+              </div>
+             
+              
+              {/* <div className="BodyText" style={{whiteSpace:"pre-line"}} onClick={() => {
+                toggleDescription()
+              }}> 
+                { state.showFullDescription ? 
+                  <div>
+                    { state.data.description.slice(0,800) }
+                  </div> 
+                  : <div>
+                    { state.data.description.slice(0,400) }
+                  </div>
+                }
+              </div>  */}
+              
+              <div className="BodyText" style={{whiteSpace:"pre-line", width: "50%"}}>
+              <textarea rows="4" type="text"
+              className='styledInput'  name="description" value={wipDeck.description} onChange={handleChanges} multiline placeholder="Deck Description" style={{ width: '100%' }} />
+              </div> 
+              
+          
+          </div>
+          </div>
+
+        {/* <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
           <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
             <div>
               <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
@@ -344,7 +495,7 @@ const DeckEditor = (props) => {
               <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
               {/* <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
           
-            </div>
+            {/* </div>
             <select
               value={wipDeck.formatTag}
               onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
@@ -377,7 +528,7 @@ const DeckEditor = (props) => {
           </div>
           <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
 
-        </form>
+        </form> */}
         <div>
         { 
           state.showRawGraphs && 
@@ -401,7 +552,7 @@ const DeckEditor = (props) => {
           })
         }
         </div>
-        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', margin: '16px 0 0 0' }}>
+        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', marginLeft:'15%', marginRight:'15%', marginBottom:'100px', marginTop:'40px' }}>
           {state.cards.map((card, index) => (
             <CardObject size={"RegularCard"} key={index} data={card} clickable/>
           ))}
