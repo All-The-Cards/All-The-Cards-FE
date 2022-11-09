@@ -108,6 +108,25 @@ const DeckEditor = (props) => {
       }
     }
   }
+  const sortByCMC = (a, b) => {
+    if (a.cmc > b.cmc) {
+      return 1
+    }
+    if (a.cmc < b.cmc) {
+      return -1
+    }
+    return 0
+  }
+  
+  const sortByName = (a, b) => {
+    if (a.name >= b.name) {
+      return 1
+    }
+    else {
+      return -1
+    }
+  }
+
   const formatWipDeck = () => {
     let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id, isValid: wipDeck.isValid }
     if (result.coverCard === undefined) {
@@ -553,7 +572,16 @@ const DeckEditor = (props) => {
         }
         </div>
         <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', marginLeft:'15%', marginRight:'15%', marginBottom:'100px', marginTop:'40px' }}>
-          {state.cards.map((card, index) => (
+          {state.cards.filter((item) => { 
+                        // console.log(item)
+                        return !item.type_one.toLowerCase().includes("land")
+                      }).sort(sortByName).sort(sortByCMC).map((card, index) => (
+            <CardObject size={"RegularCard"} key={index} data={card} clickable/>
+          ))}
+          {state.cards.filter((item) => { 
+                        // console.log(item)
+                        return item.type_one.toLowerCase().includes("land")
+                      }).sort(sortByName).sort(sortByCMC).map((card, index) => (
             <CardObject size={"RegularCard"} key={index} data={card} clickable/>
           ))}
         </div>
