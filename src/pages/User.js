@@ -140,7 +140,7 @@ const User = (props) => {
   }
 
   const sortDecks = (a,b) => {
-    console.log(a,b) 
+    // console.log(a,b) 
     if (a.created >= b.created) {
       return -1
     }
