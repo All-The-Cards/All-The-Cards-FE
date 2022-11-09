@@ -223,7 +223,7 @@ const Navbar = () => {
                     <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
                 }
                 {darkMode &&
-                    <img src={LayerIconWhite} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
+                    <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIconWhite} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
                 }
                 {openLayerMenu &&
                 <div>
@@ -239,8 +239,11 @@ const Navbar = () => {
                     <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
                 }
                 {darkMode &&
-                    <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                    <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px', color:'white'}}><img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
                 }
+                {/* {darkMode &&
+                    <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                } */}
                 {/* <div style={{marginLeft: "2px"}}>{name}</div> */}
                 {openUserMenu &&
                     <div>
