@@ -18,3 +18,28 @@
     transform: translate(-50%, -50%);
     font-size: 36px;
 }
+
+
+.styledInput {
+    background: rgba(0,0,0,.1);
+    border: 0;
+    outline: none;
+    color: white;
+    text-shadow: 5px 5px 10px rgba(0,0,0,.4);
+    border-radius: 20px;
+    padding: 10px;
+
+}
+
+option {
+    color: black;
+    background: #ffffff;
+}
+
+.styledInput::placeholder {
+    color: #cccccc
+}
+
+textarea {
+    resize: none;
+}

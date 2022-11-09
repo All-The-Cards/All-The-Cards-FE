@@ -46,6 +46,14 @@
 }
 
 
+#alt2 {
+    background-color: #e4ba23;
+}
+
+#alt2:hover {
+    background-color: #caa123;
+}
+
 .HeaderText {
     margin-top: 20px;
     font-size: 36px;

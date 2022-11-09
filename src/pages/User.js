@@ -139,6 +139,16 @@ const User = (props) => {
 
   }
 
+  const sortDecks = (a,b) => {
+    // console.log(a,b) 
+    if (a.created >= b.created) {
+      return -1
+    }
+    else {
+      return 1
+    }
+  }
+
   return (
     <>
       <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
@@ -169,9 +179,10 @@ const User = (props) => {
         {state.decks.length > 0 &&
           <div className="UserPageContent" id="deckContent"><div className="HeaderText">
             Decks
-          </div>{state.decks.map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}>
+          </div>
+          <div className="OverflowScroll">{state.decks.sort(sortDecks).map((item, i) => <div style={{ marginRight: '10px', float: 'left' }} key={i}>
               <DeckTileObject data={item} />
-            </div>)}
+            </div>)}</div>
           </div>}
           
 
@@ -179,7 +190,8 @@ const User = (props) => {
           <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent"><div className="HeaderText">
             Favorite Cards
           </div>
-            {state.favCards.sort(sortByName).slice(0, 4).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}>
+          {/* {state.favCards.sort(sortByName).slice(0, 4).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}> */}
+          <div className="OverflowScroll">{state.favCards.sort(sortByName).map((item, i) => <div style={{ marginRight: '10px', float: 'left'}} key={i}>
               {/* { gc.devMode && <CardObject data={item} isCompact={true} 
             // count={i % 4}
             // count={4 - i % 4}
@@ -188,16 +200,18 @@ const User = (props) => {
               <div className="RegularCard">
                 <CardObject clickable data={item} />
               </div>
-            </div>)}
+            </div>)
+            }</div>
           </div>}
         {state.data.favorites &&
           <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Favorite Decks
           </div>
 
-            {state.favDecks.slice(0, 3).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}>
+          {/* {state.favDecks.slice(0, 3).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}> */}
+          <div className="OverflowScroll">{state.favDecks.sort(sortDecks).map((item, i) => <div style={{ marginRight: '10px', float: 'left' }} key={i}>
               <DeckTileObject data={item} />
-            </div>)}
+            </div>)}</div>
           </div>}
 
 

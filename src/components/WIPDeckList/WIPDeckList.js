@@ -545,7 +545,7 @@ const WIPDeckList = (props) => {
                                   { state.validCommanders }
                                 </select>
                                 <div 
-                                  style={{marginBottom: '10px'}}
+                                  style={{marginBottom: '10px', cursor:'pointer'}}
                                   onClick={() => {
                                     setCommander({target: {value: "REMOVE"}})
                                   }}

@@ -121,7 +121,7 @@ export function replaceSymbols(text){
             let bg = true
             if (noBGChars.includes(builtStr)) bg = false
             // console.log("bg:", bg, "- symbol:", fullChars)
-            console.log(builtStr)
+            // console.log(builtStr)
             //surround in tag for mana
             let fullChars = "{" + builtStr + "}"
 

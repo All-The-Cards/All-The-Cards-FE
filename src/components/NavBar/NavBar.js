@@ -57,16 +57,15 @@ const Navbar = () => {
     }, [activeSession]);
 
     // Opens the menu when an icon is clicked
-    const onClickHandler = () => {
-
-        if (layerShadow)
-            setLayerMenu(true)
-        else if (userShadow) {
+    const onClickHandler = (type) => {
+        if (type=="layer")
+            setLayerMenu(!openLayerMenu)
+        else if (type=="user") {
             if (activeSession !== null) {
-                setLoggedUserMenu(true)
+                setLoggedUserMenu(!loggedInUserMenu)
             }
             else {
-                setUserMenu(true)
+                setUserMenu(!openUserMenu)
             }
         }
 
@@ -217,29 +216,32 @@ const Navbar = () => {
                 <img src={SearchGlass}
                     alt="SearchGlass"
                     className="SearchIcon"
-                    id="Searchicon-responsive"
+                    // id="Searchicon-responsive"
 
                 />
                 {!darkMode &&
-                    <img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
+                    <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
                 }
                 {darkMode &&
                     <img src={LayerIconWhite} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`} onMouseEnter={() => setLayerShadow(true)} onMouseLeave={() => setLayerShadow(false)} onClick={onClickHandler}></img>
                 }
                 {openLayerMenu &&
-                    <div className="LayerMenu" ref={wrapperRef}>
+                <div>
+                    <div className="UserMenu" ref={wrapperRef} 
+                    >
                         {/* <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div> */}
                         <div id={'2'} className="MenuItems" onClick={handleClose}>{(!gc.isEditing && "New Deck") || "Deck Editor"}</div>
                         <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
                     </div>
+                    </div>
                 }
                 {!darkMode &&
-                    <img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
+                    <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
                 }
                 {darkMode &&
                     <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
                 }
-                <div style={{marginLeft: "2px"}}>{name}</div>
+                {/* <div style={{marginLeft: "2px"}}>{name}</div> */}
                 {openUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
