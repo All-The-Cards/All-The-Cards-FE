@@ -658,7 +658,7 @@ const Deck = (props) => {
           {/* <div className="DeckPageGroup" style={{marginTop: "20px", background:'#dadada', height:'50px', borderRadius:'10px'}}> 
           Decklist actions - what content will go here? if any
           </div> */}
-          <div className="DeckPageGroup" style={{marginBottom: "100px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "50px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
           
                   {/* <b className='HeaderText'>Decklist:</b>
                   <br></br> */}
