@@ -408,7 +408,11 @@ const DeckEditor = (props) => {
                 
               </div>
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
-                 {/* {gc.wipDeck.title} */}
+                 {/* {gc.wipDeck.title} */}{
+                !gc.wipDeck.isValid && 
+                <div className="CardError" title="Deck not valid" style={{fontSize: "32px", height: "40px", width: "40px", top:"55px", marginTop: "-45px", left:"-50px", position:"relative"}}>!</div>
+                
+              }
               <input type="text" name="title" className='styledInput' value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '48px', fontWeight:'bold'}} />
               </div>
              
