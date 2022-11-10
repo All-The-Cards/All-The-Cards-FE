@@ -182,11 +182,22 @@ const CardObject = (props) => {
     const addToDeck = () => {
         let tempCards = wipDeck.cards
         tempCards.push(props.data)
-        setWipDeck((previous) => ({
-            ...previous,
-            cards: tempCards
-        }))
-        saveToLocalStorage("wipDeck", wipDeck)
+        // console.log(wipDeck)
+        if (wipDeck.coverCard == null || wipDeck.coverCard.image_uris == null || wipDeck.coverCard.image_uris.art_crop == "") {
+            setWipDeck((previous) => ({
+                ...previous,
+                cards: tempCards,
+                coverCard: props.data
+            }))
+            saveToLocalStorage("wipDeck", wipDeck)
+        }
+        else {
+            setWipDeck((previous) => ({
+                ...previous,
+                cards: tempCards,
+            }))
+            saveToLocalStorage("wipDeck", wipDeck)
+        }
     }
     const removeFromDeck = () => {
         let tempCards = wipDeck.cards
@@ -405,8 +416,12 @@ const CardObject = (props) => {
                 {props.clickable &&
                     <Link to={("/card/?id=" + props.data.id)}
 
-                        onMouseEnter={() => setListHover(true)}
-                        onMouseLeave={() => setListHover(false)}
+                        onMouseEnter={() => {
+                            if (!props.disableHover) setListHover(true)
+                        }}
+                        onMouseLeave={() => {
+                            if (!props.disableHover) setListHover(false)
+                        }}
                     >
                         <div className="CardListInfo">
                             <div className="CardListContent" id="cardListLeft" style={{ fontWeight: 'bold' }}>
@@ -436,12 +451,12 @@ const CardObject = (props) => {
                         </div>
                     </div>
                 }
-                {state.listHover &&
+                { !props.dontHover && state.listHover &&
                     <img src={state.imgLink} id="cardList"></img>
                 }
             </div>
                 : <div
-                    className="CardObjectContainer RegularCard"
+                    className={"CardObjectContainer " + props.size}
                 >
                     {props.clickable &&
                         <Link to={"/card/?id=" + props.data.id}
@@ -465,7 +480,7 @@ const CardObject = (props) => {
                         </div>
                     }
                     {gc.isEditing &&
-                        <div style={{ position: "absolute", top: "32px", right: "8px", display: "inline-flex", flexFlow: "column nowrap", width: "100%", alignItems:"flex-end", gap:"8px" }}>
+                        <div style={{ position: "absolute", top: "32px", right: "8px", display: "inline-flex", flexFlow: "column nowrap", alignItems:"flex-end", gap:"8px" }}>
                             <RoundButton icon={plusIcon} onClick={addToDeck} />
                             {(wipDeck.cards != undefined) && (wipDeck.cards.indexOf(props.data) != -1) ? <RoundButton icon={minusIcon} onClick={removeFromDeck} /> : <></>}
                             <RoundButton icon={imageIcon} onClick={setAsCoverCard} />

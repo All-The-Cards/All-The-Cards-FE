@@ -7,6 +7,7 @@ import './Card.css'
 
 import { GlobalContext } from "../context/GlobalContext";
 import * as mana from '../components/TextToMana/TextToMana.js'
+import Sparkles from '../images/sparkles.png'
 
 const Card = (props) => {
 
@@ -289,8 +290,7 @@ const Card = (props) => {
     }
 
   return (
-    <>
-      <div className='Container'>
+      <div className='Container Page'>
         {
           !state.hasGottenVersions && 
           <div className="HeaderText" style={{textAlign:'center'}}>
@@ -307,6 +307,10 @@ const Card = (props) => {
             <br></br>
             <br></br>
             <div id="priceInfo">
+              
+            {state.data.name} - {state.data.set_shorthand.toUpperCase()}
+            <br></br>
+            <br></br>
             {/* <div style={{fontSize:'24px'}}><b>Market Info:</b></div> */}
             {/* {
               (state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
@@ -314,16 +318,16 @@ const Card = (props) => {
             } */}
             {
             state.data.prices.usd && 
-              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") }
+              <div>{"Price: " + ((state.data.prices.usd && "$" + state.data.prices.usd) || "N/A") } 
               <br></br>
               </div>
             }
-            {
+            {/* {
               state.data.prices.usd_foil && 
                 <div>{"Foil: " + ((state.data.prices.usd_foil && "$" + state.data.prices.usd_foil) || "N/A") }
                 <br></br>
                 </div>
-            }
+            } */}
             {/* {
             state.data.prices.eur &&
               <div>{"EUR: " + ((state.data.prices.eur && "€" + state.data.prices.eur) || "N/A") }
@@ -338,9 +342,9 @@ const Card = (props) => {
             } */}
             {
             state.data.tcgplayer_id && 
-            <div>
+            <div> 
               <a href={"https://www.tcgplayer.com/product/" + state.data.tcgplayer_id}>
-              <i>View on TCGPlayer</i>
+              <i style={{color:"#7138D1"}}>View on TCGPlayer</i>
               </a>
             </div>
             }
@@ -356,14 +360,14 @@ const Card = (props) => {
               state.data.mtgo_id && 
               <div>
                 <a href={"https://www.cardhoarder.com/cards/" + state.data.mtgo_id}>
-                <i>View on Cardhoarder</i> 
+                <i style={{color:"#7138D1"}}>View on Cardhoarder</i> 
                 </a>
                 <br></br>
               </div>
             }
             {
               !(state.data.prices.tix || state.data.prices.usd || state.data.prices.usd_foil) && 
-              <div><i>Pricing info not available</i></div>
+              <div><i style={{color:"#7138D1"}}>Pricing info not available</i></div>
             }
             </div>
             
@@ -392,8 +396,10 @@ const Card = (props) => {
                   >
                 
                 { state.isFavorited &&
-                  <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
-                  <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                  // <div className="FavoriteIcon" style={{backgroundColor: "Gold"}}>-</div> ||
+                  // <div className="FavoriteIcon" style={{backgroundColor: "#dadada"}}>+</div>
+                    <img className="FavoriteIcon" title="Remove Favorite" id="isFavorited" src={Sparkles}></img> || 
+                    <img className="FavoriteIcon" title="Add Favorite" id="notFavorited" src={Sparkles}></img>
                 }
                   </div>
 }
@@ -450,7 +456,6 @@ const Card = (props) => {
         </div>
         } 
       </div>
-    </>
   );
 
 };

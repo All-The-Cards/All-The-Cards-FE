@@ -6,7 +6,6 @@ import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
 import { GlobalContext } from '../context/GlobalContext.js';
 import SearchBar from '../components/SearchBar/SearchBar.js';
 import * as server from '../functions/ServerTalk.js';
-import Footer from '../components/Footer/Footer';
 
 const Home = (props) => {
 
@@ -29,12 +28,6 @@ const Home = (props) => {
 
       // console.log(gc.wipDeck)
   }, [])
-
-  // useEffect(() => {
-
-  //   console.log(gc.activeUser)
-
-  // }, [gc.activeSession])
 
   const updateState = (objectToUpdate) => {
     setState((previous) => ({
@@ -68,7 +61,7 @@ const Home = (props) => {
   }
 
   return (
-    <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
+    <div className={`Container Page${darkMode ? "ContainerDark Page" : ''}`}>
       <div className="SearchContent" style={{ backgroundImage: 'url(' + state.bgImageUrl + ')' }}>
         <div className="blur" />
         <div className="SearchBarObject">
@@ -86,53 +79,7 @@ const Home = (props) => {
 
           </div>
         }
-        {/* ignore this div, test data */}
-        <div>
-          {/* <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/b/abff6c81-65a4-48fa-ba8f-580f87b0344a.jpg?1634347351",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span>
-        <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/2/f29ba16f-c8fb-42fe-aabf-87089cb214a7.jpg?1662526238",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span>
-        <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/9/e/9e7fb3c0-5159-4d1f-8490-ce4c9a60f567.jpg?1567181307",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span>
-        <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/d/5/d52868cb-087e-4f91-91bc-455f2e2e7cd7.jpg?1576381464",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span>
-        <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/8/9/89f612d6-7c59-4a7b-a87d-45f789e88ba5.jpg?1660849295",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span>
-        <span><DeckTileObject data={{
-          cover_art: "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/0/b/0b8aff2c-1f7b-4507-b914-53f8c4706b3d.jpg?1596259277",
-          id: "",
-          name: "Deck Test",
-          user_name: "noah_is_awesome_97",
-          format: "format"
-        }}/></span> */}
-        </div>
       </div>
-      <Footer />
     </div>
   );
 };

@@ -1,0 +1,211 @@
+.CardCreatorContainer {
+    flex: flex;
+    flex-direction: column;
+}
+
+.RowContainer {
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.EmptyCard {
+    position: relative;
+    width: 400px;
+    right: 730px;
+    z-index: 1;
+}
+
+.CardImage {
+    /* background-color: blue; */
+    position: relative;
+    width: 355px;
+    height: 300px;
+    left: 680px;
+    top: 50px;
+
+}
+
+.CardName {
+    position: relative;
+    display: flex;
+    z-index: 2;
+    width: 175px;
+    height: fit-content;
+    left: 335px;
+    top: 37px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+}
+
+.ManaContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 2;
+    width: 150px;
+    height: fit-content;
+    overflow: hidden;
+    left: 340px;
+    top: 37px;
+}
+
+.Mana {
+    position: relative;
+    z-index: 2;
+    height: 16px;
+    width: 16px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.ManaNumber {
+    position: relative;
+    z-index: 2;
+    height: 16px;
+    width: 16px;
+    margin-right: 5px;
+}
+
+.CardTypeContainer {
+    position: relative;
+    display: flex;
+    z-index: 2;
+    width: 320px;
+    height: fit-content;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: 12px;
+    left: 10px;
+    top: 322px;
+}
+
+.SubTypeName {
+    margin-left: 5px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    width: fit-content;
+}
+
+.TextAreaContainer {
+    position: relative;
+    display: flex;
+    z-index: 2;
+    height: 132px;
+    width: 320px;
+    resize: none;
+    border: none;
+    right: 310px;
+    top: 355px;
+    background-color: transparent;
+}
+
+.PowerContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    height: 20px;
+    width: 60px;
+    font-weight: bold;
+    right: 365px;
+    top: 503px;
+}
+
+.CardEditor {
+    position: relative;
+    right: 630px;
+    background-color: lightgrey;
+    box-shadow: 1px 3px 5px black;
+    width: 300px;
+    min-width: 300px;
+}
+
+.CardEditorTitle {
+    background-color: rgba(113, 56, 209, 1);
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.CardColorHeader {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.Button {
+    margin-left: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(219, 30, 79, 1);
+    cursor: pointer;
+}
+
+.Button:hover {
+    background-color: rgba(250, 30, 79, 1);
+}
+
+.Button:disabled {
+    background-color: darkgray;
+    cursor: not-allowed;
+}
+
+#SubmitButton {
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(219, 30, 79, 1);
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 4px;
+}
+
+#SubmitButton:hover {
+    background-color: rgba(250, 30, 79, 1);
+}
+
+.SaveButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    height: 100px;
+}
+
+
+#SaveButton {
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(113, 56, 209, 1);
+    cursor: pointer;
+    height: fit-content;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 4px;
+}
+
+#SaveButton:hover {
+    background-color: rgba(130, 56, 209, 1);
+}
+
+.Inputs {
+    margin-left: 5px;
+    width: 30px;
+    height: fit-content;
+}
+
+.Filler {
+    height: 155.5px;
+}

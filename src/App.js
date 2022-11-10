@@ -17,6 +17,7 @@ import WIPDeckList from './components/WIPDeckList/WIPDeckList';
 import SearchResults from './pages/SearchResults';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword'
+import Footer from './components/Footer/Footer';
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                     <Route exact path='/settings' element={<UserSettings hasSearchBar={true} />} />
                     <Route exact path='/reset-password' element={<ResetPassword hasSearchBar={false} />} />
                 </Routes>
+                <Footer/>
             </GlobalProvider>
         </BrowserRouter>
     );

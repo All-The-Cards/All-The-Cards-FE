@@ -7,9 +7,11 @@
     justify-content: space-between;
     align-items: stretch;
     flex-direction: row;
-    z-index: 999
+    z-index: 999;
         /* border-style: solid; */
-
+    padding-left: 20%;
+    padding-right: 20%;
+    user-select: none;
 }
 
 .NavBarContainerDark {
@@ -60,7 +62,7 @@
 
 .Icons {
     margin: 3px;
-    height: 40%;
+    height: 20px;
     width: auto;
     padding: 7px;
     border-width: 2px;
@@ -101,28 +103,41 @@
     box-shadow: 1px 3px 5px black;
     position: absolute;
     z-index: 1;
-    right: 15px;
-    top: 40px
+    top: 60px;
+    right: 21%;
 }
 
 .UserMenu {
     font-size: 15px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background-color: white;
-    height: auto;
-    width: auto;
-    box-shadow: 1px 3px 5px black;
+    align-items: left;
+    background-color: #fefefe;
+    /* height: auto;
+    width: auto; */
+    box-shadow: 1px 3px 5px rgba(0,0,0,.2);
     position: absolute;
+    /* top: 0px; */
     z-index: 1;
-    right: 5px;
-    top: 40px
+    /* right: 20%; */
+    /* top: 100px; */
+    border-radius: 5px;
+    width: 100px;
+    padding:5px;
+    /* top: 60px; */
+    top:10px;
+    margin-left:10px;
 }
 
 .MenuItems {
-    padding: 2px;
+    padding: 5px;
     cursor: pointer;
+    user-select: none;
+}
+
+.MenuItems:hover {
+    background-color: #eaeaea;
+    border-radius: 5px;
 }
 
 .MenuText {
@@ -169,4 +184,24 @@
         background: black;
         color: #ddd;
     }
+}
+
+.profileMenuButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.profileMenuButton:hover {
+    background-color: #cacaca;
+}
+
+#ignoreMenuItem {
+    color: #aaaaaa
+}
+
+#ignoreMenuItem:hover{
+    background-color: #FFFFFF;
 }

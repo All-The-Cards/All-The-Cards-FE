@@ -16,3 +16,117 @@
 .DeckPageDark label {
     color: whitesmoke;
 }
+
+.DeckPageBanner { 
+    padding-top: 0px;
+    /* padding-left: 20%;
+    padding-right: 20%; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 10% 22%;
+    /* filter: blur(5px); */
+    height: 340px;
+    /* backdrop-filter: blur(5px); */
+}
+
+.DeckPageContent {
+    width: 100%;
+}
+
+.DeckInfoContent {
+    padding-left: 20%;
+    padding-right: 20%;
+    position: absolute;
+    width: 60%;
+    top: 100px;
+    color: #f7f7f7;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, .5);
+}
+
+.DeckPageGroup {
+    margin-top:60px;
+    /* text-align: left; */
+    /* margin-left: 20%;
+    margin-right: 20%; */
+    text-align: center;
+    /* background-color: rgba(255,0,0,.3); */
+    max-height: 500px;
+    /* max-width: 80%; */
+    margin: 0 auto;
+    /* overflow:scroll; */
+    /* margin-left:20%;
+    margin-right:20%; */
+    min-width: 60%;
+    /* width: 60%; */
+    width: max-content;
+    overflow:overlay;
+}
+
+.itemPrices {
+    /* position: absolute; */
+    top: -3px;
+    /* margin-top: -20px; */
+    width: 96%;
+    float: right;
+    text-align: center;
+    margin-right: 10px;
+    font-style: italic;
+}
+
+.columns {
+    max-height: 500px;
+    /* display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; */
+    float: left;
+    /* background-color: rgba(255,0,255,0.3); */
+    /* display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat() */
+    flex-direction: row;
+    flex-wrap: wrap;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    margin-left:50px;
+}
+
+.symbol {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    position: relative;
+    top: 3px;
+    margin-right: 2px;
+}
+.groupedCards {
+    margin-left: 10px;
+    margin-right: 10px;
+    max-height:460px;
+    overflow-y:scroll;
+    width: 280px;
+    display: inline-block;
+    writing-mode: horizontal-tb;
+    /* background-color: rgba(0,0,255,0.3); */
+}
+
+.cardAndDeck{
+    background-color: aquamarine;
+    display: inline-block;
+}
+
+#stackedCards{
+    z-index: 0
+}
+
+#stackedCards:hover {
+    z-index: 100;
+    position: relative;
+    top: -20px;
+}
+
+#menuDivider {
+    background-color: #cccccc;
+    height: 1px;
+    padding: 0;
+    margin: 6px;
+}

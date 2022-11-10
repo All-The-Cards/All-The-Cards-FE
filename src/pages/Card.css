@@ -9,7 +9,6 @@
 }
 
 .CardPage-Left {
-    /* background-color: rgba(0,255,0,.2); */
     float: left;
     width: 33%;
     min-width: 250px;
@@ -82,20 +81,43 @@
 }
 
 #priceInfo {
-    background-color: #e8e8e8;
+    /* background-color: #e8e8e8; */
+    position: relative;
+    top: -20px;
     padding-top: 10px;
     padding-bottom: 15px;
     border-radius: 10px;
     /* max-width: 200px; */
     /* min-width: 200px; */
-    width: 200px;
+    width: 280px;
     margin: auto;
+    font-style: italic;
 }
 
 .FavoriteIcon {
     width: 30px; 
     height:30px;
-    border-radius:50%;
+    /* border-radius:50%; */
     font-size:24px;
-    color:rgba(0,0,0,.3)
+    color:rgba(0,0,0,.3);
+}
+#notFavorited {
+    /* background-color:#dadada; */
+    filter: invert(96%) sepia(0%) saturate(0%) hue-rotate(145deg) brightness(82%) contrast(110%);
+}
+#notFavorited:hover {
+    /* background-color:#cacaca; */
+    filter: invert(84%) sepia(1%) saturate(0%) hue-rotate(39deg) brightness(110%) contrast(97%);
+    
+    /* filter: invert(73%) sepia(90%) saturate(645%) hue-rotate(357deg) brightness(102%) contrast(107%); */
+}
+
+#isFavorited {
+    /* background-color: #ffd700; */
+    filter: invert(73%) sepia(90%) saturate(645%) hue-rotate(357deg) brightness(102%) contrast(107%);
+
+}
+#isFavorited:hover {
+    /* background-color: #eec000; */
+    filter: invert(73%) sepia(90%) saturate(945%) hue-rotate(350deg) brightness(90%) contrast(107%);
 }

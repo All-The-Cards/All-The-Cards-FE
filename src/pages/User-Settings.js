@@ -172,7 +172,7 @@ const UserSettings = (props) => {
   }
   return (
     <>
-      <div className={`Container ${darkMode ? "ContainerDark" : ''}`}>
+      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
         <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} >
           <div className="UserPage-Left">
             <div className="UserInfo">
@@ -202,6 +202,7 @@ const UserSettings = (props) => {
                   Email:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.email}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, email: e.target.value } }) }}
                 />
@@ -211,6 +212,7 @@ const UserSettings = (props) => {
                   Change Password:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.typePassword}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, typePassword: e.target.value } }) }}
                 />
@@ -220,6 +222,7 @@ const UserSettings = (props) => {
                   Confirm Password:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.confirmPassword}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, confirmPassword: e.target.value } }) }}
                 />
@@ -229,6 +232,7 @@ const UserSettings = (props) => {
                   Username:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.username}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, username: e.target.value } }) }}
                 />
@@ -238,6 +242,7 @@ const UserSettings = (props) => {
                   Bio:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.bio}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, bio: e.target.value } }) }}
                 />
@@ -247,6 +252,7 @@ const UserSettings = (props) => {
                   Name:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.name}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, name: e.target.value } }) }}
                 />
@@ -256,6 +262,7 @@ const UserSettings = (props) => {
                   Location:
                 </div>
                 <input
+                  className='settingInput'
                   value={state.inputs.location}
                   onChange={(e) => { updateState({ inputs: { ...state.inputs, location: e.target.value } }) }}
                 />

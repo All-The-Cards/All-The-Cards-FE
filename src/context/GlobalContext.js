@@ -22,14 +22,18 @@ export const GlobalProvider = ({ children }) => {
         cards: [],
         coverCard: {
             image_uris: {
-                art_crop: "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg"
+                art_crop: ""
             }
         }, 
         deckID: "",
         description: "",
         formatTag: "",
         tags: [],
-        title: ""
+        title: "",
+        commanderSlot: {
+            name: ""
+        },
+        isValid: false,
     }
 
     let loadedWipDeckData = loadFromLocalStorage("wipDeck")
@@ -46,8 +50,9 @@ export const GlobalProvider = ({ children }) => {
     const [activeSession, setActiveSession] = useState(JSON.parse(localStorage.getItem("sb-pkzscplmxataclyrehsr-auth-token")))
     const [activeUser, setUser] = useState(null)
     const [name, setName] = useState("");
-    const [darkMode, setDarkMode] = useState(localStorage.getItem("DarkMode"))
-
+    let darkModeString = localStorage.getItem("DarkMode")
+    let darkModeBool = (darkModeString === "true")
+    const [darkMode, setDarkMode] = useState(darkModeBool)
     // Global Function Below
     const getName = () => {
 

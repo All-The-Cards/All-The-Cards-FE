@@ -9,7 +9,7 @@ const Footer = () => {
     const { darkMode } = useContext(GlobalContext);
 
     return (
-
+        
         <div className={`FooterContainer ${darkMode ? "FooterContainerDark" : ''}`}>
             <div className='NavigationBox'>
                 <a className='Links' href='/'>Home</a><span> • </span>

@@ -1,5 +1,7 @@
 // This file contains utilities to display Mana symbols from text items
 import { Mana } from "@saeris/react-mana";
+import Diamond from '../../images/diamond.png'
+
 let validChars = [
     "{[0]}", "{[1]}", "{[2]}", "{[3]}", "{[4]}",
     "{[5]}", "{[6]}", "{[7]}", "{[8]}", "{[9]}",
@@ -12,7 +14,7 @@ let validChars = [
     "{W}","{U}","{B}","{R}","{G}", "{C}", "{S}",
     "{W/P}","{U/P}","{B/P}","{R/P}","{G/P}", "{P}",
     "{T}", "{Q}", "{E}", "{CREATURE}", "{ARTIFACT}", "{ENCHANTMENT}", 
-    "{INSTANT}", "{LAND}", "{PLANESWALKER}", "{SORCERY}"
+    "{INSTANT}", "{LAND}", "{PLANESWALKER}", "{SORCERY}", "{COMMANDER}"
 
 ]
 let charCodes = [
@@ -28,11 +30,11 @@ let charCodes = [
     "wp","up","bp","rp","gp", "p",
     "tap", "untap", "e", "creature", "artifact", 
     "enchantment", "instant", "land",
-    "planeswalker", "sorcery"
+    "planeswalker", "sorcery", "commander"
 ]
 let noBGChars = [
     "E", "CREATURE", "ARTIFACT", "ENCHANTMENT", "INSTANT", "LAND",
-    "PLANESWALKER", "SORCERY"
+    "PLANESWALKER", "SORCERY", "COMMANDER"
 ]
 
 // DEPRECATED 
@@ -119,14 +121,21 @@ export function replaceSymbols(text){
             let bg = true
             if (noBGChars.includes(builtStr)) bg = false
             // console.log("bg:", bg, "- symbol:", fullChars)
-
+            // console.log(builtStr)
             //surround in tag for mana
             let fullChars = "{" + builtStr + "}"
 
-
-            let icon =  <Mana symbol={charCodes[validChars.indexOf(fullChars)]}/>
+            let icon = ""
+            if (charCodes[validChars.indexOf(fullChars)] == "commander") {
+                // icon = <img className="symbol" src={Crown}></img>
+                icon = <img className="symbol" src={Diamond}></img>
+            }
+            else {
+                icon =  <Mana symbol={charCodes[validChars.indexOf(fullChars)]}/>
+            }
             if (bg) icon = <Mana symbol={charCodes[validChars.indexOf(fullChars)]} cost shadow/>
 
+            
             jsxObjs.push(<div key={i} style={{display:"inline"}}>
                 {icon}
             </div>)

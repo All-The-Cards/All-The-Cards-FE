@@ -1,5 +1,7 @@
 .Page {
-    min-height: 130vh;
+    min-height: 100vh;
+    /* background-color: rgba(255,0,0,.3); */
+    /* overflow: hidden; */
 }
 
 .Container {
@@ -7,6 +9,7 @@
     text-align: center;
     display: inline-block;
     width: 100%;
+    height: 100%;
 }
 
 .ContainerDark {
@@ -15,7 +18,6 @@
     display: inline-block;
     width: 100%;
     background-color: #2d2d2d;
-    height: 100vh;
 }
 
 .FancyButton {
@@ -43,6 +45,23 @@
     background-color: #5d32a7;
 }
 
+
+#alt2 {
+    background-color: #e4ba23;
+}
+
+#alt2:hover {
+    background-color: #caa123;
+}
+
+#disabled {
+    background-color: #777777;
+    color: #aaaaaa
+}
+
+#alt4:hover {
+    /* background-color: #888888; */
+}
 
 .HeaderText {
     margin-top: 20px;
@@ -98,7 +117,7 @@ button+button {
 
 
 .LargeCard {
-    max-width: 500px;
+    max-width: 380px;
     max-height: 700px;
     /* background-color: rgba(255,0,0,.3); */
     display: inline-block;
