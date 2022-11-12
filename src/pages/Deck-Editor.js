@@ -313,31 +313,50 @@ const DeckEditor = (props) => {
         {
           label: 'Yes',
           onClick: () => {
-            //CLEAR LOCAL
-            // gc.setWipDeck({
-            //   authorID: "",
-            //   cards: [],
-            //   deckID: "",
-            //   description: "",
-            //   formatTag: "",
-            //   tags: [],
-            //   title: "",
-            //   commanderSlot: {
-            //       name: ""
-            //   },
-            //   coverCard: {
-            //     image_uris: {
-            //       art_crop: ""
-            //     }
-            //   },
-            //   isValid: false,
-            // })
-            // saveToLocalStorage("wipDeck", gc.wipDeck)
-            
-            //SEND DELETE REQUEST
-            //.then(nav("/"))
-          }
-        }, {
+            fetch(server.buildAPIUrl("/api/features/editor/delete"),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'deckid': gc.wipDeck.deckID,
+                  'token': gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : ""
+                }
+              }
+            ).then((response) => {
+                console.log(response);
+                
+                gc.setIsEditing(false)
+                gc.setWipDeck({
+                  authorID: "",
+                  cards: [],
+                  coverCard: {
+                    image_uris: {
+                      art_crop: ""
+                    }
+                  },
+                  deckID: "",
+                  description: "",
+                  formatTag: "",
+                  tags: [],
+                  title: "",
+                  commanderSlot: {
+                    name: ""
+                  },
+                  isValid: false,
+                })
+                saveToLocalStorage("wipDeck", gc.wipDeck)
+                nav("/")
+                return response.json()
+              })
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            }
+          } , {
           label: 'No',
           onClick: null
         }
