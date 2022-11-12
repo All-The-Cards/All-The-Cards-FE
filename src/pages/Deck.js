@@ -571,7 +571,7 @@ const Deck = (props) => {
                 </div>
                 
                 {/* <input type="button" style={{float: 'right', marginRight: '20px', marginTop: '10px'}}  className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
-          
+                
                 {
                   gc.activeSession &&
                   <div onClick={() => {
@@ -611,11 +611,10 @@ const Deck = (props) => {
               }
                   {state.data.name}
                 </div>
-             
              <div 
 
               title="Click to toggle price format"
-              style={{cursor:"pointer", userSelect:"none"}}
+              style={{cursor:"pointer", userSelect:"none",}}
              onClick={() => {
               togglePriceFormat()
              }}>
@@ -632,7 +631,11 @@ const Deck = (props) => {
               </div>
              }
              </div>
-              <div className="SubHeaderText" style={{marginTop: "0px"}}> 
+             {
+                // state.data.favorites > 0 &&
+                <div style={{textAlign:'right', marginRight:'20px'}}>{state.data.favorites || "~"}  favorite{state.data.favorites != 1 && "s"}</div>
+             }
+              <div className="SubHeaderText" style={{marginTop: "-15px"}}> 
                 { utilities.getProperFormatName(state.data.format)}
               </div>
               
@@ -744,6 +747,16 @@ const Deck = (props) => {
                   <br></br>
                   <br></br>
                   {state.deckGraphs["card_types_counts"]}</div>
+                  { 
+                    state.deckStats &&
+                    <div style={{display:'inline-block', width:'50px', position:'relative', top:'-40px', left:'-40px'}}>
+                      {Object.keys(state.deckStats["card_types_counts"]).map((item) => {
+                      return <div style={{marginBottom:'10px'}}>
+                        {mana.replaceSymbols("{" + item.toUpperCase() + "}")} {state.deckStats["card_types_counts"][item]}
+                      </div>
+                    })}
+                    </div>
+                  }
           </div>
           <div className="DeckPageGroup" style={{marginBottom: "200px"}}> 
                     

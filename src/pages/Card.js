@@ -408,13 +408,15 @@ const Card = (props) => {
                 <div className="HeaderText" id="cardName"> 
                 {state.data.name}
                 </div>
-                <div>
-              </div>
+                
+              
               <div className="SubHeaderText" id="typeLine"> 
               {state.data.type_one} {(state.data.subtype_one !== null) && " - "}{state.data.subtype_one}
               {state.data.type_two && " // "}
               {state.data.type_two} {(state.data.subtype_two !== null) && " - "}{state.data.subtype_two}
               </div>
+              <div style={{textAlign:'right', marginTop:'-10px', float:'right'}}>{state.data.favorites || "~"} favorite{state.data.favorites != 1 && "s"}</div>
+             
               <div className="SubHeaderText" id="statsLine"> 
               { state.data.power &&
                 state.data.power + "/" + state.data.toughness
@@ -424,8 +426,7 @@ const Card = (props) => {
               { state.data.loyalty &&
                 "Loyalty: " + state.data.loyalty
               }
-              </div>
-              <div className="BodyText" id="cardDetails" style={{whiteSpace:"pre-line"}}> 
+              </div><div className="BodyText" id="cardDetails" style={{whiteSpace:"pre-line"}}> 
               {/* {state.data.oracle_text} */}
               {/* {mana.generateSymbols(state.data.oracle_text)} */}
               {state.oracleTextWithSymbols}
