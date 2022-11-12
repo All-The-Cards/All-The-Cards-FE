@@ -351,7 +351,7 @@ const CardObject = (props) => {
                 altclr = "#efd26e"
             }
             // 2/x edge case
-            if (colorobject.includes("2/") && uniqueColors === 1) {
+            if ((colorobject.includes("2/") || colorobject.includes("/P")) && uniqueColors === 1) {
                 if (seenColors[0]) {
                     bgclr = "#e1dfd9"
                     bgclr2 = "#ebe6d9"

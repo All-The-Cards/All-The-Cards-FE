@@ -89,7 +89,7 @@
     text-orientation: upright;
     margin-left:50px;
     text-align: left;
-    max-width: 60%;
+    /* max-width: 60%; */
     overflow-x: scroll;
 }
 
@@ -105,7 +105,7 @@
     margin-left: 10px;
     margin-right: 10px;
     max-height:460px;
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
     width: 280px;
     display: inline-block;
     writing-mode: horizontal-tb;

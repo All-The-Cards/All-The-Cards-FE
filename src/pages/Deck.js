@@ -488,7 +488,7 @@ const Deck = (props) => {
     // console.log(cards[1])
     // console.log(allCards)
     return (
-      <div className="columns" style={{marginTop:"5px" }} key={0}>
+      <div className="columns" style={{marginTop:"5px", width: '100%'}} key={0}>
         {allCards}
       </div>
     )
@@ -740,7 +740,7 @@ const Deck = (props) => {
           {/* <div className="DeckPageGroup" style={{marginTop: "20px", background:'#dadada', height:'50px', borderRadius:'10px'}}> 
           Decklist actions - what content will go here? if any
           </div> */}
-          <div className="DeckPageGroup" style={{marginBottom: "50px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px'}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "50px", height: '510px', display:'flex', justifyContent:'left', marginTop:'50px', maxWidth:'66%', overflow:'hidden'}}> 
           
                   {/* <b className='HeaderText'>Decklist:</b>
                   <br></br> */}
@@ -781,7 +781,7 @@ const Deck = (props) => {
                     </div>
                   </div>
                   
-                  <div style={{display:"inline-block", textAlign:'left'}}>
+                  <div style={{display:"inline-block", textAlign:'left', width: '100%'}}>
                   {/* { makeDecklist(state.data.cards) } */}
                   { state.deckListItems }
                   </div>
