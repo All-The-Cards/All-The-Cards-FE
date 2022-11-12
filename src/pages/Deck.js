@@ -40,7 +40,8 @@ const Deck = (props) => {
     priceFormat: "usd",
     activeCard: {},
     sampleHand: [],
-    showExportMenu: false
+    showExportMenu: false,
+    deckListItems: []
   })
 
   const updateState = (objectToUpdate) => {
@@ -96,6 +97,7 @@ const Deck = (props) => {
           deckGraphs: graphs.makeGraphs(stats.getDeckStats(response.cards)),
           hasGottenDeck: true,
           activeCard: (response.format =="commander" && response.commander) || response.cover_card || response.cards[0],
+          deckListItems: makeDecklist(response.cards, response.commander, response.format)
         
         })
         getUserById("id=" + response.user_id)
@@ -283,7 +285,7 @@ const Deck = (props) => {
 
   }
 
-  const makeDecklist = (deck) => {
+  const makeDecklist = (deck, commander, format) => {
     let unique = makeUniqueDeck(deck)
     // console.log(deck)
     unique = unique.sort(sortByName).sort(sortByCMC)
@@ -305,9 +307,9 @@ const Deck = (props) => {
     //if card in type, push to group, remove from main list
     for (let i = 0; i < Object.keys(groups).length; i++) {
       // console.log(Object.keys(groups)[i])
-      if (state.data.format == "commander" && groups["Commander"].length < 1 && state.data.commmander){
+      if (format == "commander" && groups["Commander"].length < 1){
         for (let k = 0; k < deckCopy.length; k++){
-            if (deckCopy[k].name == state.data.commander.name){
+            if (deckCopy[k].name == commander.name){
               groups["Commander"].push(deckCopy[k])
               deckCopy.splice(k--, 1)
             }
@@ -337,71 +339,133 @@ const Deck = (props) => {
     for (let i = 0; i < Object.keys(groups).length; i++) {
       groups[Object.keys(groups)[i]] = groups[Object.keys(groups)[i]].sort(sortByName).sort(sortByCMC)
     }
+    let allCards = []
     let groupCards = structuredClone(groups)
     // console.log(groups)
     // map group items to cardobjects
+    let runningKey = 0
     for (let i = 0; i < Object.keys(groups).length; i++) {
-      for (let k = 0; k < Object.values(groups)[i].length; k++) {
-        let currentCard = groupCards[Object.keys(groups)[i]][k]
-        // console.log(currentCard)
-        // console.log("HERE:", currentCard)
-        if (currentCard.type !== "div"){
-        groups[Object.keys(groups)[i]][k] = <div
-        key={i * 100 + k + 1}
-        style={{
-          marginBottom:"6px"
-        }}
-        onMouseEnter={() => {
-          // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
-          updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
-        }}>
-        <CardObject key={k + 100} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
-    
-      </div>}
-      
-      }
-      // groups[Object.keys(groups)[i]] = <CardObject isCompact={true} clickable count={getCount(unique, groups[Object.keys(groups)[i]])} disableHover data={groups[Object.keys(groups)[i]]}/>
-    }
-    // divs to groups, if group.length > 0
-    for (let i = 0; i < Object.values(groups).length; i++) {
-      // console.log(groups[Object.keys(groups)[i]])
+      let totalCards = 0
       if (groups[Object.keys(groups)[i]].length > 0){
         //get count of all cards in group
         let groupCount = groups[Object.keys(groups)[i]].length
-        let totalCards = 0
         for (let k = 0; k < groupCount; k++){
           let currentCard = groupCards[Object.keys(groups)[i]][k]
           totalCards += getCount(currentCard, deck)
         }
 
-        groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px"}}>
-          {/* {Object.keys(groups)[i] !== "Commander" &&  */}
-            <div style={{position:'relative', top:'-2px', display:"inline-block"}}>
-              {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
-            {/* </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards} */}
-            </div> {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
-        </div>)
       }
-    }
-    // console.log(groups["Artifact"])
+      for (let k = 0; k < Object.values(groups)[i].length; k++) {
+        let currentCard = groupCards[Object.keys(groups)[i]][k]
+        runningKey++
+        // console.log(currentCard)
+        // console.log("HERE:", currentCard)
+        if (k == 0){
+        allCards.push(<div 
+          key={runningKey} style={{
+          display:'inline-block',}}><div 
+          style={{
+            marginTop:"10px", 
+            marginBottom:"5px",
+            writingMode: 'horizontal-tb',
+            display:'inline-block',
+            textAlign:'left',
+            width: '260px'}}
+          >
+        {/* {Object.keys(groups)[i] !== "Commander" &&  */}
+          <div style={{position:'relative', top:'-2px', display:"inline-block", textAlign:'left', height:'21px'}}>
+            {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
+          {/* </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards} */}
+          </div> {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
+        </div><div
+            style={{
+              marginBottom:"6px",
+              writingMode: 'horizontal-tb',
+              display:'inline-block',
+              marginRight:'20px'
+            }}
+            onMouseEnter={() => {
+              // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+              updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+            }}>
+        <CardObject isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
     
-    let cards = []
-    for (let i = 0; i < Object.keys(groups).length; i++) {
-      if (i == 0) {
-        cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
-        i++
+      </div>
+        </div>)
+        }
+        
+        if (currentCard.type !== "div" && k != 0){
+          allCards.push(<div
+            key={runningKey}
+            style={{
+              marginBottom:"6px",
+              writingMode: 'horizontal-tb',
+              display:'inline-block',
+              marginRight:'20px'
+            }}
+            onMouseEnter={() => {
+              // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+              updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+            }}>
+        <CardObject isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
+    
+      </div>)
+      //   groups[Object.keys(groups)[i]][k] = <div
+      //   key={i * 100 + k + 1}
+      //   style={{
+      //     marginBottom:"6px"
+      //   }}
+      //   onMouseEnter={() => {
+      //     // updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+      //     updateState({activeCard: groupCards[Object.keys(groups)[i]][k]})
+      //   }}>
+      //   <CardObject key={k + 100} isCompact={true} clickable count={getCount(currentCard, deck)} disableHover data={currentCard}/>
+    
+      // </div>}
+        }
       }
-      else {
-
-        cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[i]}</div>)
-      }
-      // cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
-      // for (let k = 0; k < Object.values(groups)[i].length; k++) {
-      //   // console.log(Object.values(groups)[i][k])
-      //   cards.push(Object.values(groups)[i][k]
-      //   )
-      // }
+      // groups[Object.keys(groups)[i]] = <CardObject isCompact={true} clickable count={getCount(unique, groups[Object.keys(groups)[i]])} disableHover data={groups[Object.keys(groups)[i]]}/>
     }
+    // divs to groups, if group.length > 0
+    // for (let i = 0; i < Object.values(groups).length; i++) {
+    //   // console.log(groups[Object.keys(groups)[i]])
+    //   if (groups[Object.keys(groups)[i]].length > 0){
+    //     //get count of all cards in group
+    //     let groupCount = groups[Object.keys(groups)[i]].length
+    //     let totalCards = 0
+    //     for (let k = 0; k < groupCount; k++){
+    //       let currentCard = groupCards[Object.keys(groups)[i]][k]
+    //       totalCards += getCount(currentCard, deck)
+    //     }
+
+    //     groups[Object.keys(groups)[i]].unshift(<div key={i} style={{marginTop:"10px", marginBottom:"5px",}}>
+    //       {/* {Object.keys(groups)[i] !== "Commander" &&  */}
+    //         <div style={{position:'relative', top:'-2px', display:"inline-block", }}>
+    //           {mana.replaceSymbols("{" + Object.keys(groups)[i].toUpperCase() + "}")}
+    //         {/* </div>} {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards} */}
+    //         </div> {Object.keys(groups)[i]} {Object.keys(groups)[i] !== "Commander" && " - " + totalCards}
+    //     </div>)
+    //   }
+    // }
+    // // console.log(groups["Artifact"])
+    
+    // let cards = []
+    // for (let i = 0; i < Object.keys(groups).length; i++) {
+    //   if (i == 0) {
+    //     cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[0]}<div style={{height:"1px"}}></div>{Object.values(groups)[1]}</div>)
+    //     i++
+    //   }
+    //   else {
+
+    //     cards.push(<div key={i} className="groupedCards" >{Object.values(groups)[i]}</div>)
+    //   }
+    //   // cards.push(<div key={i} style={{marginLeft: "30px", maxHeight:'400px', overflowY:'scroll', width: '280px'}}>{Object.values(groups)[i]}</div>)
+    //   // for (let k = 0; k < Object.values(groups)[i].length; k++) {
+    //   //   // console.log(Object.values(groups)[i][k])
+    //   //   cards.push(Object.values(groups)[i][k]
+    //   //   )
+    //   // }
+    // }
 
     // let cards = Object.keys(groups).map((item, i) => {
     //   // let cardCount = getCount(item, deck)
@@ -422,9 +486,10 @@ const Deck = (props) => {
     //     </div>
     // })
     // console.log(cards[1])
+    // console.log(allCards)
     return (
-      <div className="columns" style={{marginTop:"5px"}}>
-        {cards}
+      <div className="columns" style={{marginTop:"5px" }} key={0}>
+        {allCards}
       </div>
     )
   }
@@ -717,7 +782,8 @@ const Deck = (props) => {
                   </div>
                   
                   <div style={{display:"inline-block", textAlign:'left'}}>
-                  { makeDecklist(state.data.cards) }
+                  {/* { makeDecklist(state.data.cards) } */}
+                  { state.deckListItems }
                   </div>
           </div> 
 
@@ -750,9 +816,9 @@ const Deck = (props) => {
                   { 
                     state.deckStats &&
                     <div style={{display:'inline-block', width:'50px', position:'relative', top:'-40px', left:'-40px'}}>
-                      {Object.keys(state.deckStats["card_types_counts"]).map((item) => {
-                      return <div style={{marginBottom:'10px'}}>
-                        {mana.replaceSymbols("{" + item.toUpperCase() + "}")} {state.deckStats["card_types_counts"][item]}
+                      {Object.keys(state.deckStats["card_types_counts"]).map((item, index) => {
+                      return <div style={{marginBottom:'10px', textAlign:'left'}} key={index} >
+                        {mana.replaceSymbols("{" + item.toUpperCase() + "}")} <div style={{display:'inline-block', float:'right'}}>{state.deckStats["card_types_counts"][item]}</div>
                       </div>
                     })}
                     </div>

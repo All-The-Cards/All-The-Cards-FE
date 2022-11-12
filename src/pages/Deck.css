@@ -88,6 +88,9 @@
     writing-mode: vertical-lr;
     text-orientation: upright;
     margin-left:50px;
+    text-align: left;
+    max-width: 60%;
+    overflow-x: scroll;
 }
 
 .symbol {
