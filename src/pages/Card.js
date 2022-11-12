@@ -9,6 +9,8 @@ import { GlobalContext } from "../context/GlobalContext";
 import * as mana from '../components/TextToMana/TextToMana.js'
 import Sparkles from '../images/sparkles.png'
 
+import DeckTileObject from '../components/DeckTileObject/DeckTileObject.js';
+
 const Card = (props) => {
 
     const [state, setState] = useState({
@@ -22,6 +24,7 @@ const Card = (props) => {
       oracleTextWithSymbols: <div/>,
       oracleTextWithSymbols_face0: <div/>,
       oracleTextWithSymbols_face1: <div/>,
+      topDecks: []
     })
 
     const updateState = (objectToUpdate) => {
@@ -40,6 +43,7 @@ const Card = (props) => {
       gc.setSearchBar(props.hasSearchBar)
       //clean up string from id format to search query format
       getCardById(id)
+      getTopDecks(id)
 
       getFavStatus(id)
     }, [id])
@@ -112,6 +116,16 @@ const Card = (props) => {
       }
 
     }
+    const sortDecks = (a,b) => {
+      // console.log(a,b) 
+      if (a.created >= b.created) {
+        return -1
+      }
+      else {
+        return 1
+      }
+    }
+
     const getNewVersion = (e) => {
       nav('/card/?id=' + e.target.value)
       // getCardById("id=" + e.target.value)
@@ -289,6 +303,40 @@ const Card = (props) => {
       
     }
 
+    const getTopDecks= (query) => {
+      query = query.slice(3)
+      // if (gc.activeSession) {
+      //   query = "id=" + gc.activeSession.user.id
+      // }
+      // query = "/api/get/decks/user_" + query
+      // //if query is empty, don't send
+      // if (query.trim() === "/api/get/decks/user_id=") {
+      //   return
+      // }
+  
+      fetch(server.buildAPIUrl("/api/features/topthree/decks"),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'cardid': query
+          }
+        }
+      ).then(response => {
+        return response.json()
+    })
+    .then((result) => {
+        console.log(result)
+        updateState({topDecks: result})
+        return result
+    })
+    .catch((error) => {
+        //console.log(error)
+        return error
+    })
+  
+    }
   return (
       <div className='Container Page'>
         {
@@ -454,6 +502,14 @@ const Card = (props) => {
               </div>
             </div>
           </div>
+        {state.topDecks.length > 0 &&
+          <div className="UserPageContent" id="deckContent" style={{marginTop: '750px', textAlign:'left'}}><div className="HeaderText">
+            Top Decks
+          </div>
+          <div className="OverflowScroll">{state.topDecks.sort(sortDecks).map((item, i) => <div style={{ marginRight: '10px', float: 'left' }} key={i}>
+              <DeckTileObject data={item} />
+            </div>)}</div>
+          </div>}
         </div>
         } 
       </div>

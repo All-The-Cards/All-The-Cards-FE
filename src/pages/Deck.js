@@ -307,7 +307,7 @@ const Deck = (props) => {
     //if card in type, push to group, remove from main list
     for (let i = 0; i < Object.keys(groups).length; i++) {
       // console.log(Object.keys(groups)[i])
-      if (format == "commander" && groups["Commander"].length < 1){
+      if (commander && format == "commander" && groups["Commander"].length < 1){
         for (let k = 0; k < deckCopy.length; k++){
             if (deckCopy[k].name == commander.name){
               groups["Commander"].push(deckCopy[k])
@@ -824,7 +824,7 @@ const Deck = (props) => {
                     </div>
                   }
           </div>
-          <div className="DeckPageGroup" style={{marginBottom: "200px"}}> 
+          <div className="DeckPageGroup" style={{marginBottom: "200px", overflow:'visible'}}> 
                     
             
           <div className='HeaderText' style={{marginBottom: '30px'}}>Sample Hand
