@@ -665,7 +665,7 @@ const DeckEditor = (props) => {
               <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
               <button className="FancyButton" style={{float:'right'}} id='' onClick={importDeckList}>Import List</button>
               <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
-              <button className="FancyButton" id='disabled' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
+              <button className="FancyButton" id='alt2' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
                 
               </div>
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
