@@ -305,7 +305,7 @@ const Deck = (props) => {
     //if card in type, push to group, remove from main list
     for (let i = 0; i < Object.keys(groups).length; i++) {
       // console.log(Object.keys(groups)[i])
-      if (state.data.format == "commander" && groups["Commander"].length < 1){
+      if (state.data.format == "commander" && groups["Commander"].length < 1 && state.data.commmander){
         for (let k = 0; k < deckCopy.length; k++){
             if (deckCopy[k].name == state.data.commander.name){
               groups["Commander"].push(deckCopy[k])
