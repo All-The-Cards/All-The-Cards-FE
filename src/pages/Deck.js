@@ -664,7 +664,7 @@ const Deck = (props) => {
                   state.deckAuthor && 
                   <UserObject data={state.deckAuthor}/>
                 } */}
-                {state.data.user_name}
+                {state.data.user_name || "anonymous"}
               </div>
               </Link></div>
               }
