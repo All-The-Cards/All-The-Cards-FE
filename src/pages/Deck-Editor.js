@@ -132,20 +132,23 @@ const DeckEditor = (props) => {
   const formatWipDeck = () => {
     //check for invalid submissions
     console.log(wipDeck)
+    console.log(wipDeck.commanderSlot, {name: ''})
     if (
       //if no cards
       wipDeck.cards.length < 1 || 
       //if commander format but no commander
       (wipDeck.formatTag == "commander" && !wipDeck.commanderSlot) ||
+      (wipDeck.formatTag == "commander" && JSON.stringify(wipDeck.commanderSlot) == JSON.stringify({name: ""})) ||
       //if no format
       wipDeck.formatTag == "" ||
       //if no cover card
-      (wipDeck.coverCard == "" || wipDeck.coverCard.image_uris.art_crop == "")
+      (wipDeck.coverCard == "" || wipDeck.coverCard.image_uris.art_crop == "") ||
+      //if title empty
+      wipDeck.title == ""
     ){
-      
-      
       return -1
     }
+
     let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id, isValid: wipDeck.isValid }
     if (result.coverCard === undefined) {
       result.coverCard = wipDeck.cards[0].id
