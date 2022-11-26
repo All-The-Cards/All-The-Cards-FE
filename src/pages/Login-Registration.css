@@ -6,13 +6,6 @@
     height: 94.6vh;
 }
 
-.LoginContainerDark {
-    background-color: #2d2d2d;
-    display: flex;
-    flex-direction: row;
-    height: 94.6vh;
-}
-
 .LeftContainer {
     background-color: grey;
     height: 100%;
@@ -43,13 +36,6 @@
     font-size: 30px;
 }
 
-.LoginTitleDark {
-    color: whitesmoke;
-    margin-top: 150px;
-    font-weight: bold;
-    font-size: 30px;
-}
-
 .RegisterLink {
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
@@ -69,13 +55,6 @@
 }
 
 .InputTitles {
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.InputTitlesDark {
-    color: whitesmoke;
     margin-top: 10px;
     font-weight: bold;
     font-size: 20px;
@@ -161,21 +140,8 @@
     height: 220px;
 }
 
-.ModalWindowContainerDark {
-    background-color: #2d2d2d;
-    width: 450px;
-    height: 220px;
-}
-
 
 .ModalWindowContainer>h2 {
-    margin: 0;
-    background-color: rgba(113, 56, 209, 1);
-    text-align: center;
-}
-
-.ModalWindowContainerDark>h2 {
-    color: whitesmoke;
     margin: 0;
     background-color: rgba(113, 56, 209, 1);
     text-align: center;
@@ -185,17 +151,6 @@
     align-items: center;
     text-align: center;
     margin: 20px;
-}
-
-.ModalWindowContainerDark>p {
-    color: whitesmoke;
-    align-items: center;
-    text-align: center;
-    margin: 20px;
-}
-
-.ModalWindowContainerDark>form {
-    color: whitesmoke;
 }
 
 .ModalWindowContainer>form {

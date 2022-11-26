@@ -18,7 +18,6 @@ import Sparkles from '../images/sparkles.png'
 const Deck = (props) => {
 
   const gc = useContext(GlobalContext)
-  const { darkMode } = useContext(GlobalContext)
 
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
@@ -592,7 +591,7 @@ const Deck = (props) => {
   }
 
   return (
-    <div className={`DeckPage ${darkMode ? "DeckPageDark" : ''}`}>
+    <div className="DeckPage">
   
       <div className='Container Page'>
         {

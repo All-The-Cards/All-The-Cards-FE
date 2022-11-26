@@ -11,7 +11,6 @@ import CardObject from '../components/CardObject/CardObject.js';
 const User = (props) => {
 
   const gc = useContext(GlobalContext);
-  const { darkMode } = useContext(GlobalContext);
 
   const [state, setState] = useState({
     data: {},
@@ -151,27 +150,27 @@ const User = (props) => {
 
   return (
     <>
-      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
+      <div className="Container Page">
         <div className="UserPageContent" >
           <div className="UserPage-Left">
             <div className="UserInfo">
               <div className="ProfilePicture" style={{ backgroundImage: "url(" + state.data.avatar + ")", float: "left" }}></div>
 
               <div className="UserDetails">
-                <div className={`HeaderText ${darkMode ? "HeaderTextDark" : ''}`}>
+                <div className="HeaderText">
                   {state.data.username}
                 </div>
-                <div className={`BodyText ${darkMode ? "BodyTextDark" : ''}`}>
+                <div className="BodyText">
                   <i>{state.data.location}</i>
                 </div>
               </div>
             </div>
           </div>
           <div className="UserPage-Right">
-            <div className={`HeaderText ${darkMode ? "HeaderTextDark" : ''}`} style={{ fontSize: "28px" }}>
+            <div className="HeaderText" style={{ fontSize: "28px" }}>
               About Me
             </div>
-            <div className={`BodyText ${darkMode ? "BodyTextDark" : ''}`} style={{ fontStyle:'italic' }}>
+            <div className="BodyText" style={{ fontStyle:'italic' }}>
               {state.data.bio}
             </div>
           </div>
@@ -187,7 +186,7 @@ const User = (props) => {
           
 
         {state.data.favorites &&
-          <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent"><div className="HeaderText">
+          <div className="UserPageContent" id="deckContent"><div className="HeaderText">
             Favorite Cards
           </div>
           {/* {state.favCards.sort(sortByName).slice(0, 4).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}> */}
@@ -204,7 +203,7 @@ const User = (props) => {
             }</div>
           </div>}
         {state.data.favorites &&
-          <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
+          <div className="UserPageContent" id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Favorite Decks
           </div>
 

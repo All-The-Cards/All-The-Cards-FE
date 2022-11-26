@@ -11,26 +11,8 @@
     margin: 0;
 }
 
-.FooterContainerDark {
-    background-color: #1B1B1B;
-    height: 65px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
 .Legality {
     margin-top: -10px;
-    height: 50%;
-    font-size: 12px;
-    text-align: center;
-}
-
-.LegalityDark {
-    color: whitesmoke;
     height: 50%;
     font-size: 12px;
     text-align: center;
