@@ -4,13 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from "../../context/GlobalContext";
 import Logo_Star from './logo_star.png'
 import Logo_Name from './logo_text_marginleft.png'
-import Logo_Name_Dark from './logo_text_white.png'
 import SearchBar from "../SearchBar/SearchBar";
 import LayerIcon from './layers_icon.png'
-import LayerIconWhite from './layers_icon_white.png'
 import UsersIcon from './users_icon.png'
-import UsersIconWhite from './users_icon_white.png'
-import * as server from '../../functions/ServerTalk.js'
 import SearchGlass from './SearchGlass.png';
 import { Link } from "react-router-dom";
 import { saveToLocalStorage } from "../../functions/Utilities";
@@ -24,7 +20,6 @@ const Navbar = () => {
     // Global Context Variables
     const gc = useContext(GlobalContext);
     const { activeSession, setActiveSession } = useContext(GlobalContext);
-    const { darkMode, setDarkMode } = useContext(GlobalContext);
     const { name, setName } = useContext(GlobalContext);
 
     // Variables strickly on the NavBar
@@ -55,6 +50,23 @@ const Navbar = () => {
         console.log(activeSession)
         gc.getName()
     }, [activeSession]);
+
+    const [theme, setTheme] = useState(
+        localStorage.getItem('theme') || 'light'
+    )
+
+    const toggleTheme = () => {
+      if (theme === 'light') {
+        setTheme('dark')
+      } else {
+        setTheme('light')
+      }
+    }
+    
+    useEffect(() => {
+        localStorage.setItem('theme', theme)
+        document.body.className = theme
+    }, [theme])
 
     // Opens the menu when an icon is clicked
     const onClickHandler = (type) => {
@@ -117,10 +129,7 @@ const Navbar = () => {
             nav('/registration')
         }
         else if (id === '6') {
-            let darkModeString = localStorage.getItem("DarkMode")
-            let darkModeBool = (darkModeString === "true")
-            setDarkMode(!darkModeBool)
-            localStorage.setItem("DarkMode", !darkModeBool)
+            toggleTheme()
         }
         else if (id === '7') {
             setLayerMenu(false)
@@ -161,8 +170,8 @@ const Navbar = () => {
                     saveToLocalStorage("wipDeck", gc.wipDeck)
                     setActiveSession(null)
                     localStorage.removeItem("userName")
-                    setDarkMode(current => !current)
-                    localStorage.removeItem("DarkMode")
+                    // setDarkMode(current => !current)
+                    // localStorage.removeItem("DarkMode")
                     nav('/')
                 }
                 else {
@@ -181,7 +190,7 @@ const Navbar = () => {
 
     return (
 
-        <div className={`NavBarContainer ${darkMode ? "NavBarContainerDark" : ''}`}>
+        <div className="NavBarContainer">
             <Link to={"/"}
                 className="LogoContainer">
                 <img
@@ -189,22 +198,12 @@ const Navbar = () => {
                     alt="logo"
                     className="Logo"
                 />
-                {!darkMode &&
-                    <img
-                        src={Logo_Name}
-                        alt="logo"
-                        className="Logo"
-                        id="Logo-responsive"
-                    />
-                }
-                {darkMode &&
-                    <img
-                        src={Logo_Name_Dark}
-                        alt="logo"
-                        className="Logo"
-                        id="Logo-responsive"
-                    />
-                }
+                <img
+                    src={Logo_Name}
+                    alt="logo"
+                    className="Logo"
+                    id="Logo-responsive"
+                />
             </Link>
 
             <div className="IconContainer">
@@ -219,12 +218,8 @@ const Navbar = () => {
                     // id="Searchicon-responsive"
 
                 />
-                {!darkMode &&
-                    <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
-                }
-                {darkMode &&
-                    <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIconWhite} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
-                }
+                <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
+                
                 {openLayerMenu &&
                 <div>
                     <div className="UserMenu" ref={wrapperRef} 
@@ -235,16 +230,8 @@ const Navbar = () => {
                     </div>
                     </div>
                 }
-                {!darkMode &&
-                    <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
-                }
-                {darkMode &&
-                    <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px', color:'white'}}><img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
-                }
-                {/* {darkMode &&
-                    <img src={UsersIconWhite} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`} onMouseEnter={() => setUserShadow(true)} onMouseLeave={() => setUserShadow(false)} onClick={onClickHandler}></img>
-                } */}
-                {/* <div style={{marginLeft: "2px"}}>{name}</div> */}
+                <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
+                
                 {openUserMenu &&
                     <div>
                         <div className="UserMenu" ref={wrapperRef}>
