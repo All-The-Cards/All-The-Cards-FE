@@ -19,6 +19,10 @@
     overflow-x: hidden;
 }
 
+.dark .DeckListContainer {
+    background-color: #2a2a2a
+}
+
 ::-webkit-scrollbar{
     width: 10px
 }
@@ -27,6 +31,7 @@
     border-radius: 5px;
     padding: 20px;
 }
+
 
 .DeckListCard {
     display: inline-block;
@@ -97,7 +102,8 @@
 .DeckListToggle {
     justify-content: center;
     text-align: center;
-    background-color: #dadada;
+    background-color: #DB1E4F;
+    color: #f7f7f7;
     cursor: pointer;
     width: 30px;
     height: 30px;
@@ -110,6 +116,11 @@
     z-index: 101;
     user-select: none;
 
+}
+
+.DeckListToggle:hover {
+    
+    background-color: #c6214d;
 }
 
 .DeckValidity {

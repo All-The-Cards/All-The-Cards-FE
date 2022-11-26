@@ -31,3 +31,8 @@ input, select, textarea {
   color: #eceaf2;
   background-color: #18181a;
 }
+
+
+.dark ::-webkit-scrollbar-thumb{
+  background-color: #616161;
+}

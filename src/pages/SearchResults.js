@@ -874,7 +874,7 @@ const SearchResults = (props) => {
             </form>
           }
         </div>
-        <div className='SelectTypeContainer' style={{ marginTop: '40px', height: '50px' }}>
+        <div className='SelectTypeContainer' style={{ marginTop: '40px', height: '50px'}}>
           <div
             className='SelectTypeOption'
             onClick={() => setResultsType('cards')}
@@ -929,7 +929,7 @@ const SearchResults = (props) => {
                 Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
               </div>
               {/* <header className="HeaderText">Filters:</header> */}
-              <div className='SelectTypeContainer' style={{ backgroundColor: '#e8e8e8', marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px' }}>
+              <div className='SelectTypeContainer' style={{ marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px' }}>
 
                 <div className='SelectTypeOption'>
                   Sort:

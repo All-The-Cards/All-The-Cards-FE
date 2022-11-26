@@ -177,7 +177,7 @@ const Login = (props) => {
               <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick} />
             }
 
-            <button className='SubmitButton' onClick={handleSubmit}>Submit</button>
+            <button className='FancyButton' onClick={handleSubmit}>Submit</button>
           </form>
         </div>
       </div>
@@ -200,7 +200,7 @@ const Login = (props) => {
                 />
               </label>
               <br /><br />
-              <button id='resetButton' className='SubmitButton' onClick={handleSubmit}>Submit</button>
+              <button id='resetButton' className='FancyButton' onClick={handleSubmit}>Submit</button>
             </form>
           </div>
         </div>

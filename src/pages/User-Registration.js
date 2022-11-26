@@ -157,7 +157,7 @@ const Registration = (props) => {
             <div className='SuccessfulTip'>You have successfully registered!</div>
           }
 
-          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} />
+          <input type="submit" className="FancyButton" onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} />
 
         </form>
       </div>
