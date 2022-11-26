@@ -475,7 +475,7 @@ const WIPDeckList = (props) => {
                   showSideList: !state.showSideList
                 })
               }}> 
-                <div style={{marginTop:'5px', color: 'rgba(0,0,0,.5)'}}>{state.showSideList ? "<" : ">"}</div>
+                <div style={{marginTop:'5px', color: 'rgba(255,255,255,.8)'}}>{state.showSideList ? "<" : ">"}</div>
               </div>
             <div className="DeckListContainer" style={{left: getMargin()}}>
               <Link to="/deckeditor">

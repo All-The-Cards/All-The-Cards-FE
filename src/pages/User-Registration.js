@@ -9,7 +9,6 @@ import * as server from '../functions/ServerTalk.js';
 const Registration = (props) => {
 
   const gc = useContext(GlobalContext)
-  const { darkMode } = useContext(GlobalContext)
 
   const [underlineActiveUser, setUnderline] = useState(false)
   const [isShowing, setIsShowing] = useState(false)
@@ -95,18 +94,18 @@ const Registration = (props) => {
   return (
 
     /* Login & Registration share some CSS properties (Login-Registration.css) */
-    <div className={`LoginContainer Page ${darkMode ? "LoginContainerDark Page" : ''}`}>
+    <div className="LoginContainer Page">
       <div style={{ backgroundImage: `url("https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092")` }} className='LeftContainer'>
         <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
-        <div className={`RegistrationTitle ${darkMode ? "RegistrationTitleDark" : ''}`}>Register</div>
+        <div className="RegistrationTitle">Register</div>
         <Link to='/login' className={`ActiveUserLink ${underlineActiveUser ? "ActiveUserLinkAlt" : ''}`} onMouseEnter={() => setUnderline(true)} onMouseLeave={() => setUnderline(false)}>Already have an account?</Link>
 
         <form className='FormContainer' onSubmit={handleSubmit}>
 
           {/* EACH GROUP IS A TITLE WITH ITS INPUT THEY ARE SPACED OUT */}
-          <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Fullname</div>
+          <div className="InputTitles">Fullname</div>
           <input
             type="text"
             name="name"
@@ -116,7 +115,7 @@ const Registration = (props) => {
             className="RegistrationInputs"
           />
 
-          <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Email</div>
+          <div className="InputTitles">Email</div>
           <input
             type="email"
             name="email"
@@ -127,7 +126,7 @@ const Registration = (props) => {
             maxLength={30}
           />
 
-          <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`} onMouseEnter={() => setToolTip(true)} onMouseLeave={() => setToolTip(false)}>Password</div>
+          <div className="InputTitles" onMouseEnter={() => setToolTip(true)} onMouseLeave={() => setToolTip(false)}>Password</div>
           <input
             type={isShowing ? "text" : "password"}
             name="password"
@@ -158,7 +157,7 @@ const Registration = (props) => {
             <div className='SuccessfulTip'>You have successfully registered!</div>
           }
 
-          <input type="submit" className={`SubmitButton ${buttonHover ? "SubmitButtonAlt" : ''}`} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} />
+          <input type="submit" className="FancyButton" onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} />
 
         </form>
       </div>

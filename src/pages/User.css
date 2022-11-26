@@ -22,17 +22,6 @@
     /* flex-wrap: nowrap; */
 }
 
-.UserPageContentDark {
-    color: whitesmoke;
-    /* background-color: rgba(255,0,0,.2); */
-    margin: 0 auto;
-    /* margin-top: 80px; */
-    /* display: inline-block; */
-    /* width: 60%; */
-    /* max-width: 80%; */
-    /* float: left; */
-    width: 1410px;
-}
 
 .UserPage-Left {
     /* background-color: rgba(0,255,0,.2); */

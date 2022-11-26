@@ -33,6 +33,9 @@
     z-index: 100;
 }
 
+.dark .AdvancedContainer {
+    background: rgba(0,0,0, 0.3);
+}
 .AdvRow {
     margin-bottom: 10px;
     justify-content: space-between;
@@ -141,6 +144,18 @@
 
 #typeInactive:hover {
     background-color: #d3d3d3;
+}
+
+.dark #typeActive {
+    background-color: #535353;
+}
+
+.dark #typeInactive {
+    background-color: #2e2e2e;
+}
+
+#typeInactive:hover {
+    background-color: #535353;
 }
 
 .SelectTypeText {

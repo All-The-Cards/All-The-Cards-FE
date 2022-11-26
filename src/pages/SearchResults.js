@@ -17,7 +17,6 @@ import UserObject from '../components/UserObject/UserObject.js';
 const SearchResults = (props) => {
 
   const gc = useContext(GlobalContext)
-  const { darkMode } = useContext(GlobalContext)
 
 
   const [state, setState] = useState({
@@ -597,7 +596,7 @@ const SearchResults = (props) => {
       threshold={50}
     >
       { }
-      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`} style={{ paddingBottom: '200px' }}>
+      <div className="Container Page" style={{ paddingBottom: '200px' }}>
         {/* Advanced search options */}
         <button className='FancyButton' id={getTypeId()} onClick={toggleType} style={{ position: 'absolute', right: '0', marginRight: '20px' }}>{getTypeName()}</button>
         <div className="AdvancedContainer" style={{ display: state.advancedContainerDisplay }}>
@@ -875,7 +874,7 @@ const SearchResults = (props) => {
             </form>
           }
         </div>
-        <div className='SelectTypeContainer' style={{ marginTop: '40px', height: '50px' }}>
+        <div className='SelectTypeContainer' style={{ marginTop: '40px', height: '50px'}}>
           <div
             className='SelectTypeOption'
             onClick={() => setResultsType('cards')}
@@ -930,7 +929,7 @@ const SearchResults = (props) => {
                 Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
               </div>
               {/* <header className="HeaderText">Filters:</header> */}
-              <div className='SelectTypeContainer' style={{ backgroundColor: '#e8e8e8', marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px' }}>
+              <div className='SelectTypeContainer' style={{ marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px' }}>
 
                 <div className='SelectTypeOption'>
                   Sort:

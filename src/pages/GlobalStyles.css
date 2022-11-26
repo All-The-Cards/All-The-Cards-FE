@@ -12,14 +12,6 @@
     height: 100%;
 }
 
-.ContainerDark {
-    margin: 0 auto;
-    text-align: center;
-    display: inline-block;
-    width: 100%;
-    background-color: #2d2d2d;
-}
-
 .FancyButton {
     cursor: pointer;
     margin-top: 20px;
@@ -70,14 +62,6 @@
     text-align: left;
 }
 
-.HeaderTextDark {
-    margin-top: 20px;
-    font-size: 36px;
-    font-weight: bold;
-    text-align: left;
-    color: whitesmoke;
-}
-
 .SubHeaderText {
     margin-top: 10px;
     font-size: 20px;
@@ -85,23 +69,7 @@
     text-align: left;
 }
 
-.SubHeaderTextDark {
-    color: whitesmoke;
-    margin-top: 10px;
-    font-size: 20px;
-    font-style: italic;
-    text-align: left;
-}
-
 .BodyText {
-    margin-top: 10px;
-    font-size: 16px;
-    text-align: left;
-    white-space: pre-line;
-}
-
-.BodyTextDark {
-    color: whitesmoke;
     margin-top: 10px;
     font-size: 16px;
     text-align: left;

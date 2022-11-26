@@ -21,3 +21,18 @@ input, select, textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.light {
+  color: #000000;
+  background-color: #F7F7F7;
+}
+
+.dark {
+  color: #eceaf2;
+  background-color: #18181a;
+}
+
+
+.dark ::-webkit-scrollbar-thumb{
+  background-color: #616161;
+}

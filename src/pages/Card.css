@@ -68,6 +68,10 @@
     min-width: 400px;
 }
 
+.dark #legalities {
+    background-color: #2a2a2a;
+}
+
 .legalities-Left {
     float: left;
     width: 50%;

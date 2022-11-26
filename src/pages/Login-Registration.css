@@ -6,13 +6,6 @@
     height: 94.6vh;
 }
 
-.LoginContainerDark {
-    background-color: #2d2d2d;
-    display: flex;
-    flex-direction: row;
-    height: 94.6vh;
-}
-
 .LeftContainer {
     background-color: grey;
     height: 100%;
@@ -43,13 +36,6 @@
     font-size: 30px;
 }
 
-.LoginTitleDark {
-    color: whitesmoke;
-    margin-top: 150px;
-    font-weight: bold;
-    font-size: 30px;
-}
-
 .RegisterLink {
     font-size: 15px;
     color: rgba(113, 56, 209, 1);
@@ -74,21 +60,14 @@
     font-size: 20px;
 }
 
-.InputTitlesDark {
-    color: whitesmoke;
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 20px;
-}
-
 .RegistrationInputs {
     margin-top: 10px;
-    background-color: lightgrey;
+    /* background-color: lightgrey; */
     padding: 5px;
     border-radius: 25px;
     width: 300px;
     border: 0;
-    box-shadow: 1px 1px 5px black;
+    /* box-shadow: 1px 1px 5px black; */
     /* border-style: solid; */
 }
 
@@ -146,7 +125,7 @@
 
 .ModalWindowBackground {
     background-color: rgb(0, 0, 0, 0.8);
-    height: 94.6vh;
+    height: 100vh;
     width: 100%;
     z-index: 3;
     position: absolute;
@@ -156,29 +135,16 @@
 }
 
 .ModalWindowContainer {
-    background-color: white;
+    background-color: #f7f7f7;
     width: 450px;
     height: 220px;
-}
-
-.ModalWindowContainerDark {
-    background-color: #2d2d2d;
-    width: 450px;
-    height: 220px;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 
-.ModalWindowContainer>h2 {
-    margin: 0;
-    background-color: rgba(113, 56, 209, 1);
-    text-align: center;
-}
-
-.ModalWindowContainerDark>h2 {
-    color: whitesmoke;
-    margin: 0;
-    background-color: rgba(113, 56, 209, 1);
-    text-align: center;
+.dark .ModalWindowContainer {
+    background-color: #191919;
 }
 
 .ModalWindowContainer>p {
@@ -187,20 +153,16 @@
     margin: 20px;
 }
 
-.ModalWindowContainerDark>p {
-    color: whitesmoke;
-    align-items: center;
-    text-align: center;
+.ModalWindowContainer>h2 {
+    /* align-items: center; */
+    /* text-align: center; */
     margin: 20px;
 }
 
-.ModalWindowContainerDark>form {
-    color: whitesmoke;
-}
 
 .ModalWindowContainer>form {
     text-align: center;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .ModalWindowContainer input {

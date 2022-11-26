@@ -10,7 +10,6 @@ import { GlobalContext } from "../context/GlobalContext";
 const UserSettings = (props) => {
 
   const gc = useContext(GlobalContext);
-  const { darkMode } = useContext(GlobalContext)
 
   const [state, setState] = useState({
     data: {
@@ -172,8 +171,8 @@ const UserSettings = (props) => {
   }
   return (
     <>
-      <div className={`Container Page ${darkMode ? "ContainerDark Page" : ''}`}>
-        <div className={`UserPageContent ${darkMode ? "UserPageContentDark" : ''}`} >
+      <div className="Container Page">
+        <div className="UserPageContent" >
           <div className="UserPage-Left">
             <div className="UserInfo">
               <div className="ProfilePicture" style={{ backgroundImage: "url(" + state.data.avatar + ")", float: "left" }}></div>

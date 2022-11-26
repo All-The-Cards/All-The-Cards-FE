@@ -11,7 +11,6 @@ const Login = (props) => {
 
   const gc = useContext(GlobalContext)
   const { activeSession, setActiveSession } = useContext(GlobalContext)
-  const { darkMode } = useContext(GlobalContext)
 
   const [underlineRegister, setUnderlineRegister] = useState(false)
   const [underlineForgot, setUnderlineForgot] = useState(false)
@@ -139,17 +138,17 @@ const Login = (props) => {
 
   return (
 
-    <div className={`LoginContainer Page${darkMode ? "LoginContainerDark Page" : ''}`}>
+    <div className="LoginContainer Page">
       <div style={{ backgroundImage: `url("https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/8/787de9ce-02c5-4a17-a88b-d38e83dbeb0b.jpg?1572893092")` }} className='LeftContainer'>
         <div className='ArtBlur' />
       </div>
       <div className='RightContainer'>
 
-        <div className={`LoginTitle ${darkMode ? "LoginTitleDark" : ''}`}>Login</div>
+        <div className="LoginTitle">Login</div>
         <Link to='/registration' className={`RegisterLink ${underlineRegister ? "RegisterLinkAlt" : ''}`} onMouseEnter={() => setUnderlineRegister(true)} onMouseLeave={() => setUnderlineRegister(false)}>Need an Account?</Link>
         <div className='FormBox'>
           <form className='FormContainer'>
-            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Email</div>
+            <div className="InputTitles">Email</div>
             <input
               type="email"
               name="email"
@@ -159,7 +158,7 @@ const Login = (props) => {
               value={inputs.email}
               onChange={handleChange}
             />
-            <div className={`InputTitles ${darkMode ? "InputTitlesDark" : ''}`}>Password</div>
+            <div className="InputTitles">Password</div>
             <input
               type={isShowing ? "text" : "password"}
               name="password"
@@ -178,14 +177,14 @@ const Login = (props) => {
               <img src={EyePassword} alt='EyeIcon' className='EyeIcon' onClick={handlePasswordClick} />
             }
 
-            <button className='SubmitButton' onClick={handleSubmit}>Submit</button>
+            <button className='FancyButton' onClick={handleSubmit}>Submit</button>
           </form>
         </div>
       </div>
 
       {isModalActive &&
         <div className='ModalWindowBackground'>
-          <div className={`ModalWindowContainer ${darkMode ? "ModalWindowContainerDark" : ''}`} ref={wrapperRef}>
+          <div className="ModalWindowContainer" ref={wrapperRef}>
             <h2>Password Reset</h2>
             <p>In order to reset your password, you will need to provide the email you registered with.</p>
             <form>
@@ -201,7 +200,7 @@ const Login = (props) => {
                 />
               </label>
               <br /><br />
-              <button id='resetButton' className='SubmitButton' onClick={handleSubmit}>Submit</button>
+              <button id='resetButton' className='FancyButton' onClick={handleSubmit}>Submit</button>
             </form>
           </div>
         </div>
