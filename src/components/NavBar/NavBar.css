@@ -13,13 +13,19 @@
     padding-right: 20%;
     user-select: none;
 }
-
+.dark .NavBarContainer {
+    background-color: #19191a;
+}
 /* Left Side Container of NavBar */
 
 .LogoContainer {
     display: flex;
     align-items: center;
     /* border-style: solid; */
+}
+
+.dark .LogoName {
+    filter: invert(100%)
 }
 
 .Logo {
@@ -55,6 +61,10 @@
     padding: 7px;
     border-width: 2px;
     cursor: pointer;
+}
+
+.dark .Icons {
+    filter: invert(100%)
 }
 
 .LayerIcon {
@@ -128,6 +138,10 @@
     border-radius: 5px;
 }
 
+.dark .MenuItems:hover {
+    background-color: #414141;
+}
+
 .MenuText {
     padding: 2px;
 }
@@ -179,4 +193,12 @@
 
 #ignoreMenuItem:hover{
     background-color: #FFFFFF;
+}
+
+.dark .profileMenuButton:hover {
+    background-color: #414141;
+}
+
+.dark .UserMenu {
+    background-color: #19191a;
 }

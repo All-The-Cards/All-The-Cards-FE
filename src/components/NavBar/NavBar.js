@@ -62,7 +62,7 @@ const Navbar = () => {
         setTheme('light')
       }
     }
-    
+
     useEffect(() => {
         localStorage.setItem('theme', theme)
         document.body.className = theme
@@ -201,7 +201,7 @@ const Navbar = () => {
                 <img
                     src={Logo_Name}
                     alt="logo"
-                    className="Logo"
+                    className="Logo LogoName"
                     id="Logo-responsive"
                 />
             </Link>
