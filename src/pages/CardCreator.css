@@ -53,24 +53,40 @@
     height: fit-content;
     overflow: hidden;
     left: 340px;
-    top: 37px;
+    top: 34px;
+    padding-bottom: 2px;
+}
+
+.RealManaContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.RealMana {
+    /* margin-right: 10px; */
+    margin-left: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 
 .Mana {
     position: relative;
     z-index: 2;
-    height: 16px;
-    width: 16px;
     margin-right: 5px;
     cursor: pointer;
 }
 
 .ManaNumber {
-    position: relative;
+    /* position: relative;
     z-index: 2;
-    height: 16px;
-    width: 16px;
+    height: 12px;
+    width: 12px;*/
     margin-right: 5px;
+
 }
 
 .CardTypeContainer {
@@ -142,7 +158,7 @@
     margin-top: 5px;
 }
 
-.Button {
+/* .Button {
     margin-left: 20px;
     font-weight: bold;
     border: none;
@@ -158,6 +174,11 @@
 .Button:disabled {
     background-color: darkgray;
     cursor: not-allowed;
+} */
+
+.SelectContainer {
+    margin-left: 10px;
+    margin-bottom: 5px;
 }
 
 #SubmitButton {
