@@ -1,4 +1,6 @@
 import { React, useContext } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalContext';
@@ -18,6 +20,7 @@ import SearchResults from './pages/SearchResults';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword'
 import Footer from './components/Footer/Footer';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
     return (
@@ -44,8 +47,10 @@ function App() {
                     <Route exact path='/reset-password' element={<ResetPassword hasSearchBar={false} />} />
                 </Routes>
                 <Footer/>
+                <ToastContainer autoClose={false} position={"top-center"}/>
             </GlobalProvider>
         </BrowserRouter>
+        
     );
 }
 

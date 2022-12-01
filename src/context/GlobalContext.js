@@ -38,6 +38,7 @@ export const GlobalProvider = ({ children }) => {
 
     let loadedWipDeckData = loadFromLocalStorage("wipDeck")
 
+
     if (loadedWipDeckData) {
         initialDeckState = loadedWipDeckData
     }
@@ -61,6 +62,9 @@ export const GlobalProvider = ({ children }) => {
         }
 
     };
+
+    let editorToast = loadFromLocalStorage("editorToast")
+    let sidebarToast = loadFromLocalStorage("sidebarToast")
 
 
     return (
@@ -88,8 +92,9 @@ export const GlobalProvider = ({ children }) => {
                 setName,
                 getName,
                 isEditing,
-                setIsEditing
-
+                setIsEditing,
+                editorToast,
+                sidebarToast,
             }}
         >
             {/* {console.log(env)} */}

@@ -1,0 +1,9 @@
+.Toastify__toast-container--top-right {
+    top: 4em;
+    right: 1em;
+}
+.Toastify__toast-container--top-center {
+    top: 4em;
+    left: 50%;
+    transform: translateX(-50%);
+}
