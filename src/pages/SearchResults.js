@@ -10,7 +10,8 @@ import { GlobalContext } from "../context/GlobalContext";
 import './SearchResults.css'
 import './GlobalStyles.css'
 import UserObject from '../components/UserObject/UserObject.js';
-
+import { saveToLocalStorage } from '../functions/Utilities.js';
+import { toast } from 'react-toastify';
 
 
 
@@ -160,6 +161,14 @@ const SearchResults = (props) => {
     }
 
   }, [urlTag])
+
+  useEffect(() => {
+    if(gc.sidebarToast === false || gc.sidebarToast === null) {
+      toast.dismiss()
+      toast("Cards you've added will show up on the left sidebar!")
+      saveToLocalStorage("sidebarToast", true)
+    }
+  }, [gc])
 
   const search = (query, type) => {
     query = query.replace("%3D", "=")

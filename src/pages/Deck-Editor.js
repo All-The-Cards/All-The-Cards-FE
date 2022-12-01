@@ -11,6 +11,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import TagList from '../components/TagList/TagList';
 import { useNavigate } from 'react-router-dom';
 import { saveToLocalStorage } from '../functions/Utilities';
+import { toast, ToastContainer } from 'react-toastify';
 
 const DeckEditor = (props) => {
   const [state, setState] = useState({
@@ -40,19 +41,21 @@ const DeckEditor = (props) => {
         title: "",
         commanderSlot: {
           name: ""
-      },
-      coverCard: {
-        image_uris: {
-          art_crop: ""
-        }
-      },
-      isValid: false,
+        },
+        coverCard: {
+          image_uris: {
+            art_crop: ""
+          }
+        },
+        isValid: false,
       })
     }
     if (gc.wipDeck.commanderSlot === undefined) {
-        updateWipDeck({commanderSlot: {
+      updateWipDeck({
+        commanderSlot: {
           name: ""
-      },})
+        },
+      })
     }
     setState((previous) => ({
       ...previous,
@@ -66,6 +69,13 @@ const DeckEditor = (props) => {
     gc.setIsEditing(true)
     document.title = "Deck Editor"
 
+    console.log(gc.editorToast)
+    if(gc.editorToast === false || gc.editorToast === null) {
+      toast.dismiss()
+      toast("Using the search to add cards won't cause you to lose progress!")
+      console.log("!!!\n\n\nTOASTER TOASTED\n\n\n!!!")
+      saveToLocalStorage("editorToast", true)
+    }
     setState((previous) => ({
       ...previous,
       cards: wipDeck.cards
@@ -119,7 +129,7 @@ const DeckEditor = (props) => {
     }
     return 0
   }
-  
+
   const sortByName = (a, b) => {
     if (a.name >= b.name) {
       return 1
@@ -132,20 +142,20 @@ const DeckEditor = (props) => {
   const formatWipDeck = () => {
     //check for invalid submissions
     console.log(wipDeck)
-    console.log(wipDeck.commanderSlot, {name: ''})
+    console.log(wipDeck.commanderSlot, { name: '' })
     if (
       //if no cards
-      wipDeck.cards.length < 1 || 
+      wipDeck.cards.length < 1 ||
       //if commander format but no commander
       (wipDeck.formatTag == "commander" && !wipDeck.commanderSlot) ||
-      (wipDeck.formatTag == "commander" && JSON.stringify(wipDeck.commanderSlot) == JSON.stringify({name: ""})) ||
+      (wipDeck.formatTag == "commander" && JSON.stringify(wipDeck.commanderSlot) == JSON.stringify({ name: "" })) ||
       //if no format
       wipDeck.formatTag == "" ||
       //if no cover card
       (wipDeck.coverCard == "" || wipDeck.coverCard.image_uris.art_crop == "") ||
       //if title empty
       wipDeck.title == ""
-    ){
+    ) {
       return -1
     }
 
@@ -163,8 +173,8 @@ const DeckEditor = (props) => {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formatWipDeck() != -1){
-      
+    if (formatWipDeck() != -1) {
+
       let deckData = formatWipDeck()
       deckData = {
         ...deckData,
@@ -197,7 +207,7 @@ const DeckEditor = (props) => {
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
-    if (formatWipDeck() != -1){
+    if (formatWipDeck() != -1) {
       console.log("submitting...")
       setState((previous) => ({
         ...previous,
@@ -254,17 +264,17 @@ const DeckEditor = (props) => {
         .catch((error) => {
           console.log(error);
         });
-      }
-      else { deckError() }
+    }
+    else { deckError() }
   }
 
   const deckError = () => {
-    
+
     confirmAlert({
       title: 'Deck Error',
       message: 'It looks like your deck is missing data. Review and try again.',
       buttons: [
-          {
+        {
           label: 'Ok',
           onClick: null
         }
@@ -288,7 +298,7 @@ const DeckEditor = (props) => {
               tags: [],
               title: "",
               commanderSlot: {
-                  name: ""
+                name: ""
               },
               coverCard: {
                 image_uris: {
@@ -327,39 +337,39 @@ const DeckEditor = (props) => {
                 }
               }
             ).then((response) => {
-                console.log(response);
-                
-                gc.setIsEditing(false)
-                gc.setWipDeck({
-                  authorID: "",
-                  cards: [],
-                  coverCard: {
-                    image_uris: {
-                      art_crop: ""
-                    }
-                  },
-                  deckID: "",
-                  description: "",
-                  formatTag: "",
-                  tags: [],
-                  title: "",
-                  commanderSlot: {
-                    name: ""
-                  },
-                  isValid: false,
-                })
-                saveToLocalStorage("wipDeck", gc.wipDeck)
-                nav("/")
-                return response.json()
+              console.log(response);
+
+              gc.setIsEditing(false)
+              gc.setWipDeck({
+                authorID: "",
+                cards: [],
+                coverCard: {
+                  image_uris: {
+                    art_crop: ""
+                  }
+                },
+                deckID: "",
+                description: "",
+                formatTag: "",
+                tags: [],
+                title: "",
+                commanderSlot: {
+                  name: ""
+                },
+                isValid: false,
               })
+              saveToLocalStorage("wipDeck", gc.wipDeck)
+              nav("/")
+              return response.json()
+            })
               .then((data) => {
                 console.log(data);
               })
               .catch((error) => {
                 console.log(error);
               });
-            }
-          } , {
+          }
+        }, {
           label: 'No',
           onClick: null
         }
@@ -392,8 +402,8 @@ const DeckEditor = (props) => {
               title: "",
               commanderSlot: {
                 name: ""
-            },
-            isValid: false,
+              },
+              isValid: false,
             })
             saveToLocalStorage("wipDeck", gc.wipDeck)
             nav("/")
@@ -465,15 +475,15 @@ const DeckEditor = (props) => {
     saveToLocalStorage("wipDeck", gc.wipDeck)
 
     let listOfCards = state.importList.split("\n")
-    for (let i = 0; i < listOfCards.length; i++){
+    for (let i = 0; i < listOfCards.length; i++) {
       if (listOfCards[i] == "") {
         listOfCards.splice(i--, 1)
       }
     }
     // console.log("Raw list:", listOfCards)
-    
+
     let importObjects = []
-    for (let i = 0; i < listOfCards.length; i++){
+    for (let i = 0; i < listOfCards.length; i++) {
       let entry = listOfCards[i]
       let obj = {
         count: 1,
@@ -483,11 +493,11 @@ const DeckEditor = (props) => {
 
       if (parseInt(entry[0])) {
         obj.count = parseInt(entry.split(" ")[0])
-        let entryNoNum = entry.split(" ").splice(1,20).join(" ")
+        let entryNoNum = entry.split(" ").splice(1, 20).join(" ")
         entry = entryNoNum
       }
 
-      if(entry.includes("[") && entry.includes("]")){
+      if (entry.includes("[") && entry.includes("]")) {
         let entrySet = entry.split("[")[1].split("]")[0]
         obj.set_id = entrySet
         let entryNoSet = entry.split("[")[0]
@@ -500,7 +510,7 @@ const DeckEditor = (props) => {
     }
 
     let cardResults = []
-    for (let i = 0; i < importObjects.length; i++){
+    for (let i = 0; i < importObjects.length; i++) {
       server.post("/api/search/card/query=" + importObjects[i].name).then(response => {
         if (response.length > 0) {
           let res = response
@@ -527,7 +537,6 @@ const DeckEditor = (props) => {
               && !artTypes.some(el => { if (item.finishes) return item.finishes.includes(el) })
               && item.promo === "false"
               && item.full_art === "false"
-              // && item.digital === "false"
               && item.games !== "['arena']"
               && item.set_shorthand !== "sld"
               && item.set_type !== "masterpiece"
@@ -549,38 +558,24 @@ const DeckEditor = (props) => {
           })
           res = uniqueRes
 
-
-          // this is deprecated by the above function
-          // //remove invalid card types for deckbuilding
-          // let invalidTypes = ['vanguard', 'token', 'planar', 'double_faced_token', 'funny', 'art_series']
-          // // let invalidTypes = ['vanguard', 'token', 'memorabilia', 'planar', 'double_faced_token', 'funny']
-          // let realCardRes = res.filter((item) => {
-          //   return !invalidTypes.includes(item.set_type) && !invalidTypes.includes(item.layout)
-          // })
-          // res = realCardRes
-
-          //remove some technically-duplicate cards
           let noArenaRes = res.filter((item) => {
             return !item.name.includes("A-")
           })
           res = noArenaRes
 
-          
-          for (let n = 0; n < res.length; n++){
+          for (let n = 0; n < res.length; n++) {
             console.log(res[n], importObjects)
-            if (res[n].name && res[n].name == importObjects[i].name){
+            if (res[n].name && res[n].name == importObjects[i].name) {
               if (cardResults.length == 0) {
 
-                updateWipDeck({coverCard: res[n]})
+                updateWipDeck({ coverCard: res[n] })
               }
-              for (let k = 0; k < importObjects[i].count; k++){
+              for (let k = 0; k < importObjects[i].count; k++) {
                 cardResults.push(res[n])
               }
             }
           }
-          // console.log(response[0])
-          
-          updateWipDeck({cards: cardResults})
+          updateWipDeck({ cards: cardResults })
         }
         else {
           console.log("Card not found:", importObjects[i].name)
@@ -588,7 +583,6 @@ const DeckEditor = (props) => {
       })
     }
   }
-  
   const cancelImport = () => {
 
     setState((previous) => ({
@@ -603,40 +597,36 @@ const DeckEditor = (props) => {
       importList: e.target.value
     }))
   }
-
   return (
     <div className='Container Page'>
-      { state.publishBlocker && <div className='PublishBlocker'>
+      {state.publishBlocker && <div className='PublishBlocker'>
         <div className="PublishText">
           Publishing...
           <br></br>
-            <img style={{width: '50px'}}src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"/>
-          </div>
-        </div> }
-        { state.showImportMenu && <div className='PublishBlocker'>
-          <div className="importMenu">
-            <div className="HeaderText" style={{position: 'relative', top: '20px', left: '20px'}}>Import Decklist</div>
-            <div className="BodyText" style={{position: 'relative', top: '15px', left: '20px', color:'#bbbbbb', fontStyle:"italic"}}>Accepted formats: "4 Arclight Phoenix", "4 Arclight Phoenix [GRN]"</div>
+          <img style={{ width: '50px' }} src="https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif" />
+        </div>
+      </div>}
+      {state.showImportMenu && <div className='PublishBlocker'>
+        <div className="importMenu">
+          <div className="HeaderText" style={{ position: 'relative', top: '20px', left: '20px' }}>Import Decklist</div>
+          <div className="BodyText" style={{ position: 'relative', top: '15px', left: '20px', color: '#bbbbbb', fontStyle: "italic" }}>Accepted formats: "4 Arclight Phoenix", "4 Arclight Phoenix [GRN]"</div>
           <textarea rows="4" type="text"
-              className='styledInput importList'  name="importList" value={state.importList} onChange={updateImportList}
-              placeholder="Enter a decklist here..." 
-              style={{color:'black'}}/>
-              <br></br>
-              <button className="FancyButton" style={{float:'right', marginRight: '20px'}} onClick={submitImport}>Import List</button>
-              <button className="FancyButton" style={{float:'right', marginRight: '20px'}} id='alt' onClick={cancelImport}>Cancel</button>
-          </div>
-        </div> }
-          <div className="DeckPageContent">
-      <div className="DeckPageBanner" style={{backgroundImage: "url(" + gc.wipDeck.coverCard.image_uris.art_crop + ")"}}>
-          {/* <div className="DeckPageBanner" style={{backgroundImage: ""}}> */}
-          <div className="blur"/>
+            className='styledInput importList' name="importList" value={state.importList} onChange={updateImportList}
+            placeholder="Enter a decklist here..."
+            style={{ color: 'black' }} />
+          <br></br>
+          <button className="FancyButton" style={{ float: 'right', marginRight: '20px' }} onClick={submitImport}>Import List</button>
+          <button className="FancyButton" style={{ float: 'right', marginRight: '20px' }} id='alt' onClick={cancelImport}>Cancel</button>
+        </div>
+      </div>}
+      <div className="DeckPageContent">
+        <div className="DeckPageBanner" style={{ backgroundImage: "url(" + gc.wipDeck.coverCard.image_uris.art_crop + ")" }}>
+          <div className="blur" />
           <div className="DeckInfoContent">
-          {/* <div className="DeckPageBanner" style={{background: "url(" + "" + ")"}}> */}
-              <div className="DeckPage-Buttons">
-              
-              <button className="FancyButton" id='alt' style={{float:'right', marginLeft:'20px'}} onClick={(event) => {
-                if (formatWipDeck() != -1){
-                  
+            <div className="DeckPage-Buttons">
+              <button className="FancyButton" id='alt' style={{ float: 'right', marginLeft: '20px' }} onClick={(event) => {
+                if (formatWipDeck() != -1) {
+
                   let msg = 'Are you sure you want to upload your deck?'
                   if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
                   confirmAlert({
@@ -646,7 +636,7 @@ const DeckEditor = (props) => {
                       {
                         label: 'Yes',
                         onClick: (() => {
-                          
+
                           handleSubmitRedirect(event)
                         })
                       }, {
@@ -657,228 +647,97 @@ const DeckEditor = (props) => {
                   })
                 }
                 else { deckError() }
-              
-                // handleSubmitRedirect(event)
-                // gc.setIsEditing(false)
-                // gc.setWipDeck(null)
-                // nav("/")
-
               }}>Publish Deck</button>
-              <button className="FancyButton" style={{float:'right'}} onClick={cancelEditingDeck}>Quit</button>
-              <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
-              <button className="FancyButton" style={{float:'right'}} id='' onClick={importDeckList}>Import List</button>
-              <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
-              <button className="FancyButton" id='alt2' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
-                
-              </div>
-             <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 
-                 {/* {gc.wipDeck.title} */}{
-                !gc.wipDeck.isValid && 
-                <div className="CardError" title="Deck not valid" style={{fontSize: "32px", height: "40px", width: "40px", top:"55px", marginTop: "-45px", left:"-50px", position:"relative"}}>!</div>
-                
+              <button className="FancyButton" style={{ float: 'right' }} onClick={cancelEditingDeck}>Quit</button>
+              <button className="FancyButton" style={{ float: 'right' }} onClick={handleSubmit} value="Save Deck" >Save</button>
+              <button className="FancyButton" style={{ float: 'right' }} id='' onClick={importDeckList}>Import List</button>
+              <button className="FancyButton" style={{ float: 'right' }} onClick={clearDeck} value="New Deck" >New Deck</button>
+              <button className="FancyButton" id='alt2' style={{ float: 'right' }} onClick={deleteDeck}>Delete</button>
+            </div>
+            <div className="HeaderText" id="cardName" style={{ fontSize: '48px', marginTop: "-5px" }}>
+              {
+                !gc.wipDeck.isValid &&
+                <div className="CardError" title="Deck not valid" style={{ fontSize: "32px", height: "40px", width: "40px", top: "55px", marginTop: "-45px", left: "-50px", position: "relative" }}>!</div>
               }
-              <input type="text" name="title" className='styledInput' value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '48px', fontWeight:'bold'}} />
-              </div>
-             
-              <div 
-              className='styledInput' style={{marginTop: "10px", width:'210px'}}> 
+              <input type="text" name="title" className='styledInput' value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '48px', fontWeight: 'bold' }} />
+            </div>
+
+            <div
+              className='styledInput' style={{ marginTop: "10px", width: '210px' }}>
               <select
-              className='styledInput'
-              style={{borderRadius:'20px', background:'0', padding:'0'}}
-              value={wipDeck.formatTag}
-              onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
-            >
-              <option value="">Choose Format</option>
-              <option value="standard">Standard</option>
-              <option value="commander">Commander</option>
-              <option value="pioneer">Pioneer</option>
-              <option value="explorer">Explorer</option>
-              <option value="modern">Modern</option>
-              <option value="premodern">Premodern</option>
-              <option value="vintage">Vintage</option>
-              <option value="legacy">Legacy</option>
-              <option value="oldschool">Old School</option>
-              <option value="pauper">Pauper</option>
-              <option value="historic">Historic</option>
-              <option value="alchemy">Alchemy</option>
-              <option value="brawl">Brawl</option>
-              <option value="paupercommander">Pauper Commander</option>
-              <option value="historicbrawl">Historic Brawl</option>
-              <option value="penny">Penny Dreadful</option>
-              <option value="duel">Duel</option>
-              <option value="future">Future</option>
-              <option value="gladiator">Gladiator</option>
-            </select>
-              </div>
-              
-              
-              <div className="SubHeaderText"> 
-                {/* <div className="DeckValidity" style={{color: state.data.isValid ? "black" : "red"}}>{state.data.cards.length > 0 && (state.data.isValid ? "" : "This deck is not legal!")}</div> */}
-              </div>
-              <div className="SubHeaderText" style={{marginTop: '10px', fontSize: '16px', color:"black", textShadow: "none", marginBottom:"20px"}}> 
-              <input type="text" name="tagInput" 
-              className='styledInput' value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag..." style={{marginRight:'20px'}}/>
-            <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
-                
-              </div>
-             
-              
-              {/* <div className="BodyText" style={{whiteSpace:"pre-line"}} onClick={() => {
-                toggleDescription()
-              }}> 
-                { state.showFullDescription ? 
-                  <div>
-                    { state.data.description.slice(0,800) }
-                  </div> 
-                  : <div>
-                    { state.data.description.slice(0,400) }
-                  </div>
-                }
-              </div>  */}
-              <input type="button" className='FancyButton' onClick={toggleGraphs} style={{float:'right'}} value={state.showRawGraphs ? "Hide Details" : "Show Details"} />
-              <div className="BodyText" style={{whiteSpace:"pre-line", width: "50%"}}>
+                className='styledInput'
+                style={{ borderRadius: '20px', background: '0', padding: '0' }}
+                value={wipDeck.formatTag}
+                onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
+              >
+                <option value="">Choose Format</option>
+                <option value="standard">Standard</option>
+                <option value="commander">Commander</option>
+                <option value="pioneer">Pioneer</option>
+                <option value="explorer">Explorer</option>
+                <option value="modern">Modern</option>
+                <option value="premodern">Premodern</option>
+                <option value="vintage">Vintage</option>
+                <option value="legacy">Legacy</option>
+                <option value="oldschool">Old School</option>
+                <option value="pauper">Pauper</option>
+                <option value="historic">Historic</option>
+                <option value="alchemy">Alchemy</option>
+                <option value="brawl">Brawl</option>
+                <option value="paupercommander">Pauper Commander</option>
+                <option value="historicbrawl">Historic Brawl</option>
+                <option value="penny">Penny Dreadful</option>
+                <option value="duel">Duel</option>
+                <option value="future">Future</option>
+                <option value="gladiator">Gladiator</option>
+              </select>
+            </div>
+            <div className="SubHeaderText">
+            </div>
+            <div className="SubHeaderText" style={{ marginTop: '10px', fontSize: '16px', color: "black", textShadow: "none", marginBottom: "20px" }}>
+              <input type="text" name="tagInput"
+                className='styledInput' value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag..." style={{ marginRight: '20px' }} />
+              <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
+            </div>
+            <input type="button" className='FancyButton' onClick={toggleGraphs} style={{ float: 'right' }} value={state.showRawGraphs ? "Hide Details" : "Show Details"} />
+            <div className="BodyText" style={{ whiteSpace: "pre-line", width: "50%" }}>
               <textarea rows="4" type="text"
-              className='styledInput'  name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%' }} />
-              </div> 
-              
-          
+                className='styledInput' name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%' }} />
+            </div>
           </div>
-          </div>
-
-        {/* <form style={{ display: 'flex', flexFlow: 'column nowrap', margin: 'auto', alignItems: 'center', }}>
-          <div style={{ display: 'flex', flexFlow: 'row wrap', width: '100%', alignItems: 'center', margin: '40px 8px 0 8px', justifyContent: 'space-between' }}>
-            <div>
-              <input type="text" name="title" value={wipDeck.title} onChange={handleChanges} placeholder="Deck Name" style={{ fontSize: '2rem' }} />
-              
-              <div className="DeckValidity" style={{color: gc.wipDeck.isValid ? "black" : "red"}}>{gc.wipDeck.isValid ? "" : "Error!"}</div>
-              <input type="button" className="FancyButton" onClick={handleSubmit} value="Save Deck" />
-              <input type="button" className="FancyButton" onClick={clearDeck} value="Clear Deck" />
-              <input type="button" className="FancyButton" onClick={(event) => {
-                let msg = 'Are you sure you want to upload your deck?'
-                if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
-                confirmAlert({
-                  title: 'Publish Deck',
-                  message: msg,
-                  buttons: [
-                    {
-                      label: 'Yes',
-                      onClick: (() => {
-                        
-                        handleSubmitRedirect(event)
-                      })
-                    }, {
-                      label: 'No',
-                      onClick: null
-                    }
-                  ]
-                })
-            
-                // handleSubmitRedirect(event)
-                // gc.setIsEditing(false)
-                // gc.setWipDeck(null)
-                // nav("/")
-
-              }} value="Publish Deck" />
-              <input type="button" className="FancyButton" onClick={cancelEditingDeck} value="Quit" />
-              {/* <input type="button" className='FancyButton' id="alt" onClick={toggleGraphs} value={state.showRawGraphs ? "Hide Graphs" : "Show Graphs"} /> */}
-          
-            {/* </div>
-            <select
-              value={wipDeck.formatTag}
-              onChange={(event) => { updateWipDeck({ formatTag: event.target.value }) }}
-            >
-              <option value="">Any Format</option>
-              <option value="standard">Standard</option>
-              <option value="commander">Commander</option>
-              <option value="pioneer">Pioneer</option>
-              <option value="explorer">Explorer</option>
-              <option value="modern">Modern</option>
-              <option value="premodern">Premodern</option>
-              <option value="vintage">Vintage</option>
-              <option value="legacy">Legacy</option>
-              <option value="oldschool">Old School</option>
-              <option value="pauper">Pauper</option>
-              <option value="historic">Historic</option>
-              <option value="alchemy">Alchemy</option>
-              <option value="brawl">Brawl</option>
-              <option value="paupercommander">Pauper Commander</option>
-              <option value="historicbrawl">Historic Brawl</option>
-              <option value="penny">Penny Dreadful</option>
-              <option value="duel">Duel</option>
-              <option value="future">Future</option>
-              <option value="gladiator">Gladiator</option>
-            </select>
-          </div>
-          <div style={{ width: '100%' }}>
-            <input type="text" name="tagInput" value={state.tagInput} onChange={handleStateChanges} onKeyDown={handleKeyDown} placeholder="Add Tag" />
-            <TagList tags={wipDeck.tags} handleDeleteTag={handleDeleteTag} editMode={true} />
-          </div>
-          <input type="text" name="description" value={wipDeck.description} onChange={handleChanges} placeholder="Deck Description" style={{ width: '100%', margin: '8px 0 0 8px' }} />
-
-        </form> */}
-        {/* <div>
-        { 
-          state.showRawGraphs && 
-          Object.keys(state.deckStats).map((key, index) => {
-            return (
-              <div key={index}>
-              {key} 
-              <br></br>
-              Stat: 
-              <br></br>
-              {JSON.stringify(state.deckStats[key], null, '\n')}
-              <br></br>
-              Graph: 
-              <br></br>
-              {state.deckGraphs[key]}
-              <br></br>
-              <br></br>
-                {/* {key}: {state.deckStats[key]} */}
-              {/* </div>
-            )
-          })
-        }
-        </div> */} 
+        </div>
         {
           state.deckGraphs && state.showRawGraphs &&
-          <div className="DeckPageGroup" style={{marginBottom: "10px", marginTop: "40px"}}> 
-          {/* <b className='HeaderText'>Deck Info:</b>
-          <br></br> */}
-          {/* <b className='BodyText'>Deck Stats:</b>
-            <br></br>
-          <div style={{display:"inline-block"}}>
-          Avg. CMC: {state.deckGraphs["avg_cmc"]}
-          </div> 
-            <br></br> */}
-          <div style={{display:"inline-block"}}>
-          <b className='BodyText'>Mana Curve</b>
-          <br></br>
-          <br></br>
-          {state.deckGraphs["mana_curve"]}</div>
-          <div style={{display:"inline-block"}}>
-          <b className='BodyText'>Color Distribution</b>
-          <br></br>
-          <br></br>
-          {state.deckGraphs["mana_ratio"]}</div>
-          <div style={{display:"inline-block"}}>
-          <b className='BodyText'>Card Types</b>
-          <br></br>
-          <br></br>
-          {state.deckGraphs["card_types_counts"]}</div>
-  </div>
+          <div className="DeckPageGroup" style={{ marginBottom: "10px", marginTop: "40px" }}>
+            <div style={{ display: "inline-block" }}>
+              <b className='BodyText'>Mana Curve</b>
+              <br></br>
+              <br></br>
+              {state.deckGraphs["mana_curve"]}</div>
+            <div style={{ display: "inline-block" }}>
+              <b className='BodyText'>Color Distribution</b>
+              <br></br>
+              <br></br>
+              {state.deckGraphs["mana_ratio"]}</div>
+            <div style={{ display: "inline-block" }}>
+              <b className='BodyText'>Card Types</b>
+              <br></br>
+              <br></br>
+              {state.deckGraphs["card_types_counts"]}</div>
+          </div>
         }
-        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', marginLeft:'15%', marginRight:'15%', marginBottom:'100px', marginTop:'40px' }}>
-          {state.cards.filter((item) => { 
-                        // console.log(item)
-                        return !item.type_one.toLowerCase().includes("land")
-                      }).sort(sortByName).sort(sortByCMC).map((card, index) => (
-            <CardObject size={"RegularCard"} key={index} data={card} clickable/>
+        <div style={{ display: 'flex', flexFlow: 'row wrap', gap: '16px', justifyContent: 'center', marginLeft: '15%', marginRight: '15%', marginBottom: '100px', marginTop: '40px' }}>
+          {state.cards.filter((item) => {
+            // console.log(item)
+            return !item.type_one.toLowerCase().includes("land")
+          }).sort(sortByName).sort(sortByCMC).map((card, index) => (
+            <CardObject size={"RegularCard"} key={index} data={card} clickable />
           ))}
-          {state.cards.filter((item) => { 
-                        // console.log(item)
-                        return item.type_one.toLowerCase().includes("land")
-                      }).sort(sortByName).sort(sortByCMC).map((card, index) => (
-            <CardObject size={"RegularCard"} key={index} data={card} clickable/>
+          {state.cards.filter((item) => {
+            // console.log(item)
+            return item.type_one.toLowerCase().includes("land")
+          }).sort(sortByName).sort(sortByCMC).map((card, index) => (
+            <CardObject size={"RegularCard"} key={index} data={card} clickable />
           ))}
         </div>
 
