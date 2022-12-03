@@ -9,14 +9,22 @@
     flex-direction: row;
     z-index: 999;
         /* border-style: solid; */
-    padding-left: 20%;
-    padding-right: 20%;
+    padding-left: 10em;
+    padding-right: 10em;
     user-select: none;
 }
 .dark .NavBarContainer {
     background-color: #19191a;
 }
 /* Left Side Container of NavBar */
+
+
+/* @media only screen and (max-width: 1300px) {
+    .NavBarContainer {
+        padding-left: 5em;
+        padding-right: 5em;
+    }
+} */
 
 .LogoContainer {
     display: flex;
