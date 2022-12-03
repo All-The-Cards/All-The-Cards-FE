@@ -74,7 +74,7 @@ const Home = (props) => {
           <div>
 
             <header className="HeaderText">Recent Decks</header>
-            {state.recentDecks.map((item, i) => <DeckTileObject data={item} key={i} />)}
+            {state.recentDecks.slice(0,6).map((item, i) => <DeckTileObject data={item} key={i} />)}
 
           </div>
         }

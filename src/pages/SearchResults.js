@@ -69,6 +69,7 @@ const SearchResults = (props) => {
 
     advancedContainerDisplay: 'none',
     resultsDisplayMode: 'cards',
+    showFilters: false,
   })
 
   const updateState = (objectToUpdate) => {
@@ -297,6 +298,7 @@ const SearchResults = (props) => {
 
           break
         case 'deck':
+          res = res.filter((item) => {return !item.containsCustom})
           updateState({
             deckResults: res,
             deckResultsFound: res.length,
@@ -394,6 +396,10 @@ const SearchResults = (props) => {
       gc.setSearchType("ADV")
       updateState({ advancedContainerDisplay: 'block' })
     }
+  }
+
+  const toggleFilterMenu = () => {
+    updateState({showFilters: !state.showFilters})
   }
 
   //advanced query toggle button text
@@ -938,6 +944,8 @@ const SearchResults = (props) => {
                 Cards found: {state.cardResults.length} | Showing: {getShowingAmt("card")}
               </div>
               {/* <header className="HeaderText">Filters:</header> */}
+              <button className='FancyButton' onClick={toggleFilterMenu} style={{position:'relative', top: '-70px', left:'450px'}}>{state.showFilters ? "Close" : "Filters"}</button>
+              { state.showFilters && 
               <div className='SelectTypeContainer' style={{ marginTop: '10px', borderRadius: '8px', padding: '20px', height: '60px' }}>
 
                 <div className='SelectTypeOption'>
@@ -1094,6 +1102,7 @@ const SearchResults = (props) => {
                 </div></div>
                 <button className="FancyButton" onClick={(e) => filterResults('clear')} style={{ marginTop: '-12px' }}>Reset</button>
               </div>
+              }
               <br></br>
               <div className="ResultsContainer">
                 {state.cardResults.slice(0, state.cardResultIndex + state.showResultAmountCards)
