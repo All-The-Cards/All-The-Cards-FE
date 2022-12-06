@@ -5,13 +5,13 @@
     justify-content: center;
     /* border-style: solid; */
     /* background-color: aquamarine; */
-    width: 500px;
+    /* width: 500em; */
 }
 
 .SearchBar{
     padding: 8px;
     border-radius: 5px;
-    width: 500px;
+    width: 30em;
     margin-right: 10px;
     border: 0;
     /* border-style: solid; */

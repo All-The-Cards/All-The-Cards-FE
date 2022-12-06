@@ -45,7 +45,7 @@
     min-width: 60%;
     /* width: 60%; */
     width: max-content;
-    overflow:overlay;
+    overflow: overlay;
 }
 
 .itemPrices {
@@ -73,10 +73,10 @@
     flex-wrap: wrap;
     writing-mode: vertical-lr;
     text-orientation: upright;
-    margin-left:50px;
+    /* margin-left:50px; */
     text-align: left;
     /* max-width: 60%; */
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
 }
 
 .symbol {
