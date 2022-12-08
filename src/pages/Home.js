@@ -74,7 +74,8 @@ const Home = (props) => {
           <div>
 
             <header className="HeaderText">Recent Decks</header>
-            {state.recentDecks.slice(0,6).map((item, i) => <DeckTileObject data={item} key={i} />)}
+            {/* {state.recentDecks.filter((item) => { return item.isValid }).filter((item) => { return item.user_id !== "anonymous" }).slice(0,6).map((item, i) => <DeckTileObject data={item} key={i} />)} */}
+            {state.recentDecks.filter((item) => { return item.isValid }).slice(0,6).map((item, i) => <DeckTileObject data={item} key={i} />)}
 
           </div>
         }
