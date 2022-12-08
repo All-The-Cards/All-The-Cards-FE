@@ -356,6 +356,7 @@ const WIPDeckList = (props) => {
     }
 
     const cardInCommander = (card, commander) => {
+      if (!commander) { return false }
       if (commander.name == "") return false
       let valid = true;
 

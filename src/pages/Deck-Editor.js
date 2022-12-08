@@ -130,6 +130,25 @@ const DeckEditor = (props) => {
   }
 
   const formatWipDeck = () => {
+    //check for invalid submissions
+    console.log(wipDeck)
+    console.log(wipDeck.commanderSlot, {name: ''})
+    if (
+      //if no cards
+      wipDeck.cards.length < 1 || 
+      //if commander format but no commander
+      (wipDeck.formatTag == "commander" && !wipDeck.commanderSlot) ||
+      (wipDeck.formatTag == "commander" && JSON.stringify(wipDeck.commanderSlot) == JSON.stringify({name: ""})) ||
+      //if no format
+      wipDeck.formatTag == "" ||
+      //if no cover card
+      (wipDeck.coverCard == "" || wipDeck.coverCard.image_uris.art_crop == "") ||
+      //if title empty
+      wipDeck.title == ""
+    ){
+      return -1
+    }
+
     let result = { ...wipDeck, cards: [], coverCard: wipDeck.coverCard.id, commander: wipDeck.commanderSlot.id, isValid: wipDeck.isValid }
     if (result.coverCard === undefined) {
       result.coverCard = wipDeck.cards[0].id
@@ -144,91 +163,113 @@ const DeckEditor = (props) => {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
-    let deckData = formatWipDeck()
-    deckData = {
-      ...deckData,
-      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
-      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
-    }
-    console.log(deckData)
-    fetch(server.buildAPIUrl("/api/features/editor/decks"),
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(deckData)
+    if (formatWipDeck() != -1){
+      
+      let deckData = formatWipDeck()
+      deckData = {
+        ...deckData,
+        token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+        authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
       }
-    )
-      .then((response) => {
-        console.log(response);
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      console.log(deckData)
+      fetch(server.buildAPIUrl("/api/features/editor/decks"),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(deckData)
+        }
+      )
+        .then((response) => {
+          console.log(response);
+        })
+        .then((data) => {
+          // console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else { deckError() }
   }
 
   const handleSubmitRedirect = (event) => {
     event.preventDefault();
-    setState((previous) => ({
-      ...previous,
-      publishBlocker: true
-    }))
-    let deckData = formatWipDeck()
-    deckData = {
-      ...deckData,
-      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
-      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
-    }
-    console.log(deckData)
-    fetch(server.buildAPIUrl("/api/features/editor/decks"),
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(deckData)
+    if (formatWipDeck() != -1){
+      console.log("submitting...")
+      setState((previous) => ({
+        ...previous,
+        publishBlocker: true
+      }))
+      let deckData = formatWipDeck()
+      deckData = {
+        ...deckData,
+        token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+        authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
       }
-    )
-      .then((response) => {
-        console.log(response);
-        setState((previous) => ({
-          ...previous,
-          publishBlocker: false
-        }))
-        gc.setIsEditing(false)
-        gc.setWipDeck({
-          authorID: "",
-          cards: [],
-          coverCard: {
-            image_uris: {
-              art_crop: ""
-            }
+      console.log(deckData)
+      fetch(server.buildAPIUrl("/api/features/editor/decks"),
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
-          deckID: "",
-          description: "",
-          formatTag: "",
-          tags: [],
-          title: "",
-          commanderSlot: {
-            name: ""
-          },
-          isValid: false,
+          body: JSON.stringify(deckData)
+        }
+      )
+        .then((response) => {
+          console.log(response);
+          setState((previous) => ({
+            ...previous,
+            publishBlocker: false
+          }))
+          gc.setIsEditing(false)
+          gc.setWipDeck({
+            authorID: "",
+            cards: [],
+            coverCard: {
+              image_uris: {
+                art_crop: ""
+              }
+            },
+            deckID: "",
+            description: "",
+            formatTag: "",
+            tags: [],
+            title: "",
+            commanderSlot: {
+              name: ""
+            },
+            isValid: false,
+          })
+          saveToLocalStorage("wipDeck", gc.wipDeck)
+          nav("/")
         })
-        saveToLocalStorage("wipDeck", gc.wipDeck)
-        nav("/")
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((data) => {
+          // console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+      else { deckError() }
+  }
+
+  const deckError = () => {
+    
+    confirmAlert({
+      title: 'Deck Error',
+      message: 'It looks like your deck is missing data. Review and try again.',
+      buttons: [
+          {
+          label: 'Ok',
+          onClick: null
+        }
+      ]
+    })
   }
   const clearDeck = (event) => {
     confirmAlert({
@@ -275,31 +316,50 @@ const DeckEditor = (props) => {
         {
           label: 'Yes',
           onClick: () => {
-            //CLEAR LOCAL
-            // gc.setWipDeck({
-            //   authorID: "",
-            //   cards: [],
-            //   deckID: "",
-            //   description: "",
-            //   formatTag: "",
-            //   tags: [],
-            //   title: "",
-            //   commanderSlot: {
-            //       name: ""
-            //   },
-            //   coverCard: {
-            //     image_uris: {
-            //       art_crop: ""
-            //     }
-            //   },
-            //   isValid: false,
-            // })
-            // saveToLocalStorage("wipDeck", gc.wipDeck)
-            
-            //SEND DELETE REQUEST
-            //.then(nav("/"))
-          }
-        }, {
+            fetch(server.buildAPIUrl("/api/features/editor/delete"),
+              {
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'deckid': gc.wipDeck.deckID,
+                  'token': gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : ""
+                }
+              }
+            ).then((response) => {
+                console.log(response);
+                
+                gc.setIsEditing(false)
+                gc.setWipDeck({
+                  authorID: "",
+                  cards: [],
+                  coverCard: {
+                    image_uris: {
+                      art_crop: ""
+                    }
+                  },
+                  deckID: "",
+                  description: "",
+                  formatTag: "",
+                  tags: [],
+                  title: "",
+                  commanderSlot: {
+                    name: ""
+                  },
+                  isValid: false,
+                })
+                saveToLocalStorage("wipDeck", gc.wipDeck)
+                nav("/")
+                return response.json()
+              })
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            }
+          } , {
           label: 'No',
           onClick: null
         }
@@ -575,25 +635,29 @@ const DeckEditor = (props) => {
               <div className="DeckPage-Buttons">
               
               <button className="FancyButton" id='alt' style={{float:'right', marginLeft:'20px'}} onClick={(event) => {
-                let msg = 'Are you sure you want to upload your deck?'
-                if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
-                confirmAlert({
-                  title: 'Publish Deck',
-                  message: msg,
-                  buttons: [
-                    {
-                      label: 'Yes',
-                      onClick: (() => {
-                        
-                        handleSubmitRedirect(event)
-                      })
-                    }, {
-                      label: 'No',
-                      onClick: null
-                    }
-                  ]
-                })
-            
+                if (formatWipDeck() != -1){
+                  
+                  let msg = 'Are you sure you want to upload your deck?'
+                  if (!gc.wipDeck.isValid) msg += " It looks like your deck isn't legal. You can still upload it, and there will be a warning tag."
+                  confirmAlert({
+                    title: 'Publish Deck',
+                    message: msg,
+                    buttons: [
+                      {
+                        label: 'Yes',
+                        onClick: (() => {
+                          
+                          handleSubmitRedirect(event)
+                        })
+                      }, {
+                        label: 'No',
+                        onClick: null
+                      }
+                    ]
+                  })
+                }
+                else { deckError() }
+              
                 // handleSubmitRedirect(event)
                 // gc.setIsEditing(false)
                 // gc.setWipDeck(null)
@@ -604,7 +668,7 @@ const DeckEditor = (props) => {
               <button className="FancyButton" style={{float:'right'}} onClick={handleSubmit} value="Save Deck" >Save</button>
               <button className="FancyButton" style={{float:'right'}} id='' onClick={importDeckList}>Import List</button>
               <button className="FancyButton" style={{float:'right'}} onClick={clearDeck} value="New Deck" >New Deck</button>
-              <button className="FancyButton" id='disabled' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
+              <button className="FancyButton" id='alt2' style={{float:'right'}} onClick={deleteDeck}>Delete</button>
                 
               </div>
              <div className="HeaderText" id="cardName" style={{fontSize: '48px', marginTop: "-5px"}}> 

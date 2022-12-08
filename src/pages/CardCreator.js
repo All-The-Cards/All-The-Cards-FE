@@ -1,6 +1,8 @@
 import { React, useState, useEffect, useContext } from 'react';
 import Footer from '../components/Footer/Footer';
 import { GlobalContext } from "../context/GlobalContext";
+import * as mana from '../components/TextToMana/TextToMana.js'
+import * as server from "../functions/ServerTalk";
 import './CardCreator.css'
 
 // Empty Cards
@@ -9,40 +11,6 @@ import BlackCard from '../images/MTG-BlackCard.png'
 import BlueCard from '../images/MTG-BlueCard.png'
 import RedCard from '../images/MTG-RedCard.png'
 import GreenCard from '../images/MTG-GreenCard.png'
-
-// Mana Symbols
-import WhiteMana from '../images/WhiteMana.svg'
-import BlackMana from '../images/BlackMana.svg'
-import BlueMana from '../images/BlueMana.svg'
-import RedMana from '../images/RedMana.svg'
-import GreenMana from '../images/GreenMana.svg'
-import WhtBlkMana from '../images/WhtBlkMana.svg'
-import WhtBluMana from '../images/WhtBluMana.svg'
-import WhtGrnMana from '../images/WhtGrnMana.svg'
-import WhtRdMana from '../images/WhtRdMana.svg'
-
-// Mana Amount
-import Zero from '../images/Zero.png'
-import One from '../images/One.svg'
-import Two from '../images/Two.svg'
-import Three from '../images/Three.svg'
-import Four from '../images/Four.svg'
-import Five from '../images/Five.svg'
-import Six from '../images/Six.svg'
-import Seven from '../images/Seven.svg'
-import Eight from '../images/Eight.svg'
-import Nine from '../images/Nine.svg'
-import Ten from '../images/Ten.png'
-import Eleven from '../images/Eleven.png'
-import Twelve from '../images/Twelve.png'
-import Thirteen from '../images/Thirteen.png'
-import Fourteen from '../images/Fourteen.png'
-import Fifteen from '../images/Fifteen.png'
-import Sixteen from '../images/Sixteen.png'
-import Seventeen from '../images/Seventeen.png'
-import Eighteen from '../images/Eighteen.png'
-import Nineteen from '../images/Nineteen.png'
-import Twenty from '../images/Twenty.png'
 
 // Images
 import Default from '../images/DefaultImage.jpg'
@@ -55,19 +23,20 @@ const CardCreator = (props) => {
   const [tempImage, setTempImage] = useState(null)
   const [cardName, setCardName] = useState('Card Name')
   const [manaImage, setManaImage] = useState()
-  const [numberImage, setNumberImage] = useState(One)
+  const [numberImage, setNumberImage] = useState(mana.replaceSymbols("{0}"))
+  const [xImage, setXImage] = useState(false)
   const [isDisabled1, setDisable1] = useState(true)
   const [isDisabled2, setDisable2] = useState(true)
-  const [checked, setCheck] = useState(false)
+  const [checked1, setCheck1] = useState(false)
+  const [checked2, setCheck2] = useState(false)
   const [cardType, setCardType] = useState('Land')
+  const [selectValue, setSelectValue] = useState('land')
   const [subType, setSubType] = useState('Subtype Name')
   const [needSub, setSub] = useState(false)
   const [textArea, setTextArea] = useState('Card Description Here...')
   const [attack, setAttack] = useState(0)
   const [defense, setDefense] = useState(0)
   const [radioSelection1, setRadioSelection1] = useState('WhiteCard')
-  const [radioSelection2, setRadioSelection2] = useState('WhiteMana')
-  const [radioSelection3, setRadioSelection3] = useState('Land')
   const [manas, setManas] = useState([])
   const [genManaNumber, setGenManaNumber] = useState(0)
 
@@ -100,82 +69,60 @@ const CardCreator = (props) => {
         setRadioSelection1('GreenCard')
         setCardImage(GreenCard)
         break
-      case 'WhiteMana':
-        setRadioSelection2('WhiteMana')
-        break
-      case 'BlackMana':
-        setRadioSelection2('BlackMana')
-        break
-      case 'BlueMana':
-        setRadioSelection2('BlueMana')
-        break
-      case 'RedMana':
-        setRadioSelection2('RedMana')
-        break
-      case 'GreenMana':
-        setRadioSelection2('GreenMana')
-        break
-      case 'WhtBlkMana':
-        setRadioSelection2('WhtBlkMana')
-        break
-      case 'WhtBluMana':
-        setRadioSelection2('WhtBluMana')
-        break
-      case 'WhtGrnMana':
-        setRadioSelection2('WhtGrnMana')
-        break
-      case 'WhtRdMana':
-        setRadioSelection2('WhtRdMana')
-        break
-      case 'Land':
-        setRadioSelection3('Land')
+      default:
+        return
+    }
+  };
+
+  const selectChange = (e) => {
+    let value = e.target.value
+    setSelectValue(value)
+
+    switch (value) {
+      case 'land':
         setCardType('Land')
         setSub(false)
         setDisable1(true)
         setDisable2(true)
         break
-      case 'Creature':
-        setRadioSelection3('Creature')
-        setCardType('Creature -')
+      case 'creature':
+        setCardType('Creature')
         setSub(true)
         setDisable1(false)
         setDisable2(false)
         break
-      case 'Enchantment':
-        setRadioSelection3('Enchantment')
+      case 'enchantment':
         setCardType('Enchantment')
         setSub(false)
         setDisable1(false)
         setDisable2(false)
         break
-      case 'Artifact':
-        setRadioSelection3('Artifact')
+      case 'artifact':
         setCardType('Artifact')
         setSub(false)
         setDisable1(false)
         setDisable2(false)
         break
-      case 'Instant':
-        setRadioSelection3('Instant')
+      case 'instant':
         setCardType('Instant')
         setSub(false)
         setDisable1(false)
         setDisable2(false)
         break
-      case 'Sorcery':
-        setRadioSelection3('Sorcery')
+      case 'sorcery':
         setCardType('Sorcery')
         setSub(false)
         setDisable1(false)
         setDisable2(false)
         break
-      case 'Artifact Creature':
-        setRadioSelection3('Artifact Creature')
-        setCardType('Artifact Creature -')
+      case 'aCreature':
+        setCardType('Artifact Creature')
         setSub(true)
         setDisable1(false)
         setDisable2(false)
         break
+      default:
+        return
     }
   };
 
@@ -186,204 +133,274 @@ const CardCreator = (props) => {
     switch (target) {
       case '0':
         setGenManaNumber(0)
-        setNumberImage(Zero)
+        setNumberImage(mana.replaceSymbols("{0}"))
         break
       case '1':
         setGenManaNumber(1)
-        setNumberImage(One)
+        setNumberImage(mana.replaceSymbols("{1}"))
         break
       case '2':
         setGenManaNumber(2)
-        setNumberImage(Two)
+        setNumberImage(mana.replaceSymbols("{2}"))
         break
       case '3':
         setGenManaNumber(3)
-        setNumberImage(Three)
+        setNumberImage(mana.replaceSymbols("{3}"))
         break
       case '4':
         setGenManaNumber(4)
-        setNumberImage(Four)
+        setNumberImage(mana.replaceSymbols("{4}"))
         break
       case '5':
         setGenManaNumber(5)
-        setNumberImage(Five)
+        setNumberImage(mana.replaceSymbols("{5}"))
         break
       case '6':
         setGenManaNumber(6)
-        setNumberImage(Six)
+        setNumberImage(mana.replaceSymbols("{6}"))
         break
       case '7':
         setGenManaNumber(7)
-        setNumberImage(Seven)
+        setNumberImage(mana.replaceSymbols("{7}"))
         break
       case '8':
         setGenManaNumber(8)
-        setNumberImage(Eight)
+        setNumberImage(mana.replaceSymbols("{8}"))
         break
       case '9':
         setGenManaNumber(9)
-        setNumberImage(Nine)
+        setNumberImage(mana.replaceSymbols("{9}"))
         break
       case '10':
         setGenManaNumber(10)
-        setNumberImage(Ten)
+        setNumberImage(mana.replaceSymbols("{10}"))
         break
       case '11':
         setGenManaNumber(11)
-        setNumberImage(Eleven)
+        setNumberImage(mana.replaceSymbols("{11}"))
         break
       case '12':
         setGenManaNumber(12)
-        setNumberImage(Twelve)
+        setNumberImage(mana.replaceSymbols("{12}"))
         break
       case '13':
         setGenManaNumber(13)
-        setNumberImage(Thirteen)
+        setNumberImage(mana.replaceSymbols("{13}"))
         break
       case '14':
         setGenManaNumber(14)
-        setNumberImage(Fourteen)
+        setNumberImage(mana.replaceSymbols("{14}"))
         break
       case '15':
         setGenManaNumber(15)
-        setNumberImage(Fifteen)
+        setNumberImage(mana.replaceSymbols("{15}"))
         break
       case '16':
         setGenManaNumber(16)
-        setNumberImage(Sixteen)
+        setNumberImage(mana.replaceSymbols("{16}"))
         break
       case '17':
         setGenManaNumber(17)
-        setNumberImage(Seventeen)
+        setNumberImage(mana.replaceSymbols("{17}"))
         break
       case '18':
         setGenManaNumber(18)
-        setNumberImage(Eighteen)
+        setNumberImage(mana.replaceSymbols("{18}"))
         break
       case '19':
         setGenManaNumber(19)
-        setNumberImage(Nineteen)
+        setNumberImage(mana.replaceSymbols("{19}"))
         break
       case '20':
         setGenManaNumber(20)
-        setNumberImage(Twenty)
+        setNumberImage(mana.replaceSymbols("{20}"))
         break
+      default:
+        return
     }
   };
 
-  const buttonClick = () => {
-    switch (radioSelection2) {
-      case 'WhiteMana':
+  const buttonClick = (e) => {
+
+    if (isDisabled1) return
+
+    switch (e.target.title) {
+      case 'White':
         setManas((prev) => {
           prev.push({
-            src: WhiteMana,
+            src: "{W}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         break
-      case 'BlackMana':
+      case 'Black':
         setManas((prev) => {
           prev.push({
-            src: BlackMana,
+            src: "{B}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         break
-      case 'BlueMana':
+      case 'Blue':
         setManas((prev) => {
           prev.push({
-            src: BlueMana,
+            src: "{U}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         break
-      case 'RedMana':
+      case 'Red':
         setManas((prev) => {
           prev.push({
-            src: RedMana,
+            src: "{R}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         return
-      case 'GreenMana':
+      case 'Green':
         setManas((prev) => {
           prev.push({
-            src: GreenMana,
+            src: "{G}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         return
-      case 'WhtBlkMana':
+      case 'White/Black':
         setManas((prev) => {
           prev.push({
-            src: WhtBlkMana,
+            src: "{W/B}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         return
-      case 'WhtBluMana':
+      case 'Blue/Black':
         setManas((prev) => {
           prev.push({
-            src: WhtBluMana,
+            src: "{U/B}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         return
-      case 'WhtGrnMana':
+      case 'Black/Red':
         setManas((prev) => {
           prev.push({
-            src: WhtGrnMana,
+            src: "{B/R}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
         return
-      case 'WhtRdMana':
+      case 'Red/Green':
         setManas((prev) => {
           prev.push({
-            src: WhtRdMana,
+            src: "{R/G}",
             alt: 'Mana Symbol'
           })
-          setManaImage(manas.map((x, i) => <img className='Mana' key={i} id={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
           checkButton()
           return manas
         })
+        return
+      case 'Green/White':
+        setManas((prev) => {
+          prev.push({
+            src: "{G/W}",
+            alt: 'Mana Symbol'
+          })
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
+          checkButton()
+          return manas
+        })
+        return
+      case 'Blue/Red':
+        setManas((prev) => {
+          prev.push({
+            src: "{U/R}",
+            alt: 'Mana Symbol'
+          })
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
+          checkButton()
+          return manas
+        })
+        return
+      case 'Black/Green':
+        setManas((prev) => {
+          prev.push({
+            src: "{B/G}",
+            alt: 'Mana Symbol'
+          })
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
+          checkButton()
+          return manas
+        })
+        return
+      case 'Red/White':
+        setManas((prev) => {
+          prev.push({
+            src: "{R/W}",
+            alt: 'Mana Symbol'
+          })
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
+          checkButton()
+          return manas
+        })
+        return
+      case 'Green/Blue':
+        setManas((prev) => {
+          prev.push({
+            src: "{G/U}",
+            alt: 'Mana Symbol'
+          })
+          setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
+          checkButton()
+          return manas
+        })
+        return
+      default:
         return
     }
 
   };
 
-  const toggle = () => {
-    setCheck(!checked)
+  const toggle = (e) => {
+
+    if (e.target.id === 'NumberMana') {
+      setCheck1(!checked1)
+    }
+    else if (e.target.id === 'XMana') {
+      setCheck2(!checked2)
+      setXImage(true)
+    }
+
   }
 
   const eraseMana = (e) => {
     let container = manas
-    container.splice(e.target.id, 1)
-    setManaImage(manas.map((x, i) => <img className='Mana' key={i} src={x.src} alt={x.alt} onClick={eraseMana} />))
+    container.splice(e.target.parentElement.parentElement.id, 1)
+    setManaImage(manas.map((x, i) => <div className='Mana' id={i} key={i} alt={x.alt} onClick={eraseMana}>{mana.replaceSymbols(x.src)}</div>))
     setDisable1(false)
   }
 
@@ -410,8 +427,10 @@ const CardCreator = (props) => {
   }
 
   const checkButton = () => {
-    console.log(manas.length)
-    if (manas.length === 6) {
+    if (checked1 && manas.length === 5) {
+      setDisable1(true)
+    }
+    else if (!checked1 && manas.length === 6) {
       setDisable1(true)
     }
   }
@@ -423,6 +442,98 @@ const CardCreator = (props) => {
   const changeImage = (e) => {
     e.preventDefault()
     setArtwork(<img className='CardImage' src={tempImage} alt='photo'></img>)
+  }
+
+  function saveCard() {
+
+    //get card object from state with mirrored structure of card object
+    let customCardData = {
+      card: buildCustomCard(),
+      png: cardImage,
+      art_crop: artwork.props.src,
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
+
+    //log card object
+    console.log(customCardData)
+
+    //send server request
+    // fetch(server.buildAPIUrl("/api/features/editor/cards"),
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //     body: JSON.stringify(customCardData)
+    //   }
+    // ).then((response) => {
+    //   console.log(response);
+    // })
+    //   .then((data) => {
+    //     // console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     return -1
+    //   });
+
+    return 1
+  }
+
+  function getColorArray(manaString) {
+    let colors = ['W', 'U', 'B', 'R', 'G']
+    let foundColors = []
+    for (let i = 0; i < manaString.length; i++) {
+      if (colors.includes(manaString[i]) && !foundColors.includes(manaString[i])) {
+        foundColors.push(manaString[i])
+      }
+    }
+    return foundColors
+  }
+
+  function buildManaString(manaArray) {
+    let manaString = ""
+    if (genManaNumber > 0) {
+      manaString += "{" + genManaNumber + "}"
+    }
+    for (let i = 0; i < manaArray.length; i++) {
+      manaString += manaArray[i].src
+    }
+    return manaString
+  }
+
+  function getManaTotal(manaArray) {
+    let total = 0
+    if (genManaNumber > 0) {
+      total += genManaNumber
+    }
+    total += manaArray.length
+    return total
+  }
+
+  function buildCustomCard() {
+    let manaString = buildManaString(manas)
+    return {
+      "id": null,
+      "author": gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+      "border_color": "black",
+      "cmc": getManaTotal(manas), /*get mana total...need to include generic mana*/
+      "color_identity": getColorArray(manaString),
+      "colors": getColorArray(manaString),
+      "flavor_text": null,
+      "frame_effects": null,
+      "mana_cost": manaString,
+      "name": cardName,
+      "oracle_text": textArea,
+      "power": attack,
+      "produced_mana": null,
+      "rarity": "common",
+      "subtype_one": subType,
+      "toughness": defense,
+      "type_one": cardType
+    }
   }
 
   return (
@@ -439,12 +550,15 @@ const CardCreator = (props) => {
             onChange={handleCardName}
           />
           <div className='ManaContainer'>
-            {checked &&
-              <img className='ManaNumber' src={numberImage} alt='Generic Number Icon'></img>
+            {checked1 &&
+              <div className='ManaNumber'>{numberImage}</div>
+            }
+            {xImage &&
+              <div className='ManaNumber'>{mana.replaceSymbols("{X}")}</div>
             }
             {manaImage}
           </div>
-          <div className='CardTypeContainer'> {cardType}
+          <div className='CardTypeContainer'> {cardType} {cardType.toLowerCase().includes('creature') && ' - '}
             {needSub &&
               <input
                 type="text"
@@ -455,7 +569,9 @@ const CardCreator = (props) => {
               />
             }
           </div>
-          <textarea className='TextAreaContainer' value={textArea} onChange={handleTextArea} />
+          <div className='TextAreaContainer' style={{ whiteSpace: "pre-line", flexDirection: 'row' }}>
+            {mana.replaceSymbols(textArea)}
+          </div>
           {!isDisabled2 &&
             <div className='PowerContainer'> {attack} / {defense} </div>
           }
@@ -521,117 +637,46 @@ const CardCreator = (props) => {
             </label>
           </form>
 
-          <h4 style={{ marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>Mana Color:<span>
-            <input
-              id='AddButton'
-              className='Button'
-              type="button"
-              value="Add"
-              disabled={isDisabled1}
-              onClick={buttonClick}
-            />
-          </span></h4>
-          <form style={{ textAlign: 'center' }}>
+          <h4 style={{ marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>Mana Color:</h4>
+
+          <div className='RealManaContainer'>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{W}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{B}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{U}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{R}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{G}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{W/B}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{U/B}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{B/R}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{R/G}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{G/W}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{U/R}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{B/G}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{R/W}")}</div>
+            <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{G/U}")}</div>
+          </div>
+
+          <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
+              Numeric Mana?:
               <input
-                type="radio"
-                name="react-tips"
-                value="WhiteMana"
-                checked={radioSelection2 === "WhiteMana"}
-                onChange={radioChange}
+                id='NumberMana'
+                type="checkbox"
+                disabled={isDisabled2}
+                checked={checked1}
+                onChange={toggle}
               />
-              White
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="BlackMana"
-                checked={radioSelection2 === "BlackMana"}
-                onChange={radioChange}
-              />
-              Black
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="BlueMana"
-                checked={radioSelection2 === "BlueMana"}
-                onChange={radioChange}
-              />
-              Blue
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="RedMana"
-                checked={radioSelection2 === "RedMana"}
-                onChange={radioChange}
-              />
-              Red
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="GreenMana"
-                checked={radioSelection2 === "GreenMana"}
-                onChange={radioChange}
-              />
-              Green
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtBlkMana"
-                checked={radioSelection2 === "WhtBlkMana"}
-                onChange={radioChange}
-              />
-              White/Black
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtBluMana"
-                checked={radioSelection2 === "WhtBluMana"}
-                onChange={radioChange}
-              />
-              White/Blue
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtGrnMana"
-                checked={radioSelection2 === "WhtGrnMana"}
-                onChange={radioChange}
-              />
-              White/Green
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtRdMana"
-                checked={radioSelection2 === "WhtRdMana"}
-                onChange={radioChange}
-              />
-              White/Red
             </label>
           </form>
 
           <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
-              Generic Mana?:
+              X Symbol?:
               <input
+                id='XMana'
                 type="checkbox"
                 disabled={isDisabled2}
-                checked={checked}
+                checked={checked2}
                 onChange={toggle}
               />
             </label>
@@ -653,112 +698,57 @@ const CardCreator = (props) => {
           </form>
 
           <h4 className='CardColorHeader'>Card Type:</h4>
-          <form style={{ textAlign: 'center' }}>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Land"
-                checked={radioSelection3 === "Land"}
-                onChange={radioChange}
-              />
-              Land
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Creature"
-                checked={radioSelection3 === "Creature"}
-                onChange={radioChange}
-              />
-              Creature
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Enchantment"
-                checked={radioSelection3 === "Enchantment"}
-                onChange={radioChange}
-              />
-              Enchantment
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Artifact"
-                checked={radioSelection3 === "Artifact"}
-                onChange={radioChange}
-              />
-              Artifact
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Instant"
-                checked={radioSelection3 === "Instant"}
-                onChange={radioChange}
-              />
-              Instant
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Sorcery"
-                checked={radioSelection3 === "Sorcery"}
-                onChange={radioChange}
-              />
-              Sorcery
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Artifact Creature"
-                checked={radioSelection3 === "Artifact Creature"}
-                onChange={radioChange}
-              />
-              Artifact Creature
-            </label>
-          </form>
+          <select className='SelectContainer' value={selectValue} onChange={selectChange}>
+            <option value='land'>Land</option>
+            <option value='creature'>Creature</option>
+            <option value='enchantment'>Enchantment</option>
+            <option value='artifact'>Artifact</option>
+            <option value='instant'>Instant</option>
+            <option value='sorcery'>Sorcery</option>
+            <option value='cArtifact'>Creature Artifact</option>
+          </select>
 
           <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
-              Attack:
-              <input
-                id='attack'
-                className='Inputs'
-                type="number"
-                value={attack}
-                disabled={isDisabled2}
-                min={0}
-                max={99}
-                onChange={powerChange}
-              />
+              Description:
             </label>
+            <br />
+            <textarea className='TextAreaContainerEditor' value={textArea} onChange={handleTextArea} />
           </form>
 
-          <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
-            <label>
-              Defense:
-              <input
-                id='defense'
-                className='Inputs'
-                type="number"
-                value={defense}
-                disabled={isDisabled2}
-                min={0}
-                max={99}
-                onChange={powerChange}
-              />
-            </label>
-          </form>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
+              <label>
+                Power:
+                <input
+                  id='attack'
+                  className='Inputs'
+                  type="number"
+                  value={attack}
+                  disabled={isDisabled2}
+                  min={0}
+                  max={99}
+                  onChange={powerChange}
+                />
+              </label>
+            </form>
+
+            <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
+              <label>
+                Toughness:
+                <input
+                  id='defense'
+                  className='Inputs'
+                  type="number"
+                  value={defense}
+                  disabled={isDisabled2}
+                  min={0}
+                  max={99}
+                  onChange={powerChange}
+                />
+              </label>
+            </form>
+          </div>
 
           <form onSubmit={changeImage} style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
@@ -773,12 +763,11 @@ const CardCreator = (props) => {
             <button id='SubmitButton' type='submit'>Update Image</button>
           </form>
 
-          <div className='SaveButtonContainer'><button id='SaveButton'>Save</button></div>
+          <div className='SaveButtonContainer'><button id='SaveButton' onClick={saveCard}>Save</button></div>
 
         </div>
       </div>
       <div className='Filler'></div>
-      <Footer />
     </div >
 
   )
