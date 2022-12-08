@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import Footer from '../components/Footer/Footer';
 import { GlobalContext } from "../context/GlobalContext";
 import * as mana from '../components/TextToMana/TextToMana.js'
+import * as server from "../functions/ServerTalk";
 import './CardCreator.css'
 
 // Empty Cards
@@ -23,9 +24,11 @@ const CardCreator = (props) => {
   const [cardName, setCardName] = useState('Card Name')
   const [manaImage, setManaImage] = useState()
   const [numberImage, setNumberImage] = useState(mana.replaceSymbols("{0}"))
+  const [xImage, setXImage] = useState(false)
   const [isDisabled1, setDisable1] = useState(true)
   const [isDisabled2, setDisable2] = useState(true)
-  const [checked, setCheck] = useState(false)
+  const [checked1, setCheck1] = useState(false)
+  const [checked2, setCheck2] = useState(false)
   const [cardType, setCardType] = useState('Land')
   const [selectValue, setSelectValue] = useState('land')
   const [subType, setSubType] = useState('Subtype Name')
@@ -83,7 +86,7 @@ const CardCreator = (props) => {
         setDisable2(true)
         break
       case 'creature':
-        setCardType('Creature -')
+        setCardType('Creature')
         setSub(true)
         setDisable1(false)
         setDisable2(false)
@@ -113,7 +116,7 @@ const CardCreator = (props) => {
         setDisable2(false)
         break
       case 'aCreature':
-        setCardType('Artifact Creature -')
+        setCardType('Artifact Creature')
         setSub(true)
         setDisable1(false)
         setDisable2(false)
@@ -382,8 +385,16 @@ const CardCreator = (props) => {
 
   };
 
-  const toggle = () => {
-    setCheck(!checked)
+  const toggle = (e) => {
+
+    if (e.target.id === 'NumberMana') {
+      setCheck1(!checked1)
+    }
+    else if (e.target.id === 'XMana') {
+      setCheck2(!checked2)
+      setXImage(true)
+    }
+
   }
 
   const eraseMana = (e) => {
@@ -416,10 +427,10 @@ const CardCreator = (props) => {
   }
 
   const checkButton = () => {
-    if (checked && manas.length === 5) {
+    if (checked1 && manas.length === 5) {
       setDisable1(true)
     }
-    else if (!checked && manas.length === 6) {
+    else if (!checked1 && manas.length === 6) {
       setDisable1(true)
     }
   }
@@ -431,6 +442,98 @@ const CardCreator = (props) => {
   const changeImage = (e) => {
     e.preventDefault()
     setArtwork(<img className='CardImage' src={tempImage} alt='photo'></img>)
+  }
+
+  function saveCard() {
+
+    //get card object from state with mirrored structure of card object
+    let customCardData = {
+      card: buildCustomCard(),
+      png: cardImage,
+      art_crop: artwork.props.src,
+      token: gc.activeSession != null && gc.activeSession.access_token != "" ? gc.activeSession.access_token : "",
+      authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+    }
+
+    //log card object
+    console.log(customCardData)
+
+    //send server request
+    // fetch(server.buildAPIUrl("/api/features/editor/cards"),
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //     body: JSON.stringify(customCardData)
+    //   }
+    // ).then((response) => {
+    //   console.log(response);
+    // })
+    //   .then((data) => {
+    //     // console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     return -1
+    //   });
+
+    return 1
+  }
+
+  function getColorArray(manaString) {
+    let colors = ['W', 'U', 'B', 'R', 'G']
+    let foundColors = []
+    for (let i = 0; i < manaString.length; i++) {
+      if (colors.includes(manaString[i]) && !foundColors.includes(manaString[i])) {
+        foundColors.push(manaString[i])
+      }
+    }
+    return foundColors
+  }
+
+  function buildManaString(manaArray) {
+    let manaString = ""
+    if (genManaNumber > 0) {
+      manaString += "{" + genManaNumber + "}"
+    }
+    for (let i = 0; i < manaArray.length; i++) {
+      manaString += manaArray[i].src
+    }
+    return manaString
+  }
+
+  function getManaTotal(manaArray) {
+    let total = 0
+    if (genManaNumber > 0) {
+      total += genManaNumber
+    }
+    total += manaArray.length
+    return total
+  }
+
+  function buildCustomCard() {
+    let manaString = buildManaString(manas)
+    return {
+      "id": null,
+      "author": gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
+      "border_color": "black",
+      "cmc": getManaTotal(manas), /*get mana total...need to include generic mana*/
+      "color_identity": getColorArray(manaString),
+      "colors": getColorArray(manaString),
+      "flavor_text": null,
+      "frame_effects": null,
+      "mana_cost": manaString,
+      "name": cardName,
+      "oracle_text": textArea,
+      "power": attack,
+      "produced_mana": null,
+      "rarity": "common",
+      "subtype_one": subType,
+      "toughness": defense,
+      "type_one": cardType
+    }
   }
 
   return (
@@ -447,13 +550,15 @@ const CardCreator = (props) => {
             onChange={handleCardName}
           />
           <div className='ManaContainer'>
-            {checked &&
-              // <img className='ManaNumber' src={numberImage} alt='Generic Number Icon'></img>
+            {checked1 &&
               <div className='ManaNumber'>{numberImage}</div>
+            }
+            {xImage &&
+              <div className='ManaNumber'>{mana.replaceSymbols("{X}")}</div>
             }
             {manaImage}
           </div>
-          <div className='CardTypeContainer'> {cardType}
+          <div className='CardTypeContainer'> {cardType} {cardType.toLowerCase().includes('creature') && ' - '}
             {needSub &&
               <input
                 type="text"
@@ -464,7 +569,9 @@ const CardCreator = (props) => {
               />
             }
           </div>
-          <textarea className='TextAreaContainer' value={textArea} onChange={handleTextArea} />
+          <div className='TextAreaContainer' style={{ whiteSpace: "pre-line", flexDirection: 'row' }}>
+            {mana.replaceSymbols(textArea)}
+          </div>
           {!isDisabled2 &&
             <div className='PowerContainer'> {attack} / {defense} </div>
           }
@@ -531,14 +638,7 @@ const CardCreator = (props) => {
           </form>
 
           <h4 style={{ marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>Mana Color:</h4>
-          {/* <input
-              id='AddButton'
-              className='Button'
-              type="button"
-              value="Add"
-              disabled={isDisabled1}
-              onClick={buttonClick}
-            /> */}
+
           <div className='RealManaContainer'>
             <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{W}")}</div>
             <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{B}")}</div>
@@ -556,107 +656,27 @@ const CardCreator = (props) => {
             <div className='RealMana' onClick={buttonClick} disabled={isDisabled1}>{mana.replaceSymbols("{G/U}")}</div>
           </div>
 
-          {/* <form style={{ textAlign: 'center' }}>
+          <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
+              Numeric Mana?:
               <input
-                type="radio"
-                name="react-tips"
-                value="WhiteMana"
-                checked={radioSelection2 === "WhiteMana"}
-                onChange={radioChange}
+                id='NumberMana'
+                type="checkbox"
+                disabled={isDisabled2}
+                checked={checked1}
+                onChange={toggle}
               />
-              White
             </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="BlackMana"
-                checked={radioSelection2 === "BlackMana"}
-                onChange={radioChange}
-              />
-              Black
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="BlueMana"
-                checked={radioSelection2 === "BlueMana"}
-                onChange={radioChange}
-              />
-              Blue
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="RedMana"
-                checked={radioSelection2 === "RedMana"}
-                onChange={radioChange}
-              />
-              Red
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="GreenMana"
-                checked={radioSelection2 === "GreenMana"}
-                onChange={radioChange}
-              />
-              Green
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtBlkMana"
-                checked={radioSelection2 === "WhtBlkMana"}
-                onChange={radioChange}
-              />
-              White/Black
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtBluMana"
-                checked={radioSelection2 === "WhtBluMana"}
-                onChange={radioChange}
-              />
-              White/Blue
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtGrnMana"
-                checked={radioSelection2 === "WhtGrnMana"}
-                onChange={radioChange}
-              />
-              White/Green
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="WhtRdMana"
-                checked={radioSelection2 === "WhtRdMana"}
-                onChange={radioChange}
-              />
-              White/Red
-            </label>
-          </form>*/}
+          </form>
 
           <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
-              Generic Mana?:
+              X Symbol?:
               <input
+                id='XMana'
                 type="checkbox"
                 disabled={isDisabled2}
-                checked={checked}
+                checked={checked2}
                 onChange={toggle}
               />
             </label>
@@ -688,80 +708,13 @@ const CardCreator = (props) => {
             <option value='cArtifact'>Creature Artifact</option>
           </select>
 
-          {/* <form style={{ textAlign: 'center' }}>
+          <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
             <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Land"
-                checked={radioSelection3 === "Land"}
-                onChange={radioChange}
-              />
-              Land
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Creature"
-                checked={radioSelection3 === "Creature"}
-                onChange={radioChange}
-              />
-              Creature
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Enchantment"
-                checked={radioSelection3 === "Enchantment"}
-                onChange={radioChange}
-              />
-              Enchantment
+              Description:
             </label>
             <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Artifact"
-                checked={radioSelection3 === "Artifact"}
-                onChange={radioChange}
-              />
-              Artifact
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Instant"
-                checked={radioSelection3 === "Instant"}
-                onChange={radioChange}
-              />
-              Instant
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Sorcery"
-                checked={radioSelection3 === "Sorcery"}
-                onChange={radioChange}
-              />
-              Sorcery
-            </label>
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="react-tips"
-                value="Artifact Creature"
-                checked={radioSelection3 === "Artifact Creature"}
-                onChange={radioChange}
-              />
-              Artifact Creature
-            </label>
-          </form> */}
+            <textarea className='TextAreaContainerEditor' value={textArea} onChange={handleTextArea} />
+          </form>
 
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <form style={{ fontWeight: 'bold', marginLeft: '10px', marginBottom: '5px', marginTop: '5px' }}>
@@ -810,12 +763,11 @@ const CardCreator = (props) => {
             <button id='SubmitButton' type='submit'>Update Image</button>
           </form>
 
-          <div className='SaveButtonContainer'><button id='SaveButton'>Save</button></div>
+          <div className='SaveButtonContainer'><button id='SaveButton' onClick={saveCard}>Save</button></div>
 
         </div>
       </div>
       <div className='Filler'></div>
-      <Footer />
     </div >
 
   )
