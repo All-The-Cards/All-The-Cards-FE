@@ -16,7 +16,8 @@ const User = (props) => {
     data: {},
     decks: [],
     favCards: [],
-    favDecks: []
+    favDecks: [],
+    customCards: []
   })
 
   const updateState = (objectToUpdate) => {
@@ -38,6 +39,7 @@ const User = (props) => {
     // console.log(id)
     getUserById(id)
     getDecksByUserId(id)
+    getCustomCardsByUserId(id)
 
   }, [id])
 
@@ -136,6 +138,28 @@ const User = (props) => {
       }
     })
 
+  } 
+  
+  const getCustomCardsByUserId = (query) => {
+    query = "/api/get/cards/user_" + query
+    //if query is empty, don't send
+    if (query.trim() === "/api/get/cards/user_id=") {
+      return
+    }
+
+    server.post(query).then(response => {
+      // console.log("User Decks: ", response)
+      //if invalid, just direct to search page
+      if (response.length === 0) {
+        // nav('/search/')
+      }
+      else {
+        updateState({
+          customCards: response,
+        })
+      }
+    })
+
   }
 
   const sortDecks = (a,b) => {
@@ -183,7 +207,6 @@ const User = (props) => {
               <DeckTileObject data={item} />
             </div>)}</div>
           </div>}
-          
 
         {state.data.favorites &&
           <div className="UserPageContent" id="deckContent"><div className="HeaderText">
@@ -202,6 +225,7 @@ const User = (props) => {
             </div>)
             }</div>
           </div>}
+
         {state.data.favorites &&
           <div className="UserPageContent" id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Favorite Decks
@@ -214,6 +238,24 @@ const User = (props) => {
           </div>}
 
 
+          
+          {state.customCards.length > 1 &&
+          <div className="UserPageContent" id="deckContent"><div className="HeaderText">
+            Custom Cards
+          </div>
+          {/* {state.favCards.sort(sortByName).slice(0, 4).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}> */}
+          <div className="OverflowScroll">{state.customCards.sort(sortByName).map((item, i) => <div style={{ marginRight: '10px', float: 'left'}} key={i}>
+              {/* { gc.devMode && <CardObject data={item} isCompact={true} 
+            // count={i % 4}
+            // count={4 - i % 4}
+            // count={4}
+            /> } */}
+              <div className="RegularCard">
+                <CardObject clickable data={item} />
+              </div>
+            </div>)
+            }</div>
+          </div>}
 
       </div>
     </>
