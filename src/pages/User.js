@@ -33,8 +33,10 @@ const User = (props) => {
   useEffect(() => {
     gc.setSearchBar(props.hasSearchBar)
     updateState({
+      decks: [],
       favCards: [],
-      favDecks: []
+      favDecks: [],
+      customCards: []
     })
     // console.log(id)
     getUserById(id)
