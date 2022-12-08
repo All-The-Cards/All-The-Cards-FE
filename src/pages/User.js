@@ -227,7 +227,7 @@ const User = (props) => {
           </div>}
 
         {state.data.favorites &&
-          <div className="UserPageContent" id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
+          <div className="UserPageContent" id="deckContent"><div className="HeaderText">
             Favorite Decks
           </div>
 
@@ -235,12 +235,12 @@ const User = (props) => {
           <div className="OverflowScroll">{state.favDecks.sort(sortDecks).map((item, i) => <div style={{ marginRight: '10px', float: 'left' }} key={i}>
               <DeckTileObject data={item} />
             </div>)}</div>
-          </div>}
+          </div>} 
 
 
           
-          {state.customCards.length > 1 &&
-          <div className="UserPageContent" id="deckContent"><div className="HeaderText">
+          {state.customCards.length > 0 &&
+          <div className="UserPageContent" id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Custom Cards
           </div>
           {/* {state.favCards.sort(sortByName).slice(0, 4).map((item, i) => <div style={{ marginLeft: '10px', float: 'left' }} key={i}> */}
