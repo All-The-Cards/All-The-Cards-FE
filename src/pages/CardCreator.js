@@ -444,6 +444,26 @@ const CardCreator = (props) => {
     setArtwork(<img className='CardImage' src={tempImage} alt='photo'></img>)
   }
 
+  // Helper to convert cardImage to a dataURL object type.
+  const toDataURL = img => fetch(img)
+    .then(response => response.blob())
+    .then(blob => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  }))
+
+  // Helper function to convert data URL to a file object.
+  function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+  }
+
   function saveCard() {
 
     //get card object from state with mirrored structure of card object
@@ -455,30 +475,36 @@ const CardCreator = (props) => {
       authorID: gc.activeSession != null && gc.activeSession.user.id != null ? gc.activeSession.user.id : "",
     }
 
-    //log card object
+    // Log card object
     console.log(customCardData)
 
-    //send server request
-    // fetch(server.buildAPIUrl("/api/features/editor/cards"),
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //     body: JSON.stringify(customCardData)
-    //   }
-    // ).then((response) => {
-    //   console.log(response);
-    // })
-    //   .then((data) => {
-    //     // console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     return -1
-    //   });
+    // Setup formData for server request
+    const formData = new FormData()
+    formData.append("art_crop", document.getElementById("userArtCrop").files[0]);
+    formData.append("card", JSON.stringify(customCardData.card));
 
+    // The cardImage is being converted to a dataURL object, then to a file object.
+    toDataURL(cardImage).then(dataUrl => {
+      var fileData = dataURLtoFile(dataUrl, "png.png")
+      formData.append("png", fileData)
+    })
+    .then(data => {
+
+    // The request is finally sent to the server
+    fetch(server.buildAPIUrl("/api/features/editor/cards"),
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch((error) => {
+      console.log(error);
+      return -1
+    });
+
+  })
     return 1
   }
 
@@ -578,7 +604,7 @@ const CardCreator = (props) => {
           {isDisabled2 &&
             <div className='PowerContainer'> </div>
           }
-          <img className='EmptyCard' src={cardImage} alt='Blank Card'></img>
+          <img className='EmptyCard' src={cardImage} id="userPng" alt='Blank Card'></img>
         </div>
 
         <div className='CardEditor'>
@@ -754,6 +780,7 @@ const CardCreator = (props) => {
             <label>
               Artwork:
               <input
+                id="userArtCrop"
                 style={{ marginTop: '5px' }}
                 type="file"
                 accept='.jpeg, .png, .svg, .jpg'
