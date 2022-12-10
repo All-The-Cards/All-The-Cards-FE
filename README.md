@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+# All The Cards - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![All The Cards](atc-logo.png)
 
-## Available Scripts
+## Introduction
 
-In the project directory, you can run:
+We present to you, yet another Magic: The Gathering online library. All The Cards allows users to explore, create, and share decks, custom cards, and favorites. This repo is specific to the frontend for handling user interactions and sending data to the server.
 
-### `npm start`
+![All The Cards](homepage.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Deck Editor:
+#### `Persistent Deck Editor`
+Unlike traditional deck builders, our deck editor follows you around the site, so you can browse without losing your work. Search for cards and view other decklists to get inspiration and add cards with a click
+#### `Customization`
+Personalize your decklist by selecting a cover card, tags, and description
+#### `Import`
+Import a decklist in the deck editor in the format `4 Lightning Bolt` or `4 Lightning Bolt [M11]`
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Homepage:
+#### `Recent Decks`
+Showcase of recent user-submitted decklists
+#### `Search Bar`
+Search for any card by name, or click the 'advanced' search button for more detailed queries
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### User Accounts:
+#### `Search`
+Find users by searching for a username, then navigate to the 'Users' section in the search results
+#### `Profile`
+View a user's profile information, uploaded decks, and favorites
+#### `Avatars`
+Set any card's artwork as your profile avatar from the card page
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Deck Page:
+#### `Tiles`
+Click on a 'deck tile' to be directed to that deck's page. These are visible on the home screen, user profile pages, and search results
+#### `Information`
+View the description, tags, format, price, and other details about a deck
+#### `List`
+View all of the cards in a deck. Hover to see price information and card image
+#### `Breakdown`
+Displays statistics about a deck, such as mana curve, color distribution, and card types
+#### `Export`
+Export a decklist as a download or text copy to use anywhere
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Card Search:
+#### `Search`
+Look up any card by name
+#### `Advanced Search`
+Use the advanced search fields to create a custom search query
+#### `Filters`
+Refine search results using the filters
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Card Page:
+#### `Details`
+View a card's name, stats, legalities, and other details
+#### `Version Select`
+Choose from a list of all printings of a card
+#### `Pricing`
+See a card's price on TCGPlayer or CardHoarder
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Technologies
 
-## Learn More
+This project is coded in JavaScript, using [React.js](https://reactjs.org/). The catalog of data is courtesy of [Scryfall API](https://scryfall.com/docs/api).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Installation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To run this project, you will need to have [NodeJS](https://nodejs.org/en/) installed on your system. Unzip the folder, open PowerShell or Bash in that folder, and run `npm install`. Then you can run `npm start` to run the client.
 
-### Code Splitting
+## Development Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The URL is [http://localhost:3000](http://localhost:3000) for the client.
 
-### Analyzing the Bundle Size
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+All The Cards is unofficial Fan Content permitted under the [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). This project is not sponsered/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
 
-### Making a Progressive Web App
+## Contributors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+`Frontend` Tanner Hawkins\
+`Frontend` Michael Lanctot\
+`Backend` Jamier Singleton\
+`Frontend` Noah Stephenson
 
-### Advanced Configuration
+## Project Status
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`Pre-Alpha` Stage Development.
