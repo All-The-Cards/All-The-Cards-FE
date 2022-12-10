@@ -12,7 +12,6 @@ import Card from './pages/Card';
 import User from './pages/User';
 import UserSettings from './pages/User-Settings';
 import DeckEditor from './pages/Deck-Editor';
-import CardCreator from './pages/CardCreator';
 import Registration from './pages/User-Registration';
 import Navbar from './components/NavBar/NavBar';
 import WIPDeckList from './components/WIPDeckList/WIPDeckList';
@@ -40,7 +39,6 @@ function App() {
                     <Route path='/user' element={<User hasSearchBar={true} />} />
                     <Route path="/user/:id?" element={<User hasSearchBar={true} />} />
                     <Route exact path='/deckeditor' element={<DeckEditor hasSearchBar={true} />} />
-                    <Route exact path='/cardcreator' element={<CardCreator hasSearchBar={false} />} />
                     <Route exact path='/registration' element={<Registration hasSearchBar={false} />} />
                     <Route exact path='/login' element={<Login hasSearchBar={false} />} />
                     <Route exact path='/settings' element={<UserSettings hasSearchBar={true} />} />

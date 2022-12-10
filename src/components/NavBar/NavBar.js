@@ -218,19 +218,20 @@ const Navbar = () => {
                     // id="Searchicon-responsive"
 
                 />
-                <div  className="profileMenuButton" onClick={() => {onClickHandler("layer")}}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
+                <div  className="profileMenuButton" id={'2'} onClick={handleClose}  style={{}}><img src={LayerIcon} alt="LayerIcon" className={`Icons ${layerShadow ? "LayerIcon" : ''}`}></img> </div>
                 
-                {openLayerMenu &&
-                <div>
-                    <div className="UserMenu" ref={wrapperRef} 
-                    >
-                        {/* <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div> */}
-                        <div id={'2'} className="MenuItems" onClick={handleClose}>{(!gc.isEditing && "New Deck") || "Deck Editor"}</div>
-                        <div id={'3'} className="MenuItems" onClick={handleClose}>New Card</div>
-                    </div>
-                    </div>
+                {
+                // openLayerMenu &&
+                // <div>
+                //     <div className="UserMenu" ref={wrapperRef} 
+                //     >
+                //         {/* <div id={'1'} className="MenuItems" onClick={handleClose}>Deck Library</div> */}
+                //         <div id={'2'} className="MenuItems" onClick={handleClose}>{(!gc.isEditing && "New Deck") || "Deck Editor"}</div>
+                        
+                //     </div>
+                // </div>
                 }
-                <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name}</div>
+                <div  onClick={() => {onClickHandler("user")}} className="profileMenuButton" style={{paddingRight: name !== "User" && '10px'}}><img src={UsersIcon} alt="UsersIcon" className={`Icons ${userShadow ? "UserIcon" : ''}`}></img>{name !== "User" && name}</div>
                 
                 {openUserMenu &&
                     <div>

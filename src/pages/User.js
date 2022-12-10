@@ -229,7 +229,7 @@ const User = (props) => {
           </div>}
 
         {state.data.favorites &&
-          <div className="UserPageContent" id="deckContent"><div className="HeaderText">
+          <div className="UserPageContent" id="deckContent" style={{marginBottom:'200px'}}><div className="HeaderText">
             Favorite Decks
           </div>
 

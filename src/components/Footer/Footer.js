@@ -11,8 +11,7 @@ const Footer = () => {
                 <a className='Links' href='/'>Home</a><span> • </span>
                 <a className='Links' href='/login'>Login</a><span> • </span>
                 <a className='Links' href='/registration'>Register</a><span> • </span>
-                <a className='Links' href='/deckeditor'>New Deck</a><span> • </span>
-                <a className='Links' href='/cardcreator'>New Card</a>
+                <a className='Links' href='/deckeditor'>Deck Editor</a>
             </div>
             <div className="Legality">
                 All the Cards is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards.
